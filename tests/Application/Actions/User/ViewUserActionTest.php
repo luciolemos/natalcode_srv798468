@@ -33,7 +33,7 @@ class ViewUserActionTest extends TestCase
 
         $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
 
-        $request = $this->createRequest('GET', '/users/1');
+        $request = $this->createRequest('GET', '/api/users/1');
         $response = $app->handle($request);
 
         $payload = (string) $response->getBody();
@@ -67,7 +67,7 @@ class ViewUserActionTest extends TestCase
 
         $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
 
-        $request = $this->createRequest('GET', '/users/1');
+        $request = $this->createRequest('GET', '/api/users/1');
         $response = $app->handle($request);
 
         $payload = (string) $response->getBody();

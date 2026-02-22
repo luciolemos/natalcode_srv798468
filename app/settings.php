@@ -18,7 +18,9 @@ return function (ContainerBuilder $containerBuilder) {
                 'logErrorDetails'     => false,
                 'logger' => [
                     'name' => 'slim-app',
-                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
+                    'path' => ($_ENV['APP_ENV'] ?? '') === 'test'
+                        ? 'php://stderr'
+                        : (isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log'),
                     'level' => Logger::DEBUG,
                 ],
             ]);

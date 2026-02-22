@@ -29,7 +29,7 @@ class ListUserActionTest extends TestCase
 
         $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
 
-        $request = $this->createRequest('GET', '/users');
+        $request = $this->createRequest('GET', '/api/users');
         $response = $app->handle($request);
 
         $payload = (string) $response->getBody();

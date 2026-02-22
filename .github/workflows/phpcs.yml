@@ -37,4 +37,4 @@ jobs:
         run: composer install --no-interaction --prefer-dist
 
       - name: Run PHPCS
-        run: vendor/bin/phpcs --standard=phpcs.xml src app tests
+        run: vendor/bin/phpcs --standard=phpcs.xml --extensions=php -n src app tests
