@@ -1,0 +1,13 @@
+{
+  "name": "natalcode-visual-tests",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Visual regression tests for NatalCode landing",
+  "scripts": {
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  }
+}
