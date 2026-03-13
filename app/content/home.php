@@ -46,13 +46,13 @@ return [
             'label' => 'Ver Horários',
             'href' => '/#roadmap',
             'class' => 'nc-btn nc-btn-primary',
-            'loadingOnClick' => true,
+            'loadingOnClick' => false,
         ],
         [
             'label' => 'Falar Conosco',
             'href' => 'mailto:contato@cedern.org',
             'class' => 'nc-btn nc-btn-secondary',
-            'loadingOnClick' => true,
+            'loadingOnClick' => false,
         ],
     ],
     'heroMetrics' => [
@@ -135,7 +135,7 @@ return [
             'label' => 'Conheça nossa Biblioteca',
             'href' => '/#biblioteca',
             'class' => 'nc-btn nc-btn-primary',
-            'loadingOnClick' => true,
+            'loadingOnClick' => false,
         ],
     ],
 ];
