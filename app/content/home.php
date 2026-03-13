@@ -129,6 +129,34 @@ return [
             'question' => 'Como funciona o atendimento fraterno?',
             'answer' => 'É um diálogo reservado com um atendente preparado, que oferece escuta e orientação baseada no Evangelho. Basta chegar 30min antes da reunião pública.',
         ],
+        [
+            'question' => 'O que são os passes magnéticos?',
+            'answer' => 'São transmissões de energias psíquicas e espirituais que visam o reequilíbrio físico e perispiritual, auxiliando na harmonia interior.',
+        ],
+        [
+            'question' => 'Crianças podem frequentar o centro?',
+            'answer' => 'Sim! Temos a Evangelização Infantil, que adapta os ensinamentos morais de Jesus e do Espiritismo para a linguagem das crianças.',
+        ],
+        [
+            'question' => 'Como posso começar a estudar?',
+            'answer' => 'Recomendamos iniciar pela leitura de "O Livro dos Espíritos" e participar do ESDE (Estudo Sistematizado da Doutrina Espírita) ou das palestras públicas.',
+        ],
+        [
+            'question' => 'Qual a visão espírita sobre outras religiões?',
+            'answer' => 'O Espiritismo respeita todas as religiões e crenças que promovam o bem, entendendo que todas são caminhos para a evolução moral do ser humano.',
+        ],
+        [
+            'question' => 'O que é a reencarnação?',
+            'answer' => 'É a volta do Espírito à vida corporal. É uma oportunidade de aprendizado e reparação, necessária para o progresso intelectual e moral.',
+        ],
+        [
+            'question' => 'O que é um médium?',
+            'answer' => 'É toda pessoa que sente, num grau qualquer, a influência dos Espíritos. É uma faculdade inerente ao ser humano e não um privilégio.',
+        ],
+        [
+            'question' => 'Como posso ajudar o CEDE?',
+            'answer' => 'Você pode ajudar participando das atividades, divulgando a doutrina e, se desejar, colaborando com doações ou trabalho voluntário nas frentes assistenciais.',
+        ],
     ],
     'ctaActions' => [
         [
