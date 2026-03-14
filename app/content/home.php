@@ -96,19 +96,19 @@ return [
     ],
     'socialProofTrustCards' => [
         [
-            'image' => 'https://via.placeholder.com/300x200?text=Estudos',
+            'image' => '/assets/img/note/note_1600_900_1.png',
             'alt' => 'Grupo de estudos',
             'title' => 'Estudos Semanais',
             'text' => 'Aprofundamento na Doutrina e no Evangelho.',
         ],
         [
-            'image' => 'https://via.placeholder.com/300x200?text=Evangelizacao',
+            'image' => '/assets/img/note/note_1600_900_2.png',
             'alt' => 'Evangelização Infantil',
             'title' => 'Evangelização',
             'text' => 'Ensinamentos morais para crianças e jovens.',
         ],
         [
-            'image' => 'https://via.placeholder.com/300x200?text=Biblioteca',
+            'image' => '/assets/img/note/note_1600_900_3.png',
             'alt' => 'Biblioteca Espírita',
             'title' => 'Biblioteca',
             'text' => 'Acervo completo das obras básicas e complementares.',
