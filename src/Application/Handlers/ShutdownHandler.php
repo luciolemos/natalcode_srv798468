@@ -10,6 +10,14 @@ use Slim\Exception\HttpInternalServerErrorException;
 
 class ShutdownHandler
 {
+    private const FATAL_ERRORS = [
+        E_ERROR,
+        E_PARSE,
+        E_CORE_ERROR,
+        E_COMPILE_ERROR,
+        E_USER_ERROR,
+    ];
+
     private Request $request;
 
     private HttpErrorHandler $errorHandler;
@@ -29,7 +37,7 @@ class ShutdownHandler
     public function __invoke()
     {
         $error = error_get_last();
-        if ($error) {
+        if ($error && in_array($error['type'], self::FATAL_ERRORS, true)) {
             $errorFile = $error['file'];
             $errorLine = $error['line'];
             $errorMessage = $error['message'];
