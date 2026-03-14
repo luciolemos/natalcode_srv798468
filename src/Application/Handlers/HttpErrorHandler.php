@@ -22,10 +22,6 @@ class HttpErrorHandler extends SlimErrorHandler
     private function expectsJson(): bool
     {
         $request = $this->request;
-        if ($request === null) {
-            return false;
-        }
-
         $accept = strtolower($request->getHeaderLine('Accept'));
         $path = $request->getUri()->getPath();
 

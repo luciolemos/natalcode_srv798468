@@ -1,0 +1,40 @@
+name: Smoke Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: URL para validar (ex: https://cedern.org/)
+        required: true
+        type: string
+  push:
+    branches:
+      - deploy-cedern
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare script
+        run: chmod +x scripts/smoke-check.sh
+
+      - name: Resolve URL
+        id: resolve-url
+        run: |
+          if [ -n "${{ github.event.inputs.url }}" ]; then
+            echo "url=${{ github.event.inputs.url }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ vars.SMOKE_URL }}" ]; then
+            echo "url=${{ vars.SMOKE_URL }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "url=https://cedern.org/" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run smoke check
+        env:
+          SMOKE_URL: ${{ steps.resolve-url.outputs.url }}
+        run: ./scripts/smoke-check.sh

@@ -219,6 +219,28 @@ Executa em `push` e `pull_request`:
 
 Em caso de falha, publica artefatos com relatorio e resultados dos testes.
 
+## Smoke check de deploy
+
+Para validar rapidamente se a pagina publicada nao esta truncada e se os scripts criticos foram carregados:
+
+```bash
+chmod +x scripts/smoke-check.sh
+./scripts/smoke-check.sh https://cedern.org/
+```
+
+O script falha se:
+
+- status HTTP for >= 500;
+- HTML vier truncado (sem `</html>`);
+- houver JSON de erro injetado no HTML (`"statusCode": 500`);
+- referencia do `cedern-nav.js` nao for encontrada.
+
+Workflow dedicado:
+
+- `.github/workflows/smoke-check.yml`
+
+Ele roda automaticamente em push na branch `deploy-cedern` e tambem pode ser executado manualmente com URL informada.
+
 ### Quando a mudanca visual for intencional
 
 Atualize snapshots localmente e versione os arquivos gerados:
