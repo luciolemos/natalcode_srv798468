@@ -19,6 +19,32 @@ use Throwable;
 
 class HttpErrorHandler extends SlimErrorHandler
 {
+    private function expectsJson(): bool
+    {
+        $request = $this->request;
+        $accept = strtolower($request->getHeaderLine('Accept'));
+        $path = $request->getUri()->getPath();
+
+        if (strpos($path, '/api/') === 0) {
+            return true;
+        }
+
+        return strpos($accept, 'application/json') !== false
+            && strpos($accept, 'text/html') === false;
+    }
+
+    private function buildHtmlErrorPage(int $statusCode, string $description): string
+    {
+        $safeDescription = htmlspecialchars($description, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+        return sprintf(
+            '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Erro %d</title></head><body><main style="max-width:720px;margin:3rem auto;padding:0 1rem;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif"><h1>Erro %d</h1><p>%s</p></main></body></html>',
+            $statusCode,
+            $statusCode,
+            $safeDescription
+        );
+    }
+
     /**
      * @inheritdoc
      */
@@ -58,12 +84,18 @@ class HttpErrorHandler extends SlimErrorHandler
             $error->setDescription($exception->getMessage());
         }
 
-        $payload = new ActionPayload($statusCode, null, $error);
-        $encodedPayload = json_encode($payload, JSON_PRETTY_PRINT);
-
         $response = $this->responseFactory->createResponse($statusCode);
-        $response->getBody()->write($encodedPayload);
 
-        return $response->withHeader('Content-Type', 'application/json');
+        if ($this->expectsJson()) {
+            $payload = new ActionPayload($statusCode, null, $error);
+            $encodedPayload = json_encode($payload, JSON_PRETTY_PRINT);
+            $response->getBody()->write($encodedPayload);
+
+            return $response->withHeader('Content-Type', 'application/json');
+        }
+
+        $response->getBody()->write($this->buildHtmlErrorPage($statusCode, $error->getDescription()));
+
+        return $response->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 }
