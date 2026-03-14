@@ -1,11 +1,11 @@
-<section id="solucoes" class="nc-section" aria-label="Solucoes principais">
+<section id="estudos" class="nc-section" aria-label="Estudos principais">
   {% set features_section = homeContent.sections.features|default({}) %}
   {% set features_items = homeContent.featuresItems|default([]) %}
 
   {% include 'components/section-header.twig' with {
-    kicker: features_section.kicker|default('Solucoes'),
-    title: features_section.title|default('Solucoes de TI conectadas ao seu negocio'),
-    lead: features_section.lead|default('Criamos e evoluimos produtos digitais com foco em eficiencia operacional, experiencia do usuario e resultado mensuravel.')
+    kicker: features_section.kicker|default('Estudos'),
+    title: features_section.title|default('Iluminando consciências através do conhecimento'),
+    lead: features_section.lead|default('Oferecemos grupos de estudo sistematizado, palestras públicas e atendimento fraterno para todos que buscam compreender a vida além da matéria.')
   } %}
   <div class="nc-feature-grid">
     {% for item in features_items %}

@@ -35,7 +35,7 @@ function initCedernTheme() {
       + '<button type="button" class="nc-swatch" data-theme-value="red" aria-pressed="false" aria-label="Ativar tema vermelho"><span class="nc-swatch-dot nc-dot-red"></span><span class="nc-swatch-label">Red</span></button>'
       + '<button type="button" class="nc-swatch" data-theme-value="green" aria-pressed="false" aria-label="Ativar tema verde"><span class="nc-swatch-dot nc-dot-green"></span><span class="nc-swatch-label">Green</span></button>'
       + '<button type="button" class="nc-swatch" data-theme-value="violet" aria-pressed="false" aria-label="Ativar tema violeta"><span class="nc-swatch-dot nc-dot-violet"></span><span class="nc-swatch-label">Violet</span></button>'
-      + '<button type="button" class="nc-swatch" data-theme-value="amber" aria-pressed="false" aria-label="Ativar tema ambar"><span class="nc-swatch-dot nc-dot-amber"></span><span class="nc-swatch-label">Amber</span></button>'
+      + '<button type="button" class="nc-swatch" data-theme-value="amber" aria-pressed="false" aria-label="Ativar tema âmbar"><span class="nc-swatch-dot nc-dot-amber"></span><span class="nc-swatch-label">Amber</span></button>'
       + '</div>'
       + '</div>'
       + '</section>'
