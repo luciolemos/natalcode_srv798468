@@ -1037,6 +1037,10 @@ code {
   content: "▴";
 }
 
+.nc-palette-toggle-label-mobile {
+  display: none;
+}
+
 .nc-palette-panel {
   padding: 0 var(--space-4) var(--space-4);
 }
@@ -1123,6 +1127,18 @@ code {
   .nc-palette {
     width: min(320px, 100%);
     margin-left: auto;
+  }
+
+  .nc-palette-toggle {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .nc-palette-toggle-label-full {
+    display: none;
+  }
+
+  .nc-palette-toggle-label-mobile {
+    display: inline;
   }
 }
 

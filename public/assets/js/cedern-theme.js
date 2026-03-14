@@ -22,7 +22,7 @@ function initCedernTheme() {
       '<aside class="nc-utility-stack" data-utility-stack data-scroll-threshold-mobile="110" data-scroll-threshold-desktop="260" aria-label="Ferramentas de interface">'
       + '<button type="button" class="nc-scroll-top" data-scroll-top aria-label="Voltar ao topo" hidden>↑</button>'
       + '<section class="nc-palette" aria-label="Paleta de cores do site">'
-      + '<button type="button" class="nc-palette-toggle" data-palette-toggle aria-expanded="false" aria-controls="nc-palette-panel">Personalizar cores</button>'
+      + '<button type="button" class="nc-palette-toggle" data-palette-toggle aria-expanded="false" aria-controls="nc-palette-panel"><span class="nc-palette-toggle-label-full">Personalizar cores</span><span class="nc-palette-toggle-label-mobile">Cores</span></button>'
       + '<div class="nc-palette-panel" id="nc-palette-panel" data-palette-panel hidden>'
       + '<p class="nc-palette-title">Modo</p>'
       + '<div class="nc-mode-group" role="group" aria-label="Alternar modo claro e escuro">'
