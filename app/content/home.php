@@ -38,6 +38,8 @@ return [
             'kicker' => 'Participe',
             'title' => 'Junte-se a nós nesta jornada de luz',
             'lead' => 'Venha conhecer o CEDE e encontrar respostas para suas indagações espirituais em um ambiente acolhedor e fraterno.',
+            'address' => 'Endereço: R. Frejó, 44 - Nova Parnamirim, Parnamirim - RN, 59150-663.',
+            'addressMapUrl' => 'https://www.google.com/maps/search/?api=1&query=R.%20Frej%C3%B3%2C%2044%20-%20Nova%20Parnamirim%2C%20Parnamirim%20-%20RN%2C%2059150-663',
             'actionsDelay' => 160,
         ],
     ],
