@@ -136,6 +136,13 @@ return [
             'role' => 'Voluntária',
             'text' => 'Servir no CEDE é uma alegria. A caridade e o amor ao próximo são praticados aqui todos os dias.',
         ],
+         [
+            'avatar' => 'https://randomuser.me/api/portraits/women/90.jpg',
+            'alt' => 'Solange',
+            'name' => 'Solange',
+            'role' => 'Frequentadora',
+            'text' => 'O acolhimento fraterno transformou minha vida. Sinto muita paz e gratidão por fazer parte desta casa.',
+        ],
     ],
      'roadmapItems' => [
         [
