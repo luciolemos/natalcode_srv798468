@@ -5,3 +5,8 @@
     {{ lead }}
   </p>
 {% endif %}
+{% if lead_secondary is defined and lead_secondary %}
+  <p class="nc-section-lead" data-aos="fade-up" data-aos-delay="{{ lead_secondary_delay|default(100) }}">
+    {{ lead_secondary }}
+  </p>
+{% endif %}

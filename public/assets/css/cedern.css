@@ -693,6 +693,18 @@ h3 {
   color: var(--text-muted);
 }
 
+.nc-footer-link {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+}
+
+.nc-footer-link:hover,
+.nc-footer-link:focus-visible {
+  color: var(--text-main);
+}
+
 .nc-section {
   margin-top: var(--section-gap);
 }
@@ -742,6 +754,10 @@ h3 {
   margin: 0;
   color: var(--text-muted);
   max-width: 70ch;
+}
+
+.nc-about-header .nc-section-lead + .nc-section-lead {
+  margin-top: var(--space-3);
 }
 
 .nc-hero-grid {
@@ -1176,6 +1192,30 @@ code {
 
   .nc-feature-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .nc-about-header {
+    display: grid;
+    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+    column-gap: var(--space-6);
+    row-gap: var(--space-3);
+    align-items: start;
+  }
+
+  .nc-about-header .nc-section-kicker {
+    justify-self: start;
+    width: fit-content;
+  }
+
+  .nc-about-header .nc-section-title {
+    grid-column: 1;
+    margin: 0;
+    max-width: 20ch;
+  }
+
+  .nc-about-header .nc-section-lead {
+    grid-column: 2;
+    max-width: none;
   }
 
   .nc-logo-list {

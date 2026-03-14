@@ -19,9 +19,10 @@ return [
             'lead' => 'Oferecemos grupos de estudo sistematizado, palestras públicas e atendimento fraterno para todos que buscam compreender a vida além da matéria.',
         ],
         'socialProof' => [
-            'kicker' => 'Inspiração',
-            'title' => 'A base da nossa doutrina',
-            'lead' => 'Seguimos os preceitos codificados por Allan Kardec, unindo ciência, filosofia e religião para o consolo e esclarecimento das almas.',
+            'kicker' => 'Quem Somos',
+            'title' => 'Centro de Estudos da Doutrina Espírita (CEDE)',
+            'lead' => 'O Centro de Estudos da Doutrina Espírita (CEDE) é uma instituição filantrópica dedicada ao estudo sistemático, à prática e à divulgação da Doutrina Espírita, fundamentada nas obras de Allan Kardec.',
+            'leadSecondary' => 'Por meio de atividades de estudo, reflexão, acolhimento e assistência fraterna, buscamos contribuir para o desenvolvimento espiritual do indivíduo, incentivar valores como caridade, fraternidade e responsabilidade moral, além de oferecer apoio e orientação a todos que buscam compreensão, consolo e crescimento interior.',
             'trustGridLabel' => 'Frentes de trabalho',
         ],
         'roadmap' => [
@@ -40,13 +41,15 @@ return [
             'lead' => 'Venha conhecer o CEDE e encontrar respostas para suas indagações espirituais em um ambiente acolhedor e fraterno.',
             'address' => 'Endereço: R. Frejó, 44 - Nova Parnamirim, Parnamirim - RN, 59150-663.',
             'addressMapUrl' => 'https://www.google.com/maps/search/?api=1&query=R.%20Frej%C3%B3%2C%2044%20-%20Nova%20Parnamirim%2C%20Parnamirim%20-%20RN%2C%2059150-663',
+            'instagramUrl' => 'https://www.instagram.com/cedeoficialrn/',
+            'instagramLabel' => 'Instagram oficial: @cedeoficialrn',
             'actionsDelay' => 160,
         ],
     ],
     'heroActions' => [
         [
             'label' => 'Ver Horários',
-            'href' => '/#roadmap',
+            'href' => '/#agenda',
             'class' => 'nc-btn nc-btn-primary',
             'loadingOnClick' => false,
         ],

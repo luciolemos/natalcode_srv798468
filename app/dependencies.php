@@ -67,12 +67,16 @@ return function (ContainerBuilder $containerBuilder) {
             $defaultDarkIntensity = $resolveEnvChoice('APP_DEFAULT_DARK_INTENSITY');
             $homeContent = require __DIR__ . '/content/home.php';
             $appAddress = (string) ($homeContent['sections']['cta']['address'] ?? '');
+            $appInstagramUrl = (string) ($homeContent['sections']['cta']['instagramUrl'] ?? '');
+            $appInstagramLabel = (string) ($homeContent['sections']['cta']['instagramLabel'] ?? 'Instagram oficial');
 
             $twig->getEnvironment()->addGlobal('app_default_page_title', $appDefaultPageTitle);
             $twig->getEnvironment()->addGlobal('default_theme', $defaultTheme);
             $twig->getEnvironment()->addGlobal('default_mode', $defaultMode);
             $twig->getEnvironment()->addGlobal('default_dark_intensity', $defaultDarkIntensity);
             $twig->getEnvironment()->addGlobal('app_address', $appAddress);
+            $twig->getEnvironment()->addGlobal('app_instagram_url', $appInstagramUrl);
+            $twig->getEnvironment()->addGlobal('app_instagram_label', $appInstagramLabel);
 
             return $twig;
         },

@@ -1,15 +1,18 @@
-<section class="nc-section" aria-label="Prova social" data-aos="fade-up" data-aos-delay="0">
+<section id="quem-somos" class="nc-section" aria-label="Prova social" data-aos="fade-up" data-aos-delay="0">
   {% set social_proof = homeContent.sections.socialProof|default({}) %}
   {% set trust_cards = homeContent.socialProofTrustCards|default([]) %}
   {% set testimonials = homeContent.socialProofTestimonials|default([]) %}
 
-  {% include 'components/section-header.twig' with {
-    kicker: social_proof.kicker|default('Confianca'),
-    title: social_proof.title|default('Confiado por equipes de operacao e tecnologia'),
-    lead: social_proof.lead|default('Seguimos os preceitos codificados por Allan Kardec.')
-  } %}
+  <div class="nc-about-header">
+    {% include 'components/section-header.twig' with {
+      kicker: social_proof.kicker|default('Confiança'),
+      title: social_proof.title|default('Confiado por equipes de operação e tecnologia'),
+      lead: social_proof.lead|default('Seguimos os preceitos codificados por Allan Kardec.'),
+      lead_secondary: social_proof.leadSecondary|default('')
+    } %}
+  </div>
 
-  <div class="nc-trust-grid" aria-label="{{ social_proof.trustGridLabel|default('Frentes de atuacao') }}">
+  <div class="nc-trust-grid" aria-label="{{ social_proof.trustGridLabel|default('Frentes de atuação') }}">
     {% for card in trust_cards %}
       <article class="nc-trust-card" data-aos="zoom-in" data-aos-delay="{{ card.delay|default(120 + (loop.index0 * 60)) }}">
         <img class="nc-trust-media" src="{{ card.image }}" alt="{{ card.alt }}">

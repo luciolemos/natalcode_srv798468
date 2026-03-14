@@ -1,8 +1,13 @@
-<footer class="nc-footer">
+<footer id="contato" class="nc-footer">
   <div class="nc-container">
     <p class="nc-footer-copy">Centro de Estudos da Doutrina Espírita - CEDE &copy; {{ "now"|date("Y") }}</p>
     {% if app_address is defined and app_address %}
       <p class="nc-footer-copy">{{ app_address }}</p>
+    {% endif %}
+    {% if app_instagram_url is defined and app_instagram_url %}
+      <p class="nc-footer-copy">
+        <a class="nc-footer-link" href="{{ app_instagram_url }}" target="_blank" rel="noopener noreferrer">{{ app_instagram_label|default('Instagram oficial') }}</a>
+      </p>
     {% endif %}
   </div>
 </footer>
