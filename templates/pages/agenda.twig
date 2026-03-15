@@ -2,18 +2,63 @@
 
 {% block content %}
   <main class="nc-main nc-container nc-home-flow">
-    {% include 'home/roadmap.twig' %}
     <section class="nc-section" aria-label="Detalhes das atividades">
       {% include 'components/section-header.twig' with {
         kicker: 'Agenda',
-        title: 'Participe das atividades da semana',
-        lead: 'Consulte os detalhes de cada encontro e escolha o melhor momento para participar da rotina fraterna do CEDE.'
+        title: 'Próximas atividades',
+        lead: 'Consulte os próximos encontros e abra os detalhes de cada atividade da agenda do CEDE.'
       } %}
-      <div class="nc-actions" data-aos="fade-up" data-aos-delay="120">
-        <a class="nc-btn nc-btn-secondary" href="/agenda/estudo-do-evangelho">Estudo do Evangelho</a>
-        <a class="nc-btn nc-btn-secondary" href="/agenda/palestra-publica">Palestra Pública</a>
-        <a class="nc-btn nc-btn-secondary" href="/agenda/juventude-espirita">Juventude Espírita</a>
-      </div>
+
+      {% if agenda_events|default([])|length > 0 %}
+        {% if agenda_featured_events|default([])|length > 0 %}
+          <p class="nc-badge">Em destaque</p>
+          <ul class="nc-checklist nc-agenda-featured-list">
+            {% for event in agenda_featured_events %}
+              {% set event_place = event.location_name|default('CEDE') %}
+              {% set event_description = event.description|default('Confira os detalhes completos desta atividade.') %}
+              {% include 'components/check-item.twig' with {
+                step: event.starts_at_label|default('Agenda'),
+                title: event.title,
+                description: event_place ~ ' • ' ~ event.mode_label|default('Presencial') ~ ' • ' ~ event_description,
+                href: '/agenda/' ~ event.slug,
+                link_label: 'Ver detalhes',
+                delay: 100 + (loop.index * 35)
+              } %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if agenda_regular_events|default([])|length > 0 %}
+          <p class="nc-badge">Próximas atividades</p>
+        {% endif %}
+        <ul class="nc-checklist nc-agenda-events-list">
+          {% for event in agenda_regular_events|default(agenda_events) %}
+            {% set event_place = event.location_name|default('CEDE') %}
+            {% set event_description = event.description|default('Confira os detalhes completos desta atividade.') %}
+            {% include 'components/check-item.twig' with {
+              step: event.starts_at_label|default('Agenda'),
+              title: event.title,
+              description: event_place ~ ' • ' ~ event.mode_label|default('Presencial') ~ ' • ' ~ event_description,
+              href: '/agenda/' ~ event.slug,
+              link_label: 'Ver detalhes',
+              delay: 100 + (loop.index * 40)
+            } %}
+          {% endfor %}
+        </ul>
+      {% else %}
+        <ul class="nc-checklist">
+          {% for item in agenda_roadmap_fallback|default([]) %}
+            {% include 'components/check-item.twig' with {
+              step: item.phase|default('Agenda'),
+              title: item.title|default('Atividade'),
+              description: item.description|default('Confira os detalhes da atividade.'),
+              href: item.href|default(''),
+              link_label: item.linkLabel|default('Ver detalhes da atividade'),
+              delay: item.delay|default(120)
+            } %}
+          {% endfor %}
+        </ul>
+      {% endif %}
     </section>
     {% include 'home/final-cta.twig' %}
   </main>

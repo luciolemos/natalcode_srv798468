@@ -237,6 +237,11 @@ function initCedernTheme() {
     return allowed.indexOf(value) !== -1 ? value : fallback;
   }
 
+  function getRootValue(attrName, allowed, fallback) {
+    var value = (root && root.getAttribute(attrName) ? root.getAttribute(attrName) : '').toLowerCase();
+    return allowed.indexOf(value) !== -1 ? value : fallback;
+  }
+
   function setPanelState(expanded) {
     if (!paletteToggle || !palettePanel) {
       return;
@@ -343,20 +348,23 @@ function initCedernTheme() {
   }
 
   var defaultTheme = getBodyDefault('data-default-theme', allowedThemes, 'amber');
-  var savedTheme = localStorage.getItem(themeStorageKey);
-  var initialTheme = allowedThemes.indexOf(savedTheme) !== -1 ? savedTheme : defaultTheme;
+  var rootTheme = getRootValue('data-theme', allowedThemes, '');
+  var savedTheme = (localStorage.getItem(themeStorageKey) || '').toLowerCase();
+  var initialTheme = rootTheme || (allowedThemes.indexOf(savedTheme) !== -1 ? savedTheme : defaultTheme);
   applyTheme(initialTheme);
 
   var defaultMode = getBodyDefault('data-default-mode', allowedModes, 'light');
+  var rootMode = getRootValue('data-mode', allowedModes, '');
   var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   var fallbackMode = defaultMode || (prefersDark ? 'dark' : 'light');
-  var savedMode = localStorage.getItem(modeStorageKey);
-  var initialMode = allowedModes.indexOf(savedMode) !== -1 ? savedMode : fallbackMode;
+  var savedMode = (localStorage.getItem(modeStorageKey) || '').toLowerCase();
+  var initialMode = rootMode || (allowedModes.indexOf(savedMode) !== -1 ? savedMode : fallbackMode);
   applyMode(initialMode);
 
   var defaultDarkIntensity = getBodyDefault('data-default-dark-intensity', allowedDarkIntensities, 'neutral');
-  var savedIntensity = localStorage.getItem(darkIntensityStorageKey);
-  var initialIntensity = allowedDarkIntensities.indexOf(savedIntensity) !== -1 ? savedIntensity : defaultDarkIntensity;
+  var rootDarkIntensity = getRootValue('data-dark-intensity', allowedDarkIntensities, '');
+  var savedIntensity = (localStorage.getItem(darkIntensityStorageKey) || '').toLowerCase();
+  var initialIntensity = rootDarkIntensity || (allowedDarkIntensities.indexOf(savedIntensity) !== -1 ? savedIntensity : defaultDarkIntensity);
   applyDarkIntensity(initialIntensity);
   setPanelState(false);
   syncMobilePalettePosition();

@@ -1,0 +1,220 @@
+{% extends 'layouts/dashboard-base.twig' %}
+
+{% block content %}
+  <main class="nc-dashboard-shell" aria-label="Dashboard administrativo">
+    <header class="nc-dashboard-topbar">
+      <div class="nc-dashboard-topbar-left">
+        <button id="nc-dashboard-sidebar-toggle" class="nc-dashboard-sidebar-toggle" type="button" aria-expanded="false" aria-controls="nc-dashboard-sidebar" aria-label="Abrir menu do dashboard">
+          ☰
+        </button>
+        <a class="nc-dashboard-brand" href="/painel">Dashboard CEDE</a>
+      </div>
+
+      <div class="nc-dashboard-topbar-right">
+        <span class="nc-dashboard-env-badge nc-dashboard-env-badge-{{ dashboard_env_tone|default('prod') }}">
+          {{ dashboard_env_label|default('Produção') }}
+        </span>
+        <span id="nc-dashboard-theme-badge" class="nc-dashboard-theme-badge" aria-live="polite">Tema: padrão</span>
+        <details class="nc-dashboard-user-menu">
+          {% set dashboard_user_label = dashboard_user|default('Usuário') %}
+          {% set dashboard_user_initial = dashboard_user_label|slice(0, 1)|upper %}
+          <summary>
+            <span class="nc-dashboard-user-avatar">{{ dashboard_user_initial }}</span>
+            <span class="nc-dashboard-user-name">{{ dashboard_user_label }}</span>
+            <span class="nc-dashboard-user-caret" aria-hidden="true">▾</span>
+          </summary>
+          <div class="nc-dashboard-user-menu-content">
+            <a class="nc-link nc-dashboard-user-menu-link" href="/painel">
+              <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V14H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span>Início do painel</span>
+            </a>
+            <a class="nc-link nc-dashboard-user-menu-link" href="/painel/eventos">
+              <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 7H20M8 12H20M8 17H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="4.5" cy="7" r="1.5" fill="currentColor"/>
+                  <circle cx="4.5" cy="12" r="1.5" fill="currentColor"/>
+                  <circle cx="4.5" cy="17" r="1.5" fill="currentColor"/>
+                </svg>
+              </span>
+              <span>Lista de eventos</span>
+            </a>
+              <a class="nc-link nc-dashboard-user-menu-link" href="/">
+              <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 5H19V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 14L19 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="5" y="9" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                </svg>
+              </span>
+              <span>Home do site</span>
+            </a>
+            <a class="nc-link nc-dashboard-user-menu-link" href="/painel/logout">
+              <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 17L5 12M5 12L10 7M5 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M14 4H18C19.1046 4 20 4.89543 20 6V18C20 19.1046 19.1046 20 18 20H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span>Sair</span>
+            </a>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <div class="nc-dashboard-layout">
+      <aside id="nc-dashboard-sidebar" class="nc-admin-sidebar" aria-label="Menu do dashboard">
+        <h2>Painel Dashboard</h2>
+        <nav class="nc-admin-nav">
+          <a class="nc-link{{ current_path == '/painel' ? ' is-active' : '' }}" href="/painel">
+            <span class="nc-admin-link-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V14H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="nc-admin-link-label">Dashboard</span>
+          </a>
+          <a class="nc-link" href="/">
+            <span class="nc-admin-link-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 5H19V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 14L19 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="5" y="9" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/>
+              </svg>
+            </span>
+            <span class="nc-admin-link-label">Home do site</span>
+          </a>
+          <a class="nc-link{{ current_path starts with '/painel/eventos' ? ' is-active' : '' }}" href="/painel/eventos">
+            <span class="nc-admin-link-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 7H20M8 12H20M8 17H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <circle cx="4.5" cy="7" r="1.5" fill="currentColor"/>
+                <circle cx="4.5" cy="12" r="1.5" fill="currentColor"/>
+                <circle cx="4.5" cy="17" r="1.5" fill="currentColor"/>
+              </svg>
+            </span>
+            <span class="nc-admin-link-label">Lista de eventos</span>
+          </a>
+          <a class="nc-link{{ current_path == '/painel/eventos/novo' ? ' is-active' : '' }}" href="/painel/eventos/novo">
+            <span class="nc-admin-link-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M12 9V15M9 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="nc-admin-link-label">Novo evento</span>
+          </a>
+          <a class="nc-link" href="/painel/logout">
+            <span class="nc-admin-link-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 17L5 12M5 12L10 7M5 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 4H18C19.1046 4 20 4.89543 20 6V18C20 19.1046 19.1046 20 18 20H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="nc-admin-link-label">Sair</span>
+          </a>
+        </nav>
+
+        <footer class="nc-admin-sidebar-footer" aria-label="Rodapé do painel">
+          <span class="nc-admin-sidebar-footer-copy">© {{ "now"|date("Y") }} CEDE</span>
+        </footer>
+      </aside>
+
+      <section class="nc-admin-main" aria-label="Conteúdo do dashboard">
+        {% block dashboard_page_header %}
+          {% if dashboard_page_title is defined and dashboard_page_title %}
+            <header class="nc-dashboard-page-header">
+              {% include 'components/section-header.twig' with {
+                kicker: dashboard_page_kicker|default('Dashboard'),
+                title: dashboard_page_title,
+                lead: dashboard_page_lead|default('')
+              } %}
+            </header>
+          {% endif %}
+        {% endblock %}
+
+        {% block admin_content %}{% endblock %}
+
+      </section>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('nc-dashboard-sidebar-toggle');
+      var sidebar = document.getElementById('nc-dashboard-sidebar');
+      var userMenu = document.querySelector('.nc-dashboard-user-menu');
+      var themeBadge = document.getElementById('nc-dashboard-theme-badge');
+
+      function capitalize(value) {
+        if (!value) {
+          return '';
+        }
+
+        return value.charAt(0).toUpperCase() + value.slice(1);
+      }
+
+      function syncThemeBadge() {
+        if (!themeBadge) {
+          return;
+        }
+
+        var root = document.documentElement;
+        var theme = (root.getAttribute('data-theme') || '').toLowerCase();
+        var mode = (root.getAttribute('data-mode') || '').toLowerCase();
+        var intensity = (root.getAttribute('data-dark-intensity') || '').toLowerCase();
+
+        if (!theme) {
+          themeBadge.textContent = 'Tema: padrão';
+          return;
+        }
+
+        var modeLabel = mode ? capitalize(mode) : 'Light';
+        var intensityLabel = mode === 'dark' && intensity ? ' · ' + capitalize(intensity) : '';
+        themeBadge.textContent = 'Tema: ' + capitalize(theme) + ' · ' + modeLabel + intensityLabel;
+      }
+
+      syncThemeBadge();
+
+      window.addEventListener('storage', function (event) {
+        if (!event || (event.key !== 'natalcode_theme' && event.key !== 'natalcode_mode' && event.key !== 'natalcode_dark_intensity')) {
+          return;
+        }
+
+        syncThemeBadge();
+      });
+
+      if (!toggle || !sidebar) {
+        return;
+      }
+
+      toggle.addEventListener('click', function () {
+        var isOpen = sidebar.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+
+      if (userMenu) {
+        document.addEventListener('click', function (event) {
+          if (!userMenu.open) {
+            return;
+          }
+
+          if (!userMenu.contains(event.target)) {
+            userMenu.removeAttribute('open');
+          }
+        });
+
+        document.addEventListener('keydown', function (event) {
+          if (event.key === 'Escape' && userMenu.open) {
+            userMenu.removeAttribute('open');
+          }
+        });
+      }
+    })();
+  </script>
+{% endblock %}

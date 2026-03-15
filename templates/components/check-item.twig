@@ -5,7 +5,26 @@
     <p>{{ description }}</p>
     {% if href is defined and href %}
       <div class="nc-check-content-action">
-        <a class="nc-btn nc-btn-secondary" href="{{ href }}">{{ link_label|default('Saiba mais') }}</a>
+        {% if link_icon is defined and link_icon %}
+          <a class="nc-btn nc-btn-secondary nc-btn-icon{{ link_action_class is defined and link_action_class ? ' ' ~ link_action_class : '' }}" href="{{ href }}" aria-label="{{ link_label|default('Saiba mais') }}" title="{{ link_label|default('Saiba mais') }}">
+            {% if link_icon == 'list' %}
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8 7H20M8 12H20M8 17H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <circle cx="4.5" cy="7" r="1.5" fill="currentColor"/>
+                <circle cx="4.5" cy="12" r="1.5" fill="currentColor"/>
+                <circle cx="4.5" cy="17" r="1.5" fill="currentColor"/>
+              </svg>
+            {% elseif link_icon == 'create' %}
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M12 9V15M9 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            {% endif %}
+            <span class="nc-sr-only">{{ link_label|default('Saiba mais') }}</span>
+          </a>
+        {% else %}
+          <a class="nc-btn nc-btn-secondary{{ link_action_class is defined and link_action_class ? ' ' ~ link_action_class : '' }}" href="{{ href }}">{{ link_label|default('Saiba mais') }}</a>
+        {% endif %}
       </div>
     {% endif %}
   </div>

@@ -18,6 +18,15 @@ return function (ContainerBuilder $containerBuilder) {
                 'displayErrorDetails' => $isDevelopment,
                 'logError'            => !$isDevelopment,
                 'logErrorDetails'     => !$isDevelopment,
+                'db' => [
+                    'host' => trim((string) ($_ENV['DB_HOST'] ?? '')),
+                    'port' => (int) ($_ENV['DB_PORT'] ?? 3306),
+                    'name' => trim((string) ($_ENV['DB_NAME'] ?? '')),
+                    'user' => trim((string) ($_ENV['DB_USER'] ?? '')),
+                    'pass' => (string) ($_ENV['DB_PASS'] ?? ''),
+                    'charset' => trim((string) ($_ENV['DB_CHARSET'] ?? 'utf8mb4')),
+                    'timezone' => trim((string) ($_ENV['DB_TIMEZONE'] ?? '+00:00')),
+                ],
                 'logger' => [
                     'name' => 'slim-app',
                     'path' => ($_ENV['APP_ENV'] ?? '') === 'test'

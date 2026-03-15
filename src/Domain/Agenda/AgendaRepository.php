@@ -1,0 +1,45 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domain\Agenda;
+
+interface AgendaRepository
+{
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function findUpcomingPublished(int $limit = 20): array;
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function findPublishedBySlug(string $slug): ?array;
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function findAllForAdmin(): array;
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function findByIdForAdmin(int $id): ?array;
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function findActiveCategories(): array;
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function createEvent(array $data): int;
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function updateEvent(int $id, array $data): bool;
+
+    public function deleteEvent(int $id): bool;
+}
