@@ -1,30 +1,72 @@
 {% extends 'layouts/admin-dashboard.twig' %}
 
 {% set dashboard_page_kicker = 'Dashboard' %}
-{% set dashboard_page_title = 'Área administrativa' %}
-{% set dashboard_page_lead = 'Use o menu lateral para abrir a lista de eventos e gerenciar o conteúdo da agenda.' %}
+{% set panel_is_superuser = dashboard_is_admin_session|default(false) %}
+{% set panel_role_key = member_role_key|default('member') %}
+{% if panel_is_superuser or panel_role_key == 'admin' %}
+  {% set dashboard_page_title = 'Área administrativa' %}
+  {% set dashboard_page_lead = 'Acesso administrativo completo: gerencie eventos, categorias e usuários da plataforma.' %}
+{% elseif panel_role_key == 'manager' %}
+  {% set dashboard_page_title = 'Área de gestão' %}
+  {% set dashboard_page_lead = 'Acesso de gestão: organize eventos e categorias da agenda.' %}
+{% else %}
+  {% set dashboard_page_title = 'Área operacional' %}
+  {% set dashboard_page_lead = 'Acesso operacional: mantenha os eventos da agenda atualizados.' %}
+{% endif %}
 
 {% block admin_content %}
+  {% set panel_can_events = panel_is_superuser or panel_role_key in ['operator', 'manager', 'admin'] %}
+  {% set panel_can_categories = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
+  {% set panel_can_users = panel_is_superuser or panel_role_key == 'admin' %}
+
   <ul class="nc-checklist">
-    {% include 'components/check-item.twig' with {
-      step: '01',
-      title: 'Lista de eventos',
-      description: 'Abra todos os eventos cadastrados para editar, excluir ou visualizar no site.',
-      href: '/painel/eventos',
-      link_label: 'Abrir lista',
-      link_icon: 'list',
-      link_action_class: 'nc-admin-action-open',
-      delay: 120
-    } %}
-    {% include 'components/check-item.twig' with {
-      step: '02',
-      title: 'Novo evento',
-      description: 'Cadastre uma nova atividade da agenda com horário, local e status de publicação.',
-      href: '/painel/eventos/novo',
-      link_label: 'Criar evento',
-      link_icon: 'create',
-      link_action_class: 'nc-admin-action-create',
-      delay: 180
-    } %}
+    {% if panel_can_events %}
+      {% include 'components/check-item.twig' with {
+        step: '01',
+        title: 'Lista de eventos',
+        description: 'Abra todos os eventos cadastrados para editar, excluir ou visualizar no site.',
+        href: '/painel/eventos',
+        link_label: 'Abrir lista',
+        link_icon: 'list',
+        link_action_class: 'nc-admin-action-open',
+        delay: 120
+      } %}
+      {% include 'components/check-item.twig' with {
+        step: '02',
+        title: 'Novo evento',
+        description: 'Cadastre uma nova atividade da agenda com horário, local e status de publicação.',
+        href: '/painel/eventos/novo',
+        link_label: 'Criar evento',
+        link_icon: 'create',
+        link_action_class: 'nc-admin-action-create',
+        delay: 180
+      } %}
+    {% endif %}
+
+    {% if panel_can_categories %}
+      {% include 'components/check-item.twig' with {
+        step: '03',
+        title: 'Categorias',
+        description: 'Gerencie categorias usadas nos eventos da agenda.',
+        href: '/painel/categorias',
+        link_label: 'Abrir categorias',
+        link_icon: 'list',
+        link_action_class: 'nc-admin-action-open',
+        delay: 220
+      } %}
+    {% endif %}
+
+    {% if panel_can_users %}
+      {% include 'components/check-item.twig' with {
+        step: '04',
+        title: 'Usuários',
+        description: 'Aprove cadastros pendentes e atribua perfil de acesso aos membros.',
+        href: '/painel/usuarios',
+        link_label: 'Gerenciar usuários',
+        link_icon: 'list',
+        link_action_class: 'nc-admin-action-open',
+        delay: 260
+      } %}
+    {% endif %}
   </ul>
 {% endblock %}

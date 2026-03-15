@@ -1,0 +1,41 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <main class="nc-main nc-home-flow">
+    <section class="nc-section" aria-label="Login de membro" data-aos="fade-up" data-aos-delay="0">
+      <div class="nc-container">
+        {% include 'components/section-header.twig' with {
+          kicker: 'Acesso',
+          title: 'Acessar área do membro',
+          lead: 'Use seu e-mail e senha para acessar sua área de membro.'
+        } %}
+
+        <article class="nc-card nc-admin-login-card">
+          {% if member_login_error %}
+            <p class="nc-admin-login-error" role="alert">{{ member_login_error }}</p>
+          {% endif %}
+
+          <form class="nc-admin-login-form" method="post" action="/entrar">
+            <div class="nc-admin-login-field">
+              <label class="nc-admin-login-label" for="identifier">E-mail ou usuário</label>
+              <input class="nc-admin-login-input" id="identifier" name="identifier" type="text" value="{{ member_login_form.identifier|default('') }}" autocomplete="username" required>
+            </div>
+
+            <div class="nc-admin-login-field">
+              <label class="nc-admin-login-label" for="password">Senha</label>
+              <input class="nc-admin-login-input" id="password" name="password" type="password" autocomplete="current-password" required>
+            </div>
+
+            <div class="nc-actions nc-admin-login-actions" data-aos="fade-up" data-aos-delay="80">
+              <button class="nc-btn nc-btn-primary nc-admin-login-submit nc-admin-login-submit-full" type="submit">Entrar</button>
+            </div>
+
+            <p class="nc-admin-login-footnote">
+              Não sou membro. <a class="nc-link" href="/cadastro">Desejo ser membro</a>
+            </p>
+          </form>
+        </article>
+      </div>
+    </section>
+  </main>
+{% endblock %}

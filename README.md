@@ -166,6 +166,55 @@ Valores válidos:
 - `APP_DEFAULT_MODE`: `light | dark`
 - `APP_DEFAULT_DARK_INTENSITY`: `neutral | vivid`
 
+## Acesso administrativo via membros
+
+O painel (`/painel`) utiliza papéis de `member_users`.
+
+- `operator`: acesso a eventos;
+- `manager`: acesso a eventos e categorias;
+- `admin`: acesso total, incluindo usuários.
+
+Não há mais autenticação administrativa por usuário/senha em `.env`.
+Administradores devem ser membros aprovados com papel `admin`.
+
+### Bootstrap do primeiro admin (SQL)
+
+Promover um membro existente pelo e-mail:
+
+```sql
+UPDATE member_users mu
+JOIN roles r ON r.role_key = 'admin'
+SET
+	mu.role_id = r.id,
+	mu.status = 'active',
+	mu.approved_at = COALESCE(mu.approved_at, NOW())
+WHERE mu.email = 'seu-email@dominio.com';
+```
+
+Criar um membro admin direto (ajuste hash/senha conforme sua política):
+
+```sql
+INSERT INTO member_users (
+	full_name,
+	email,
+	password_hash,
+	role_id,
+	status,
+	profile_completed,
+	approved_at
+)
+SELECT
+	'Administrador CEDE',
+	'admin@exemplo.com',
+	'$2y$10$TroquePorHashBcryptValido',
+	r.id,
+	'active',
+	1,
+	NOW()
+FROM roles r
+WHERE r.role_key = 'admin';
+```
+
 ## Como executar localmente
 
 ```bash

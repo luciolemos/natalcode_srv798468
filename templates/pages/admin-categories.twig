@@ -6,19 +6,28 @@
 
 {% block admin_content %}
     <section class="nc-section" aria-label="Administração de categorias" data-aos="fade-up" data-aos-delay="0">
+      {% set toast_message = '' %}
+      {% set toast_tone = 'success' %}
       {% if admin_status == 'created' %}
-        <p>Categoria criada com sucesso.</p>
+        {% set toast_message = 'Categoria criada com sucesso.' %}
       {% elseif admin_status == 'updated' %}
-        <p>Categoria atualizada com sucesso.</p>
+        {% set toast_message = 'Categoria atualizada com sucesso.' %}
       {% elseif admin_status == 'enabled' %}
-        <p>Categoria ativada com sucesso.</p>
+        {% set toast_message = 'Categoria ativada com sucesso.' %}
       {% elseif admin_status == 'disabled' %}
-        <p>Categoria inativada com sucesso.</p>
+        {% set toast_message = 'Categoria inativada com sucesso.' %}
       {% elseif admin_status == 'not-found' %}
-        <p>Categoria não encontrada.</p>
+        {% set toast_message = 'Categoria não encontrada.' %}
+        {% set toast_tone = 'error' %}
       {% elseif admin_status == 'toggle-error' %}
-        <p>Não foi possível alterar o status da categoria.</p>
+        {% set toast_message = 'Não foi possível alterar o status da categoria.' %}
+        {% set toast_tone = 'error' %}
       {% endif %}
+
+      {% include 'components/admin-toast.twig' with {
+        message: toast_message,
+        tone: toast_tone
+      } %}
 
       <div class="nc-actions" data-aos="fade-up" data-aos-delay="80">
         <a class="nc-btn nc-btn-primary nc-btn-icon nc-admin-action-create" href="/painel/categorias/nova" aria-label="Nova categoria" title="Nova categoria">

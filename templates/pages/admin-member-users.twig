@@ -1,0 +1,150 @@
+{% extends 'layouts/admin-dashboard.twig' %}
+
+{% set dashboard_page_kicker = 'Dashboard' %}
+{% set dashboard_page_title = 'Usuários' %}
+{% set dashboard_page_lead = 'Valide cadastros pendentes e atribua perfis de acesso aos frequentadores.' %}
+
+{% block admin_content %}
+  <section class="nc-section" aria-label="Administração de usuários" data-aos="fade-up" data-aos-delay="0">
+    {% set toast_message = '' %}
+    {% set toast_tone = 'success' %}
+    {% if admin_status == 'approved' %}
+      {% set toast_message = 'Usuário aprovado e perfil atualizado com sucesso.' %}
+    {% elseif admin_status == 'invalid-role' %}
+      {% set toast_message = 'Selecione um perfil válido para continuar.' %}
+      {% set toast_tone = 'error' %}
+    {% elseif admin_status == 'assign-error' %}
+      {% set toast_message = 'Não foi possível salvar o perfil do usuário agora. Tente novamente.' %}
+      {% set toast_tone = 'error' %}
+    {% elseif admin_status == 'load-error' %}
+      {% set toast_message = admin_error_message|default('Não foi possível carregar os usuários no momento.') %}
+      {% set toast_tone = 'error' %}
+    {% endif %}
+
+    {% include 'components/admin-toast.twig' with {
+      message: toast_message,
+      tone: toast_tone
+    } %}
+
+    {% set pagination = member_users_pagination|default({}) %}
+    {% set sort_links = member_users_sort_links|default({}) %}
+    {% set search_term = member_users_search|default('') %}
+
+    {% if member_users|length == 0 %}
+      <form class="nc-admin-table-search" method="get" action="/painel/usuarios" data-aos="fade-up" data-aos-delay="95">
+        <label for="nc-users-search">Buscar usuários</label>
+        <div class="nc-admin-table-search-controls">
+          <input id="nc-users-search" name="q" type="search" value="{{ search_term }}" placeholder="Nome, e-mail, status, perfil...">
+          <input type="hidden" name="sort" value="{{ pagination.sort|default('id') }}">
+          <input type="hidden" name="dir" value="{{ pagination.dir|default('desc') }}">
+          <input type="hidden" name="per_page" value="{{ pagination.page_size|default(10) }}">
+          <button class="nc-btn nc-btn-secondary" type="submit">Buscar</button>
+        </div>
+      </form>
+      <p>{{ search_term ? 'Nenhum usuário encontrado para a busca informada.' : 'Nenhum usuário cadastrado até o momento.' }}</p>
+    {% else %}
+      <form class="nc-admin-table-search" method="get" action="/painel/usuarios" data-aos="fade-up" data-aos-delay="95">
+        <label for="nc-users-search">Buscar usuários</label>
+        <div class="nc-admin-table-search-controls">
+          <input id="nc-users-search" name="q" type="search" value="{{ search_term }}" placeholder="Nome, e-mail, status, perfil...">
+          <input type="hidden" name="sort" value="{{ pagination.sort|default('id') }}">
+          <input type="hidden" name="dir" value="{{ pagination.dir|default('desc') }}">
+          <input type="hidden" name="per_page" value="{{ pagination.page_size|default(10) }}">
+          <button class="nc-btn nc-btn-secondary" type="submit">Buscar</button>
+        </div>
+      </form>
+
+      <div class="nc-admin-table-toolbar" data-aos="fade-up" data-aos-delay="110">
+        <p class="nc-admin-table-counter">
+          Mostrando {{ pagination.start_item }}-{{ pagination.end_item }} de {{ pagination.total_items }} registros
+        </p>
+
+        <form class="nc-admin-table-page-size" method="get" action="/painel/usuarios">
+          <label for="nc-users-per-page">Registros por página</label>
+          <select id="nc-users-per-page" name="per_page" onchange="this.form.submit()">
+            {% for option in pagination.page_size_options %}
+              <option value="{{ option.value }}"{% if option.selected %} selected{% endif %}>{{ option.value }}</option>
+            {% endfor %}
+          </select>
+          <input type="hidden" name="sort" value="{{ pagination.sort|default('id') }}">
+          <input type="hidden" name="dir" value="{{ pagination.dir|default('desc') }}">
+          <input type="hidden" name="q" value="{{ search_term }}">
+          <noscript>
+            <button class="nc-btn nc-btn-secondary" type="submit">Aplicar</button>
+          </noscript>
+        </form>
+      </div>
+
+      <div class="nc-admin-table-wrap" data-aos="fade-up" data-aos-delay="80">
+        <table class="nc-admin-table">
+          <thead>
+            <tr>
+              <th>
+                <a class="nc-admin-sort-link{% if sort_links.id.active %} is-active{% endif %}" href="{{ sort_links.id.url }}">ID <span aria-hidden="true">{{ sort_links.id.indicator }}</span></a>
+              </th>
+              <th>
+                <a class="nc-admin-sort-link{% if sort_links.full_name.active %} is-active{% endif %}" href="{{ sort_links.full_name.url }}">Nome <span aria-hidden="true">{{ sort_links.full_name.indicator }}</span></a>
+              </th>
+              <th>
+                <a class="nc-admin-sort-link{% if sort_links.email.active %} is-active{% endif %}" href="{{ sort_links.email.url }}">E-mail <span aria-hidden="true">{{ sort_links.email.indicator }}</span></a>
+              </th>
+              <th>
+                <a class="nc-admin-sort-link{% if sort_links.status.active %} is-active{% endif %}" href="{{ sort_links.status.url }}">Status <span aria-hidden="true">{{ sort_links.status.indicator }}</span></a>
+              </th>
+              <th>
+                <a class="nc-admin-sort-link{% if sort_links.role_name.active %} is-active{% endif %}" href="{{ sort_links.role_name.url }}">Perfil <span aria-hidden="true">{{ sort_links.role_name.indicator }}</span></a>
+              </th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in member_users %}
+              <tr>
+                <td data-label="ID">{{ user.id }}</td>
+                <td data-label="Nome">{{ user.full_name|default('-') }}</td>
+                <td data-label="E-mail">{{ user.email|default('-') }}</td>
+                <td data-label="Status">
+                  <span class="nc-admin-featured-flag{{ user.status == 'active' ? ' is-on' : ' is-off' }}">{{ user.status }}</span>
+                </td>
+                <td data-label="Perfil">{{ user.role_name|default('-') }}</td>
+                <td data-label="Ações">
+                  <form method="post" action="/painel/usuarios/{{ user.id }}/atribuir-papel" class="nc-admin-inline-form">
+                    <select class="nc-admin-inline-select" name="role_id" aria-label="Selecionar perfil para {{ user.full_name|default('usuário') }}">
+                      <option value="">Selecionar perfil</option>
+                      {% for role in member_roles %}
+                        <option value="{{ role.id }}"{% if user.role_key is defined and user.role_key == role.role_key %} selected{% endif %}>{{ role.name }}</option>
+                      {% endfor %}
+                    </select>
+                    <button class="nc-btn nc-btn-secondary" type="submit">Salvar</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% if pagination.total_pages > 1 %}
+        <nav class="nc-admin-pagination" aria-label="Paginação de usuários" data-aos="fade-up" data-aos-delay="170">
+          {% if pagination.previous_url %}
+            <a class="nc-link" href="{{ pagination.previous_url }}">← Anterior</a>
+          {% else %}
+            <span class="is-disabled">← Anterior</span>
+          {% endif %}
+
+          <div class="nc-admin-pagination-pages">
+            {% for link in pagination.links %}
+              <a class="nc-link{% if link.active %} is-active{% endif %}" href="{{ link.url }}">{{ link.number }}</a>
+            {% endfor %}
+          </div>
+
+          {% if pagination.next_url %}
+            <a class="nc-link" href="{{ pagination.next_url }}">Próxima →</a>
+          {% else %}
+            <span class="is-disabled">Próxima →</span>
+          {% endif %}
+        </nav>
+      {% endif %}
+    {% endif %}
+  </section>
+{% endblock %}

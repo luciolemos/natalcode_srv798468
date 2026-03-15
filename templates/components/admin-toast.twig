@@ -1,0 +1,7 @@
+{% if message is defined and message %}
+  {% set tone = tone|default('info') %}
+  <div class="nc-admin-toast nc-admin-toast-{{ tone }}" role="status" aria-live="polite" data-admin-toast>
+    <div class="nc-admin-toast-body">{{ message }}</div>
+    <button class="nc-admin-toast-close" type="button" aria-label="Fechar aviso" data-admin-toast-close>×</button>
+  </div>
+{% endif %}

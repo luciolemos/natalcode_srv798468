@@ -6,17 +6,26 @@
 
 {% block admin_content %}
     <section class="nc-section" aria-label="Administração da agenda" data-aos="fade-up" data-aos-delay="0">
+      {% set toast_message = '' %}
+      {% set toast_tone = 'success' %}
       {% if admin_status == 'created' %}
-        <p>Evento criado com sucesso.</p>
+        {% set toast_message = 'Evento criado com sucesso.' %}
       {% elseif admin_status == 'updated' %}
-        <p>Evento atualizado com sucesso.</p>
+        {% set toast_message = 'Evento atualizado com sucesso.' %}
       {% elseif admin_status == 'deleted' %}
-        <p>Evento excluído com sucesso.</p>
+        {% set toast_message = 'Evento excluído com sucesso.' %}
       {% elseif admin_status == 'not-found' %}
-        <p>Evento não encontrado.</p>
+        {% set toast_message = 'Evento não encontrado.' %}
+        {% set toast_tone = 'error' %}
       {% elseif admin_status == 'delete-error' %}
-        <p>Não foi possível excluir o evento.</p>
+        {% set toast_message = 'Não foi possível excluir o evento.' %}
+        {% set toast_tone = 'error' %}
       {% endif %}
+
+      {% include 'components/admin-toast.twig' with {
+        message: toast_message,
+        tone: toast_tone
+      } %}
 
       <div class="nc-actions" data-aos="fade-up" data-aos-delay="80">
         <a class="nc-btn nc-btn-primary nc-btn-icon nc-admin-action-create" href="/painel/eventos/novo" aria-label="Novo evento" title="Novo evento">

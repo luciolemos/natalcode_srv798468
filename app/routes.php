@@ -15,6 +15,8 @@ use App\Application\Actions\Admin\AdminAgendaListPageAction;
 use App\Application\Actions\Admin\AdminCategoryFormPageAction;
 use App\Application\Actions\Admin\AdminCategoryListPageAction;
 use App\Application\Actions\Admin\AdminCategoryToggleStatusAction;
+use App\Application\Actions\Admin\AdminMemberAssignRoleAction;
+use App\Application\Actions\Admin\AdminMemberUsersPageAction;
 use App\Application\Actions\Admin\AdminLogoutAction;
 use App\Application\Actions\Page\AgendaDetailPageAction;
 use App\Application\Actions\Page\AgendaPageAction;
@@ -26,6 +28,14 @@ use App\Application\Actions\Page\FaqParticipationPageAction;
 use App\Application\Actions\Page\FaqPracticesPageAction;
 use App\Application\Actions\Page\FraternalServicePageAction;
 use App\Application\Actions\Page\HomePageAction;
+use App\Application\Actions\Page\MemberCompleteProfilePageAction;
+use App\Application\Actions\Page\MemberAdminAreaPageAction;
+use App\Application\Actions\Page\MemberHomePageAction;
+use App\Application\Actions\Page\MemberLoginPageAction;
+use App\Application\Actions\Page\MemberManagerAreaPageAction;
+use App\Application\Actions\Page\MemberOperatorAreaPageAction;
+use App\Application\Actions\Page\MemberLogoutAction;
+use App\Application\Actions\Page\MemberRegisterPageAction;
 use App\Application\Actions\Page\PublicLecturesPageAction;
 use App\Application\Actions\Page\StudiesPageAction;
 use App\Application\Actions\User\ListUsersAction;
@@ -39,65 +49,49 @@ use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 use Slim\Views\Twig;
 
 return function (App $app) {
-    $normalizeEnvValue = static function (string $value): string {
-        $normalized = trim($value);
+    $roleWeights = [
+        'member' => 10,
+        'operator' => 20,
+        'manager' => 30,
+        'admin' => 40,
+    ];
 
-        if (strlen($normalized) >= 2) {
-            $first = $normalized[0];
-            $last = $normalized[strlen($normalized) - 1];
+    $memberHasMinimumRole = static function (string $requiredRoleKey) use ($roleWeights): bool {
+        $memberRoleKey = trim((string) ($_SESSION['member_role_key'] ?? 'member'));
+        $memberWeight = (int) ($roleWeights[$memberRoleKey] ?? 0);
+        $requiredWeight = (int) ($roleWeights[$requiredRoleKey] ?? PHP_INT_MAX);
 
-            if (($first === '"' && $last === '"') || ($first === '\'' && $last === '\'')) {
-                return substr($normalized, 1, -1);
-            }
-        }
-
-        return $normalized;
+        return !empty($_SESSION['member_authenticated']) && $memberWeight >= $requiredWeight;
     };
 
-    $buildDashboardAuthToken = static function (string $username, string $password): string {
-        $seed = trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'CEDE'));
-
-        return hash('sha256', $seed . '|' . $username . '|' . $password);
-    };
-
-    $adminSessionAuthMiddleware = function (Request $request, RequestHandler $handler) use ($app): Response {
+    $adminSessionAuthMiddleware = function (Request $request, RequestHandler $handler) use ($app, $memberHasMinimumRole): Response {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             @session_start();
         }
 
-        if (!empty($_SESSION['admin_authenticated'])) {
+        if ($memberHasMinimumRole('operator')) {
             return $handler->handle($request);
-        }
-
-        $expectedUserRaw = (string) (
-            $_ENV['ADMIN_DASHBOARD_USER']
-            ?? $_ENV['ADMIN_AGENDA_USER']
-            ?? ''
-        );
-        $expectedPassRaw = (string) (
-            $_ENV['ADMIN_DASHBOARD_PASS']
-            ?? $_ENV['ADMIN_AGENDA_PASS']
-            ?? ''
-        );
-
-        $expectedUser = $normalizeEnvValue($expectedUserRaw);
-        $expectedPass = $normalizeEnvValue($expectedPassRaw);
-
-        if ($expectedUser !== '' && $expectedPass !== '') {
-            $cookieToken = (string) ($_COOKIE['dashboard_auth'] ?? '');
-            $validToken = $buildDashboardAuthToken($expectedUser, $expectedPass);
-
-            if ($cookieToken !== '' && hash_equals($validToken, $cookieToken)) {
-                $_SESSION['admin_authenticated'] = true;
-                $_SESSION['admin_user'] = $expectedUser;
-
-                return $handler->handle($request);
-            }
         }
 
         $response = $app->getResponseFactory()->createResponse(302);
 
-        return $response->withHeader('Location', '/painel/login');
+        return $response->withHeader('Location', '/entrar');
+    };
+
+    $panelRoleMiddlewareFactory = static function (string $requiredRoleKey) use ($app, $memberHasMinimumRole): callable {
+        return function (Request $request, RequestHandler $handler) use ($app, $memberHasMinimumRole, $requiredRoleKey): Response {
+            if ($memberHasMinimumRole($requiredRoleKey)) {
+                return $handler->handle($request);
+            }
+
+            $response = $app->getResponseFactory()->createResponse(302);
+
+            if (!empty($_SESSION['member_authenticated'])) {
+                return $response->withHeader('Location', '/membro?status=forbidden');
+            }
+
+            return $response->withHeader('Location', '/entrar');
+        };
     };
 
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
@@ -117,18 +111,28 @@ return function (App $app) {
     $app->get('/estudos/atendimento-fraterno', FraternalServicePageAction::class);
     $app->get('/agenda', AgendaPageAction::class);
     $app->get('/agenda/{slug}', AgendaDetailPageAction::class);
+    $app->map(['GET', 'POST'], '/cadastro', MemberRegisterPageAction::class);
+    $app->map(['GET', 'POST'], '/entrar', MemberLoginPageAction::class);
+    $app->map(['GET', 'POST'], '/membro/sair', MemberLogoutAction::class);
+    $app->get('/membro', MemberHomePageAction::class);
+    $app->map(['GET', 'POST'], '/membro/perfil/completar', MemberCompleteProfilePageAction::class);
+    $app->get('/membro/operacao', MemberOperatorAreaPageAction::class);
+    $app->get('/membro/gestao', MemberManagerAreaPageAction::class);
+    $app->get('/membro/administracao', MemberAdminAreaPageAction::class);
     $app->map(['GET', 'POST'], '/painel/login', AdminLoginPageAction::class);
     $app->get('/painel/logout', AdminLogoutAction::class);
-    $app->group('/painel', function (Group $group) {
-        $group->get('', AdminDashboardPageAction::class);
-        $group->get('/eventos', AdminAgendaListPageAction::class);
-        $group->map(['GET', 'POST'], '/eventos/novo', AdminAgendaFormPageAction::class);
-        $group->map(['GET', 'POST'], '/eventos/{id}/editar', AdminAgendaFormPageAction::class);
-        $group->post('/eventos/{id}/excluir', AdminAgendaDeleteAction::class);
-        $group->get('/categorias', AdminCategoryListPageAction::class);
-        $group->map(['GET', 'POST'], '/categorias/nova', AdminCategoryFormPageAction::class);
-        $group->map(['GET', 'POST'], '/categorias/{id}/editar', AdminCategoryFormPageAction::class);
-        $group->post('/categorias/{id}/alternar-status', AdminCategoryToggleStatusAction::class);
+    $app->group('/painel', function (Group $group) use ($panelRoleMiddlewareFactory) {
+        $group->get('', AdminDashboardPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+        $group->get('/eventos', AdminAgendaListPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+        $group->map(['GET', 'POST'], '/eventos/novo', AdminAgendaFormPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+        $group->map(['GET', 'POST'], '/eventos/{id}/editar', AdminAgendaFormPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+        $group->post('/eventos/{id}/excluir', AdminAgendaDeleteAction::class)->add($panelRoleMiddlewareFactory('operator'));
+        $group->get('/categorias', AdminCategoryListPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
+        $group->map(['GET', 'POST'], '/categorias/nova', AdminCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
+        $group->map(['GET', 'POST'], '/categorias/{id}/editar', AdminCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
+        $group->post('/categorias/{id}/alternar-status', AdminCategoryToggleStatusAction::class)->add($panelRoleMiddlewareFactory('manager'));
+        $group->get('/usuarios', AdminMemberUsersPageAction::class)->add($panelRoleMiddlewareFactory('admin'));
+        $group->post('/usuarios/{id}/atribuir-papel', AdminMemberAssignRoleAction::class)->add($panelRoleMiddlewareFactory('admin'));
     })->add($adminSessionAuthMiddleware);
 
     $app->get('/admin', function (Request $request, Response $response) {
@@ -170,6 +174,13 @@ return function (App $app) {
     $app->post('/admin/categorias/{id}/alternar-status', function (Request $request, Response $response) {
         $id = (string) ($request->getAttribute('id') ?? '');
         return $response->withHeader('Location', '/painel/categorias/' . $id . '/alternar-status')->withStatus(307);
+    });
+    $app->get('/admin/usuarios', function (Request $request, Response $response) {
+        return $response->withHeader('Location', '/painel/usuarios')->withStatus(302);
+    });
+    $app->post('/admin/usuarios/{id}/atribuir-papel', function (Request $request, Response $response) {
+        $id = (string) ($request->getAttribute('id') ?? '');
+        return $response->withHeader('Location', '/painel/usuarios/' . $id . '/atribuir-papel')->withStatus(307);
     });
     $app->get('/faq', FaqPageAction::class);
     $app->get('/faq/doutrina', FaqDoctrinePageAction::class);

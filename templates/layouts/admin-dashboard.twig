@@ -1,6 +1,12 @@
 {% extends 'layouts/dashboard-base.twig' %}
 
 {% block content %}
+  {% set panel_is_superuser = dashboard_is_admin_session|default(false) %}
+  {% set panel_role_key = member_role_key|default('member') %}
+  {% set panel_can_events = panel_is_superuser or panel_role_key in ['operator', 'manager', 'admin'] %}
+  {% set panel_can_categories = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
+  {% set panel_can_users = panel_is_superuser or panel_role_key == 'admin' %}
+
   <main class="nc-dashboard-shell" aria-label="Dashboard administrativo">
     <header class="nc-dashboard-topbar">
       <div class="nc-dashboard-topbar-left">
@@ -18,8 +24,15 @@
         <details class="nc-dashboard-user-menu">
           {% set dashboard_user_label = dashboard_user|default('Usuário') %}
           {% set dashboard_user_initial = dashboard_user_label|slice(0, 1)|upper %}
+          {% set dashboard_user_photo_path = dashboard_user_photo_path|default('') %}
           <summary>
-            <span class="nc-dashboard-user-avatar">{{ dashboard_user_initial }}</span>
+            <span class="nc-dashboard-user-avatar">
+              {% if dashboard_user_photo_path %}
+                <img src="/{{ dashboard_user_photo_path }}" alt="">
+              {% else %}
+                {{ dashboard_user_initial }}
+              {% endif %}
+            </span>
             <span class="nc-dashboard-user-name">{{ dashboard_user_label }}</span>
             <span class="nc-dashboard-user-caret" aria-hidden="true">▾</span>
           </summary>
@@ -43,18 +56,42 @@
               </span>
               <span>Lista de eventos</span>
             </a>
-            <a class="nc-link nc-dashboard-user-menu-link" href="/painel/categorias">
+            {% if panel_can_categories %}
+              <a class="nc-link nc-dashboard-user-menu-link" href="/painel/categorias">
+                <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 6.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M5 17.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="4" cy="6.5" r="1" fill="currentColor"/>
+                    <circle cx="4" cy="12" r="1" fill="currentColor"/>
+                    <circle cx="4" cy="17.5" r="1" fill="currentColor"/>
+                  </svg>
+                </span>
+                <span>Lista de categorias</span>
+              </a>
+            {% endif %}
+            {% if panel_can_users %}
+              <a class="nc-link nc-dashboard-user-menu-link" href="/painel/usuarios">
+                <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 19C16 16.7909 14.2091 15 12 15C9.79086 15 8 16.7909 8 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="12" cy="9" r="3" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M5 19C5 17.3431 3.65685 16 2 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M19 19C19 17.3431 20.3431 16 22 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span>Usuários</span>
+              </a>
+            {% endif %}
+            <a class="nc-link nc-dashboard-user-menu-link" href="/membro/perfil/completar">
               <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 6.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                  <path d="M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                  <path d="M5 17.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                  <circle cx="4" cy="6.5" r="1" fill="currentColor"/>
-                  <circle cx="4" cy="12" r="1" fill="currentColor"/>
-                  <circle cx="4" cy="17.5" r="1" fill="currentColor"/>
+                  <circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="M5 19C5 15.6863 8.13401 13 12 13C15.866 13 19 15.6863 19 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                 </svg>
               </span>
-              <span>Lista de categorias</span>
+              <span>Meu perfil</span>
             </a>
             <a class="nc-link nc-dashboard-user-menu-link" href="/">
               <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
@@ -115,18 +152,33 @@
               </span>
               <span class="nc-admin-link-label">Lista de eventos</span>
             </a>
-            <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/categorias' ? ' is-active' : '' }}" href="/painel/categorias">
+            {% if panel_can_categories %}
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/categorias' ? ' is-active' : '' }}" href="/painel/categorias">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 7H20M8 12H20M8 17H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="4.5" cy="7" r="1.5" fill="currentColor"/>
+                    <circle cx="4.5" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="4.5" cy="17" r="1.5" fill="currentColor"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Lista de categorias</span>
+              </a>
+            {% endif %}
+          </details>
+          {% if panel_can_users %}
+            <a class="nc-link{{ current_path starts with '/painel/usuarios' ? ' is-active' : '' }}" href="/painel/usuarios">
               <span class="nc-admin-link-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M8 7H20M8 12H20M8 17H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                  <circle cx="4.5" cy="7" r="1.5" fill="currentColor"/>
-                  <circle cx="4.5" cy="12" r="1.5" fill="currentColor"/>
-                  <circle cx="4.5" cy="17" r="1.5" fill="currentColor"/>
+                  <path d="M16 19C16 16.7909 14.2091 15 12 15C9.79086 15 8 16.7909 8 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="12" cy="9" r="3" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="M5 19C5 17.3431 3.65685 16 2 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M19 19C19 17.3431 20.3431 16 22 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                 </svg>
               </span>
-              <span class="nc-admin-link-label">Lista de categorias</span>
+              <span class="nc-admin-link-label">Usuários</span>
             </a>
-          </details>
+          {% endif %}
           <a class="nc-link" href="/painel/logout">
             <span class="nc-admin-link-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -297,6 +349,33 @@
           if (event.key === 'Escape' && userMenu.open) {
             userMenu.removeAttribute('open');
           }
+        });
+      }
+
+      var toasts = document.querySelectorAll('[data-admin-toast]');
+
+      if (toasts.length > 0) {
+        toasts.forEach(function (toast) {
+          var closeButton = toast.querySelector('[data-admin-toast-close]');
+
+          window.requestAnimationFrame(function () {
+            toast.classList.add('is-visible');
+          });
+
+          function hideToast() {
+            toast.classList.add('is-hiding');
+            window.setTimeout(function () {
+              if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+              }
+            }, 180);
+          }
+
+          if (closeButton) {
+            closeButton.addEventListener('click', hideToast);
+          }
+
+          window.setTimeout(hideToast, 4500);
         });
       }
     })();
