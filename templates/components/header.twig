@@ -56,9 +56,32 @@
       {% endfor %}
 
       {% for item in nav_links_after %}
-        {% set is_item_active = path == item.path %}
-        <a class="nc-link{{ is_item_active ? ' is-active' : '' }}" href="{{ item.path }}" {% if is_item_active %}aria-current="page"{% endif %}>{{ item.key is defined ? labels[item.key]|default(item.label|default(item.path)) : item.label|default(item.path) }}</a>
+        {% set is_login_entry = item.key is defined and item.key == 'login' %}
+        {% if not is_login_entry %}
+          {% set is_item_active = path == item.path %}
+          <a class="nc-link{{ is_item_active ? ' is-active' : '' }}" href="{{ item.path }}" {% if is_item_active %}aria-current="page"{% endif %}>{{ item.key is defined ? labels[item.key]|default(item.label|default(item.path)) : item.label|default(item.path) }}</a>
+        {% endif %}
       {% endfor %}
+
+      {% set auth_is_logged = dashboard_is_authenticated|default(false) %}
+      {% set auth_path = auth_is_logged ? '/painel' : '/painel/login' %}
+      {% set auth_label = auth_is_logged ? 'PAINEL' : labels.login|default('Login') %}
+      {% set auth_is_active = auth_is_logged ? (path starts with '/painel') : (path == '/painel/login') %}
+
+      {% if auth_is_logged %}
+        <a class="nc-link nc-link-panel{{ auth_is_active ? ' is-active' : '' }}" href="{{ auth_path }}" {% if auth_is_active %}aria-current="page"{% endif %}>
+          <span class="nc-link-panel-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M3 10H21" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M8 15H11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span>{{ auth_label }}</span>
+        </a>
+      {% else %}
+        <a class="nc-link{{ auth_is_active ? ' is-active' : '' }}" href="{{ auth_path }}" {% if auth_is_active %}aria-current="page"{% endif %}>{{ auth_label }}</a>
+      {% endif %}
     </nav>
   </div>
 </header>

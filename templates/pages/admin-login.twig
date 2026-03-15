@@ -1,0 +1,38 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <main class="nc-main nc-home-flow">
+    <section class="nc-section" aria-label="Login administrativo" data-aos="fade-up" data-aos-delay="0">
+      <div class="nc-container">
+        {% include 'components/section-header.twig' with {
+          kicker: 'Dashboard',
+          title: 'Login do dashboard',
+          lead: 'Entre para acessar o dashboard interno e gerenciar os eventos da agenda.'
+        } %}
+
+        <article class="nc-card nc-admin-login-card">
+          {% if admin_login_error %}
+            <p class="nc-admin-login-error" role="alert">{{ admin_login_error }}</p>
+          {% endif %}
+
+          <form class="nc-admin-login-form" method="post" action="/painel/login">
+            <div class="nc-admin-login-field">
+              <label class="nc-admin-login-label" for="username">Usuário</label>
+              <input class="nc-admin-login-input" id="username" name="username" type="text" autocomplete="username" required>
+            </div>
+
+            <div class="nc-admin-login-field">
+              <label class="nc-admin-login-label" for="password">Senha</label>
+              <input class="nc-admin-login-input" id="password" name="password" type="password" autocomplete="current-password" required>
+            </div>
+
+            <div class="nc-actions nc-admin-login-actions" data-aos="fade-up" data-aos-delay="100">
+              <button class="nc-btn nc-btn-primary nc-admin-login-submit" type="submit">Entrar</button>
+              <a class="nc-btn nc-btn-secondary nc-admin-login-back" href="/">Voltar ao site</a>
+            </div>
+          </form>
+        </article>
+      </div>
+    </section>
+  </main>
+{% endblock %}

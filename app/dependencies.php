@@ -27,6 +27,34 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $logger;
         },
+        \PDO::class => function (ContainerInterface $c): \PDO {
+            $settings = $c->get(SettingsInterface::class);
+            $db = (array) $settings->get('db');
+
+            $host = (string) ($db['host'] ?? '');
+            $name = (string) ($db['name'] ?? '');
+            $user = (string) ($db['user'] ?? '');
+            $pass = (string) ($db['pass'] ?? '');
+            $port = (int) ($db['port'] ?? 3306);
+            $charset = (string) ($db['charset'] ?? 'utf8mb4');
+            $timezone = (string) ($db['timezone'] ?? '+00:00');
+
+            if ($host === '' || $name === '' || $user === '') {
+                throw new \RuntimeException('Configuração de banco incompleta. Defina DB_HOST, DB_NAME, DB_USER e DB_PASS no .env.');
+            }
+
+            $dsn = sprintf('mysql:host=%s;port=%d;dbname=%s;charset=%s', $host, $port, $name, $charset);
+
+            $pdo = new \PDO($dsn, $user, $pass, [
+                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+                \PDO::ATTR_EMULATE_PREPARES => false,
+            ]);
+
+            $pdo->exec(sprintf("SET time_zone = '%s'", str_replace("'", "''", $timezone)));
+
+            return $pdo;
+        },
         Twig::class => function () {
             $twig = Twig::create(__DIR__ . '/../templates', [
                 'cache' => false,

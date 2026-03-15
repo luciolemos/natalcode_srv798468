@@ -1,0 +1,30 @@
+{% extends 'layouts/admin-dashboard.twig' %}
+
+{% set dashboard_page_kicker = 'Dashboard' %}
+{% set dashboard_page_title = 'Área administrativa' %}
+{% set dashboard_page_lead = 'Use o menu lateral para abrir a lista de eventos e gerenciar o conteúdo da agenda.' %}
+
+{% block admin_content %}
+  <ul class="nc-checklist">
+    {% include 'components/check-item.twig' with {
+      step: '01',
+      title: 'Lista de eventos',
+      description: 'Abra todos os eventos cadastrados para editar, excluir ou visualizar no site.',
+      href: '/painel/eventos',
+      link_label: 'Abrir lista',
+      link_icon: 'list',
+      link_action_class: 'nc-admin-action-open',
+      delay: 120
+    } %}
+    {% include 'components/check-item.twig' with {
+      step: '02',
+      title: 'Novo evento',
+      description: 'Cadastre uma nova atividade da agenda com horário, local e status de publicação.',
+      href: '/painel/eventos/novo',
+      link_label: 'Criar evento',
+      link_icon: 'create',
+      link_action_class: 'nc-admin-action-create',
+      delay: 180
+    } %}
+  </ul>
+{% endblock %}
