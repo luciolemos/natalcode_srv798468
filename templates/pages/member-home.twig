@@ -1,0 +1,78 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <main class="nc-main nc-home-flow">
+    <section class="nc-section" aria-label="Área do membro" data-aos="fade-up" data-aos-delay="0">
+      <div class="nc-container">
+        {% include 'components/section-header.twig' with {
+          kicker: 'Área do Membro',
+          title: 'Bem-vindo, ' ~ (member_data.full_name|default(member_name|default('Membro'))),
+          lead: 'Sua área pessoal está ativa. Revise seus dados e acesse os recursos conforme seu perfil.'
+        } %}
+
+        {% if member_home_status == 'forbidden' %}
+          <p class="nc-admin-login-error" role="alert">Seu perfil não possui permissão para acessar a área solicitada.</p>
+        {% elseif member_home_status == 'profile-updated' %}
+          <p class="nc-admin-login-success" role="status">Perfil atualizado com sucesso.</p>
+        {% elseif member_home_status == 'profile-updated-no-photo' %}
+          <p class="nc-admin-login-success" role="status">Perfil atualizado, mas não foi possível salvar a foto agora. Tente novamente em instantes.</p>
+        {% endif %}
+
+        <section class="nc-member-dashboard" aria-label="Resumo do perfil">
+          <article class="nc-card nc-member-panel">
+            <div class="nc-member-header">
+              <div class="nc-member-avatar-wrap" aria-hidden="true">
+                {% if member_data.profile_photo_path %}
+                  <img class="nc-member-avatar" src="/{{ member_data.profile_photo_path }}" alt="">
+                {% else %}
+                  <div class="nc-member-avatar-placeholder">{{ (member_data.full_name|default('M')|slice(0, 1)|upper) }}</div>
+                {% endif %}
+              </div>
+              <div class="nc-member-header-text">
+                <h3>Dados do cadastro</h3>
+                <p>Essas informações ficam associadas à sua conta de membro.</p>
+              </div>
+            </div>
+
+            <dl class="nc-member-grid">
+              <div><dt>Perfil</dt><dd>{{ member_data.role_name|default('Membro') }}</dd></div>
+              <div><dt>E-mail</dt><dd>{{ member_data.email|default('-') }}</dd></div>
+              <div><dt>Celular</dt><dd>{{ member_data.phone_mobile|default('-') }}</dd></div>
+              <div><dt>Telefone</dt><dd>{{ member_data.phone_landline|default('-') }}</dd></div>
+              <div><dt>Data de nascimento</dt><dd>{{ member_data.birth_date|default('-') }}</dd></div>
+              <div><dt>Naturalidade</dt><dd>{{ member_data.birth_place|default('-') }}</dd></div>
+            </dl>
+
+            <div class="nc-actions nc-admin-login-actions nc-member-actions" data-aos="fade-up" data-aos-delay="80">
+              <a class="nc-btn nc-btn-secondary" href="/membro/perfil/completar">Editar dados do perfil</a>
+              <a class="nc-btn nc-btn-secondary" href="/">Voltar ao site</a>
+              <form method="post" action="/membro/sair" onsubmit="return confirm('Deseja realmente encerrar sua sessão?');">
+                <button class="nc-btn nc-admin-action-delete" type="submit">Encerrar sessão</button>
+              </form>
+            </div>
+          </article>
+
+          {% set role_key = member_data.role_key|default('member') %}
+          <article class="nc-card nc-member-panel">
+            <h3>Acessos do seu perfil</h3>
+            <p class="nc-member-subtitle">Os atalhos abaixo variam de acordo com seu nível de acesso.</p>
+            <ul class="nc-member-access-list">
+              {% if role_key in ['operator', 'manager', 'admin'] %}
+                <li><a class="nc-link" href="/membro/operacao">Área de Operação</a></li>
+              {% endif %}
+              {% if role_key in ['manager', 'admin'] %}
+                <li><a class="nc-link" href="/membro/gestao">Área de Gestão</a></li>
+              {% endif %}
+              {% if role_key == 'admin' %}
+                <li><a class="nc-link" href="/membro/administracao">Área Administrativa</a></li>
+              {% endif %}
+              {% if role_key not in ['operator', 'manager', 'admin'] %}
+                <li>Seu perfil atual é de membro básico. Novos acessos aparecem após atribuição de papel no painel.</li>
+              {% endif %}
+            </ul>
+          </article>
+        </section>
+      </div>
+    </section>
+  </main>
+{% endblock %}

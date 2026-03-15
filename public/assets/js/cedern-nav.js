@@ -141,6 +141,9 @@ const initCedernNav = () => {
       return;
     }
 
+    const isMemberUserMenu = group.classList.contains("nc-member-nav-group");
+    let memberMenuCloseTimer = null;
+
     groupToggle.addEventListener("click", (event) => {
       event.preventDefault();
 
@@ -149,6 +152,37 @@ const initCedernNav = () => {
       closeAllGroups();
       setGroupOpen(group, willOpen);
     });
+
+    if (isMemberUserMenu) {
+      group.addEventListener("mouseenter", () => {
+        if (!desktopQuery.matches) {
+          return;
+        }
+
+        if (memberMenuCloseTimer) {
+          window.clearTimeout(memberMenuCloseTimer);
+          memberMenuCloseTimer = null;
+        }
+
+        closeAllGroups();
+        setGroupOpen(group, true);
+      });
+
+      group.addEventListener("mouseleave", () => {
+        if (!desktopQuery.matches) {
+          return;
+        }
+
+        if (memberMenuCloseTimer) {
+          window.clearTimeout(memberMenuCloseTimer);
+        }
+
+        memberMenuCloseTimer = window.setTimeout(() => {
+          setGroupOpen(group, false);
+          memberMenuCloseTimer = null;
+        }, 320);
+      });
+    }
   });
 
   nav.querySelectorAll("a").forEach((link) => {

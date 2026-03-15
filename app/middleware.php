@@ -25,9 +25,37 @@ return function (App $app) {
             $dashboardEnvTone = 'test';
         }
 
+        $dashboardRoleWeights = [
+            'member' => 10,
+            'operator' => 20,
+            'manager' => 30,
+            'admin' => 40,
+        ];
+
+        $memberRoleKey = trim((string) ($_SESSION['member_role_key'] ?? 'member'));
+        $memberRoleWeight = (int) ($dashboardRoleWeights[$memberRoleKey] ?? 0);
+        $memberHasDashboardAccess = !empty($_SESSION['member_authenticated']) && $memberRoleWeight >= 20;
+
+        $dashboardIsAdminSession = !empty($_SESSION['admin_authenticated']);
+        $dashboardIsAuthenticated = !empty($_SESSION['admin_authenticated']) || $memberHasDashboardAccess;
+        $dashboardUser = (string) ($_SESSION['admin_user'] ?? '');
+        $dashboardUserPhotoPath = '';
+
+        if ($dashboardUser === '' && $memberHasDashboardAccess) {
+            $dashboardUser = (string) ($_SESSION['member_name'] ?? 'Usuário');
+            $dashboardUserPhotoPath = (string) ($_SESSION['member_profile_photo_path'] ?? '');
+        }
+
         $twigEnvironment->addGlobal('current_path', $request->getUri()->getPath());
-        $twigEnvironment->addGlobal('dashboard_user', (string) ($_SESSION['admin_user'] ?? ''));
-        $twigEnvironment->addGlobal('dashboard_is_authenticated', !empty($_SESSION['admin_authenticated']));
+        $twigEnvironment->addGlobal('dashboard_user', $dashboardUser);
+        $twigEnvironment->addGlobal('dashboard_user_photo_path', $dashboardUserPhotoPath);
+        $twigEnvironment->addGlobal('dashboard_is_authenticated', $dashboardIsAuthenticated);
+        $twigEnvironment->addGlobal('dashboard_is_admin_session', $dashboardIsAdminSession);
+        $twigEnvironment->addGlobal('member_is_authenticated', !empty($_SESSION['member_authenticated']));
+        $twigEnvironment->addGlobal('member_name', (string) ($_SESSION['member_name'] ?? ''));
+        $twigEnvironment->addGlobal('member_role_key', (string) ($_SESSION['member_role_key'] ?? ''));
+        $twigEnvironment->addGlobal('member_role_name', (string) ($_SESSION['member_role_name'] ?? 'Membro'));
+        $twigEnvironment->addGlobal('member_profile_photo_path', (string) ($_SESSION['member_profile_photo_path'] ?? ''));
         $twigEnvironment->addGlobal('dashboard_env_label', $dashboardEnvLabel);
         $twigEnvironment->addGlobal('dashboard_env_tone', $dashboardEnvTone);
 

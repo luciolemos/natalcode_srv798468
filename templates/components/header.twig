@@ -35,20 +35,34 @@
     <nav id="nc-nav-menu" class="nc-nav" aria-label="Navegação principal" hidden>
       {% for item in nav_links_before %}
         {% set is_item_active = path == item.path %}
-        <a class="nc-link{{ is_item_active ? ' is-active' : '' }}" href="{{ item.path }}" {% if is_item_active %}aria-current="page"{% endif %}>{{ item.key is defined ? labels[item.key]|default(item.label|default(item.path)) : item.label|default(item.path) }}</a>
+        {% set item_label = item.key is defined ? labels[item.key]|default(item.label|default(item.path)) : item.label|default(item.path) %}
+        <a class="nc-link{{ is_item_active ? ' is-active' : '' }}" href="{{ item.path }}" {% if is_item_active %}aria-current="page"{% endif %}>
+          <span class="nc-nav-link-content">
+            {% include 'components/nav-icon.twig' with { icon_key: item.key|default('menu') } only %}
+            <span>{{ item_label }}</span>
+          </span>
+        </a>
       {% endfor %}
 
       {% for group in nav_groups %}
         {% set is_group_active = path starts with group.base %}
         <div class="nc-nav-group{{ is_group_active ? ' is-active' : '' }}" data-nav-group>
           <button class="nc-nav-group-toggle{{ is_group_active ? ' is-active' : '' }}" type="button" aria-expanded="false" aria-controls="nc-submenu-{{ group.key }}" {% if is_group_active %}aria-current="page"{% endif %}>
-            {{ labels[group.key]|default(group.label|default(group.key)) }}
+            <span class="nc-nav-link-content">
+              {% include 'components/nav-icon.twig' with { icon_key: group.key|default('menu') } only %}
+              <span>{{ labels[group.key]|default(group.label|default(group.key)) }}</span>
+            </span>
           </button>
           <div id="nc-submenu-{{ group.key }}" class="nc-nav-submenu" hidden>
             {% for item in group.items %}
               {% set is_item_active = path == item.path %}
+              {% set item_label = item.key is defined ? labels[item.key]|default(item.label|default(item.path)) : item.label|default(item.path) %}
+              {% set submenu_icon_key = item.key|default(group.key|default('menu')) %}
               <a class="nc-nav-submenu-link{{ is_item_active ? ' is-active' : '' }}" href="{{ item.path }}" {% if is_item_active %}aria-current="page"{% endif %}>
-                {{ item.key is defined ? labels[item.key]|default(item.label|default(item.path)) : item.label|default(item.path) }}
+                <span class="nc-nav-link-content">
+                  {% include 'components/nav-icon.twig' with { icon_key: submenu_icon_key } only %}
+                  <span>{{ item_label }}</span>
+                </span>
               </a>
             {% endfor %}
           </div>
@@ -59,16 +73,80 @@
         {% set is_login_entry = item.key is defined and item.key == 'login' %}
         {% if not is_login_entry %}
           {% set is_item_active = path == item.path %}
-          <a class="nc-link{{ is_item_active ? ' is-active' : '' }}" href="{{ item.path }}" {% if is_item_active %}aria-current="page"{% endif %}>{{ item.key is defined ? labels[item.key]|default(item.label|default(item.path)) : item.label|default(item.path) }}</a>
+          {% set item_label = item.key is defined ? labels[item.key]|default(item.label|default(item.path)) : item.label|default(item.path) %}
+          <a class="nc-link{{ is_item_active ? ' is-active' : '' }}" href="{{ item.path }}" {% if is_item_active %}aria-current="page"{% endif %}>
+            <span class="nc-nav-link-content">
+              {% include 'components/nav-icon.twig' with { icon_key: item.key|default('menu') } only %}
+              <span>{{ item_label }}</span>
+            </span>
+          </a>
         {% endif %}
       {% endfor %}
 
-      {% set auth_is_logged = dashboard_is_authenticated|default(false) %}
-      {% set auth_path = auth_is_logged ? '/painel' : '/painel/login' %}
-      {% set auth_label = auth_is_logged ? 'PAINEL' : labels.login|default('Login') %}
-      {% set auth_is_active = auth_is_logged ? (path starts with '/painel') : (path == '/painel/login') %}
+      {% set member_is_logged = member_is_authenticated|default(false) %}
+      {% if member_is_logged %}
+        {% set member_area_active = path starts with '/membro' %}
+        {% set member_display_name = member_name|default('Membro') %}
+        {% set member_role_label = member_role_name|default('Membro') %}
+        {% set member_photo_path = member_profile_photo_path|default('') %}
+        <div class="nc-nav-group nc-member-nav-group{{ member_area_active ? ' is-active' : '' }}" data-nav-group>
+          <button class="nc-nav-group-toggle nc-member-nav-toggle{{ member_area_active ? ' is-active' : '' }}" type="button" aria-expanded="false" aria-controls="nc-submenu-member-user" {% if member_area_active %}aria-current="page"{% endif %}>
+            <span class="nc-member-nav-avatar" aria-hidden="true">
+              {% if member_photo_path %}
+                <img src="/{{ member_photo_path }}" alt="">
+              {% else %}
+                <span>{{ member_display_name|slice(0, 1)|upper }}</span>
+              {% endif %}
+            </span>
+            <span class="nc-member-nav-meta">
+              <span class="nc-member-nav-name">{{ member_display_name }}</span>
+              <span class="nc-member-nav-role">{{ member_role_label }}</span>
+            </span>
+          </button>
+          <div id="nc-submenu-member-user" class="nc-nav-submenu" hidden>
+            <a class="nc-nav-submenu-link{{ path == '/membro' ? ' is-active' : '' }}" href="/membro" {% if path == '/membro' %}aria-current="page"{% endif %}>
+              <span class="nc-nav-link-content">
+                {% include 'components/nav-icon.twig' with { icon_key: 'member-area' } only %}
+                <span>Minha Área</span>
+              </span>
+            </a>
+            <a class="nc-nav-submenu-link{{ path starts with '/membro/perfil' ? ' is-active' : '' }}" href="/membro/perfil/completar" {% if path starts with '/membro/perfil' %}aria-current="page"{% endif %}>
+              <span class="nc-nav-link-content">
+                {% include 'components/nav-icon.twig' with { icon_key: 'quem-somos' } only %}
+                <span>Editar Perfil</span>
+              </span>
+            </a>
+            <a class="nc-nav-submenu-link" href="/membro/sair">
+              <span class="nc-nav-link-content">
+                {% include 'components/nav-icon.twig' with { icon_key: 'logout' } only %}
+                <span>Encerrar sessão</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      {% else %}
+        {% set member_login_active = path == '/entrar' %}
+        {% set member_register_active = path == '/cadastro' %}
+        <a class="nc-link{{ member_login_active ? ' is-active' : '' }}" href="/entrar" {% if member_login_active %}aria-current="page"{% endif %}>
+          <span class="nc-nav-link-content">
+            {% include 'components/nav-icon.twig' with { icon_key: 'entrar' } only %}
+            <span>Entrar</span>
+          </span>
+        </a>
+        <a class="nc-link{{ member_register_active ? ' is-active' : '' }}" href="/cadastro" {% if member_register_active %}aria-current="page"{% endif %}>
+          <span class="nc-nav-link-content">
+            {% include 'components/nav-icon.twig' with { icon_key: 'cadastrar' } only %}
+            <span>Cadastrar</span>
+          </span>
+        </a>
+      {% endif %}
 
+      {% set auth_is_logged = dashboard_is_authenticated|default(false) %}
       {% if auth_is_logged %}
+        {% set auth_path = '/painel' %}
+        {% set auth_label = 'PAINEL' %}
+        {% set auth_is_active = path starts with '/painel' %}
+
         <a class="nc-link nc-link-panel{{ auth_is_active ? ' is-active' : '' }}" href="{{ auth_path }}" {% if auth_is_active %}aria-current="page"{% endif %}>
           <span class="nc-link-panel-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -79,8 +157,6 @@
           </span>
           <span>{{ auth_label }}</span>
         </a>
-      {% else %}
-        <a class="nc-link{{ auth_is_active ? ' is-active' : '' }}" href="{{ auth_path }}" {% if auth_is_active %}aria-current="page"{% endif %}>{{ auth_label }}</a>
       {% endif %}
     </nav>
   </div>

@@ -1,0 +1,24 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <main class="nc-main nc-home-flow">
+    <section class="nc-section" aria-label="Área de operação" data-aos="fade-up" data-aos-delay="0">
+      <div class="nc-container">
+        {% include 'components/section-header.twig' with {
+          kicker: 'Área do Membro',
+          title: 'Área de Operação',
+          lead: 'Acesso permitido para perfis Operador, Gerente e Administrador.'
+        } %}
+
+        <article class="nc-card nc-admin-login-card">
+          <p>Perfil atual: <strong>{{ member_data.role_name|default('Membro') }}</strong></p>
+          <p>Use esta seção para funcionalidades operacionais internas.</p>
+
+          <div class="nc-actions nc-admin-login-actions" data-aos="fade-up" data-aos-delay="80">
+            <a class="nc-btn nc-btn-secondary" href="/membro">Voltar para minha área</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+{% endblock %}

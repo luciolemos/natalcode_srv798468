@@ -1,0 +1,45 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domain\Member;
+
+interface MemberAuthRepository
+{
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function createPendingUser(array $data): int;
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function findByEmail(string $email): ?array;
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function findById(int $id): ?array;
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function findAllRoles(): array;
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function findRoleByKey(string $roleKey): ?array;
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function updateProfile(int $id, array $data): bool;
+
+    public function approveAndAssignRole(int $id, int $roleId): bool;
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function findAllUsersForAdmin(): array;
+}

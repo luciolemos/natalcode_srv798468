@@ -3,9 +3,12 @@
 declare(strict_types=1);
 
 use App\Domain\Agenda\AgendaRepository;
+use App\Domain\Member\MemberAuthRepository;
 use App\Domain\User\UserRepository;
 use App\Infrastructure\Persistence\Agenda\FallbackAgendaRepository;
 use App\Infrastructure\Persistence\Agenda\MySqlAgendaRepository;
+use App\Infrastructure\Persistence\Member\FallbackMemberAuthRepository;
+use App\Infrastructure\Persistence\Member\MySqlMemberAuthRepository;
 use App\Infrastructure\Persistence\User\InMemoryUserRepository;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
@@ -18,6 +21,13 @@ return function (ContainerBuilder $containerBuilder) {
                 return new MySqlAgendaRepository($c->get(\PDO::class));
             } catch (\Throwable $exception) {
                 return new FallbackAgendaRepository();
+            }
+        },
+        MemberAuthRepository::class => function (ContainerInterface $c): MemberAuthRepository {
+            try {
+                return new MySqlMemberAuthRepository($c->get(\PDO::class));
+            } catch (\Throwable $exception) {
+                return new FallbackMemberAuthRepository();
             }
         },
         UserRepository::class => \DI\autowire(InMemoryUserRepository::class),

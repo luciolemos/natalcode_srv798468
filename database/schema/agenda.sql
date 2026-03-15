@@ -10,6 +10,39 @@ CREATE TABLE IF NOT EXISTS activity_categories (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS roles (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    role_key VARCHAR(40) NOT NULL UNIQUE,
+    name VARCHAR(80) NOT NULL,
+    description VARCHAR(255) NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS member_users (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(160) NULL,
+    email VARCHAR(180) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role_id BIGINT UNSIGNED NULL,
+    status ENUM('pending', 'active', 'blocked') NOT NULL DEFAULT 'pending',
+    phone_mobile VARCHAR(30) NULL,
+    phone_landline VARCHAR(30) NULL,
+    birth_date DATE NULL,
+    birth_place VARCHAR(140) NULL,
+    profile_photo_path VARCHAR(255) NULL,
+    profile_completed TINYINT(1) NOT NULL DEFAULT 0,
+    approved_at DATETIME NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_member_users_role
+        FOREIGN KEY (role_id) REFERENCES roles(id)
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    INDEX idx_member_users_status (status),
+    INDEX idx_member_users_role (role_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS agenda_events (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     category_id BIGINT UNSIGNED NOT NULL,
@@ -80,6 +113,16 @@ ON DUPLICATE KEY UPDATE
     name = VALUES(name),
     color = VALUES(color),
     audience_default = VALUES(audience_default);
+
+INSERT INTO roles (role_key, name, description)
+VALUES
+    ('member', 'Membro', 'Acesso à área de membro e recursos básicos.'),
+    ('operator', 'Operador', 'Operação de funcionalidades internas específicas.'),
+    ('manager', 'Gerente', 'Coordenação de conteúdos e fluxos internos.'),
+    ('admin', 'Administrador', 'Gestão completa de usuários e permissões.')
+ON DUPLICATE KEY UPDATE
+    name = VALUES(name),
+    description = VALUES(description);
 
 INSERT INTO agenda_events (
     category_id,
