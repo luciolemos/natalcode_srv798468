@@ -124,12 +124,18 @@
             </thead>
             <tbody>
               {% for event in agenda_events %}
+                {% set event_status_key = event.status|default('') %}
+                {% set event_status_label = {
+                  'draft': 'Rascunho',
+                  'published': 'Publicado',
+                  'cancelled': 'Cancelado'
+                }[event_status_key]|default(event_status_key ?: '-') %}
                 <tr>
                   <td data-label="ID">{{ event.id }}</td>
                   <td data-label="Título">{{ event.title }}</td>
                   <td data-label="Categoria">{{ event.category_name|default('-') }}</td>
                   <td data-label="Início">{{ event.starts_at_label|default(event.starts_at) }}</td>
-                  <td data-label="Status">{{ event.status }}</td>
+                  <td data-label="Status">{{ event_status_label }}</td>
                   <td data-label="Destacar">
                     <span class="nc-admin-featured-flag{{ event.is_featured ? ' is-on' : ' is-off' }}">{{ event.is_featured ? 'Sim' : 'Não' }}</span>
                   </td>
