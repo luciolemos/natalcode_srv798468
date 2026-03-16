@@ -43,9 +43,6 @@ final class InstitutionalEmailTemplate
                       style="display:block;max-width:220px;width:100%;height:auto;margin:0 auto;"
                     >
                   </div>
-                  <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#64748b;">
-                    Centro de Estudos da Doutrina Espírita
-                  </div>
                   <h1 style="margin:8px 0 0;font-size:20px;line-height:1.25;color:#1e293b;">
                     {$titleSafe}
                   </h1>
