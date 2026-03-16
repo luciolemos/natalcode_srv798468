@@ -2554,6 +2554,16 @@ code {
 }
 
 @media (max-width: 700px) {
+  .nc-actions.is-stacked-mobile {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nc-actions.is-stacked-mobile .nc-btn {
+    width: 100%;
+    min-width: 0;
+  }
+
   .nc-contact-form-actions {
     flex-direction: column;
     align-items: stretch;
