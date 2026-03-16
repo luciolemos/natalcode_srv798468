@@ -3719,6 +3719,32 @@ textarea.nc-admin-form-input {
 }
 
 @media (max-width: 980px) {
+  .nc-nav .nc-link-panel,
+  .nc-nav .nc-link-notify {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .nc-nav .nc-nav-link-icon,
+  .nc-nav .nc-link-panel-icon,
+  .nc-nav .nc-link-notify-icon {
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 1rem;
+  }
+
+  .nc-nav .nc-nav-link-icon svg,
+  .nc-nav .nc-link-panel-icon svg,
+  .nc-nav .nc-link-notify-icon svg {
+    width: 100%;
+    height: 100%;
+    max-width: 1rem;
+    max-height: 1rem;
+  }
+}
+
+@media (max-width: 980px) {
   .nc-dashboard-layout {
     grid-template-columns: minmax(0, 1fr);
   }
