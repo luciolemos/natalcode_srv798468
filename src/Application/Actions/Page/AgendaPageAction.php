@@ -21,8 +21,7 @@ class AgendaPageAction extends AbstractPageAction
         Twig $twig,
         AgendaRepository $agendaRepository,
         SettingsInterface $settings
-    )
-    {
+    ) {
         parent::__construct($logger, $twig);
         $this->agendaRepository = $agendaRepository;
 

@@ -44,41 +44,13 @@ class AdminUserGuidePageAction extends AbstractPageAction
         $codeLines = [];
         $inCodeBlock = false;
 
-        $flushParagraph = static function () use (&$html, &$paragraph): void {
-            if ($paragraph === []) {
-                return;
-            }
-
-            $text = implode(' ', $paragraph);
-            $html[] = '<p>' . $text . '</p>';
-            $paragraph = [];
-        };
-
-        $flushList = static function () use (&$html, &$listItems): void {
-            if ($listItems === []) {
-                return;
-            }
-
-            $html[] = '<ul><li>' . implode('</li><li>', $listItems) . '</li></ul>';
-            $listItems = [];
-        };
-
-        $flushCode = static function () use (&$html, &$codeLines): void {
-            if ($codeLines === []) {
-                return;
-            }
-
-            $html[] = '<pre><code>' . implode("\n", $codeLines) . '</code></pre>';
-            $codeLines = [];
-        };
-
         foreach ($lines as $line) {
             if (preg_match('/^```/', $line) === 1) {
-                $flushParagraph();
-                $flushList();
+                $this->flushParagraph($html, $paragraph);
+                $this->flushList($html, $listItems);
 
                 if ($inCodeBlock) {
-                    $flushCode();
+                    $this->flushCode($html, $codeLines);
                     $inCodeBlock = false;
                 } else {
                     $inCodeBlock = true;
@@ -95,15 +67,15 @@ class AdminUserGuidePageAction extends AbstractPageAction
 
             $trimmed = trim($line);
             if ($trimmed === '') {
-                $flushParagraph();
-                $flushList();
+                $this->flushParagraph($html, $paragraph);
+                $this->flushList($html, $listItems);
 
                 continue;
             }
 
             if (preg_match('/^(#{1,6})\s+(.*)$/', $trimmed, $headingMatch) === 1) {
-                $flushParagraph();
-                $flushList();
+                $this->flushParagraph($html, $paragraph);
+                $this->flushList($html, $listItems);
 
                 $level = strlen($headingMatch[1]);
                 $content = $this->renderInlineMarkdown($headingMatch[2]);
@@ -113,7 +85,7 @@ class AdminUserGuidePageAction extends AbstractPageAction
             }
 
             if (preg_match('/^[-*]\s+(.*)$/', $trimmed, $listMatch) === 1) {
-                $flushParagraph();
+                $this->flushParagraph($html, $paragraph);
                 $listItems[] = $this->renderInlineMarkdown($listMatch[1]);
 
                 continue;
@@ -122,11 +94,53 @@ class AdminUserGuidePageAction extends AbstractPageAction
             $paragraph[] = $this->renderInlineMarkdown($trimmed);
         }
 
-        $flushParagraph();
-        $flushList();
-        $flushCode();
+        $this->flushParagraph($html, $paragraph);
+        $this->flushList($html, $listItems);
+        $this->flushCode($html, $codeLines);
 
         return implode("\n", $html);
+    }
+
+    /**
+     * @param array<int, string> $html
+     * @param array<int, string> $paragraph
+     */
+    private function flushParagraph(array &$html, array &$paragraph): void
+    {
+        if ($paragraph === []) {
+            return;
+        }
+
+        $html[] = '<p>' . implode(' ', $paragraph) . '</p>';
+        $paragraph = [];
+    }
+
+    /**
+     * @param array<int, string> $html
+     * @param array<int, string> $listItems
+     */
+    private function flushList(array &$html, array &$listItems): void
+    {
+        if ($listItems === []) {
+            return;
+        }
+
+        $html[] = '<ul><li>' . implode('</li><li>', $listItems) . '</li></ul>';
+        $listItems = [];
+    }
+
+    /**
+     * @param array<int, string> $html
+     * @param array<int, string> $codeLines
+     */
+    private function flushCode(array &$html, array &$codeLines): void
+    {
+        if ($codeLines === []) {
+            return;
+        }
+
+        $html[] = '<pre><code>' . implode("\n", $codeLines) . '</code></pre>';
+        $codeLines = [];
     }
 
     private function renderInlineMarkdown(string $text): string
