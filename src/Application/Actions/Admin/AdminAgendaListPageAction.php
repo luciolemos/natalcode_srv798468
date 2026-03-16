@@ -33,21 +33,32 @@ class AdminAgendaListPageAction extends AbstractAdminAgendaAction
 
         if ($searchTerm !== '') {
             $normalizedSearch = strtolower($searchTerm);
+            $statusSearchTokens = [
+                'draft' => ['draft', 'rascunho'],
+                'published' => ['published', 'publicado'],
+                'cancelled' => ['cancelled', 'cancelado'],
+            ];
 
-            $events = array_values(array_filter($events, static function (array $event) use ($normalizedSearch): bool {
-                $featuredLabel = ((int) ($event['is_featured'] ?? 0) === 1) ? 'sim' : 'não';
-                $haystack = implode(' ', [
-                    (string) ($event['title'] ?? ''),
-                    (string) ($event['category_name'] ?? ''),
-                    (string) ($event['slug'] ?? ''),
-                    (string) ($event['status'] ?? ''),
-                    (string) ($event['starts_at_label'] ?? ''),
-                    (string) ($event['starts_at'] ?? ''),
-                    $featuredLabel,
-                ]);
+            $events = array_values(array_filter(
+                $events,
+                static function (array $event) use ($normalizedSearch, $statusSearchTokens): bool {
+                    $featuredLabel = ((int) ($event['is_featured'] ?? 0) === 1) ? 'sim' : 'não';
+                    $eventStatus = (string) ($event['status'] ?? '');
+                    $statusTerms = $statusSearchTokens[$eventStatus] ?? [$eventStatus];
+                    $haystack = implode(' ', [
+                        (string) ($event['title'] ?? ''),
+                        (string) ($event['category_name'] ?? ''),
+                        (string) ($event['slug'] ?? ''),
+                        (string) ($event['status'] ?? ''),
+                        implode(' ', $statusTerms),
+                        (string) ($event['starts_at_label'] ?? ''),
+                        (string) ($event['starts_at'] ?? ''),
+                        $featuredLabel,
+                    ]);
 
-                return stripos(strtolower($haystack), $normalizedSearch) !== false;
-            }));
+                    return stripos(strtolower($haystack), $normalizedSearch) !== false;
+                }
+            ));
         }
 
         $sortBy = (string) ($queryParams['sort'] ?? 'starts_at');

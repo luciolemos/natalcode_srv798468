@@ -55,7 +55,7 @@ return [
         ],
         [
             'label' => 'Falar Conosco',
-            'href' => 'mailto:contato@cedern.org',
+            'href' => 'mailto:cede@cedern.org',
             'class' => 'nc-btn nc-btn-secondary',
             'loadingOnClick' => false,
         ],
