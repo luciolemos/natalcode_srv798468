@@ -3,6 +3,7 @@
 {% set site_contact = site.contact|default({}) %}
 {% set site_instagram = site.social.instagram|default({}) %}
 {% set brand = site.brand|default({}) %}
+{% set institutional = site.institutional|default({}) %}
 
 <footer id="contato" class="nc-footer">
   <div class="nc-container">
@@ -45,6 +46,9 @@
           <h3 class="nc-footer-contact-title">{{ footer.contactTitle|default('Fale com o CEDE') }}</h3>
           {% if footer.contactLead|default('') %}
             <p class="nc-footer-copy">{{ footer.contactLead }}</p>
+          {% endif %}
+          {% if institutional.footerSummary|default('') %}
+            <p class="nc-footer-copy">{{ institutional.footerSummary }}</p>
           {% endif %}
 
           <address class="nc-footer-contact-list">

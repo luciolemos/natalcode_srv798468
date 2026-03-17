@@ -2,28 +2,47 @@
 
 {% block content %}
   <main class="nc-main nc-container nc-home-flow">
+    {% set institutional = site.institutional|default({}) %}
+
     <section class="nc-section" aria-label="Detalhes institucionais">
       {% include 'components/section-header.twig' with {
         kicker: 'Quem Somos',
         title: 'Conheça nossa identidade',
-        lead: 'Acesse conteúdos específicos sobre missão, valores, história e simbologia da marca do CEDE.'
+        lead: 'Acesse conteúdos específicos sobre missão, valores, história e estatuto do CEDE.'
       } %}
-      <div class="nc-actions nc-tonal-actions" data-aos="fade-up" data-aos-delay="120">
+      <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="120">
         <a class="nc-btn nc-btn-secondary" href="/quem-somos/missao">Missão</a>
         <a class="nc-btn nc-btn-secondary" href="/quem-somos/valores">Valores</a>
         <a class="nc-btn nc-btn-secondary" href="/quem-somos/historia">História</a>
-        <a class="nc-btn nc-btn-secondary" href="/quem-somos/nossa-marca">Nossa Marca</a>
+        <a class="nc-btn nc-btn-secondary" href="/quem-somos/estatuto">Estatuto</a>
       </div>
     </section>
 
-    <section class="nc-section" aria-label="Gestão CEDE" data-aos="fade-up" data-aos-delay="40">
+    <section class="nc-section" aria-label="Natureza jurídica e sede" data-aos="fade-up" data-aos-delay="20">
+      {% include 'components/section-header.twig' with {
+        kicker: 'Institucional',
+        title: 'Natureza jurídica e sede',
+        lead: 'Base estatutária e dados institucionais do CEDE.'
+      } %}
+
+      <div class="nc-about-legal-copy" data-aos="fade-up" data-aos-delay="120">
+        <h3>Constituição do CEDE</h3>
+        <p>{{ institutional.statuteExcerpt|default('O Centro de Estudos da Doutrina Espírita - CEDE, fundado em 09 de janeiro de 2001, neste Estatuto denominado simplesmente "CEDE", é uma associação civil de caráter religioso, filosófico, científico, cultural e filantrópico, sem fins lucrativos, com sede e foro na cidade de Parnamirim/RN, localizada à Rua Frejó, nº 44, bairro Nova Parnamirim.') }}</p>
+      </div>
+
+      <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="160">
+        <a class="nc-btn nc-btn-primary" href="/quem-somos/estatuto">Ler estatuto completo</a>
+      </div>
+    </section>
+
+    <section class="nc-section nc-about-management-preview" aria-label="Gestão CEDE" data-aos="fade-up" data-aos-delay="40">
       {% include 'components/section-header.twig' with {
         kicker: 'Gestão CEDE',
         title: 'Diretoria e funções institucionais',
         lead: 'Acesse a página dedicada com os membros da gestão atual e as atribuições institucionais de cada função.'
       } %}
 
-      <div class="nc-actions nc-tonal-actions" data-aos="fade-up" data-aos-delay="140">
+      <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="140">
         <a class="nc-btn nc-btn-primary" href="/quem-somos/gestao-cede">Abrir Gestão CEDE</a>
       </div>
     </section>

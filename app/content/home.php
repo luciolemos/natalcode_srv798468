@@ -243,7 +243,7 @@ return [
                 [
                     'step' => '01',
                     'title' => 'Origem no estudo coletivo',
-                    'description' => 'Iniciamos com pequenos grupos de leitura e reflexão doutrinária, fortalecendo laços de fraternidade.',
+                    'description' => 'Fundado em 09 de janeiro de 2001, em Parnamirim/RN, o CEDE nasceu de pequenos grupos de leitura e reflexão doutrinária.',
                     'delay' => 120,
                 ],
                 [
@@ -256,6 +256,36 @@ return [
                     'step' => '03',
                     'title' => 'Compromisso permanente',
                     'description' => 'Seguimos dedicados ao estudo e à caridade, servindo à comunidade com simplicidade e amor.',
+                    'delay' => 240,
+                ],
+            ],
+        ],
+        'estatuto' => [
+            'kicker' => 'Quem Somos',
+            'title' => 'Estatuto e Natureza Institucional',
+            'lead' => 'O Centro de Estudos da Doutrina Espírita - CEDE, fundado em 09 de janeiro de 2001, '
+                . 'neste Estatuto denominado simplesmente "CEDE", é uma associação civil de caráter religioso, '
+                . 'filosófico, científico, cultural e filantrópico, sem fins lucrativos, com sede e foro na cidade '
+                . 'de Parnamirim/RN, localizada à Rua Frejó, nº 44, bairro Nova Parnamirim.',
+            'topics' => [
+                [
+                    'step' => '01',
+                    'title' => 'Fundação e denominação',
+                    'description' => 'O CEDE foi fundado em 09 de janeiro de 2001 e é denominado no Estatuto '
+                        . 'simplesmente como "CEDE".',
+                    'delay' => 120,
+                ],
+                [
+                    'step' => '02',
+                    'title' => 'Natureza jurídica',
+                    'description' => 'Associação civil sem fins lucrativos, de caráter religioso, filosófico, '
+                        . 'científico, cultural e filantrópico.',
+                    'delay' => 180,
+                ],
+                [
+                    'step' => '03',
+                    'title' => 'Sede e foro',
+                    'description' => 'Sede e foro em Parnamirim/RN, à Rua Frejó, nº 44, bairro Nova Parnamirim.',
                     'delay' => 240,
                 ],
             ],
@@ -313,7 +343,7 @@ return [
     ],
     'donationOptions' => [
         [
-            'title' => 'Doação via PIX (Banco Bradesco)',
+            'title' => 'Doação via PIX (ASAAS)',
             'description' => 'Escaneie o QR Code do PIX para contribuir de forma rápida e segura.',
             'qrImage' => '/assets/img/cedern/qr_cede_bradesco.jpeg',
             'qrAlt' => 'QR Code para doação via PIX',

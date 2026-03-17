@@ -150,6 +150,42 @@
                 </a>
               {% endif %}
 
+              <a class="nc-link nc-dashboard-user-menu-link" href="/painel/institucional/estatuto">
+                <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span>Editar Estatuto</span>
+              </a>
+
+              <a class="nc-link nc-dashboard-user-menu-link" href="/painel/institucional/politica-de-privacidade">
+                <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span>Editar Privacidade</span>
+              </a>
+
+              <a class="nc-link nc-dashboard-user-menu-link" href="/painel/institucional/termos-de-uso">
+                <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span>Editar Termos de Uso</span>
+              </a>
+
               <a class="nc-link nc-dashboard-user-menu-link" href="/painel/guia-pratico">
                 <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -211,7 +247,7 @@
     <div class="nc-dashboard-layout">
       <aside id="nc-dashboard-sidebar" class="nc-admin-sidebar" aria-label="Menu do dashboard">
         <a class="nc-dashboard-brand nc-dashboard-sidebar-brand" href="/painel" aria-label="Painel CEDE">
-          <img src="{{ base_url ?? '' }}/assets/img/brands/cedern.png" alt="CEDE" class="nc-dashboard-brand-logo">
+          <img src="{{ base_url ?? '' }}/assets/img/brands/cede4_logo.png" alt="CEDE" class="nc-dashboard-brand-logo">
         </a>
         <nav class="nc-admin-nav">
           <a class="nc-link{{ current_path == '/painel' ? ' is-active' : '' }}" href="/painel">
@@ -259,6 +295,46 @@
               </a>
             {% endif %}
           </details>
+          {% if panel_can_users %}
+            <details class="nc-admin-nav-group" aria-label="Seção governança e conformidade" {% if current_path starts with '/painel/institucional/' %}open{% endif %}>
+              <summary class="nc-admin-nav-group-title">GOVERNANÇA E CONFORMIDADE</summary>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/institucional/estatuto' ? ' is-active' : '' }}" href="/painel/institucional/estatuto">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Editar Estatuto</span>
+              </a>
+
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/institucional/politica-de-privacidade' ? ' is-active' : '' }}" href="/painel/institucional/politica-de-privacidade">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Editar Privacidade</span>
+              </a>
+
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/institucional/termos-de-uso' ? ' is-active' : '' }}" href="/painel/institucional/termos-de-uso">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Editar Termos de Uso</span>
+              </a>
+            </details>
+          {% endif %}
           {% if panel_can_users %}
             <a class="nc-link{{ current_path starts with '/painel/usuarios' ? ' is-active' : '' }}" href="/painel/usuarios">
               <span class="nc-admin-link-icon" aria-hidden="true">
