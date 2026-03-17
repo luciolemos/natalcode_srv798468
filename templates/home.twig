@@ -4,7 +4,7 @@
   <main class="nc-main nc-container nc-home-flow">
     {% include 'home/hero.twig' %}
 
-    <section class="nc-section" aria-label="Depoimentos" data-aos="fade-up" data-aos-delay="0">
+    <section class="nc-section nc-home-testimonials" aria-label="Depoimentos" data-aos="fade-up" data-aos-delay="0">
       {% set social_proof = homeContent.sections.socialProof|default({}) %}
       {% set testimonials = homeContent.socialProofTestimonials|default([]) %}
 
@@ -31,7 +31,7 @@
         </div>
 
         {% if testimonials|length > 3 %}
-          <div class="nc-actions" data-aos="fade-up" data-aos-delay="180">
+          <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="180">
             <button class="nc-btn nc-btn-primary" type="button" data-testimonials-toggle aria-expanded="false">Ver mais depoimentos</button>
           </div>
         {% endif %}
@@ -39,7 +39,7 @@
     </section>
 
 
-    <section class="nc-section" aria-label="Acesso rápido" data-aos="fade-up" data-aos-delay="0">
+    <section class="nc-section nc-home-quick-access" aria-label="Acesso rápido" data-aos="fade-up" data-aos-delay="0">
       {% include 'components/section-header.twig' with {
         kicker: 'Caminhos',
         title: 'Encontre o que você busca no CEDE',
@@ -96,8 +96,8 @@
         lead: 'Consulte a diretoria e as funções institucionais atualizadas na página Quem Somos.'
       } %}
 
-      <div class="nc-actions" data-aos="fade-up" data-aos-delay="140">
-        <a class="nc-btn nc-btn-primary" href="/quem-somos">Ver gestão completa</a>
+      <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="140">
+        <a class="nc-btn nc-btn-primary" href="/quem-somos/gestao-cede">Ver gestão completa</a>
       </div>
     </section>
 

@@ -22,6 +22,16 @@ return [
             'label' => 'Instagram oficial: @cedeoficialrn',
         ],
     ],
+    'institutional' => [
+        'statuteExcerpt' => 'O Centro de Estudos da Doutrina Espírita - CEDE, fundado em 09 de janeiro de 2001, '
+            . 'neste Estatuto denominado simplesmente "CEDE", é uma associação civil de caráter religioso, '
+            . 'filosófico, científico, cultural e filantrópico, sem fins lucrativos, com sede e foro na cidade de '
+            . 'Parnamirim/RN, localizada à Rua Frejó, nº 44, bairro Nova Parnamirim.',
+        'contactSummary' => 'Fundado em 09 de janeiro de 2001, o CEDE é uma associação civil sem fins lucrativos '
+            . 'com sede em Parnamirim/RN, à Rua Frejó, nº 44, bairro Nova Parnamirim.',
+        'footerSummary' => 'Fundado em 09 de janeiro de 2001 • Associação civil sem fins lucrativos • '
+            . 'Parnamirim/RN',
+    ],
     'footer' => [
         'kicker' => 'Presença e acolhimento',
         'description' => 'Estamos de portas abertas para estudo, atendimento fraterno e convivência cristã.',
@@ -31,8 +41,11 @@ return [
                 'links' => [
                     ['path' => '/', 'key' => 'inicio'],
                     ['path' => '/quem-somos', 'key' => 'quem-somos'],
+                    ['path' => '/quem-somos/estatuto', 'key' => 'estatuto'],
                     ['path' => '/quem-somos/gestao-cede', 'key' => 'gestao-cede'],
                     ['path' => '/contato', 'key' => 'contato'],
+                    ['path' => '/politica-de-privacidade', 'key' => 'politica-de-privacidade'],
+                    ['path' => '/termos-de-uso', 'key' => 'termos-de-uso'],
                 ],
             ],
             [

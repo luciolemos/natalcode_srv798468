@@ -20,7 +20,7 @@
         lead: selected.lead|default(faq_section.lead|default('Encontre orientações claras para dúvidas frequentes sobre a vivência e os princípios da casa espírita.'))
       } %}
 
-      <div class="nc-actions" data-aos="fade-up" data-aos-delay="120">
+      <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="120">
         {% for category in faq_categories %}
           <a class="nc-btn {{ category.slug == faq_category_slug|default('') ? 'nc-btn-primary' : 'nc-btn-secondary' }}" href="/faq/{{ category.slug }}">{{ category.title }}</a>
         {% endfor %}
@@ -38,7 +38,7 @@
         {% endfor %}
       </div>
 
-      <div class="nc-actions" data-aos="fade-up" data-aos-delay="180">
+      <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="180">
         <a class="nc-btn nc-btn-secondary" href="/faq">Voltar para FAQ</a>
       </div>
     </section>

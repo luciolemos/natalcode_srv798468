@@ -6,6 +6,7 @@ use App\Application\Actions\Page\AboutPageAction;
 use App\Application\Actions\Page\AboutMissionPageAction;
 use App\Application\Actions\Page\AboutValuesPageAction;
 use App\Application\Actions\Page\AboutHistoryPageAction;
+use App\Application\Actions\Page\AboutStatutePageAction;
 use App\Application\Actions\Page\AboutBrandPageAction;
 use App\Application\Actions\Page\AboutManagementPageAction;
 use App\Application\Actions\Admin\AdminDashboardPageAction;
@@ -20,7 +21,10 @@ use App\Application\Actions\Admin\AdminMemberAssignRoleAction;
 use App\Application\Actions\Admin\AdminMemberUsersPageAction;
 use App\Application\Actions\Admin\AdminMemberUserSummaryPageAction;
 use App\Application\Actions\Admin\AdminCedeManagementPageAction;
+use App\Application\Actions\Admin\AdminPrivacyPolicyPageAction;
 use App\Application\Actions\Admin\AdminPracticalGuidePageAction;
+use App\Application\Actions\Admin\AdminStatutePageAction;
+use App\Application\Actions\Admin\AdminTermsOfUsePageAction;
 use App\Application\Actions\Admin\AdminUserGuidePageAction;
 use App\Application\Actions\Admin\AdminLogoutAction;
 use App\Application\Actions\Page\AgendaDetailPageAction;
@@ -43,8 +47,10 @@ use App\Application\Actions\Page\MemberManagerAreaPageAction;
 use App\Application\Actions\Page\MemberOperatorAreaPageAction;
 use App\Application\Actions\Page\MemberLogoutAction;
 use App\Application\Actions\Page\MemberRegisterPageAction;
+use App\Application\Actions\Page\PrivacyPolicyPageAction;
 use App\Application\Actions\Page\PublicLecturesPageAction;
 use App\Application\Actions\Page\StudiesPageAction;
+use App\Application\Actions\Page\TermsOfUsePageAction;
 use App\Application\Actions\User\ListUsersAction;
 use App\Application\Actions\User\ViewUserAction;
 use App\Domain\User\UserRepository;
@@ -111,6 +117,7 @@ return function (App $app) {
     $app->get('/quem-somos/missao', AboutMissionPageAction::class);
     $app->get('/quem-somos/valores', AboutValuesPageAction::class);
     $app->get('/quem-somos/historia', AboutHistoryPageAction::class);
+    $app->get('/quem-somos/estatuto', AboutStatutePageAction::class);
     $app->get('/quem-somos/nossa-marca', AboutBrandPageAction::class);
     $app->get('/quem-somos/gestao-cede', AboutManagementPageAction::class);
     $app->get('/estudos', StudiesPageAction::class);
@@ -147,6 +154,9 @@ return function (App $app) {
         $group->post('/usuarios/{id}/atribuir-papel', AdminMemberAssignRoleAction::class)->add($panelRoleMiddlewareFactory('admin'));
         $group->get('/guia-do-usuario', AdminUserGuidePageAction::class)->add($panelRoleMiddlewareFactory('admin'));
         $group->get('/guia-pratico', AdminPracticalGuidePageAction::class)->add($panelRoleMiddlewareFactory('admin'));
+        $group->map(['GET', 'POST'], '/institucional/estatuto', AdminStatutePageAction::class)->add($panelRoleMiddlewareFactory('admin'));
+        $group->map(['GET', 'POST'], '/institucional/politica-de-privacidade', AdminPrivacyPolicyPageAction::class)->add($panelRoleMiddlewareFactory('admin'));
+        $group->map(['GET', 'POST'], '/institucional/termos-de-uso', AdminTermsOfUsePageAction::class)->add($panelRoleMiddlewareFactory('admin'));
     })->add($adminSessionAuthMiddleware);
 
     $app->get('/admin', function (Request $request, Response $response) {
@@ -209,11 +219,28 @@ return function (App $app) {
     $app->get('/admin/guia-pratico', function (Request $request, Response $response) {
         return $response->withHeader('Location', '/painel/guia-pratico')->withStatus(302);
     });
+    $app->map(['GET', 'POST'], '/admin/institucional/estatuto', function (Request $request, Response $response) {
+        $statusCode = strtoupper($request->getMethod()) === 'POST' ? 307 : 302;
+
+        return $response->withHeader('Location', '/painel/institucional/estatuto')->withStatus($statusCode);
+    });
+    $app->map(['GET', 'POST'], '/admin/institucional/politica-de-privacidade', function (Request $request, Response $response) {
+        $statusCode = strtoupper($request->getMethod()) === 'POST' ? 307 : 302;
+
+        return $response->withHeader('Location', '/painel/institucional/politica-de-privacidade')->withStatus($statusCode);
+    });
+    $app->map(['GET', 'POST'], '/admin/institucional/termos-de-uso', function (Request $request, Response $response) {
+        $statusCode = strtoupper($request->getMethod()) === 'POST' ? 307 : 302;
+
+        return $response->withHeader('Location', '/painel/institucional/termos-de-uso')->withStatus($statusCode);
+    });
     $app->get('/faq', FaqPageAction::class);
     $app->get('/faq/doutrina', FaqDoctrinePageAction::class);
     $app->get('/faq/participacao', FaqParticipationPageAction::class);
     $app->get('/faq/praticas', FaqPracticesPageAction::class);
     $app->map(['GET', 'POST'], '/contato', ContactPageAction::class);
+    $app->get('/politica-de-privacidade', PrivacyPolicyPageAction::class);
+    $app->get('/termos-de-uso', TermsOfUsePageAction::class);
 
     $app->get('/users', function (Request $request, Response $response) use ($app) {
         $twig = $app->getContainer()->get(Twig::class);
@@ -244,6 +271,10 @@ return function (App $app) {
             ['template' => 'home.twig', 'context' => ['homeContent' => $homeContent]],
             ['template' => 'pages/about.twig', 'context' => ['homeContent' => $homeContent]],
             ['template' => 'pages/about-detail.twig', 'context' => ['homeContent' => $homeContent, 'about' => $homeContent['aboutPages']['missao'] ?? []]],
+            ['template' => 'pages/about-detail.twig', 'context' => ['homeContent' => $homeContent, 'about' => $homeContent['aboutPages']['estatuto'] ?? []]],
+            ['template' => 'pages/about-statute.twig', 'context' => ['homeContent' => $homeContent, 'statute' => (require __DIR__ . '/content/statute.php')]],
+            ['template' => 'pages/legal-document.twig', 'context' => ['homeContent' => $homeContent, 'legal_document' => (require __DIR__ . '/content/privacy-policy.php')]],
+            ['template' => 'pages/legal-document.twig', 'context' => ['homeContent' => $homeContent, 'legal_document' => (require __DIR__ . '/content/terms-of-use.php')]],
             ['template' => 'pages/about-brand.twig', 'context' => ['homeContent' => $homeContent]],
             ['template' => 'pages/studies.twig', 'context' => ['homeContent' => $homeContent]],
             ['template' => 'pages/study-detail.twig', 'context' => ['homeContent' => $homeContent, 'study' => $homeContent['studiesPages']['esde'] ?? []]],
