@@ -17,6 +17,10 @@
       tone: toast_tone
     } %}
 
+    <div class="nc-actions" data-aos="fade-up" data-aos-delay="80">
+      <a class="nc-btn nc-btn-secondary" href="/painel">← Voltar ao painel</a>
+    </div>
+
     {% set pagination = cede_management_pagination|default({}) %}
     {% set sort_links = cede_management_sort_links|default({}) %}
     {% set search_term = cede_management_search|default('') %}

@@ -6,6 +6,7 @@ namespace App\Application\Actions\Admin;
 
 use App\Application\Actions\Page\AbstractPageAction;
 use App\Domain\Analytics\SiteVisitRepository;
+use App\Domain\Member\MemberAuthRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
@@ -17,10 +18,17 @@ class AdminDashboardPageAction extends AbstractPageAction
 
     private SiteVisitRepository $siteVisitRepository;
 
-    public function __construct(LoggerInterface $logger, Twig $twig, SiteVisitRepository $siteVisitRepository)
-    {
+    private MemberAuthRepository $memberAuthRepository;
+
+    public function __construct(
+        LoggerInterface $logger,
+        Twig $twig,
+        SiteVisitRepository $siteVisitRepository,
+        MemberAuthRepository $memberAuthRepository
+    ) {
         parent::__construct($logger, $twig);
         $this->siteVisitRepository = $siteVisitRepository;
+        $this->memberAuthRepository = $memberAuthRepository;
     }
 
     public function __invoke(Request $request, Response $response): Response
@@ -37,6 +45,15 @@ class AdminDashboardPageAction extends AbstractPageAction
             'top_pages' => [],
         ];
         $visitMetricsError = '';
+        $memberMetrics = [
+            'total_associates' => 0,
+            'total_effective_members' => 0,
+            'total_founder_members' => 0,
+            'total_pending_accounts' => 0,
+            'total_blocked_accounts' => 0,
+            'total_active_without_type' => 0,
+        ];
+        $memberMetricsError = '';
 
         try {
             $visitMetrics = $this->siteVisitRepository->getDashboardSummary();
@@ -45,6 +62,17 @@ class AdminDashboardPageAction extends AbstractPageAction
             $this->logger->warning('Falha ao carregar métricas de visita do dashboard.', [
                 'exception' => $exception,
             ]);
+        }
+
+        if (!empty($_SESSION['admin_authenticated']) || (string) ($_SESSION['member_role_key'] ?? '') === 'admin') {
+            try {
+                $memberMetrics = $this->buildMemberMetrics($this->memberAuthRepository->findAllUsersForAdmin());
+            } catch (\Throwable $exception) {
+                $memberMetricsError = 'Os indicadores de pessoas não puderam ser carregados agora.';
+                $this->logger->warning('Falha ao carregar indicadores de pessoas do dashboard.', [
+                    'exception' => $exception,
+                ]);
+            }
         }
 
         return $this->renderPage($response, 'pages/admin-dashboard-home.twig', [
@@ -57,7 +85,67 @@ class AdminDashboardPageAction extends AbstractPageAction
             ),
             'dashboard_visit_metrics_error' => $visitMetricsError,
             'dashboard_visit_metrics_flash_status' => trim((string) ($flash['status'] ?? '')),
+            'dashboard_member_metrics' => $memberMetrics,
+            'dashboard_member_metrics_error' => $memberMetricsError,
         ]);
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $users
+     * @return array{
+     *     total_associates: int,
+     *     total_effective_members: int,
+     *     total_founder_members: int,
+     *     total_pending_accounts: int,
+     *     total_blocked_accounts: int,
+     *     total_active_without_type: int
+     * }
+     */
+    private function buildMemberMetrics(array $users): array
+    {
+        $metrics = [
+            'total_associates' => 0,
+            'total_effective_members' => 0,
+            'total_founder_members' => 0,
+            'total_pending_accounts' => 0,
+            'total_blocked_accounts' => 0,
+            'total_active_without_type' => 0,
+        ];
+
+        foreach ($users as $user) {
+            $status = strtolower(trim((string) ($user['status'] ?? '')));
+            $memberType = strtolower(trim((string) ($user['member_type'] ?? '')));
+
+            if ($status === 'pending') {
+                $metrics['total_pending_accounts']++;
+                continue;
+            }
+
+            if ($status === 'blocked') {
+                $metrics['total_blocked_accounts']++;
+                continue;
+            }
+
+            if ($status !== 'active') {
+                continue;
+            }
+
+            $metrics['total_associates']++;
+
+            if ($memberType === 'efetivo') {
+                $metrics['total_effective_members']++;
+                continue;
+            }
+
+            if ($memberType === 'fundador') {
+                $metrics['total_founder_members']++;
+                continue;
+            }
+
+            $metrics['total_active_without_type']++;
+        }
+
+        return $metrics;
     }
 
     /**

@@ -35,17 +35,23 @@
       tone: toast_tone
     } %}
 
+    <div class="nc-actions" data-aos="fade-up" data-aos-delay="80">
+      <a class="nc-btn nc-btn-secondary" href="/painel">← Voltar ao painel</a>
+    </div>
+
     {% set pagination = member_users_pagination|default({}) %}
     {% set sort_links = member_users_sort_links|default({}) %}
     {% set search_term = member_users_search|default('') %}
     {% set institutional_role_options = member_institutional_role_options|default([]) %}
     {% set member_type_options = member_member_type_options|default([]) %}
     {% set role_filter_options = member_users_role_filter_options|default([]) %}
+    {% set status_filter_options = member_users_status_filter_options|default({}) %}
     {% set institutional_role_filter_options = member_users_institutional_role_filter_options|default(institutional_role_options) %}
     {% set selected_role_filter = member_users_role_filter|default('') %}
     {% set selected_member_type_filter = member_users_member_type_filter|default('') %}
+    {% set selected_status_filter = member_users_status_filter|default('') %}
     {% set selected_institutional_role_filter = member_users_institutional_role_filter|default('') %}
-    {% set has_active_filters = search_term != '' or selected_role_filter != '' or selected_member_type_filter != '' or selected_institutional_role_filter != '' %}
+    {% set has_active_filters = search_term != '' or selected_role_filter != '' or selected_member_type_filter != '' or selected_status_filter != '' or selected_institutional_role_filter != '' %}
 
     {% if member_users|length == 0 %}
       <form class="nc-admin-table-search" method="get" action="/painel/usuarios" data-aos="fade-up" data-aos-delay="95">
@@ -62,6 +68,12 @@
             <option value="">Todos os tipos de sócio</option>
             {% for member_type_option in member_type_options %}
               <option value="{{ member_type_option.value }}"{% if selected_member_type_filter == member_type_option.value %} selected{% endif %}>{{ member_type_option.label }}</option>
+            {% endfor %}
+          </select>
+          <select name="status_filter" aria-label="Filtrar por status">
+            <option value="">Todos os status</option>
+            {% for status_value, status_label in status_filter_options %}
+              <option value="{{ status_value }}"{% if selected_status_filter == status_value %} selected{% endif %}>{{ status_label }}</option>
             {% endfor %}
           </select>
           <select name="institutional_role_filter" aria-label="Filtrar por função no CEDE">
@@ -97,6 +109,12 @@
               <option value="{{ member_type_option.value }}"{% if selected_member_type_filter == member_type_option.value %} selected{% endif %}>{{ member_type_option.label }}</option>
             {% endfor %}
           </select>
+          <select name="status_filter" aria-label="Filtrar por status">
+            <option value="">Todos os status</option>
+            {% for status_value, status_label in status_filter_options %}
+              <option value="{{ status_value }}"{% if selected_status_filter == status_value %} selected{% endif %}>{{ status_label }}</option>
+            {% endfor %}
+          </select>
           <select name="institutional_role_filter" aria-label="Filtrar por função no CEDE">
             <option value="">Todas as funções no CEDE</option>
             {% for institutional_role_filter_option in institutional_role_filter_options %}
@@ -130,6 +148,7 @@
           <input type="hidden" name="q" value="{{ search_term }}">
           <input type="hidden" name="role_filter" value="{{ selected_role_filter }}">
           <input type="hidden" name="member_type_filter" value="{{ selected_member_type_filter }}">
+          <input type="hidden" name="status_filter" value="{{ selected_status_filter }}">
           <input type="hidden" name="institutional_role_filter" value="{{ selected_institutional_role_filter }}">
           <noscript>
             <button class="nc-btn nc-btn-secondary" type="submit">Aplicar</button>
