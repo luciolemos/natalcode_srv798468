@@ -39,6 +39,13 @@ class AdminMemberUsersPageAction extends AbstractPageAction
     private const MEMBER_TYPE_OPTIONS = [
         'fundador' => 'Fundador',
         'efetivo' => 'Efetivo',
+        'undefined' => 'Não definido',
+    ];
+
+    private const STATUS_FILTER_OPTIONS = [
+        'active' => 'Ativo',
+        'pending' => 'Pendente',
+        'blocked' => 'Bloqueado',
     ];
 
     private MemberAuthRepository $memberAuthRepository;
@@ -58,6 +65,7 @@ class AdminMemberUsersPageAction extends AbstractPageAction
         $institutionalRoleConflict = trim((string) ($flash['institutional_role'] ?? ''));
         $selectedRoleFilter = strtolower(trim((string) ($queryParams['role_filter'] ?? '')));
         $selectedMemberTypeFilter = strtolower(trim((string) ($queryParams['member_type_filter'] ?? '')));
+        $selectedStatusFilter = strtolower(trim((string) ($queryParams['status_filter'] ?? '')));
         $selectedInstitutionalRoleFilter = trim((string) ($queryParams['institutional_role_filter'] ?? ''));
 
         $users = [];
@@ -107,10 +115,12 @@ class AdminMemberUsersPageAction extends AbstractPageAction
             $user['role_key'] = $roleKey;
 
             $memberType = strtolower(trim((string) ($user['member_type'] ?? '')));
-            $user['member_type'] = array_key_exists($memberType, self::MEMBER_TYPE_OPTIONS)
+            $user['member_type'] = array_key_exists($memberType, self::MEMBER_TYPE_OPTIONS) && $memberType !== 'undefined'
                 ? $memberType
                 : '';
-            $user['member_type_label'] = self::MEMBER_TYPE_OPTIONS[$user['member_type']] ?? 'Não definido';
+            $user['member_type_label'] = $user['member_type'] !== ''
+                ? self::MEMBER_TYPE_OPTIONS[$user['member_type']]
+                : self::MEMBER_TYPE_OPTIONS['undefined'];
 
             return $user;
         }, $users);
@@ -134,6 +144,9 @@ class AdminMemberUsersPageAction extends AbstractPageAction
         ) {
             $selectedMemberTypeFilter = '';
         }
+        if ($selectedStatusFilter !== '' && !array_key_exists($selectedStatusFilter, self::STATUS_FILTER_OPTIONS)) {
+            $selectedStatusFilter = '';
+        }
         if (
             $selectedInstitutionalRoleFilter !== ''
             && !in_array($selectedInstitutionalRoleFilter, $institutionalRoleFilterOptions, true)
@@ -152,8 +165,23 @@ class AdminMemberUsersPageAction extends AbstractPageAction
         if ($selectedMemberTypeFilter !== '') {
             $users = array_values(array_filter(
                 $users,
+                static function (array $user) use ($selectedMemberTypeFilter): bool {
+                    $memberType = strtolower(trim((string) $user['member_type']));
+
+                    if ($selectedMemberTypeFilter === 'undefined') {
+                        return $memberType === '';
+                    }
+
+                    return $memberType === $selectedMemberTypeFilter;
+                }
+            ));
+        }
+
+        if ($selectedStatusFilter !== '') {
+            $users = array_values(array_filter(
+                $users,
                 static fn (array $user): bool =>
-                    strtolower(trim((string) $user['member_type'])) === $selectedMemberTypeFilter
+                    strtolower(trim((string) ($user['status'] ?? ''))) === $selectedStatusFilter
             ));
         }
 
@@ -254,6 +282,9 @@ class AdminMemberUsersPageAction extends AbstractPageAction
         if ($selectedMemberTypeFilter !== '') {
             $baseQuery['member_type_filter'] = $selectedMemberTypeFilter;
         }
+        if ($selectedStatusFilter !== '') {
+            $baseQuery['status_filter'] = $selectedStatusFilter;
+        }
         if ($selectedInstitutionalRoleFilter !== '') {
             $baseQuery['institutional_role_filter'] = $selectedInstitutionalRoleFilter;
         }
@@ -276,6 +307,7 @@ class AdminMemberUsersPageAction extends AbstractPageAction
                     'q' => $searchTerm,
                     'role_filter' => $selectedRoleFilter,
                     'member_type_filter' => $selectedMemberTypeFilter,
+                    'status_filter' => $selectedStatusFilter,
                     'institutional_role_filter' => $selectedInstitutionalRoleFilter,
                 ]),
                 'indicator' => $indicator,
@@ -310,6 +342,7 @@ class AdminMemberUsersPageAction extends AbstractPageAction
                 'q' => $searchTerm,
                 'role_filter' => $selectedRoleFilter,
                 'member_type_filter' => $selectedMemberTypeFilter,
+                'status_filter' => $selectedStatusFilter,
                 'institutional_role_filter' => $selectedInstitutionalRoleFilter,
             ]),
         ], self::PAGE_SIZE_OPTIONS);
@@ -332,8 +365,10 @@ class AdminMemberUsersPageAction extends AbstractPageAction
             'member_users_search' => $searchTerm,
             'member_users_role_filter' => $selectedRoleFilter,
             'member_users_member_type_filter' => $selectedMemberTypeFilter,
+            'member_users_status_filter' => $selectedStatusFilter,
             'member_users_institutional_role_filter' => $selectedInstitutionalRoleFilter,
             'member_users_role_filter_options' => $roleFilterOptions,
+            'member_users_status_filter_options' => self::STATUS_FILTER_OPTIONS,
             'member_users_institutional_role_filter_options' => $institutionalRoleFilterOptions,
             'member_users_sort_links' => $sortLinks,
             'member_users_pagination' => [

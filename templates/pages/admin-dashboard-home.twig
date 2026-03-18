@@ -20,11 +20,128 @@
   {% set panel_can_users = panel_is_superuser or panel_role_key == 'admin' %}
   {% set panel_can_visit_reset = panel_is_superuser or panel_role_key == 'admin' %}
   {% set visit_metrics = dashboard_visit_metrics|default({}) %}
+  {% set member_metrics = dashboard_member_metrics|default({}) %}
 
   {% if dashboard_visit_metrics_flash_status == 'visit-count-reset' %}
     <p class="nc-admin-login-success" role="status">Nova contagem de visitas iniciada com sucesso a partir de hoje.</p>
   {% elseif dashboard_visit_metrics_flash_status == 'visit-count-reset-error' %}
     <p class="nc-admin-login-error" role="alert">Não foi possível iniciar uma nova contagem de visitas agora.</p>
+  {% endif %}
+
+  {% if panel_can_users %}
+    <section class="nc-card nc-dashboard-visit-panel" aria-label="Indicadores de pessoas e cadastros">
+      <div class="nc-dashboard-visit-panel-head">
+        <div>
+          <h3 class="nc-dashboard-visit-panel-title">Pessoas e cadastros</h3>
+          <p class="nc-dashboard-visit-panel-copy">Visão rápida do quadro atual de associados e contas em análise no sistema.</p>
+        </div>
+      </div>
+
+      {% if dashboard_member_metrics_error %}
+        <p class="nc-admin-login-error" role="alert">{{ dashboard_member_metrics_error }}</p>
+      {% else %}
+        {% set member_metric_cards = [
+          {
+            label: 'Total de Associados',
+            value: member_metrics.total_associates|default(0),
+            description: 'Contas ativas liberadas para uso da área do membro.',
+            href: '/painel/usuarios?status_filter=active',
+            cta: 'Abrir ativos',
+            icon: 'group'
+          },
+          {
+            label: 'Sócios Efetivos',
+            value: member_metrics.total_effective_members|default(0),
+            description: 'Associados ativos classificados como efetivos.',
+            href: '/painel/usuarios?status_filter=active&member_type_filter=efetivo',
+            cta: 'Filtrar efetivos',
+            icon: 'effective'
+          },
+          {
+            label: 'Sócios Fundadores',
+            value: member_metrics.total_founder_members|default(0),
+            description: 'Associados ativos classificados como fundadores.',
+            href: '/painel/usuarios?status_filter=active&member_type_filter=fundador',
+            cta: 'Filtrar fundadores',
+            icon: 'founder'
+          },
+          {
+            label: 'Contas Pendentes',
+            value: member_metrics.total_pending_accounts|default(0),
+            description: 'Cadastros aguardando validação administrativa.',
+            href: '/painel/usuarios?status_filter=pending',
+            cta: 'Ver pendências',
+            icon: 'pending'
+          },
+          {
+            label: 'Contas Bloqueadas',
+            value: member_metrics.total_blocked_accounts|default(0),
+            description: 'Usuários com acesso suspenso no momento.',
+            href: '/painel/usuarios?status_filter=blocked',
+            cta: 'Ver bloqueadas',
+            icon: 'blocked'
+          },
+          {
+            label: 'Sem Tipo Definido',
+            value: member_metrics.total_active_without_type|default(0),
+            description: 'Associados ativos ainda sem classificação de tipo de sócio.',
+            href: '/painel/usuarios?status_filter=active&member_type_filter=undefined',
+            cta: 'Ver sem tipo',
+            icon: 'undefined'
+          }
+        ] %}
+        <div class="nc-dashboard-visit-grid is-members">
+          {% for card in member_metric_cards %}
+            <a class="nc-dashboard-visit-card nc-dashboard-visit-card-link" href="{{ card.href }}" aria-label="{{ card.label }}. {{ card.cta }}">
+              <span class="nc-dashboard-visit-card-head">
+                <span class="nc-dashboard-visit-card-icon" aria-hidden="true">
+                  {% if card.icon == 'group' %}
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M8 11.25C9.79493 11.25 11.25 9.79493 11.25 8C11.25 6.20507 9.79493 4.75 8 4.75C6.20507 4.75 4.75 6.20507 4.75 8C4.75 9.79493 6.20507 11.25 8 11.25Z" stroke="currentColor" stroke-width="1.7"/>
+                      <path d="M16.25 10.25C17.7688 10.25 19 9.01878 19 7.5C19 5.98122 17.7688 4.75 16.25 4.75C14.7312 4.75 13.5 5.98122 13.5 7.5C13.5 9.01878 14.7312 10.25 16.25 10.25Z" stroke="currentColor" stroke-width="1.7"/>
+                      <path d="M3.75 18.25C3.75 15.6266 5.87665 13.5 8.5 13.5H9.5C12.1234 13.5 14.25 15.6266 14.25 18.25" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                      <path d="M13.75 18.25C13.75 16.1789 15.4289 14.5 17.5 14.5H17.75C19.8211 14.5 21.5 16.1789 21.5 18.25" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                    </svg>
+                  {% elseif card.icon == 'effective' %}
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="9" r="4.25" stroke="currentColor" stroke-width="1.7"/>
+                      <path d="M5 19.25C5.95813 16.5655 8.53138 14.75 11.5 14.75H12.5C15.4686 14.75 18.0419 16.5655 19 19.25" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                      <path d="M17.5 5.5L18.35 7.15L20.2 7.4L18.85 8.7L19.2 10.55L17.5 9.7L15.8 10.55L16.15 8.7L14.8 7.4L16.65 7.15L17.5 5.5Z" fill="currentColor"/>
+                    </svg>
+                  {% elseif card.icon == 'founder' %}
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 4.75L13.95 8.7L18.3 9.33L15.15 12.4L15.89 16.73L12 14.69L8.11 16.73L8.85 12.4L5.7 9.33L10.05 8.7L12 4.75Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                      <path d="M7 19.25H17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                    </svg>
+                  {% elseif card.icon == 'pending' %}
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="7.25" stroke="currentColor" stroke-width="1.7"/>
+                      <path d="M12 8.25V12.25L14.75 14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  {% elseif card.icon == 'blocked' %}
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="5.25" y="10.25" width="13.5" height="9" rx="2" stroke="currentColor" stroke-width="1.7"/>
+                      <path d="M8.5 10.25V8.75C8.5 6.817 10.067 5.25 12 5.25C13.933 5.25 15.5 6.817 15.5 8.75V10.25" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                      <circle cx="12" cy="14.75" r="1.1" fill="currentColor"/>
+                    </svg>
+                  {% else %}
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="7.25" stroke="currentColor" stroke-width="1.7"/>
+                      <path d="M12 11V15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                      <circle cx="12" cy="8.25" r="0.9" fill="currentColor"/>
+                    </svg>
+                  {% endif %}
+                </span>
+                <span class="nc-metric-label">{{ card.label }}</span>
+              </span>
+              <strong class="nc-metric-value">{{ card.value }}</strong>
+              <p>{{ card.description }}</p>
+              <span class="nc-dashboard-visit-card-cta">{{ card.cta }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </section>
   {% endif %}
 
   <section class="nc-card nc-dashboard-visit-panel" aria-label="Visitas do site">
@@ -51,19 +168,19 @@
       <p class="nc-admin-login-error" role="alert">{{ dashboard_visit_metrics_error }}</p>
     {% else %}
       <div class="nc-dashboard-visit-grid">
-        <article class="nc-dashboard-visit-card">
+        <article class="nc-dashboard-visit-card is-hoverable">
           <span class="nc-metric-label">Hoje</span>
           <strong class="nc-metric-value">{{ visit_metrics.today_views|default(0) }}</strong>
           <p>{{ visit_metrics.today_unique_visitors|default(0) }} visitante(s) único(s)</p>
         </article>
 
-        <article class="nc-dashboard-visit-card">
+        <article class="nc-dashboard-visit-card is-hoverable">
           <span class="nc-metric-label">Últimos 7 dias</span>
           <strong class="nc-metric-value">{{ visit_metrics.last_7_days_views|default(0) }}</strong>
           <p>{{ visit_metrics.last_7_days_unique_visitors|default(0) }} visitante(s) único(s)</p>
         </article>
 
-        <article class="nc-dashboard-visit-card">
+        <article class="nc-dashboard-visit-card is-hoverable">
           <span class="nc-metric-label">{% if visit_metrics.baseline_started_at|default('') %}Desde a nova contagem{% else %}Total histórico{% endif %}</span>
           <strong class="nc-metric-value">{{ visit_metrics.total_views|default(0) }}</strong>
           <p>{{ visit_metrics.total_unique_visitors|default(0) }} visitante(s) único(s)</p>

@@ -299,8 +299,8 @@
             {% endif %}
           </details>
           {% if panel_can_users %}
-            <details class="nc-admin-nav-group" aria-label="Seção governança e conformidade" {% if current_path starts with '/painel/institucional/' %}open{% endif %}>
-              <summary class="nc-admin-nav-group-title">GOVERNANÇA E CONFORMIDADE</summary>
+            <details class="nc-admin-nav-group" aria-label="Seção governança" {% if current_path starts with '/painel/institucional/' %}open{% endif %}>
+              <summary class="nc-admin-nav-group-title">GOVERNANÇA</summary>
               <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/institucional/estatuto' ? ' is-active' : '' }}" href="/painel/institucional/estatuto">
                 <span class="nc-admin-link-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

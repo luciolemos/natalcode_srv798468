@@ -2312,7 +2312,13 @@ code {
 .nc-dashboard-visit-grid {
   display: grid;
   gap: var(--space-3);
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+@media (min-width: 1024px) {
+  .nc-dashboard-visit-grid.is-members {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .nc-dashboard-visit-card {
@@ -2324,10 +2330,77 @@ code {
   background: color-mix(in srgb, var(--theme-soft-1) 10%, var(--surface-main));
 }
 
+.nc-dashboard-visit-card.is-hoverable {
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.nc-dashboard-visit-card.is-hoverable:hover {
+  border-color: color-mix(in srgb, var(--theme-accent-1) 42%, var(--surface-border));
+  background: color-mix(in srgb, var(--theme-soft-1) 22%, var(--surface-main));
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
+}
+
+.nc-dashboard-visit-card-link {
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.nc-dashboard-visit-card-link:hover,
+.nc-dashboard-visit-card-link:focus-visible {
+  border-color: color-mix(in srgb, var(--theme-accent-1) 42%, var(--surface-border));
+  background: color-mix(in srgb, var(--theme-soft-1) 22%, var(--surface-main));
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
+}
+
+.nc-dashboard-visit-card-link:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--theme-accent-1) 55%, white);
+  outline-offset: 2px;
+}
+
+.nc-dashboard-visit-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.nc-dashboard-visit-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--theme-accent-1) 22%, var(--surface-border));
+  background: color-mix(in srgb, var(--theme-soft-2) 24%, var(--surface-main));
+  color: var(--theme-accent-1);
+  flex-shrink: 0;
+}
+
+.nc-dashboard-visit-card-icon svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
 .nc-dashboard-visit-card p {
   margin: 0;
   color: var(--text-muted);
   font-size: 0.88rem;
+}
+
+.nc-dashboard-visit-card-cta {
+  margin-top: 0.15rem;
+  color: var(--theme-accent-1);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.nc-dashboard-visit-card-link:hover .nc-dashboard-visit-card-icon,
+.nc-dashboard-visit-card-link:focus-visible .nc-dashboard-visit-card-icon {
+  border-color: color-mix(in srgb, var(--theme-accent-1) 42%, var(--surface-border));
+  background: color-mix(in srgb, var(--theme-soft-1) 58%, var(--surface-main));
 }
 
 .nc-dashboard-visit-top-pages {
