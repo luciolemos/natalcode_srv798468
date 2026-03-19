@@ -66,12 +66,14 @@ class MemberForgotPasswordPageAction extends AbstractPageAction
                         $tokenHash = hash('sha256', $token);
                         $expiresAt = new \DateTimeImmutable('+' . self::TOKEN_TTL_MINUTES . ' minutes');
 
-                        if ($this->memberAuthRepository->createPasswordResetToken(
-                            (int) ($user['id'] ?? 0),
-                            $email,
-                            $tokenHash,
-                            $expiresAt
-                        )) {
+                        if (
+                            $this->memberAuthRepository->createPasswordResetToken(
+                                (int) ($user['id'] ?? 0),
+                                $email,
+                                $tokenHash,
+                                $expiresAt
+                            )
+                        ) {
                             $this->sendPasswordResetEmail($user, $token, $expiresAt);
                         } else {
                             $this->logger->warning('Falha ao registrar token de redefinicao de senha.', [
