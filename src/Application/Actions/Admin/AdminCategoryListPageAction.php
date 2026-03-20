@@ -15,7 +15,7 @@ class AdminCategoryListPageAction extends AbstractAdminAgendaAction
 
     private const PAGE_SIZE_OPTIONS = [5, 10, 25, 50, 100];
 
-    private const SORT_FIELDS = ['id', 'name', 'slug', 'is_active', 'audience_default'];
+    private const SORT_FIELDS = ['id', 'name', 'slug', 'is_active'];
 
     public function __invoke(Request $request, Response $response): Response
     {
@@ -44,7 +44,6 @@ class AdminCategoryListPageAction extends AbstractAdminAgendaAction
                     $haystack = implode(' ', [
                         (string) ($category['name'] ?? ''),
                         (string) ($category['slug'] ?? ''),
-                        (string) ($category['audience_default'] ?? ''),
                         $activeLabel,
                     ]);
 

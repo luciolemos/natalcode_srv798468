@@ -83,21 +83,6 @@
 
       {% set auth_is_logged = dashboard_is_authenticated|default(false) %}
       {% if auth_is_logged %}
-        {% set auth_path = '/painel' %}
-        {% set auth_label = 'PAINEL' %}
-        {% set auth_is_active = path starts with '/painel' %}
-
-        <a class="nc-link nc-link-panel{{ auth_is_active ? ' is-active' : '' }}" href="{{ auth_path }}" {% if auth_is_active %}aria-current="page"{% endif %}>
-          <span class="nc-link-panel-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/>
-              <path d="M3 10H21" stroke="currentColor" stroke-width="1.8"/>
-              <path d="M8 15H11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-          </span>
-          <span>{{ auth_label }}</span>
-        </a>
-
         {% set can_admin_notifications = dashboard_is_admin_session|default(false) or member_role_key|default('member') == 'admin' %}
         {% set admin_notification_count = dashboard_admin_notification_count|default(0) %}
         {% if can_admin_notifications %}
@@ -118,7 +103,8 @@
 
       {% set member_is_logged = member_is_authenticated|default(false) %}
       {% if member_is_logged %}
-        {% set member_area_active = path starts with '/membro' %}
+        {% set member_has_panel_access = dashboard_is_authenticated|default(false) %}
+        {% set member_area_active = path starts with '/membro' or path starts with '/painel' %}
         {% set member_display_name = member_name|default('Membro') %}
         {% set member_role_label = member_role_name|default('Membro') %}
         {% set member_photo_path = member_profile_photo_path|default('') %}
@@ -137,6 +123,14 @@
             </span>
           </button>
           <div id="nc-submenu-member-user" class="nc-nav-submenu" hidden>
+            {% if member_has_panel_access %}
+              <a class="nc-nav-submenu-link{{ path starts with '/painel' ? ' is-active' : '' }}" href="/painel" {% if path starts with '/painel' %}aria-current="page"{% endif %}>
+                <span class="nc-nav-link-content">
+                  {% include 'components/nav-icon.twig' with { icon_key: 'painel' } only %}
+                  <span>PAINEL</span>
+                </span>
+              </a>
+            {% endif %}
             <a class="nc-nav-submenu-link{{ path == '/membro' ? ' is-active' : '' }}" href="/membro" {% if path == '/membro' %}aria-current="page"{% endif %}>
               <span class="nc-nav-link-content">
                 {% include 'components/nav-icon.twig' with { icon_key: 'member-area' } only %}

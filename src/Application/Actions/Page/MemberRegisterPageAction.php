@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Page;
 
+use App\Application\Security\RecaptchaVerifier;
 use App\Application\Support\InstitutionalEmailTemplate;
 use App\Domain\Member\MemberAuthRepository;
 use PHPMailer\PHPMailer\Exception;
@@ -17,13 +18,20 @@ use Throwable;
 class MemberRegisterPageAction extends AbstractPageAction
 {
     private const FLASH_KEY = 'member_register';
+    private const RECAPTCHA_ACTION = 'member_register';
 
     private MemberAuthRepository $memberAuthRepository;
+    private RecaptchaVerifier $recaptchaVerifier;
 
-    public function __construct(LoggerInterface $logger, Twig $twig, MemberAuthRepository $memberAuthRepository)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        Twig $twig,
+        MemberAuthRepository $memberAuthRepository,
+        RecaptchaVerifier $recaptchaVerifier
+    ) {
         parent::__construct($logger, $twig);
         $this->memberAuthRepository = $memberAuthRepository;
+        $this->recaptchaVerifier = $recaptchaVerifier;
     }
 
     public function __invoke(Request $request, Response $response): Response
@@ -57,6 +65,16 @@ class MemberRegisterPageAction extends AbstractPageAction
 
             $form['full_name'] = $fullName;
             $form['email'] = $email;
+
+            $recaptchaValidation = $this->verifyRecaptchaToken(
+                $request,
+                $this->recaptchaVerifier,
+                (string) ($body['recaptcha_token'] ?? ''),
+                self::RECAPTCHA_ACTION
+            );
+            if (!$recaptchaValidation['ok']) {
+                $errors[] = $recaptchaValidation['message'];
+            }
 
             if ($fullName === '') {
                 $errors[] = 'Informe seu nome completo.';

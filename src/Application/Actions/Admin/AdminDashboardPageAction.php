@@ -177,6 +177,7 @@ class AdminDashboardPageAction extends AbstractPageAction
         $segmentLabels = [
             'agenda' => 'Agenda',
             'atendimento-fraterno' => 'Atendimento Fraterno',
+            'biblioteca' => 'Biblioteca',
             'cadastro' => 'Cadastro',
             'contato' => 'Contato',
             'entrar' => 'Entrar',
@@ -189,6 +190,7 @@ class AdminDashboardPageAction extends AbstractPageAction
             'nossa-marca' => 'Nossa Marca',
             'palestras' => 'Palestras',
             'politica-de-privacidade' => 'Política de Privacidade',
+            'livros' => 'Livros',
             'quem-somos' => 'Quem Somos',
             'termos-de-uso' => 'Termos de Uso',
             'valores' => 'Valores',

@@ -53,7 +53,7 @@
         <form class="nc-admin-table-search" method="get" action="/painel/categorias" data-aos="fade-up" data-aos-delay="95">
           <label for="nc-categories-search">Buscar categorias</label>
           <div class="nc-admin-table-search-controls">
-            <input id="nc-categories-search" name="q" type="search" value="{{ search_term }}" placeholder="Nome, slug, público, status...">
+            <input id="nc-categories-search" name="q" type="search" value="{{ search_term }}" placeholder="Nome, slug, status...">
             <input type="hidden" name="sort" value="{{ pagination.sort|default('name') }}">
             <input type="hidden" name="dir" value="{{ pagination.dir|default('asc') }}">
             <input type="hidden" name="per_page" value="{{ pagination.page_size|default(10) }}">
@@ -65,7 +65,7 @@
         <form class="nc-admin-table-search" method="get" action="/painel/categorias" data-aos="fade-up" data-aos-delay="95">
           <label for="nc-categories-search">Buscar categorias</label>
           <div class="nc-admin-table-search-controls">
-            <input id="nc-categories-search" name="q" type="search" value="{{ search_term }}" placeholder="Nome, slug, público, status...">
+            <input id="nc-categories-search" name="q" type="search" value="{{ search_term }}" placeholder="Nome, slug, status...">
             <input type="hidden" name="sort" value="{{ pagination.sort|default('name') }}">
             <input type="hidden" name="dir" value="{{ pagination.dir|default('asc') }}">
             <input type="hidden" name="per_page" value="{{ pagination.page_size|default(10) }}">
@@ -99,16 +99,10 @@
             <thead>
               <tr>
                 <th>
-                  <a class="nc-admin-sort-link{% if sort_links.id.active %} is-active{% endif %}" href="{{ sort_links.id.url }}">ID <span aria-hidden="true">{{ sort_links.id.indicator }}</span></a>
-                </th>
-                <th>
                   <a class="nc-admin-sort-link{% if sort_links.name.active %} is-active{% endif %}" href="{{ sort_links.name.url }}">Nome <span aria-hidden="true">{{ sort_links.name.indicator }}</span></a>
                 </th>
                 <th>
                   <a class="nc-admin-sort-link{% if sort_links.slug.active %} is-active{% endif %}" href="{{ sort_links.slug.url }}">Slug <span aria-hidden="true">{{ sort_links.slug.indicator }}</span></a>
-                </th>
-                <th>
-                  <a class="nc-admin-sort-link{% if sort_links.audience_default.active %} is-active{% endif %}" href="{{ sort_links.audience_default.url }}">Público padrão <span aria-hidden="true">{{ sort_links.audience_default.indicator }}</span></a>
                 </th>
                 <th>
                   <a class="nc-admin-sort-link{% if sort_links.is_active.active %} is-active{% endif %}" href="{{ sort_links.is_active.url }}">Status <span aria-hidden="true">{{ sort_links.is_active.indicator }}</span></a>
@@ -119,10 +113,8 @@
             <tbody>
               {% for category in agenda_categories %}
                 <tr>
-                  <td data-label="ID">{{ category.id }}</td>
                   <td data-label="Nome">{{ category.name }}</td>
                   <td class="nc-admin-cell-slug" data-label="Slug" title="{{ category.slug }}"><span>{{ category.slug }}</span></td>
-                  <td data-label="Público padrão">{{ category.audience_default|default('-') }}</td>
                   <td data-label="Status">
                     <span class="nc-admin-featured-flag{{ category.is_active ? ' is-on' : ' is-off' }}">{{ category.is_active ? 'Ativa' : 'Inativa' }}</span>
                   </td>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Page;
 
+use App\Application\Security\RecaptchaVerifier;
 use App\Domain\Member\MemberAuthRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -14,13 +15,20 @@ use Throwable;
 class MemberLoginPageAction extends AbstractPageAction
 {
     public const FLASH_KEY = 'member_login';
+    private const RECAPTCHA_ACTION = 'member_login';
 
     private MemberAuthRepository $memberAuthRepository;
+    private RecaptchaVerifier $recaptchaVerifier;
 
-    public function __construct(LoggerInterface $logger, Twig $twig, MemberAuthRepository $memberAuthRepository)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        Twig $twig,
+        MemberAuthRepository $memberAuthRepository,
+        RecaptchaVerifier $recaptchaVerifier
+    ) {
         parent::__construct($logger, $twig);
         $this->memberAuthRepository = $memberAuthRepository;
+        $this->recaptchaVerifier = $recaptchaVerifier;
     }
 
     public function __invoke(Request $request, Response $response): Response
@@ -55,20 +63,34 @@ class MemberLoginPageAction extends AbstractPageAction
 
             $form['identifier'] = $identifier;
 
-            try {
-                $user = $this->memberAuthRepository->findByEmail($email);
-            } catch (Throwable $exception) {
-                $this->logger->error('Falha ao autenticar membro por e-mail.', [
-                    'email' => $email,
-                    'exception' => $exception,
-                ]);
-
-                $error = 'Não foi possível processar seu login agora. Tente novamente em instantes.';
-                $user = null;
+            $recaptchaValidation = $this->verifyRecaptchaToken(
+                $request,
+                $this->recaptchaVerifier,
+                (string) ($body['recaptcha_token'] ?? ''),
+                self::RECAPTCHA_ACTION
+            );
+            if (!$recaptchaValidation['ok']) {
+                $error = $recaptchaValidation['message'];
             }
 
-            $isMemberAuth = $user !== null
-                && password_verify($password, (string) ($user['password_hash'] ?? ''));
+            $user = null;
+            $isMemberAuth = false;
+
+            if ($error === '') {
+                try {
+                    $user = $this->memberAuthRepository->findByEmail($email);
+                } catch (Throwable $exception) {
+                    $this->logger->error('Falha ao autenticar membro por e-mail.', [
+                        'email' => $email,
+                        'exception' => $exception,
+                    ]);
+
+                    $error = 'Não foi possível processar seu login agora. Tente novamente em instantes.';
+                }
+
+                $isMemberAuth = $user !== null
+                    && password_verify($password, (string) ($user['password_hash'] ?? ''));
+            }
 
             if ($isMemberAuth) {
                 if ((string) ($user['status'] ?? '') === 'pending') {

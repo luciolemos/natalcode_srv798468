@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Application\Settings\SettingsInterface;
+use App\Application\Security\RecaptchaVerifier;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -91,6 +92,9 @@ return function (ContainerBuilder $containerBuilder) {
             $appDefaultSiteName = trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'CEDE'));
             $appDefaultTwitterSite = trim((string) ($_ENV['APP_DEFAULT_TWITTER_SITE'] ?? '@cedeoficialrn'));
             $appAssetVersion = trim((string) ($_ENV['APP_ASSET_VERSION'] ?? '1'));
+            $recaptchaVerifier = new RecaptchaVerifier();
+            $appRecaptchaEnabled = $recaptchaVerifier->isReady();
+            $appRecaptchaSiteKey = $recaptchaVerifier->getSiteKey();
 
             if ($appDefaultPageTitle === '') {
                 $appDefaultPageTitle = 'CEDE | Centro de Estudos da Doutrina Espírita';
@@ -244,6 +248,8 @@ return function (ContainerBuilder $containerBuilder) {
             $twig->getEnvironment()->addGlobal('app_default_site_name', $appDefaultSiteName);
             $twig->getEnvironment()->addGlobal('app_default_twitter_site', $appDefaultTwitterSite);
             $twig->getEnvironment()->addGlobal('app_asset_version', $appAssetVersion);
+            $twig->getEnvironment()->addGlobal('app_recaptcha_enabled', $appRecaptchaEnabled);
+            $twig->getEnvironment()->addGlobal('app_recaptcha_site_key', $appRecaptchaSiteKey);
             $twig->getEnvironment()->addGlobal('default_theme', $defaultTheme);
             $twig->getEnvironment()->addGlobal('default_mode', $defaultMode);
             $twig->getEnvironment()->addGlobal('default_dark_intensity', $defaultDarkIntensity);

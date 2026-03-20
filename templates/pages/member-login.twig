@@ -19,7 +19,7 @@
             <p class="nc-admin-login-error" role="alert">{{ member_login_error }}</p>
           {% endif %}
 
-          <form class="nc-admin-login-form" method="post" action="/entrar">
+          <form class="nc-admin-login-form" method="post" action="/entrar"{% if app_recaptcha_enabled %} data-recaptcha-action="member_login" data-recaptcha-site-key="{{ app_recaptcha_site_key }}"{% endif %}>
             <input type="hidden" name="redirect_to" value="{{ member_login_redirect_to|default('/membro') }}">
 
             <div class="nc-admin-login-field">
@@ -35,6 +35,8 @@
             <div class="nc-actions nc-admin-login-actions" data-aos="fade-up" data-aos-delay="80">
               <button class="nc-btn nc-btn-primary nc-admin-login-submit nc-admin-login-submit-full" type="submit">Entrar</button>
             </div>
+
+            {% include 'components/recaptcha-fields.twig' %}
 
             <p class="nc-admin-login-footnote">
               Esqueci minha senha. <a class="nc-link" href="/esqueci-senha">Redefinir agora</a>

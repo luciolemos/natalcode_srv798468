@@ -10,6 +10,7 @@ return [
             'tagline' => 'Iluminando consciências, transformando vidas.',
             'lead' => 'Promovendo o estudo, a prática e a difusão do Espiritismo com base nas obras de Allan Kardec, buscando o progresso moral e intelectual do ser humano.',
             'actionsDelay' => 140,
+            'showPanel' => false,
             'panelTitle' => 'Nossas Atividades',
             'panelDelay' => 180,
             'qrTitle' => 'Acesse no celular',
@@ -348,9 +349,9 @@ return [
     ],
     'donationOptions' => [
         [
-            'title' => 'Doação via PIX (ASAAS)',
+            'title' => 'Doação via PIX (Banco Bradesco)',
             'description' => 'Escaneie o QR Code do PIX para contribuir de forma rápida e segura.',
-            'qrImage' => '/assets/img/cedern/qr_cede_bradesco.jpeg',
+            'qrImage' => '/assets/img/cedern/qr_cede_bradesco.png',
             'qrAlt' => 'QR Code para doação via PIX',
             'pixKey' => '04.242.556/0001-45',
             'hint' => 'Adicione a imagem do QR do PIX e atualize a chave PIX no arquivo de conteúdo da home.',
@@ -531,7 +532,7 @@ return [
     'ctaActions' => [
         [
             'label' => 'Conheça nossa Biblioteca',
-            'href' => '/estudos',
+            'href' => '/biblioteca',
             'class' => 'nc-btn nc-btn-primary',
             'loadingOnClick' => false,
         ],

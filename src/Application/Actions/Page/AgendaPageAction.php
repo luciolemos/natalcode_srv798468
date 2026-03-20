@@ -15,7 +15,7 @@ class AgendaPageAction extends AbstractPageAction
 {
     private const PAGE_SIZE_OPTIONS = [5, 10, 12, 25, 50];
 
-    private const SORT_FIELDS = ['starts_at', 'title', 'location_name', 'mode_label'];
+    private const SORT_FIELDS = ['starts_at', 'title', 'category_name', 'audience', 'location_name', 'mode_label'];
 
     private AgendaRepository $agendaRepository;
     private int $publicUpcomingLimit;
@@ -80,6 +80,8 @@ class AgendaPageAction extends AbstractPageAction
                     $haystack = implode(' ', [
                         (string) ($event['title'] ?? ''),
                         (string) ($event['description'] ?? ''),
+                        (string) ($event['category_name'] ?? ''),
+                        (string) ($event['audience'] ?? ''),
                         (string) ($event['location_name'] ?? ''),
                         (string) ($event['mode_label'] ?? ''),
                         (string) ($event['starts_at_label'] ?? ''),

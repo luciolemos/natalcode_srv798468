@@ -174,9 +174,6 @@
         <table class="nc-admin-table nc-admin-table-users">
           <thead>
             <tr>
-              <th class="nc-admin-col-id">
-                <a class="nc-admin-sort-link{% if sort_links.id.active %} is-active{% endif %}" href="{{ sort_links.id.url }}">ID <span aria-hidden="true">{{ sort_links.id.indicator }}</span></a>
-              </th>
               <th>Foto</th>
               <th>
                 <a class="nc-admin-sort-link{% if sort_links.full_name.active %} is-active{% endif %}" href="{{ sort_links.full_name.url }}">Nome <span aria-hidden="true">{{ sort_links.full_name.indicator }}</span></a>
@@ -207,7 +204,6 @@
                   'active': 'Ativo',
                   'blocked': 'Bloqueado'
                 }[user_status_key]|default(user_status_key ?: '-') %}
-                <td class="nc-admin-col-id" data-label="ID">{{ user.id }}</td>
                 <td class="nc-admin-user-photo-cell" data-label="Foto">
                   <span class="nc-admin-user-photo" aria-hidden="true">
                     {% if user.profile_photo_path|default('') %}

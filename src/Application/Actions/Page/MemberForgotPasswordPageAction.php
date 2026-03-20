@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Page;
 
+use App\Application\Security\RecaptchaVerifier;
 use App\Application\Support\InstitutionalEmailTemplate;
 use App\Domain\Member\MemberAuthRepository;
 use PHPMailer\PHPMailer\Exception;
@@ -18,13 +19,20 @@ class MemberForgotPasswordPageAction extends AbstractPageAction
 {
     private const FLASH_KEY = 'member_password_forgot';
     private const TOKEN_TTL_MINUTES = 60;
+    private const RECAPTCHA_ACTION = 'member_password_forgot';
 
     private MemberAuthRepository $memberAuthRepository;
+    private RecaptchaVerifier $recaptchaVerifier;
 
-    public function __construct(LoggerInterface $logger, Twig $twig, MemberAuthRepository $memberAuthRepository)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        Twig $twig,
+        MemberAuthRepository $memberAuthRepository,
+        RecaptchaVerifier $recaptchaVerifier
+    ) {
         parent::__construct($logger, $twig);
         $this->memberAuthRepository = $memberAuthRepository;
+        $this->recaptchaVerifier = $recaptchaVerifier;
     }
 
     public function __invoke(Request $request, Response $response): Response
@@ -52,6 +60,16 @@ class MemberForgotPasswordPageAction extends AbstractPageAction
             $email = strtolower(trim((string) ($body['email'] ?? '')));
 
             $form['email'] = $email;
+
+            $recaptchaValidation = $this->verifyRecaptchaToken(
+                $request,
+                $this->recaptchaVerifier,
+                (string) ($body['recaptcha_token'] ?? ''),
+                self::RECAPTCHA_ACTION
+            );
+            if (!$recaptchaValidation['ok']) {
+                $errors[] = $recaptchaValidation['message'];
+            }
 
             if ($email === '' || filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
                 $errors[] = 'Informe um e-mail válido.';

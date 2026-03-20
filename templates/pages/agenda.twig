@@ -41,7 +41,7 @@
         <form class="nc-admin-table-search" method="get" action="/agenda">
           <label for="nc-agenda-search">Buscar atividades</label>
           <div class="nc-admin-table-search-controls">
-            <input id="nc-agenda-search" name="q" type="search" value="{{ search_term }}" placeholder="Título, local, modalidade...">
+            <input id="nc-agenda-search" name="q" type="search" value="{{ search_term }}" placeholder="Título, categoria, público, local, modalidade...">
             <input type="hidden" name="sort" value="{{ pagination.sort|default('starts_at') }}">
             <input type="hidden" name="dir" value="{{ pagination.dir|default('asc') }}">
             <input type="hidden" name="per_page" value="{{ pagination.per_page|default(12) }}">
@@ -81,6 +81,12 @@
                   <a class="nc-admin-sort-link{% if sort_links.title.active %} is-active{% endif %}" href="{{ sort_links.title.url|default('#') }}">Atividade <span aria-hidden="true">{{ sort_links.title.indicator|default('↕') }}</span></a>
                 </th>
                 <th scope="col">
+                  <a class="nc-admin-sort-link{% if sort_links.category_name.active %} is-active{% endif %}" href="{{ sort_links.category_name.url|default('#') }}">Categoria <span aria-hidden="true">{{ sort_links.category_name.indicator|default('↕') }}</span></a>
+                </th>
+                <th scope="col">
+                  <a class="nc-admin-sort-link{% if sort_links.audience.active %} is-active{% endif %}" href="{{ sort_links.audience.url|default('#') }}">Público alvo <span aria-hidden="true">{{ sort_links.audience.indicator|default('↕') }}</span></a>
+                </th>
+                <th scope="col">
                   <a class="nc-admin-sort-link{% if sort_links.location_name.active %} is-active{% endif %}" href="{{ sort_links.location_name.url|default('#') }}">Local <span aria-hidden="true">{{ sort_links.location_name.indicator|default('↕') }}</span></a>
                 </th>
                 <th scope="col">
@@ -99,6 +105,8 @@
                     <strong>{{ event.title }}</strong>
                     <small>{{ event_description }}</small>
                   </td>
+                  <td data-label="Categoria">{{ event.category_name|default('-') }}</td>
+                  <td data-label="Público alvo">{{ event.audience|default('-') ?: '-' }}</td>
                   <td data-label="Local">{{ event_place }}</td>
                   <td data-label="Modalidade">{{ event.mode_label|default('Presencial') }}</td>
                   <td data-label="Ação">
