@@ -17,6 +17,12 @@ use App\Application\Actions\Admin\AdminAgendaListPageAction;
 use App\Application\Actions\Admin\AdminCategoryFormPageAction;
 use App\Application\Actions\Admin\AdminCategoryListPageAction;
 use App\Application\Actions\Admin\AdminCategoryToggleStatusAction;
+use App\Application\Actions\Admin\AdminLibraryBookDeleteAction;
+use App\Application\Actions\Admin\AdminLibraryBookFormPageAction;
+use App\Application\Actions\Admin\AdminLibraryBookListPageAction;
+use App\Application\Actions\Admin\AdminLibraryCategoryFormPageAction;
+use App\Application\Actions\Admin\AdminLibraryCategoryListPageAction;
+use App\Application\Actions\Admin\AdminLibraryCategoryToggleStatusAction;
 use App\Application\Actions\Admin\AdminMemberAssignRoleAction;
 use App\Application\Actions\Admin\AdminMemberUsersPageAction;
 use App\Application\Actions\Admin\AdminMemberUserSummaryPageAction;
@@ -39,6 +45,7 @@ use App\Application\Actions\Page\FaqParticipationPageAction;
 use App\Application\Actions\Page\FaqPracticesPageAction;
 use App\Application\Actions\Page\FraternalServicePageAction;
 use App\Application\Actions\Page\HomePageAction;
+use App\Application\Actions\Page\LibraryPageAction;
 use App\Application\Actions\Page\MemberCompleteProfilePageAction;
 use App\Application\Actions\Page\MemberEventInterestToggleAction;
 use App\Application\Actions\Page\MemberAdminAreaPageAction;
@@ -130,6 +137,7 @@ return function (App $app) {
     $app->get('/agenda', AgendaPageAction::class);
     $app->get('/agenda/{slug}', AgendaDetailPageAction::class);
     $app->get('/agenda/{slug}/ics', AgendaEventIcsDownloadAction::class);
+    $app->get('/biblioteca', LibraryPageAction::class);
     $app->map(['GET', 'POST'], '/cadastro', MemberRegisterPageAction::class);
     $app->map(['GET', 'POST'], '/entrar', MemberLoginPageAction::class);
     $app->map(['GET', 'POST'], '/esqueci-senha', MemberForgotPasswordPageAction::class);
@@ -153,6 +161,14 @@ return function (App $app) {
         $group->map(['GET', 'POST'], '/categorias/nova', AdminCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
         $group->map(['GET', 'POST'], '/categorias/{id}/editar', AdminCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
         $group->post('/categorias/{id}/alternar-status', AdminCategoryToggleStatusAction::class)->add($panelRoleMiddlewareFactory('manager'));
+        $group->get('/biblioteca/livros', AdminLibraryBookListPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+        $group->map(['GET', 'POST'], '/biblioteca/livros/novo', AdminLibraryBookFormPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+        $group->map(['GET', 'POST'], '/biblioteca/livros/{id}/editar', AdminLibraryBookFormPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+        $group->post('/biblioteca/livros/{id}/excluir', AdminLibraryBookDeleteAction::class)->add($panelRoleMiddlewareFactory('operator'));
+        $group->get('/biblioteca/categorias', AdminLibraryCategoryListPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
+        $group->map(['GET', 'POST'], '/biblioteca/categorias/nova', AdminLibraryCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
+        $group->map(['GET', 'POST'], '/biblioteca/categorias/{id}/editar', AdminLibraryCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
+        $group->post('/biblioteca/categorias/{id}/alternar-status', AdminLibraryCategoryToggleStatusAction::class)->add($panelRoleMiddlewareFactory('manager'));
         $group->get('/usuarios', AdminMemberUsersPageAction::class)->add($panelRoleMiddlewareFactory('admin'));
         $group->get('/gestao-cede', AdminCedeManagementPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
         $group->get('/usuarios/{id}/resumo', AdminMemberUserSummaryPageAction::class)->add($panelRoleMiddlewareFactory('admin'));
@@ -193,6 +209,47 @@ return function (App $app) {
     });
     $app->get('/admin/categorias', function (Request $request, Response $response) {
         return $response->withHeader('Location', '/painel/categorias')->withStatus(302);
+    });
+    $app->get('/admin/biblioteca', function (Request $request, Response $response) {
+        return $response->withHeader('Location', '/painel/biblioteca/livros')->withStatus(302);
+    });
+    $app->get('/admin/biblioteca/livros', function (Request $request, Response $response) {
+        return $response->withHeader('Location', '/painel/biblioteca/livros')->withStatus(302);
+    });
+    $app->map(['GET', 'POST'], '/admin/biblioteca/livros/novo', function (Request $request, Response $response) {
+        $statusCode = strtoupper($request->getMethod()) === 'POST' ? 307 : 302;
+
+        return $response->withHeader('Location', '/painel/biblioteca/livros/novo')->withStatus($statusCode);
+    });
+    $app->map(['GET', 'POST'], '/admin/biblioteca/livros/{id}/editar', function (Request $request, Response $response) {
+        $id = (string) ($request->getAttribute('id') ?? '');
+        $statusCode = strtoupper($request->getMethod()) === 'POST' ? 307 : 302;
+
+        return $response->withHeader('Location', '/painel/biblioteca/livros/' . $id . '/editar')->withStatus($statusCode);
+    });
+    $app->post('/admin/biblioteca/livros/{id}/excluir', function (Request $request, Response $response) {
+        $id = (string) ($request->getAttribute('id') ?? '');
+
+        return $response->withHeader('Location', '/painel/biblioteca/livros/' . $id . '/excluir')->withStatus(307);
+    });
+    $app->get('/admin/biblioteca/categorias', function (Request $request, Response $response) {
+        return $response->withHeader('Location', '/painel/biblioteca/categorias')->withStatus(302);
+    });
+    $app->map(['GET', 'POST'], '/admin/biblioteca/categorias/nova', function (Request $request, Response $response) {
+        $statusCode = strtoupper($request->getMethod()) === 'POST' ? 307 : 302;
+
+        return $response->withHeader('Location', '/painel/biblioteca/categorias/nova')->withStatus($statusCode);
+    });
+    $app->map(['GET', 'POST'], '/admin/biblioteca/categorias/{id}/editar', function (Request $request, Response $response) {
+        $id = (string) ($request->getAttribute('id') ?? '');
+        $statusCode = strtoupper($request->getMethod()) === 'POST' ? 307 : 302;
+
+        return $response->withHeader('Location', '/painel/biblioteca/categorias/' . $id . '/editar')->withStatus($statusCode);
+    });
+    $app->post('/admin/biblioteca/categorias/{id}/alternar-status', function (Request $request, Response $response) {
+        $id = (string) ($request->getAttribute('id') ?? '');
+
+        return $response->withHeader('Location', '/painel/biblioteca/categorias/' . $id . '/alternar-status')->withStatus(307);
     });
     $app->map(['GET', 'POST'], '/admin/categorias/nova', function (Request $request, Response $response) {
         return $response->withHeader('Location', '/painel/categorias/nova')->withStatus(302);
@@ -284,6 +341,11 @@ return function (App $app) {
             ['template' => 'pages/about-brand.twig', 'context' => ['homeContent' => $homeContent]],
             ['template' => 'pages/studies.twig', 'context' => ['homeContent' => $homeContent]],
             ['template' => 'pages/study-detail.twig', 'context' => ['homeContent' => $homeContent, 'study' => $homeContent['studiesPages']['esde'] ?? []]],
+            ['template' => 'pages/library.twig', 'context' => ['homeContent' => $homeContent]],
+            ['template' => 'pages/admin-library-books.twig', 'context' => ['library_books' => []]],
+            ['template' => 'pages/admin-library-book-form.twig', 'context' => ['library_book_form' => [], 'library_book_categories' => []]],
+            ['template' => 'pages/admin-library-categories.twig', 'context' => ['library_categories' => []]],
+            ['template' => 'pages/admin-library-category-form.twig', 'context' => ['library_category_form' => []]],
             ['template' => 'pages/agenda.twig', 'context' => ['homeContent' => $homeContent]],
             ['template' => 'pages/agenda-detail.twig', 'context' => ['homeContent' => $homeContent, 'agenda' => $homeContent['agendaPages']['estudo-do-evangelho'] ?? []]],
             ['template' => 'pages/faq.twig', 'context' => ['homeContent' => $homeContent]],

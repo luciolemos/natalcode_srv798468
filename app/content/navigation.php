@@ -39,6 +39,7 @@ return [
                 ['path' => '/quem-somos/valores', 'key' => 'valores'],
                 ['path' => '/quem-somos/historia', 'key' => 'historia'],
                 ['path' => '/quem-somos/estatuto', 'key' => 'estatuto'],
+                ['path' => '/quem-somos/nossa-marca', 'key' => 'nossa-marca'],
                 ['path' => '/quem-somos/gestao-cede', 'key' => 'gestao-cede'],
             ],
         ],
@@ -62,16 +63,6 @@ return [
                 ['path' => '/agenda/juventude-espirita', 'key' => 'juventude-espirita'],
             ],
         ],
-        [
-            'key' => 'faq',
-            'base' => '/faq',
-            'items' => [
-                ['path' => '/faq', 'label' => 'Visão geral'],
-                ['path' => '/faq/doutrina', 'key' => 'doutrina'],
-                ['path' => '/faq/participacao', 'key' => 'participacao'],
-                ['path' => '/faq/praticas', 'key' => 'praticas'],
-            ],
-        ],
     ],
     'links_before_groups' => [
         [
@@ -81,7 +72,7 @@ return [
     ],
     'links_after_groups' => [
         [
-            'path' => '#',
+            'path' => '/biblioteca',
             'key' => 'biblioteca',
         ],
         [

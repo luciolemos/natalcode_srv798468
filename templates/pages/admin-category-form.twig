@@ -31,16 +31,6 @@
             </div>
 
             <div class="nc-admin-form-field">
-              <label class="nc-admin-form-label" for="audience_default">Público padrão</label>
-              <select class="nc-admin-form-input" id="audience_default" name="audience_default">
-                <option value="" {% if agenda_category_form.audience_default|default('') == '' %}selected{% endif %} disabled>Selecione um público</option>
-                {% for audience_option in agenda_audience_options|default(['Jovens', 'Adultos', 'Crianças', 'Público interno', 'Livre']) %}
-                  <option value="{{ audience_option }}" {{ agenda_category_form.audience_default == audience_option ? 'selected' : '' }}>{{ audience_option }}</option>
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="nc-admin-form-field">
               <label class="nc-admin-form-label" for="is_active">Status da categoria</label>
               <select class="nc-admin-form-input" id="is_active" name="is_active" required>
                 <option value="" {% if agenda_category_form.is_active|default('') == '' %}selected{% endif %} disabled>Selecione status</option>

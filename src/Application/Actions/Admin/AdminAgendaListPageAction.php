@@ -15,7 +15,7 @@ class AdminAgendaListPageAction extends AbstractAdminAgendaAction
 
     private const PAGE_SIZE_OPTIONS = [5, 10, 25, 50, 100];
 
-    private const SORT_FIELDS = ['id', 'title', 'category_name', 'starts_at', 'status', 'is_featured', 'slug'];
+    private const SORT_FIELDS = ['id', 'title', 'category_name', 'audience', 'mode', 'starts_at', 'status', 'is_featured'];
 
     public function __invoke(Request $request, Response $response): Response
     {
@@ -51,7 +51,9 @@ class AdminAgendaListPageAction extends AbstractAdminAgendaAction
                     $haystack = implode(' ', [
                         (string) ($event['title'] ?? ''),
                         (string) ($event['category_name'] ?? ''),
-                        (string) ($event['slug'] ?? ''),
+                        (string) ($event['audience'] ?? ''),
+                        (string) ($event['mode_label'] ?? ''),
+                        (string) ($event['mode'] ?? ''),
                         (string) ($event['status'] ?? ''),
                         implode(' ', $statusTerms),
                         (string) ($event['starts_at_label'] ?? ''),

@@ -4,14 +4,27 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Page;
 
+use App\Application\Security\RecaptchaVerifier;
 use App\Application\Support\InstitutionalEmailTemplate;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\LoggerInterface;
+use Slim\Views\Twig;
 
 class ContactPageAction extends AbstractPageAction
 {
+    private const RECAPTCHA_ACTION = 'contact_submit';
+
+    private RecaptchaVerifier $recaptchaVerifier;
+
+    public function __construct(LoggerInterface $logger, Twig $twig, RecaptchaVerifier $recaptchaVerifier)
+    {
+        parent::__construct($logger, $twig);
+        $this->recaptchaVerifier = $recaptchaVerifier;
+    }
+
     public function __invoke(Request $request, Response $response): Response
     {
         $method = strtoupper($request->getMethod());
@@ -55,6 +68,16 @@ class ContactPageAction extends AbstractPageAction
 
                 return $response->withHeader('Location', '/contato')->withStatus(303);
             } else {
+                $recaptchaValidation = $this->verifyRecaptchaToken(
+                    $request,
+                    $this->recaptchaVerifier,
+                    (string) ($body['recaptcha_token'] ?? ''),
+                    self::RECAPTCHA_ACTION
+                );
+                if (!$recaptchaValidation['ok']) {
+                    $errors[] = $recaptchaValidation['message'];
+                }
+
                 if ($form['name'] === '') {
                     $errors[] = 'Informe seu nome.';
                 }

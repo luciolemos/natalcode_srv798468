@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Page;
 
+use App\Application\Security\RecaptchaVerifier;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
@@ -82,5 +83,41 @@ abstract class AbstractPageAction
         if (session_status() !== PHP_SESSION_ACTIVE) {
             @session_start();
         }
+    }
+
+    /**
+     * @return array{ok: bool, message: string, score: float|null, error_codes: list<string>}
+     */
+    protected function verifyRecaptchaToken(
+        Request $request,
+        RecaptchaVerifier $recaptchaVerifier,
+        string $token,
+        string $expectedAction
+    ): array {
+        return $recaptchaVerifier->verifySubmission(
+            $token,
+            $expectedAction,
+            strtolower(trim($request->getUri()->getHost())),
+            $this->resolveClientIp($request)
+        );
+    }
+
+    protected function resolveClientIp(Request $request): ?string
+    {
+        $forwardedFor = trim($request->getHeaderLine('X-Forwarded-For'));
+        if ($forwardedFor !== '') {
+            $candidates = array_map('trim', explode(',', $forwardedFor));
+            foreach ($candidates as $candidate) {
+                if (filter_var($candidate, FILTER_VALIDATE_IP) !== false) {
+                    return $candidate;
+                }
+            }
+        }
+
+        $remoteAddress = trim((string) ($request->getServerParams()['REMOTE_ADDR'] ?? ''));
+
+        return filter_var($remoteAddress, FILTER_VALIDATE_IP) !== false
+            ? $remoteAddress
+            : null;
     }
 }

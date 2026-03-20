@@ -11,14 +11,6 @@ class AdminCategoryFormPageAction extends AbstractAdminAgendaAction
 {
     private const FLASH_KEY_PREFIX = 'admin_category_form_';
 
-    private const AUDIENCE_OPTIONS = [
-        'Jovens',
-        'Adultos',
-        'Crianças',
-        'Público interno',
-        'Livre',
-    ];
-
     public function __invoke(Request $request, Response $response): Response
     {
         $idRaw = $request->getAttribute('id');
@@ -132,7 +124,7 @@ class AdminCategoryFormPageAction extends AbstractAdminAgendaAction
         return [
             'name' => trim((string) ($input['name'] ?? '')),
             'slug' => $slug,
-            'audience_default' => $this->normalizeAudience((string) ($input['audience_default'] ?? '')),
+            'audience_default' => null,
             'color' => trim((string) ($input['color'] ?? '')),
             'icon' => trim((string) ($input['icon'] ?? '')),
             'is_active' => $isActiveRaw === '1' ? 1 : ($isActiveRaw === '0' ? 0 : -1),
@@ -182,8 +174,6 @@ class AdminCategoryFormPageAction extends AbstractAdminAgendaAction
         $form = [
             'name' => $submittedPayload['name'] ?? ($existingCategory['name'] ?? ''),
             'slug' => $submittedPayload['slug'] ?? ($existingCategory['slug'] ?? ''),
-            'audience_default' => $submittedPayload['audience_default']
-                ?? ($existingCategory['audience_default'] ?? ''),
             'color' => $submittedPayload['color'] ?? ($existingCategory['color'] ?? ''),
             'icon' => $submittedPayload['icon'] ?? ($existingCategory['icon'] ?? ''),
             'is_active' => array_key_exists('is_active', $submittedPayload)
@@ -196,7 +186,6 @@ class AdminCategoryFormPageAction extends AbstractAdminAgendaAction
             'agenda_category_form_errors' => $errors,
             'agenda_category_form_is_edit' => $isEdit,
             'agenda_category_id' => $existingCategory['id'] ?? null,
-            'agenda_audience_options' => self::AUDIENCE_OPTIONS,
             'page_title' => ($isEdit ? 'Editar categoria' : 'Nova categoria') . ' | Dashboard Agenda',
             'page_url' => 'https://cedern.org/painel/categorias',
             'page_description' => 'Formulário do dashboard para categorias da agenda.',
