@@ -280,13 +280,15 @@ class AdminBookshopBookFormPageAction extends AbstractAdminBookshopAction
             $errors[] = 'Selecione uma categoria válida.';
         }
 
-        if ((int) ($payload['genre_id'] ?? 0) > 0
+        if (
+            (int) ($payload['genre_id'] ?? 0) > 0
             && $this->bookshopRepository->findGenreByIdForAdmin((int) $payload['genre_id']) === null
         ) {
             $errors[] = 'Selecione um gênero válido.';
         }
 
-        if ((int) ($payload['collection_id'] ?? 0) > 0
+        if (
+            (int) ($payload['collection_id'] ?? 0) > 0
             && $this->bookshopRepository->findCollectionByIdForAdmin((int) $payload['collection_id']) === null
         ) {
             $errors[] = 'Selecione uma coleção válida.';
