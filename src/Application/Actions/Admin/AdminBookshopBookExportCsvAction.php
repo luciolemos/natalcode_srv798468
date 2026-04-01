@@ -17,6 +17,7 @@ class AdminBookshopBookExportCsvAction extends AbstractAdminBookshopAction
         'category_name',
         'isbn',
         'barcode',
+        'location_label',
         'stock_quantity',
         'sale_price',
         'status',
@@ -167,12 +168,47 @@ class AdminBookshopBookExportCsvAction extends AbstractAdminBookshopAction
         $sortDirection = strtolower((string) ($queryParams['dir'] ?? 'asc')) === 'desc' ? 'desc' : 'asc';
         $sortMultiplier = $sortDirection === 'desc' ? -1 : 1;
 
-        usort($books, static function (array $firstBook, array $secondBook) use ($sortBy, $sortMultiplier): int {
+        usort($books, function (array $firstBook, array $secondBook) use ($sortBy, $sortMultiplier): int {
             $firstValue = $firstBook[$sortBy] ?? '';
             $secondValue = $secondBook[$sortBy] ?? '';
 
             if (in_array($sortBy, ['stock_quantity', 'sale_price'], true)) {
                 $comparison = (float) $firstValue <=> (float) $secondValue;
+
+                return $comparison * $sortMultiplier;
+            }
+
+            if ($sortBy === 'location_label') {
+                $firstRaw = trim((string) $firstValue);
+                $secondRaw = trim((string) $secondValue);
+                $firstLocation = $this->parseLocationLabel($firstRaw);
+                $secondLocation = $this->parseLocationLabel($secondRaw);
+                $firstStructured = $firstLocation['shelf'] !== '' || $firstLocation['level'] !== '';
+                $secondStructured = $secondLocation['shelf'] !== '' || $secondLocation['level'] !== '';
+
+                if ($firstStructured && $secondStructured) {
+                    $shelfComparison = strnatcasecmp($firstLocation['shelf'], $secondLocation['shelf']);
+                    if ($shelfComparison !== 0) {
+                        return $shelfComparison * $sortMultiplier;
+                    }
+
+                    $firstLevel = $firstLocation['level'] === '' ? PHP_INT_MAX : (int) $firstLocation['level'];
+                    $secondLevel = $secondLocation['level'] === '' ? PHP_INT_MAX : (int) $secondLocation['level'];
+                    $levelComparison = $firstLevel <=> $secondLevel;
+                    if ($levelComparison !== 0) {
+                        return $levelComparison * $sortMultiplier;
+                    }
+                } elseif ($firstStructured !== $secondStructured) {
+                    return ($firstStructured ? -1 : 1) * $sortMultiplier;
+                }
+
+                $firstEmpty = $firstRaw === '';
+                $secondEmpty = $secondRaw === '';
+                if ($firstEmpty !== $secondEmpty) {
+                    return ($firstEmpty ? 1 : -1) * $sortMultiplier;
+                }
+
+                $comparison = strnatcasecmp($firstRaw, $secondRaw);
 
                 return $comparison * $sortMultiplier;
             }
