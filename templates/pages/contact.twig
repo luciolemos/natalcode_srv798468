@@ -3,8 +3,6 @@
 {% block content %}
   <main class="nc-main nc-container nc-home-flow">
     {% set site_contact = site.contact|default({}) %}
-    {% set site_instagram = site.social.instagram|default({}) %}
-    {% set institutional = site.institutional|default({}) %}
 
     <section class="nc-section nc-contact-overview" aria-label="Contato" data-aos="fade-up" data-aos-delay="0">
       {% include 'components/section-header.twig' with {
@@ -65,23 +63,6 @@
         </form>
       </article>
 
-      <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="120">
-        {% if site_instagram.url|default('') %}
-          <a class="nc-btn nc-btn-secondary" href="{{ site_instagram.url }}" target="_blank" rel="noopener noreferrer">{{ site_instagram.label|default('Instagram oficial') }}</a>
-        {% endif %}
-        {% if site_contact.email|default('') %}
-          <a class="nc-btn nc-btn-secondary" href="mailto:{{ site_contact.email }}">E-mail direto</a>
-        {% endif %}
-      </div>
-
-      {% if institutional.contactSummary|default('') %}
-        <div class="nc-list" data-aos="fade-up" data-aos-delay="160">
-          <article class="nc-list-item">
-            <h3>Dados institucionais</h3>
-            <p>{{ institutional.contactSummary }}</p>
-          </article>
-        </div>
-      {% endif %}
     </section>
   </main>
 {% endblock %}
