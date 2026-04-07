@@ -13,9 +13,9 @@ class FaqParticipationPageAction extends AbstractPageAction
     {
         return $this->renderPage($response, 'pages/faq-category.twig', [
             'faq_category_slug' => 'participacao',
-            'page_title' => 'FAQ Participação | CEDE',
-            'page_url' => 'https://cedern.org/faq/participacao',
-            'page_description' => 'Perguntas frequentes sobre participação e integração nas atividades do CEDE.',
+            'page_title' => 'FAQ Participação | NatalCode',
+            'page_url' => 'https://natalcode.com.br/faq/participacao',
+            'page_description' => 'Perguntas frequentes sobre participação e integração nas atividades do NatalCode.',
         ]);
     }
 }

@@ -2,17 +2,17 @@
 
 {% block content %}
   <main class="nc-main nc-container nc-home-flow">
-    <section class="nc-section nc-management-slideshow" aria-label="Gestão CEDE" data-aos="fade-up" data-aos-delay="40" data-cards-slideshow data-page-size-mobile="1" data-page-size-tablet="3" data-page-size-desktop="3" data-autoplay="true" data-autoplay-interval="4500">
+    <section class="nc-section nc-management-slideshow" aria-label="Gestão NatalCode" data-aos="fade-up" data-aos-delay="40" data-cards-slideshow data-page-size-mobile="1" data-page-size-tablet="3" data-page-size-desktop="3" data-autoplay="true" data-autoplay-interval="4500">
       {% include 'components/section-header.twig' with {
         kicker: 'Quem Somos',
-        title: 'Gestão CEDE',
-        lead: 'Conheça os membros da gestão atual e as atribuições de cada função institucional, responsáveis por conduzir o CEDE com dedicação, equilíbrio e compromisso com seus princípios.'
+        title: 'Gestão NatalCode',
+        lead: 'Conheça os membros da gestão atual e as atribuições de cada função institucional, responsáveis por conduzir o NatalCode com dedicação, equilíbrio e compromisso com seus princípios.'
       } %}
 
       <div class="nc-management-intro" data-aos="fade-up" data-aos-delay="80">
-        <p>A gestão do CEDE é pautada na seriedade, responsabilidade e fidelidade aos ensinamentos da Doutrina Espírita, assegurando que todas as atividades da casa sejam realizadas com organização, harmonia e propósito. Cada integrante da gestão exerce seu papel com espírito de serviço, buscando sempre o bem coletivo e o crescimento moral e espiritual de todos os frequentadores.</p>
-        <p>Mais do que uma estrutura administrativa, a gestão representa um instrumento de sustentação e continuidade da missão do CEDE, garantindo que os estudos, atendimentos e ações fraternas sejam conduzidos com qualidade, acolhimento e coerência doutrinária.</p>
-        <p>Uma gestão comprometida fortalece a instituição, amplia seu alcance e consolida sua credibilidade perante a comunidade, permitindo que o CEDE continue sendo um espaço de luz, aprendizado e transformação interior.</p>
+        <p>A gestao da NatalCode e pautada por clareza, responsabilidade tecnica e foco em resultado. Cada integrante atua com escopo definido para manter qualidade de entrega e comunicacao objetiva com clientes.</p>
+        <p>Mais do que estrutura administrativa, a gestao organiza priorizacao, governanca de projeto e padroes operacionais para garantir consistencia em cada entrega digital.</p>
+        <p>Uma gestao comprometida fortalece a operacao, amplia previsibilidade e sustenta evolucao continua dos servicos oferecidos pela NatalCode.</p>
       </div>
 
       {% if public_cede_management|default([])|length > 0 %}
@@ -30,7 +30,7 @@
                   <span class="nc-testimonial-role">{{ member.institutional_role|default('Função institucional') }}</span>
                 </div>
               </div>
-              <p>{{ member.institutional_role_description|default('Atua na organização e no fortalecimento das atividades institucionais do CEDE.') }}</p>
+              <p>{{ member.institutional_role_description|default('Atua na organização e no fortalecimento das atividades institucionais do NatalCode.') }}</p>
             </article>
           {% endfor %}
         </div>

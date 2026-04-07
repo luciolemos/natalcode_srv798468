@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% set page_title = page_title|default(app_default_page_title|default('Dashboard | CEDE')) %}
+  {% set page_title = page_title|default(app_default_page_title|default('Dashboard | NatalCode')) %}
   {% set page_description = page_description|default(app_default_page_description|default('Área interna administrativa.')) %}
-  {% set page_url = page_url|default(app_default_page_url|default('https://cedern.org/dashboard')) %}
-  {% set page_image = page_image|default(app_default_page_image|default('https://cedern.org/assets/img/cedern/cede1_1600_1000.png')) %}
-  {% set site_name = site_name|default(app_default_site_name|default('CEDE')) %}
-  {% set twitter_site = twitter_site|default(app_default_twitter_site|default('@cedeoficialrn')) %}
+  {% set page_url = page_url|default(app_default_page_url|default('https://natalcode.com.br/dashboard')) %}
+  {% set page_image = page_image|default(app_default_page_image|default('https://natalcode.com.br/assets/img/brand/natalcode1.png')) %}
+  {% set site_name = site_name|default(app_default_site_name|default('NatalCode')) %}
+  {% set twitter_site = twitter_site|default(app_default_twitter_site|default('@natalcode')) %}
   <title>{{ page_title }}</title>
   <meta name="description" content="{{ page_description }}">
   <meta property="og:title" content="{{ page_title }}">
@@ -64,9 +64,9 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Lora:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
   {% set asset_version = app_asset_version|default('1') %}
   <link rel="stylesheet" href="/assets/css/cedern.css?v={{ asset_version }}">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/brands/cede4_logo.png?v={{ asset_version }}">
-  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/brands/cede4_logo.png?v={{ asset_version }}">
-  <link rel="apple-touch-icon" href="/assets/img/brands/cede4_logo.png?v={{ asset_version }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/brand/nc5.png?v={{ asset_version }}">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/brand/nc5.png?v={{ asset_version }}">
+  <link rel="apple-touch-icon" href="/assets/img/brand/nc5.png?v={{ asset_version }}">
   <script src="/assets/js/cedern-theme.js?v={{ asset_version }}" defer></script>
   {% block head %}{% endblock %}
 </head>

@@ -84,14 +84,14 @@ class AgendaDetailPageAction extends AbstractPageAction
         $flash = $this->consumeSessionFlash(self::FLASH_KEY);
         $status = trim((string) ($flash['status'] ?? ''));
 
-        $title = (string) ($agendaEvent['title'] ?? 'Atividade do CEDE');
-        $pageDescription = (string) ($agendaEvent['description'] ?? 'Detalhes da atividade da agenda do CEDE.');
+        $title = (string) ($agendaEvent['title'] ?? 'Atividade do NatalCode');
+        $pageDescription = (string) ($agendaEvent['description'] ?? 'Detalhes da atividade da agenda do NatalCode.');
 
         return $this->renderPage($response, 'pages/agenda-detail.twig', [
             'agenda_event' => $agendaEvent,
             'agenda_event_status' => $status,
-            'page_title' => $title . ' | CEDE',
-            'page_url' => 'https://cedern.org/agenda/' . $slug,
+            'page_title' => $title . ' | NatalCode',
+            'page_url' => 'https://natalcode.com.br/agenda/' . $slug,
             'page_description' => $pageDescription,
         ]);
     }

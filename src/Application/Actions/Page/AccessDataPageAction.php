@@ -53,9 +53,9 @@ class AccessDataPageAction extends AbstractPageAction
         return $this->renderPage($response, 'pages/access-data.twig', [
             'legal_document' => $document,
             'access_data_sections' => $this->parseAccessDataBody((string) ($document['body'] ?? '')),
-            'page_title' => 'Dados de acesso | CEDE',
-            'page_url' => 'https://cedern.org/dados-de-acesso',
-            'page_description' => 'Página institucional reservada para dados de acesso do CEDE.',
+            'page_title' => 'Dados de acesso | NatalCode',
+            'page_url' => 'https://natalcode.com.br/dados-de-acesso',
+            'page_description' => 'Página institucional reservada para dados de acesso do NatalCode.',
         ]);
     }
 

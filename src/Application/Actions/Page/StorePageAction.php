@@ -12,11 +12,11 @@ class StorePageAction extends AbstractPageAction
     public function __invoke(Request $request, Response $response): Response
     {
         return $this->renderPage($response, 'pages/store.twig', [
-            'page_title' => 'Loja | CEDE',
-            'page_url' => 'https://cedern.org/loja',
+            'page_title' => 'Loja | NatalCode',
+            'page_url' => 'https://natalcode.com.br/loja',
             'page_description' =>
-                'Acesse a área de loja do CEDE '
-                . 'e consulte o catalogo da livraria com venda presencial no balcao da casa.',
+                'Acesse a área de loja do NatalCode '
+                . 'e consulte o catalogo da NatalCode Labs com atendimento presencial.',
         ]);
     }
 }

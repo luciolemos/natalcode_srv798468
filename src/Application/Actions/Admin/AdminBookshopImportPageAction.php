@@ -47,7 +47,7 @@ class AdminBookshopImportPageAction extends AbstractAdminBookshopAction
                 'bookshop_import_summary' => (array) ($flash['summary'] ?? []),
                 'bookshop_import_errors' => (array) ($flash['errors'] ?? []),
                 'page_title' => 'Importar Acervo | Dashboard',
-                'page_url' => 'https://cedern.org/painel/livraria/importar',
+                'page_url' => 'https://natalcode.com.br/painel/livraria/importar',
                 'page_description' => 'Importação de acervo da livraria por CSV exportado do Excel.',
             ]);
         }

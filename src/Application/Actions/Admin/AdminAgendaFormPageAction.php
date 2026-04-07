@@ -163,7 +163,7 @@ class AdminAgendaFormPageAction extends AbstractAdminAgendaAction
             'agenda_event_id' => $existingEvent['id'] ?? null,
             'agenda_audience_options' => self::AUDIENCE_OPTIONS,
             'page_title' => ($isEdit ? 'Editar evento' : 'Novo evento') . ' | Dashboard Agenda',
-            'page_url' => 'https://cedern.org/painel/eventos',
+            'page_url' => 'https://natalcode.com.br/painel/eventos',
             'page_description' => 'Formulário do dashboard para eventos da agenda.',
         ]);
     }

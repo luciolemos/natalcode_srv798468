@@ -197,8 +197,8 @@ class AdminBookshopCollectionListPageAction extends AbstractAdminBookshopAction
                 'page_size_options' => $pageSizeOptions,
             ],
             'page_title' => 'Coleções da Livraria | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/colecoes',
-            'page_description' => 'Painel para gestão de coleções e séries do acervo da livraria do CEDE.',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/colecoes',
+            'page_description' => 'Painel para gestão de coleções e séries do acervo da livraria do NatalCode.',
         ]);
     }
 }

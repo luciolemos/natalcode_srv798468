@@ -281,7 +281,7 @@ class MemberHomePageAction extends AbstractMemberGuardedPageAction
             $memberNotifications[] = [
                 'type' => 'info',
                 'title' => 'Sem eventos publicados no momento',
-                'description' => 'Acompanhe a agenda para participar das próximas atividades da casa.',
+                'description' => 'Acompanhe a agenda para participar das proximas atividades da NatalCode.',
                 'href' => '/agenda',
                 'cta' => 'Abrir agenda',
             ];
@@ -315,7 +315,7 @@ class MemberHomePageAction extends AbstractMemberGuardedPageAction
 
         $weeklyFocus = [
             'title' => 'Leitura do momento',
-            'description' => 'Seu painel está em dia. Continue acompanhando a agenda e as novidades da casa.',
+            'description' => 'Seu painel esta em dia. Continue acompanhando a agenda e as novidades da NatalCode.',
         ];
 
         if ($onboardingCompleted < $onboardingTotal) {
@@ -334,7 +334,7 @@ class MemberHomePageAction extends AbstractMemberGuardedPageAction
         } elseif (!empty($lockedTracks[0])) {
             $weeklyFocus = [
                 'title' => 'Próximo degrau de acesso',
-                'description' => 'Seu perfil atual está ativo, mas ainda existem trilhas liberáveis se você assumir novas frentes na casa.',
+                'description' => 'Seu perfil atual esta ativo, mas ainda existem trilhas liberaveis se voce assumir novas frentes na operacao.',
             ];
         }
 
@@ -367,9 +367,9 @@ class MemberHomePageAction extends AbstractMemberGuardedPageAction
             'member_upcoming_events' => $upcomingEvents,
             'member_my_upcoming_events' => $myUpcomingEvents,
             'member_permission_feedback' => $permissionFeedback,
-            'page_title' => 'Área do Membro | CEDE',
-            'page_url' => 'https://cedern.org/membro',
-            'page_description' => 'Área do membro do CEDE.',
+            'page_title' => 'Área do Membro | NatalCode',
+            'page_url' => 'https://natalcode.com.br/membro',
+            'page_description' => 'Área do membro do NatalCode.',
         ]);
     }
 

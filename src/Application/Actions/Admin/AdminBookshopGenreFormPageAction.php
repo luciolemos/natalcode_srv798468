@@ -193,7 +193,7 @@ class AdminBookshopGenreFormPageAction extends AbstractAdminBookshopAction
             'bookshop_genre_form_is_edit' => $isEdit,
             'bookshop_genre_id' => $existingGenre['id'] ?? null,
             'page_title' => ($isEdit ? 'Editar gênero literário da livraria' : 'Novo gênero literário da livraria') . ' | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/generos',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/generos',
             'page_description' => 'Formulário do dashboard para gêneros literários do acervo da livraria.',
         ]);
     }

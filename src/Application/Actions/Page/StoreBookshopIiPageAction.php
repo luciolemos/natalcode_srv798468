@@ -18,12 +18,12 @@ class StoreBookshopIiPageAction extends StoreBookshopPageAction
 
     protected function getPageTitle(): string
     {
-        return 'Livraria Auta de Sousa | Loja | CEDE';
+        return 'NatalCode Labs | Loja | NatalCode';
     }
 
     protected function getPageDescription(): string
     {
-        return 'Vitrine principal da Livraria Auta de Sousa, '
-            . 'com o catalogo publico organizado em lista e ficha tecnica expandida.';
+        return 'Vitrine principal da NatalCode Labs, '
+            . 'com catalogo publico organizado em lista e ficha tecnica expandida.';
     }
 }

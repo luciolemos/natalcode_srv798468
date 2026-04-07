@@ -44,7 +44,7 @@
           <path d="M3 11H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
           <path d="M17 11H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
-        Gestão CEDE
+        Gestão NatalCode
       </a>
     </div>
 
@@ -85,8 +85,8 @@
               <option value="{{ status_value }}"{% if selected_status_filter == status_value %} selected{% endif %}>{{ status_label }}</option>
             {% endfor %}
           </select>
-          <select name="institutional_role_filter" aria-label="Filtrar por função no CEDE">
-            <option value="">Todas as funções no CEDE</option>
+          <select name="institutional_role_filter" aria-label="Filtrar por função no NatalCode">
+            <option value="">Todas as funções no NatalCode</option>
             {% for institutional_role_filter_option in institutional_role_filter_options %}
               <option value="{{ institutional_role_filter_option }}"{% if selected_institutional_role_filter == institutional_role_filter_option %} selected{% endif %}>{{ institutional_role_filter_option }}</option>
             {% endfor %}
@@ -124,8 +124,8 @@
               <option value="{{ status_value }}"{% if selected_status_filter == status_value %} selected{% endif %}>{{ status_label }}</option>
             {% endfor %}
           </select>
-          <select name="institutional_role_filter" aria-label="Filtrar por função no CEDE">
-            <option value="">Todas as funções no CEDE</option>
+          <select name="institutional_role_filter" aria-label="Filtrar por função no NatalCode">
+            <option value="">Todas as funções no NatalCode</option>
             {% for institutional_role_filter_option in institutional_role_filter_options %}
               <option value="{{ institutional_role_filter_option }}"{% if selected_institutional_role_filter == institutional_role_filter_option %} selected{% endif %}>{{ institutional_role_filter_option }}</option>
             {% endfor %}
@@ -180,7 +180,7 @@
               <th>
                 <a class="nc-admin-sort-link{% if sort_links.member_type_label.active %} is-active{% endif %}" href="{{ sort_links.member_type_label.url }}">Tipo de Sócio <span aria-hidden="true">{{ sort_links.member_type_label.indicator }}</span></a>
               </th>
-              <th>Função CEDE</th>
+              <th>Função NatalCode</th>
               <th>
                 <a class="nc-admin-sort-link{% if sort_links.role_name.active %} is-active{% endif %}" href="{{ sort_links.role_name.url }}">Perfil <span aria-hidden="true">{{ sort_links.role_name.indicator }}</span></a>
               </th>
@@ -249,7 +249,7 @@
                 </td>
                 <td class="nc-admin-col-email" data-label="E-mail">{{ user.email|default('-') }}</td>
                 <td data-label="Tipo de Sócio">{{ user.member_type_label|default('Não definido') }}</td>
-                <td data-label="Função CEDE">{{ user.institutional_role|default('Sem função definida') }}</td>
+                <td data-label="Função NatalCode">{{ user.institutional_role|default('Sem função definida') }}</td>
                 <td data-label="Perfil">{{ user.role_name|default('-') }}</td>
                 <td data-label="Status">
                   <span class="nc-admin-featured-flag{{ user_status_key == 'active' ? ' is-on' : ' is-off' }}">{{ user_status_label }}</span>

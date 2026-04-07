@@ -16,9 +16,9 @@ class EsdePageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/study-detail.twig', [
             'study' => $study,
-            'page_title' => 'ESDE | CEDE',
-            'page_url' => 'https://cedern.org/estudos/esde',
-            'page_description' => 'Conheça o Estudo Sistematizado da Doutrina Espírita (ESDE) no CEDE.',
+            'page_title' => 'ESDE | NatalCode',
+            'page_url' => 'https://natalcode.com.br/estudos/esde',
+            'page_description' => 'Conheca a solucao de Landing Pages da NatalCode.',
         ]);
     }
 }

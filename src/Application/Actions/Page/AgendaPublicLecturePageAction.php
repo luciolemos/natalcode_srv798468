@@ -16,9 +16,9 @@ class AgendaPublicLecturePageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/agenda-detail.twig', [
             'agenda' => $agenda,
-            'page_title' => 'Palestra Pública | CEDE',
-            'page_url' => 'https://cedern.org/agenda/palestra-publica',
-            'page_description' => 'Detalhes da Palestra Pública na agenda semanal do CEDE.',
+            'page_title' => 'Palestra Pública | NatalCode',
+            'page_url' => 'https://natalcode.com.br/agenda/palestra-publica',
+            'page_description' => 'Detalhes da Palestra Pública na agenda semanal do NatalCode.',
         ]);
     }
 }

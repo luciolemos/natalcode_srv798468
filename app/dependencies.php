@@ -85,39 +85,39 @@ return function (ContainerBuilder $containerBuilder) {
                     : $config['default'];
             };
 
-            $appDefaultPageTitle = trim((string) ($_ENV['APP_DEFAULT_PAGE_TITLE'] ?? 'CEDE | Centro de Estudos da Doutrina Espírita'));
-            $appDefaultPageDescription = trim((string) ($_ENV['APP_DEFAULT_PAGE_DESCRIPTION'] ?? 'Centro de Estudos da Doutrina Espírita (CEDE): instituição filantrópica dedicada ao estudo, à prática e à divulgação da Doutrina Espírita.'));
-            $appDefaultPageUrl = trim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org/'));
-            $appDefaultPageImage = trim((string) ($_ENV['APP_DEFAULT_PAGE_IMAGE'] ?? 'https://cedern.org/assets/img/cedern/cede1_1600_1000.png'));
-            $appDefaultSiteName = trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'CEDE'));
-            $appDefaultTwitterSite = trim((string) ($_ENV['APP_DEFAULT_TWITTER_SITE'] ?? '@cedeoficialrn'));
+            $appDefaultPageTitle = trim((string) ($_ENV['APP_DEFAULT_PAGE_TITLE'] ?? 'NatalCode | Agencia Digital'));
+            $appDefaultPageDescription = trim((string) ($_ENV['APP_DEFAULT_PAGE_DESCRIPTION'] ?? 'NatalCode Agencia Digital: criacao de sites, landing pages e sistemas web com foco em performance e conversao.'));
+            $appDefaultPageUrl = trim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'));
+            $appDefaultPageImage = trim((string) ($_ENV['APP_DEFAULT_PAGE_IMAGE'] ?? 'https://natalcode.com.br/assets/img/brand/natalcode1.png'));
+            $appDefaultSiteName = trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'NatalCode'));
+            $appDefaultTwitterSite = trim((string) ($_ENV['APP_DEFAULT_TWITTER_SITE'] ?? '@natalcode'));
             $appAssetVersion = trim((string) ($_ENV['APP_ASSET_VERSION'] ?? '1'));
             $recaptchaVerifier = new RecaptchaVerifier();
             $appRecaptchaEnabled = $recaptchaVerifier->isReady();
             $appRecaptchaSiteKey = $recaptchaVerifier->getSiteKey();
 
             if ($appDefaultPageTitle === '') {
-                $appDefaultPageTitle = 'CEDE | Centro de Estudos da Doutrina Espírita';
+                $appDefaultPageTitle = 'NatalCode | Agencia Digital';
             }
 
             if ($appDefaultPageDescription === '') {
-                $appDefaultPageDescription = 'Centro de Estudos da Doutrina Espírita (CEDE): instituição filantrópica dedicada ao estudo, à prática e à divulgação da Doutrina Espírita.';
+                $appDefaultPageDescription = 'NatalCode Agencia Digital: criacao de sites, landing pages e sistemas web com foco em performance e conversao.';
             }
 
             if ($appDefaultPageUrl === '') {
-                $appDefaultPageUrl = 'https://cedern.org/';
+                $appDefaultPageUrl = 'https://natalcode.com.br/';
             }
 
             if ($appDefaultPageImage === '') {
-                $appDefaultPageImage = 'https://cedern.org/assets/img/cedern/cede1_1600_1000.png';
+                $appDefaultPageImage = 'https://natalcode.com.br/assets/img/brand/natalcode1.png';
             }
 
             if ($appDefaultSiteName === '') {
-                $appDefaultSiteName = 'CEDE';
+                $appDefaultSiteName = 'NatalCode';
             }
 
             if ($appDefaultTwitterSite === '') {
-                $appDefaultTwitterSite = '@cedeoficialrn';
+                $appDefaultTwitterSite = '@natalcode';
             }
 
             if ($appAssetVersion === '') {

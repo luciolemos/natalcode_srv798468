@@ -1,11 +1,11 @@
 {% extends 'layouts/admin-dashboard.twig' %}
 
 {% set dashboard_page_kicker = 'Dashboard' %}
-{% set dashboard_page_title = 'Gestão CEDE' %}
-{% set dashboard_page_lead = 'Usuários com função institucional ativa no CEDE.' %}
+{% set dashboard_page_title = 'Gestão NatalCode' %}
+{% set dashboard_page_lead = 'Usuários com função institucional ativa no NatalCode.' %}
 
 {% block admin_content %}
-  <section class="nc-section" aria-label="Gestão CEDE" data-aos="fade-up" data-aos-delay="0">
+  <section class="nc-section" aria-label="Gestão NatalCode" data-aos="fade-up" data-aos-delay="0">
     {% set toast_message = '' %}
     {% set toast_tone = 'error' %}
     {% if cede_management_status == 'load-error' %}
@@ -39,10 +39,10 @@
     {% set has_active_filters = search_term != '' or selected_institutional_role != '' or selected_status_filter != '' %}
 
     <form class="nc-admin-table-search" method="get" action="/painel/gestao-cede" data-aos="fade-up" data-aos-delay="95">
-      <label for="nc-cede-management-search">Buscar na Gestão CEDE</label>
+      <label for="nc-cede-management-search">Buscar na Gestão NatalCode</label>
       <div class="nc-admin-table-search-controls">
         <input id="nc-cede-management-search" name="q" type="search" value="{{ search_term }}" placeholder="Nome, e-mail, função, perfil, status...">
-        <select name="institutional_role" aria-label="Filtrar por função no CEDE">
+        <select name="institutional_role" aria-label="Filtrar por função no NatalCode">
           <option value="">Todas as funções</option>
           {% for role_option in institutional_role_options %}
             <option value="{{ role_option }}"{% if selected_institutional_role == role_option %} selected{% endif %}>{{ role_option }}</option>
@@ -65,7 +65,7 @@
     </form>
 
     {% if cede_management_users|length == 0 %}
-      <p>{{ search_term ? 'Nenhum usuário com função no CEDE encontrado para a busca informada.' : 'Nenhum usuário com função institucional ativa no CEDE.' }}</p>
+      <p>{{ search_term ? 'Nenhum usuário com função no NatalCode encontrado para a busca informada.' : 'Nenhum usuário com função institucional ativa no NatalCode.' }}</p>
     {% else %}
       <div class="nc-admin-table-toolbar" data-aos="fade-up" data-aos-delay="110">
         <p class="nc-admin-table-counter">
@@ -100,7 +100,7 @@
               </th>
               <th>Telefone</th>
               <th>
-                <a class="nc-admin-sort-link{% if sort_links.institutional_role.active %} is-active{% endif %}" href="{{ sort_links.institutional_role.url }}">Função no CEDE <span aria-hidden="true">{{ sort_links.institutional_role.indicator }}</span></a>
+                <a class="nc-admin-sort-link{% if sort_links.institutional_role.active %} is-active{% endif %}" href="{{ sort_links.institutional_role.url }}">Função no NatalCode <span aria-hidden="true">{{ sort_links.institutional_role.indicator }}</span></a>
               </th>
               <th>Tipo de Sócio</th>
               <th>
@@ -169,7 +169,7 @@
                     </small>
                   {% endif %}
                 </td>
-                <td data-label="Função no CEDE">{{ user.institutional_role|default('-') }}</td>
+                <td data-label="Função no NatalCode">{{ user.institutional_role|default('-') }}</td>
                 <td data-label="Tipo de Sócio">{{ user.member_type_label|default('Não definido') }}</td>
                 <td data-label="Perfil no sistema">{{ user.role_name|default('-') }}</td>
                 <td data-label="Status">
@@ -191,7 +191,7 @@
       </div>
 
       {% if pagination.total_pages > 1 %}
-        <nav class="nc-admin-pagination" aria-label="Paginação da Gestão CEDE" data-aos="fade-up" data-aos-delay="170">
+        <nav class="nc-admin-pagination" aria-label="Paginação da Gestão NatalCode" data-aos="fade-up" data-aos-delay="170">
           {% if pagination.previous_url %}
             <a class="nc-link" href="{{ pagination.previous_url }}">← Anterior</a>
           {% else %}

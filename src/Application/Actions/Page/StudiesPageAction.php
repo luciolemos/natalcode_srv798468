@@ -13,9 +13,9 @@ class StudiesPageAction extends AbstractPageAction
     {
 
         return $this->renderPage($response, 'pages/studies.twig', [
-            'page_title' => 'Estudos | CEDE',
-            'page_url' => 'https://cedern.org/estudos',
-            'page_description' => 'Participe dos estudos, palestras e atendimento fraterno do CEDE.',
+            'page_title' => 'Estudos | NatalCode',
+            'page_url' => 'https://natalcode.com.br/estudos',
+            'page_description' => 'Conheca os servicos digitais e o modelo de entrega da NatalCode.',
         ]);
     }
 }

@@ -52,9 +52,9 @@ class PrivacyPolicyPageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/legal-document.twig', [
             'legal_document' => $document,
-            'page_title' => 'Política de Privacidade | CEDE',
-            'page_url' => 'https://cedern.org/politica-de-privacidade',
-            'page_description' => 'Política de Privacidade do CEDE conforme LGPD.',
+            'page_title' => 'Política de Privacidade | NatalCode',
+            'page_url' => 'https://natalcode.com.br/politica-de-privacidade',
+            'page_description' => 'Política de Privacidade do NatalCode conforme LGPD.',
         ]);
     }
 
@@ -77,7 +77,7 @@ class PrivacyPolicyPageAction extends AbstractPageAction
         return [
             'kicker' => 'Institucional',
             'title' => trim((string) ($defaults['title'] ?? 'Política de Privacidade')),
-            'lead' => 'Transparência sobre como tratamos dados pessoais no site do CEDE.',
+            'lead' => 'Transparência sobre como tratamos dados pessoais no site do NatalCode.',
             'body' => str_replace(["\r\n", "\r"], "\n", (string) ($defaults['body'] ?? '')),
             'updated_at_label' => '',
         ];

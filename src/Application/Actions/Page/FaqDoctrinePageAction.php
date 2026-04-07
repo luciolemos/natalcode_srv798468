@@ -13,9 +13,9 @@ class FaqDoctrinePageAction extends AbstractPageAction
     {
         return $this->renderPage($response, 'pages/faq-category.twig', [
             'faq_category_slug' => 'doutrina',
-            'page_title' => 'FAQ Doutrina Espírita | CEDE',
-            'page_url' => 'https://cedern.org/faq/doutrina',
-            'page_description' => 'Perguntas frequentes sobre os fundamentos da Doutrina Espírita.',
+            'page_title' => 'FAQ Estrategia | NatalCode',
+            'page_url' => 'https://natalcode.com.br/faq/doutrina',
+            'page_description' => 'Perguntas frequentes sobre estrategia digital e planejamento de projeto.',
         ]);
     }
 }

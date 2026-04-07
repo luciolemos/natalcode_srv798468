@@ -197,8 +197,8 @@ class AdminLibraryCategoryListPageAction extends AbstractAdminLibraryAction
                 'page_size_options' => $pageSizeOptions,
             ],
             'page_title' => 'Categorias da Central de conteúdo | Dashboard',
-            'page_url' => 'https://cedern.org/painel/biblioteca/categorias',
-            'page_description' => 'Painel para gestão de categorias da central de conteúdo do CEDE.',
+            'page_url' => 'https://natalcode.com.br/painel/biblioteca/categorias',
+            'page_description' => 'Painel para gestão de categorias da central de conteúdo do NatalCode.',
         ]);
     }
 }

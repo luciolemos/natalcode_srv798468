@@ -6,7 +6,7 @@
       {% include 'components/section-header.twig' with {
         kicker: 'Agenda',
         title: 'Próximas atividades',
-        lead: 'Consulte os próximos encontros e abra os detalhes de cada atividade da agenda do CEDE.'
+        lead: 'Consulte os próximos encontros e abra os detalhes de cada atividade da agenda do NatalCode.'
       } %}
 
       {% if agenda_events|default([])|length > 0 %}
@@ -18,7 +18,7 @@
           <p class="nc-badge">Em destaque</p>
           <ul class="nc-checklist nc-agenda-featured-list">
             {% for event in agenda_featured_events %}
-              {% set event_place = event.location_name|default('CEDE') %}
+              {% set event_place = event.location_name|default('NatalCode') %}
               {% set event_description = event.description|default('Confira os detalhes completos desta atividade.') %}
               <li class="nc-check-item nc-agenda-featured-card" data-aos="fade-right" data-aos-delay="{{ 100 + (loop.index * 35) }}">
                 <div class="nc-check-content">
@@ -97,7 +97,7 @@
             </thead>
             <tbody>
               {% for event in agenda_table_events|default([]) %}
-                {% set event_place = event.location_name|default('CEDE') %}
+                {% set event_place = event.location_name|default('NatalCode') %}
                 {% set event_description = event.description|default('Confira os detalhes completos desta atividade.') %}
                 <tr>
                   <td data-label="Data e hora">{{ event.starts_at_label|default('Agenda') }}</td>

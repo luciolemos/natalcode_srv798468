@@ -16,9 +16,9 @@ class FraternalServicePageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/study-detail.twig', [
             'study' => $study,
-            'page_title' => 'Atendimento Fraterno | CEDE',
-            'page_url' => 'https://cedern.org/estudos/atendimento-fraterno',
-            'page_description' => 'Entenda como funciona o atendimento fraterno no CEDE.',
+            'page_title' => 'Suporte e Manutencao | NatalCode',
+            'page_url' => 'https://natalcode.com.br/estudos/atendimento-fraterno',
+            'page_description' => 'Entenda como funciona o suporte e manutencao na NatalCode.',
         ]);
     }
 }

@@ -12,8 +12,8 @@ class HomePageAction extends AbstractPageAction
     public function __invoke(Request $request, Response $response): Response
     {
         return $this->renderPage($response, 'home.twig', [
-            'page_title' => 'CEDE | Centro de Estudos da Doutrina Espírita',
-            'page_url' => 'https://cedern.org/',
+            'page_title' => 'NatalCode | Agencia Digital',
+            'page_url' => 'https://natalcode.com.br/',
         ]);
     }
 }

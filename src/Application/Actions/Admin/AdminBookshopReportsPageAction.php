@@ -246,8 +246,8 @@ class AdminBookshopReportsPageAction extends AbstractAdminBookshopAction
             'bookshop_report_genre_summary' => $this->summarizeCounts($genreSummary),
             'bookshop_report_collection_summary' => $this->summarizeCounts($collectionSummary),
             'page_title' => 'Relatórios da Livraria | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/relatorios',
-            'page_description' => 'Relatórios operacionais da livraria física do CEDE.',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/relatorios',
+            'page_description' => 'Relatórios operacionais da livraria física do NatalCode.',
         ]);
     }
 

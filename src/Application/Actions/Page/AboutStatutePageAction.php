@@ -52,9 +52,9 @@ class AboutStatutePageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/about-statute.twig', [
             'statute' => $statute,
-            'page_title' => 'Estatuto | CEDE',
-            'page_url' => 'https://cedern.org/quem-somos/estatuto',
-            'page_description' => 'Consulte o Estatuto completo do CEDE.',
+            'page_title' => 'Estatuto | NatalCode',
+            'page_url' => 'https://natalcode.com.br/quem-somos/estatuto',
+            'page_description' => 'Consulte o Estatuto completo do NatalCode.',
         ]);
     }
 

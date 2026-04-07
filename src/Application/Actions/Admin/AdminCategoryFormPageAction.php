@@ -187,7 +187,7 @@ class AdminCategoryFormPageAction extends AbstractAdminAgendaAction
             'agenda_category_form_is_edit' => $isEdit,
             'agenda_category_id' => $existingCategory['id'] ?? null,
             'page_title' => ($isEdit ? 'Editar categoria' : 'Nova categoria') . ' | Dashboard Agenda',
-            'page_url' => 'https://cedern.org/painel/categorias',
+            'page_url' => 'https://natalcode.com.br/painel/categorias',
             'page_description' => 'Formulário do dashboard para categorias da agenda.',
         ]);
     }

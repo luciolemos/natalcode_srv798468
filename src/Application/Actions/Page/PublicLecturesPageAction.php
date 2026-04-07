@@ -16,9 +16,9 @@ class PublicLecturesPageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/study-detail.twig', [
             'study' => $study,
-            'page_title' => 'Palestras Públicas | CEDE',
-            'page_url' => 'https://cedern.org/estudos/palestras',
-            'page_description' => 'Saiba como funcionam as palestras públicas do CEDE e como participar.',
+            'page_title' => 'Palestras Públicas | NatalCode',
+            'page_url' => 'https://natalcode.com.br/estudos/palestras',
+            'page_description' => 'Saiba como funcionam as palestras públicas do NatalCode e como participar.',
         ]);
     }
 }

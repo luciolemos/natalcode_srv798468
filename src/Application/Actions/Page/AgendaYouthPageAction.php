@@ -16,9 +16,9 @@ class AgendaYouthPageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/agenda-detail.twig', [
             'agenda' => $agenda,
-            'page_title' => 'Juventude Espírita | CEDE',
-            'page_url' => 'https://cedern.org/agenda/juventude-espirita',
-            'page_description' => 'Detalhes da atividade Juventude Espírita do CEDE.',
+            'page_title' => 'Juventude Espírita | NatalCode',
+            'page_url' => 'https://natalcode.com.br/agenda/juventude-espirita',
+            'page_description' => 'Detalhes da atividade Juventude Espírita do NatalCode.',
         ]);
     }
 }

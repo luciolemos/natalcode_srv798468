@@ -52,7 +52,7 @@ class AgendaEventIcsDownloadAction extends AbstractPageAction
             $endsAt = $startsAt->modify('+90 minutes');
         }
 
-        $title = $this->escapeIcsText((string) ($event['title'] ?? 'Atividade do CEDE'));
+        $title = $this->escapeIcsText((string) ($event['title'] ?? 'Atividade do NatalCode'));
         $description = $this->escapeIcsText((string) ($event['description'] ?? ''));
         $locationParts = array_filter([
             trim((string) ($event['location_name'] ?? '')),
@@ -60,7 +60,7 @@ class AgendaEventIcsDownloadAction extends AbstractPageAction
         ]);
         $location = $this->escapeIcsText(implode(' - ', $locationParts));
 
-        $uid = sha1((string) ($event['slug'] ?? $slug) . '|' . (string) ($event['starts_at'] ?? '')) . '@cedern.org';
+        $uid = sha1((string) ($event['slug'] ?? $slug) . '|' . (string) ($event['starts_at'] ?? '')) . '@natalcode.com.br';
         $dtStamp = gmdate('Ymd\\THis\\Z');
         $dtStart = $startsAt->setTimezone(new \DateTimeZone('UTC'))->format('Ymd\\THis\\Z');
         $dtEnd = $endsAt->setTimezone(new \DateTimeZone('UTC'))->format('Ymd\\THis\\Z');
@@ -68,7 +68,7 @@ class AgendaEventIcsDownloadAction extends AbstractPageAction
         $icsLines = [
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
-            'PRODID:-//CEDE//Agenda//PT-BR',
+            'PRODID:-//NatalCode//Agenda//PT-BR',
             'CALSCALE:GREGORIAN',
             'METHOD:PUBLISH',
             'BEGIN:VEVENT',

@@ -385,8 +385,8 @@ class AdminBookshopSaleFormPageAction extends AbstractAdminBookshopAction
             'bookshop_sale_form_field_errors' => $this->buildFieldErrors($errors),
             'bookshop_sale_book_options' => $bookOptions,
             'page_title' => 'Nova venda | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/vendas/nova',
-            'page_description' => 'PDV administrativo da livraria do CEDE.',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/vendas/nova',
+            'page_description' => 'PDV administrativo da livraria do NatalCode.',
         ]);
     }
 

@@ -1,11 +1,11 @@
-<section id="agenda" class="nc-section" aria-label="Agenda semanal">
+<section id="agenda" class="nc-section" aria-label="Processo de projeto">
   {% set roadmap_section = homeContent.sections.roadmap|default({}) %}
   {% set roadmap_items = homeContent.roadmapItems|default([]) %}
 
   {% include 'components/section-header.twig' with {
-    kicker: roadmap_section.kicker|default('Agenda'),
-    title: roadmap_section.title|default('Cronograma Semanal de Atividades'),
-    lead: roadmap_section.lead|default('Confira nossos horários de reuniões públicas, estudos e assistência espiritual. Todas as atividades são gratuitas.')
+    kicker: roadmap_section.kicker|default('Processo'),
+    title: roadmap_section.title|default('Etapas de entrega'),
+    lead: roadmap_section.lead|default('Fluxo de trabalho com etapas claras para planejar, implementar e otimizar seu projeto digital.')
   } %}
   <ul class="nc-checklist">
     {% for item in roadmap_items %}

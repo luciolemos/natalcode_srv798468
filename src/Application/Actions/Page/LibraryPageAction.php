@@ -42,7 +42,7 @@ class LibraryPageAction extends AbstractPageAction
         $categories = [];
         $basePath = rtrim((string) $request->getUri()->getPath(), '/');
         $basePath = $basePath !== '' ? $basePath : '/quem-somos/base-de-conhecimento';
-        $pageUrlBase = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org/'), '/');
+        $pageUrlBase = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'), '/');
 
         try {
             $books = $this->libraryRepository->findPublishedBooks();
@@ -194,10 +194,10 @@ class LibraryPageAction extends AbstractPageAction
                 'previous_url' => $previousPageUrl,
                 'next_url' => $nextPageUrl,
             ],
-            'page_title' => 'Base de conhecimento | CEDE',
+            'page_title' => 'Base de conhecimento | NatalCode',
             'page_url' => $pageUrlBase . $basePath,
             'page_description' =>
-                'Consulte a base de conhecimento do CEDE '
+                'Consulte a base de conhecimento do NatalCode '
                 . 'e acesse conteúdos em PDF para estudo, pesquisa e aprofundamento doutrinário.',
         ]);
     }

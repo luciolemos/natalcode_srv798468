@@ -18,8 +18,8 @@ use Throwable;
 class AdminMemberAssignRoleAction extends AbstractPageAction
 {
     private const EXCLUSIVE_INSTITUTIONAL_ROLES = [
-        'Presidente CEDE',
-        'Vice-presidente CEDE',
+        'Presidente NatalCode',
+        'Vice-presidente NatalCode',
         'Secretário',
         'Diretor de Finanças',
         'Diretor de Eventos',
@@ -30,8 +30,8 @@ class AdminMemberAssignRoleAction extends AbstractPageAction
     ];
 
     private const INSTITUTIONAL_ROLE_OPTIONS = [
-        'Presidente CEDE',
-        'Vice-presidente CEDE',
+        'Presidente NatalCode',
+        'Vice-presidente NatalCode',
         'Secretário',
         'Diretor de Finanças',
         'Diretor de Eventos',
@@ -180,8 +180,8 @@ class AdminMemberAssignRoleAction extends AbstractPageAction
         $smtpUser = trim((string) ($_ENV['MAIL_USERNAME'] ?? ''));
         $smtpPass = (string) ($_ENV['MAIL_PASSWORD'] ?? '');
         $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? $smtpUser));
-        $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'CEDE - Contato'));
-        $siteUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org'), '/');
+        $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'NatalCode - Contato'));
+        $siteUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br'), '/');
 
         if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '' || $fromEmail === '') {
             throw new \RuntimeException('Configuração SMTP incompleta para envio do e-mail de aprovação.');
@@ -192,7 +192,7 @@ class AdminMemberAssignRoleAction extends AbstractPageAction
             throw new \RuntimeException('E-mail inválido para envio da confirmação de aprovação.');
         }
 
-        $resolvedFullName = trim($fullName) !== '' ? trim($fullName) : 'Membro CEDE';
+        $resolvedFullName = trim($fullName) !== '' ? trim($fullName) : 'Membro NatalCode';
         $resolvedRoleName = trim((string) $roleName);
         if ($resolvedRoleName === '') {
             $resolvedRoleName = 'Membro';
@@ -217,13 +217,13 @@ class AdminMemberAssignRoleAction extends AbstractPageAction
                 . htmlspecialchars($memberTypeLabel, ENT_QUOTES, 'UTF-8') . '</p>';
         }
 
-        $detailLines[] = '<p style="margin:0;"><strong>Função CEDE:</strong> '
+        $detailLines[] = '<p style="margin:0;"><strong>Função NatalCode:</strong> '
             . htmlspecialchars($normalizedInstitutionalRole ?? 'Não definida', ENT_QUOTES, 'UTF-8') . '</p>';
 
         $body = InstitutionalEmailTemplate::buildLayout(
-            'Seu acesso ao CEDE foi liberado',
+            'Seu acesso ao NatalCode foi liberado',
             '<p style="margin:0 0 14px;">Olá, <strong>' . $safeFullName . '</strong>.</p>'
-            . '<p style="margin:0 0 14px;">Sua solicitação de cadastro foi validada e seu acesso à área de membros do CEDE já está liberado.</p>'
+            . '<p style="margin:0 0 14px;">Sua solicitação de cadastro foi validada e seu acesso à área de membros do NatalCode já está liberado.</p>'
             . '<div style="margin:0 0 16px;padding:14px 16px;border:1px solid #dbe4ee;'
             . 'border-radius:12px;background:#f8fafc;">'
             . implode('', $detailLines)
@@ -242,7 +242,7 @@ class AdminMemberAssignRoleAction extends AbstractPageAction
                 ],
                 [
                     'href' => $contactUrl,
-                    'label' => 'Falar com o CEDE',
+                    'label' => 'Falar com o NatalCode',
                     'is_primary' => false,
                 ],
             ])
@@ -251,7 +251,7 @@ class AdminMemberAssignRoleAction extends AbstractPageAction
             . '<p style="margin:0 0 8px;font-size:12px;letter-spacing:0.04em;'
             . 'text-transform:uppercase;color:#64748b;">Observações</p>'
             . '<p style="margin:0;font-size:13px;color:#475569;">'
-            . 'Se precisar de ajuda para entrar, atualizar seus dados ou esclarecer alguma dúvida, use o canal oficial de contato do CEDE.</p>'
+            . 'Se precisar de ajuda para entrar, atualizar seus dados ou esclarecer alguma dúvida, use o canal oficial de contato do NatalCode.</p>'
             . '</div>',
             $this->resolveEmbeddedLogoSrc(),
             $headerMetaHtml
@@ -268,14 +268,14 @@ class AdminMemberAssignRoleAction extends AbstractPageAction
             $resolvedFullName,
             $fromEmail,
             $fromName,
-            'Seu acesso ao CEDE foi liberado',
+            'Seu acesso ao NatalCode foi liberado',
             $body,
-            "Seu acesso ao CEDE foi liberado\n"
+            "Seu acesso ao NatalCode foi liberado\n"
             . "Nome: {$resolvedFullName}\n"
             . "E-mail de acesso: {$normalizedEmail}\n"
             . "Perfil liberado: {$resolvedRoleName}\n"
             . ($memberTypeLabel !== null ? "Tipo de sócio: {$memberTypeLabel}\n" : '')
-            . "Função CEDE: " . ($normalizedInstitutionalRole ?? 'Não definida') . "\n\n"
+            . "Função NatalCode: " . ($normalizedInstitutionalRole ?? 'Não definida') . "\n\n"
             . "Entre usando o mesmo e-mail e a senha cadastrados.\n"
             . "Área do membro: {$memberLoginUrl}\n"
             . "Contato: {$contactUrl}"
@@ -312,7 +312,7 @@ class AdminMemberAssignRoleAction extends AbstractPageAction
         $mailer->Sender = $fromEmail;
 
         $hostFromUrl = (string) parse_url(
-            (string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org/'),
+            (string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'),
             PHP_URL_HOST
         );
         if ($hostFromUrl !== '') {
@@ -323,9 +323,9 @@ class AdminMemberAssignRoleAction extends AbstractPageAction
         $mailer->addAddress($toEmail, $toName);
         $mailer->addReplyTo($replyToEmail, $replyToName);
 
-        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brands/cede4_logo.png';
+        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brand/natalcode1.png';
         if (is_file($logoPath)) {
-            $mailer->addEmbeddedImage($logoPath, 'cedern-logo', 'cede4_logo.png', 'base64', 'image/png');
+            $mailer->addEmbeddedImage($logoPath, 'natalcode-logo', 'natalcode1.png', 'base64', 'image/png');
         }
 
         $mailer->isHTML(true);
@@ -382,9 +382,9 @@ class AdminMemberAssignRoleAction extends AbstractPageAction
 
     private function resolveEmbeddedLogoSrc(): ?string
     {
-        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brands/cede4_logo.png';
+        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brand/natalcode1.png';
 
-        return is_file($logoPath) ? 'cid:cedern-logo' : null;
+        return is_file($logoPath) ? 'cid:natalcode-logo' : null;
     }
 
     private function resolveRedirectTarget(string $value): string

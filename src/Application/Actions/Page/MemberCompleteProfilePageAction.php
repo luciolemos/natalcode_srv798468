@@ -269,8 +269,8 @@ class MemberCompleteProfilePageAction extends AbstractMemberGuardedPageAction
             'member_profile_privacy_notice_required' => !$privacyNoticeAlreadyAccepted,
             'member_profile_privacy_notice_version' => self::PRIVACY_NOTICE_VERSION,
             'member_profile_privacy_notice_acknowledged_at' => $privacyNoticeAcceptedAt,
-            'page_title' => 'Completar Perfil | CEDE',
-            'page_url' => 'https://cedern.org/membro/perfil/completar',
+            'page_title' => 'Completar Perfil | NatalCode',
+            'page_url' => 'https://natalcode.com.br/membro/perfil/completar',
             'page_description' => 'Complete seus dados de contato para liberar a área de membro.',
         ]);
     }

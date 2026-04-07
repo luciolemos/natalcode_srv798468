@@ -16,9 +16,9 @@ class AboutValuesPageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/about-detail.twig', [
             'about' => $about,
-            'page_title' => 'Valores | CEDE',
-            'page_url' => 'https://cedern.org/quem-somos/valores',
-            'page_description' => 'Conheça os valores que orientam as atividades do CEDE.',
+            'page_title' => 'Valores | NatalCode',
+            'page_url' => 'https://natalcode.com.br/quem-somos/valores',
+            'page_description' => 'Conheça os valores que orientam as atividades do NatalCode.',
         ]);
     }
 }

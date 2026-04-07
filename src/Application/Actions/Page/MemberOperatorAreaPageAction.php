@@ -32,8 +32,8 @@ class MemberOperatorAreaPageAction extends AbstractMemberGuardedPageAction
 
         return $this->renderPage($response, 'pages/member-operator.twig', [
             'member_data' => $member,
-            'page_title' => 'Área de Operação | CEDE',
-            'page_url' => 'https://cedern.org/membro/operacao',
+            'page_title' => 'Área de Operação | NatalCode',
+            'page_url' => 'https://natalcode.com.br/membro/operacao',
             'page_description' => 'Área interna disponível para operador, gerente e administrador.',
         ]);
     }

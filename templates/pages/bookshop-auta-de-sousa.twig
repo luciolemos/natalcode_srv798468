@@ -10,14 +10,14 @@
     {% set auta_topics = auta.topics|default([]) %}
     {% set auta_quote = auta.quote|default('')|trim %}
     {% set auta_quote_attribution = auta.quote_attribution|default('')|trim %}
-    {% set auta_display_name = auta_name != '' ? auta_name : auta.title|default('Auta de Sousa') %}
+    {% set auta_display_name = auta_name != '' ? auta_name : auta.title|default('NatalCode Labs') %}
     {% set auta_avatar_label = auta_name != '' ? auta_name : auta_display_name %}
 
-    <section class="nc-section nc-about-founder-page" aria-label="Página dedicada à Livraria Auta de Sousa" data-aos="fade-up" data-aos-delay="0">
+    <section class="nc-section nc-about-founder-page" aria-label="Página dedicada à NatalCode Labs" data-aos="fade-up" data-aos-delay="0">
       {% include 'components/section-header.twig' with {
         kicker: auta.kicker|default('Livraria'),
-        title: auta.title|default('Auta de Sousa'),
-        lead: auta.lead|default('Conheça a inspiração que dá nome à Livraria Auta de Sousa.')
+        title: auta.title|default('NatalCode Labs'),
+        lead: auta.lead|default('Conheça a inspiração que dá nome à NatalCode Labs.')
       } %}
 
       <article class="nc-card nc-about-founder-profile" data-aos="fade-up" data-aos-delay="80">
@@ -27,7 +27,7 @@
               <img
                 class="nc-about-founder-portrait"
                 src="{{ auta_photo }}"
-                alt="{{ auta.photo_alt|default('Retrato de Auta de Sousa') }}"
+                alt="{{ auta.photo_alt|default('Retrato de NatalCode Labs') }}"
               >
             {% else %}
               <span class="nc-about-founder-portrait nc-about-founder-portrait-fallback" aria-hidden="true">
@@ -61,7 +61,7 @@
       {% endif %}
 
       {% if auta_topics|length > 0 %}
-        <section class="nc-section nc-about-founder-legacy" aria-label="Legado da Livraria Auta de Sousa" data-aos="fade-up" data-aos-delay="140">
+        <section class="nc-section nc-about-founder-legacy" aria-label="Legado da NatalCode Labs" data-aos="fade-up" data-aos-delay="140">
           <ul class="nc-checklist">
             {% for topic in auta_topics %}
               {% include 'components/check-item.twig' with {
@@ -76,8 +76,8 @@
       {% endif %}
 
       <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="180">
-        <a class="nc-btn nc-btn-secondary" href="/loja/livraria">Voltar para a Livraria Auta de Sousa</a>
-        <a class="nc-btn nc-btn-primary" href="/contato">Falar com o CEDE</a>
+        <a class="nc-btn nc-btn-secondary" href="/loja/livraria">Voltar para a NatalCode Labs</a>
+        <a class="nc-btn nc-btn-primary" href="/contato">Falar com o NatalCode</a>
       </div>
     </section>
   </main>

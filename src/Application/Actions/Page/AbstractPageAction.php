@@ -26,16 +26,16 @@ abstract class AbstractPageAction
 
     protected function renderPage(Response $response, string $template, array $data = []): Response
     {
-        $baseUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org/'), '/');
+        $baseUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'), '/');
         $defaultPageImage =
-            'https://cedern.org/assets/img/cedern/cede1_1600_1000.png';
+            'https://natalcode.com.br/assets/img/brand/natalcode1.png';
         $defaultPageDescription =
-            'Centro de Estudos da Doutrina Espírita (CEDE): instituição filantrópica '
-            . 'dedicada ao estudo, à prática e à divulgação da Doutrina Espírita.';
+            'NatalCode Agencia Digital: criacao de sites, landing pages e sistemas web '
+            . 'com foco em performance e conversao.';
 
         $context = array_merge([
             'homeContent' => require __DIR__ . '/../../../../app/content/home.php',
-            'site_name' => trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'CEDE')),
+            'site_name' => trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'NatalCode')),
             'page_image' => trim((string) ($_ENV['APP_DEFAULT_PAGE_IMAGE'] ?? $defaultPageImage)),
             'page_description' => trim((string) (
                 $_ENV['APP_DEFAULT_PAGE_DESCRIPTION'] ?? $defaultPageDescription

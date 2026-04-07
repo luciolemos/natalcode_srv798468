@@ -133,9 +133,9 @@ class MemberForgotPasswordPageAction extends AbstractPageAction
             'member_password_forgot_success' => $success,
             'member_password_forgot_form' => $form,
             'member_password_forgot_ttl_minutes' => self::TOKEN_TTL_MINUTES,
-            'page_title' => 'Recuperar senha | CEDE',
-            'page_url' => 'https://cedern.org/esqueci-senha',
-            'page_description' => 'Solicite um link seguro para redefinir sua senha na área do membro do CEDE.',
+            'page_title' => 'Recuperar senha | NatalCode',
+            'page_url' => 'https://natalcode.com.br/esqueci-senha',
+            'page_description' => 'Solicite um link seguro para redefinir sua senha na área do membro do NatalCode.',
         ]);
     }
 
@@ -150,7 +150,7 @@ class MemberForgotPasswordPageAction extends AbstractPageAction
         $smtpUser = trim((string) ($_ENV['MAIL_USERNAME'] ?? ''));
         $smtpPass = (string) ($_ENV['MAIL_PASSWORD'] ?? '');
         $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? $smtpUser));
-        $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'CEDE - Site'));
+        $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'NatalCode - Site'));
 
         if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '' || $fromEmail === '') {
             throw new \RuntimeException('Configuração SMTP incompleta para redefinição de senha.');
@@ -178,7 +178,7 @@ class MemberForgotPasswordPageAction extends AbstractPageAction
         $body = InstitutionalEmailTemplate::buildLayout(
             'Redefinição de senha',
             '<p style="margin:0 0 14px;">Olá, <strong>' . $safeFullName . '</strong>.</p>'
-            . '<p style="margin:0 0 14px;">Recebemos uma solicitação para redefinir a senha da sua área de membro do CEDE.</p>'
+            . '<p style="margin:0 0 14px;">Recebemos uma solicitação para redefinir a senha da sua área de membro do NatalCode.</p>'
             . '<div style="margin:0 0 16px;padding:16px;border-left:4px solid #2563eb;'
             . 'border-radius:10px;background:#f8fafc;">'
             . '<p style="margin:0 0 8px;font-size:12px;letter-spacing:0.04em;'
@@ -206,14 +206,14 @@ class MemberForgotPasswordPageAction extends AbstractPageAction
             $fullName !== '' ? $fullName : 'Membro',
             $fromEmail,
             $fromName,
-            'Recuperação de senha | CEDE',
+            'Recuperação de senha | NatalCode',
             $body
         );
     }
 
     private function buildResetUrl(string $token): string
     {
-        $siteUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org/'), '/');
+        $siteUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'), '/');
 
         return $siteUrl . '/redefinir-senha?token=' . rawurlencode($token);
     }
@@ -247,7 +247,7 @@ class MemberForgotPasswordPageAction extends AbstractPageAction
         $mailer->Sender = $fromEmail;
 
         $hostFromUrl = (string) parse_url(
-            (string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org/'),
+            (string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'),
             PHP_URL_HOST
         );
         if ($hostFromUrl !== '') {
@@ -258,9 +258,9 @@ class MemberForgotPasswordPageAction extends AbstractPageAction
         $mailer->addAddress($toEmail, $toName);
         $mailer->addReplyTo($replyToEmail, $replyToName);
 
-        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brands/cede4_logo.png';
+        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brand/natalcode1.png';
         if (is_file($logoPath)) {
-            $mailer->addEmbeddedImage($logoPath, 'cedern-logo', 'cede4_logo.png', 'base64', 'image/png');
+            $mailer->addEmbeddedImage($logoPath, 'natalcode-logo', 'natalcode1.png', 'base64', 'image/png');
         }
 
         $mailer->isHTML(true);
@@ -277,8 +277,8 @@ class MemberForgotPasswordPageAction extends AbstractPageAction
 
     private function resolveEmbeddedLogoSrc(): ?string
     {
-        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brands/cede4_logo.png';
+        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brand/natalcode1.png';
 
-        return is_file($logoPath) ? 'cid:cedern-logo' : null;
+        return is_file($logoPath) ? 'cid:natalcode-logo' : null;
     }
 }

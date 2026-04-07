@@ -293,8 +293,8 @@ class AdminBookshopDashboardPageAction extends AbstractAdminBookshopAction
             'bookshop_dashboard_recent_movements' => array_slice($movements, 0, self::SUMMARY_LIMIT),
             'bookshop_dashboard_payment_summary' => $this->summarizeTotals($paymentSummary),
             'page_title' => 'Livraria | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria',
-            'page_description' => 'Operação administrativa da livraria e PDV do CEDE.',
+            'page_url' => 'https://natalcode.com.br/painel/livraria',
+            'page_description' => 'Operação administrativa da livraria e PDV do NatalCode.',
         ]);
     }
 

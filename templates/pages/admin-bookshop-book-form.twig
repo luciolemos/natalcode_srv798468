@@ -53,8 +53,8 @@
         <div class="nc-admin-form-grid nc-admin-form-grid-bookshop-header">
           <div class="nc-admin-form-field">
             <label class="nc-admin-form-label" for="sku">SKU <span class="nc-admin-form-required-indicator" aria-hidden="true">*</span></label>
-            <input class="nc-admin-form-input" id="sku" name="sku" type="text" required readonly aria-readonly="true" pattern="CEDE-LIV-[0-9]{4}" maxlength="13" inputmode="text" placeholder="Ex: CEDE-LIV-0001" title="Gerado automaticamente no padrão CEDE-LIV-0001" value="{{ bookshop_book_form.sku|default('') }}">
-            <small>Gerado automaticamente pelo sistema no padrão <code>CEDE-LIV-0001</code>.</small>
+            <input class="nc-admin-form-input" id="sku" name="sku" type="text" required readonly aria-readonly="true" pattern="(CEDE|NATALCODE)-LIV-[0-9]{4}" maxlength="18" inputmode="text" placeholder="Ex: NATALCODE-LIV-0001" title="Gerado automaticamente no padrão NATALCODE-LIV-0001" value="{{ bookshop_book_form.sku|default('') }}">
+            <small>Gerado automaticamente pelo sistema no padrão <code>NATALCODE-LIV-0001</code>.</small>
           </div>
 
           <div class="nc-admin-form-field">

@@ -3,49 +3,44 @@
 declare(strict_types=1);
 
 return [
-    'title' => 'Política de Privacidade',
+    'title' => 'Politica de Privacidade',
     'body' => <<<'POLICY'
-POLÍTICA DE PRIVACIDADE (LGPD) – CEDE
-Vigência: 17 de março de 2026
+POLITICA DE PRIVACIDADE (LGPD) - NATALCODE
+Vigencia: 06 de abril de 2026
 
 1. QUEM SOMOS
-O Centro de Estudos da Doutrina Espírita – CEDE, CNPJ 04.242.556/0001-45, com sede em Parnamirim/RN, é o controlador dos dados pessoais tratados neste site.
+A NatalCode Agencia Digital e controladora dos dados pessoais tratados neste site.
 
 2. DADOS QUE COLETAMOS
-Podemos tratar dados como: nome, e-mail, telefone, conteúdo de mensagens enviadas no contato, dados de cadastro para área de membros e dados técnicos de navegação (IP, data/hora, navegador, logs e preferências funcionais do site).
+Podemos tratar: nome, e-mail, telefone, dados enviados em formularios, dados de autenticacao em area restrita e dados tecnicos de navegacao (IP, data/hora, navegador e logs).
 
 3. FINALIDADES E BASES LEGAIS
 Tratamos dados para:
-- responder solicitações de contato;
-- viabilizar cadastro, autenticação e uso da área de membros;
-- organizar participação em atividades do CEDE;
-- cumprir obrigações legais e regulatórias;
-- proteger a segurança do site e prevenir fraudes.
-As bases legais incluem, conforme o caso: consentimento, procedimentos preliminares/execução contratual, legítimo interesse e cumprimento de obrigação legal/regulatória.
+- responder contatos e pedidos comerciais;
+- viabilizar autenticacao e uso de areas restritas;
+- executar, melhorar e proteger os servicos digitais;
+- cumprir obrigacoes legais e regulatorias.
+As bases legais podem incluir consentimento, execucao de contrato, legitimo interesse e cumprimento de obrigacao legal.
 
 4. COMPARTILHAMENTO DE DADOS
-Não vendemos dados pessoais. Os dados podem ser compartilhados com operadores essenciais (hospedagem, e-mail e suporte técnico) e com autoridades públicas quando houver obrigação legal.
+Nao vendemos dados pessoais. O compartilhamento pode ocorrer com operadores essenciais (hospedagem, e-mail, monitoramento e suporte tecnico), sempre com necessidade e proporcionalidade.
 
-5. COOKIES E TECNOLOGIAS SEMELHANTES
-Utilizamos cookies e armazenamento local para funcionamento do site e preferências do usuário. O usuário pode gerenciar isso no navegador, ciente de possíveis limitações de funcionalidade.
+5. COOKIES E ARMAZENAMENTO LOCAL
+Utilizamos cookies e armazenamento local para funcionamento do site, analise basica de uso e preferencias de experiencia. O usuario pode gerenciar esses recursos no navegador.
 
-6. RETENÇÃO E DESCARTE
-Os dados são mantidos pelo tempo necessário às finalidades informadas, ao cumprimento de obrigações legais e à defesa em processos, sendo eliminados ou anonimizados quando cabível.
+6. RETENCAO
+Os dados sao mantidos pelo periodo necessario para as finalidades informadas, cumprimento de obrigacoes legais e eventual defesa de direitos.
 
 7. DIREITOS DO TITULAR
-Nos termos da LGPD, o titular pode solicitar confirmação de tratamento, acesso, correção, anonimização/bloqueio/eliminação quando aplicável, portabilidade, informação sobre compartilhamentos e revisão de decisões automatizadas.
+Nos termos da LGPD, voce pode solicitar: confirmacao de tratamento, acesso, correcao, anonimização, bloqueio ou eliminacao quando aplicavel, portabilidade e informacoes sobre compartilhamento.
 
-8. CANAL DE PRIVACIDADE
-Solicitações e dúvidas sobre dados pessoais devem ser enviadas para:
-E-mail: cede@cedern.org
+8. SEGURANCA
+Adotamos medidas tecnicas e administrativas razoaveis para proteger dados contra acesso indevido, perda, alteracao e divulgacao nao autorizada.
 
-9. SEGURANÇA DA INFORMAÇÃO
-Adotamos medidas técnicas e administrativas razoáveis para proteger dados contra acesso não autorizado, perda, alteração ou divulgação indevida.
+9. CONTATO DE PRIVACIDADE
+E-mail: contato@natalcode.com.br
 
-10. CRIANÇAS E ADOLESCENTES
-Quando houver tratamento de dados de crianças e adolescentes, o CEDE observará as exigências legais específicas, inclusive consentimento de responsável quando necessário.
-
-11. ATUALIZAÇÕES DESTA POLÍTICA
-Esta Política pode ser atualizada a qualquer tempo. A versão vigente estará sempre disponível neste site.
+10. ATUALIZACOES
+Esta politica pode ser atualizada periodicamente. A versao vigente permanece publicada neste site.
 POLICY,
 ];

@@ -12,10 +12,9 @@ class AboutPageAction extends AbstractPageAction
     public function __invoke(Request $request, Response $response): Response
     {
         return $this->renderPage($response, 'pages/about.twig', [
-            'page_title' => 'Quem Somos | CEDE',
-            'page_url' => 'https://cedern.org/quem-somos',
-            'page_description' => 'Conheça o CEDE, sua missão, valores e frentes de atuação '
-                . 'no estudo e prática da Doutrina Espírita.',
+            'page_title' => 'Quem Somos | NatalCode',
+            'page_url' => 'https://natalcode.com.br/quem-somos',
+            'page_description' => 'Conheca a NatalCode, sua missao, valores e frentes de atuacao em estrategia, design e desenvolvimento web.',
         ]);
     }
 }

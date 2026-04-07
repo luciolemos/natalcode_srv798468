@@ -200,7 +200,7 @@ class AdminBookshopSaleListPageAction extends AbstractAdminBookshopAction
                 'page_size_options' => $pageSizeOptions,
             ],
             'page_title' => 'Vendas PDV | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/vendas',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/vendas',
             'page_description' => 'Histórico administrativo de vendas de balcão da livraria.',
         ]);
     }

@@ -611,7 +611,7 @@ class MySqlAgendaRepository implements AgendaRepository
      */
     private function buildGoogleCalendarUrl(array $event): string
     {
-        $title = trim((string) ($event['title'] ?? 'Atividade do CEDE'));
+        $title = trim((string) ($event['title'] ?? 'Atividade da NatalCode'));
         $details = trim((string) ($event['description'] ?? ''));
         $location = trim((string) ($event['location_name'] ?? ''));
 

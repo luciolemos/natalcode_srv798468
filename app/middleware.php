@@ -50,7 +50,7 @@ return function (App $app) {
             $expires
         );
 
-        $isHttps = str_starts_with(strtolower((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org/')), 'https://')
+        $isHttps = str_starts_with(strtolower((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/')), 'https://')
             || strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https'
             || (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off');
 
@@ -61,7 +61,7 @@ return function (App $app) {
         return $cookieHeader;
     };
 
-    $cookieName = 'cede_vid';
+    $cookieName = 'natalcode_vid';
     $cookieMaxAge = 31536000;
 
     $app->add(function (

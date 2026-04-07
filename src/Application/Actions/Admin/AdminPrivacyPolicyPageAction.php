@@ -238,8 +238,8 @@ class AdminPrivacyPolicyPageAction extends AbstractPageAction
             'admin_document_dashboard_lead' => 'Edite a Política de Privacidade exibida para visitantes em /politica-de-privacidade.',
             'admin_document_saved_message' => 'Política de Privacidade atualizada com sucesso.',
             'admin_document_error_message' => 'Não foi possível salvar a Política de Privacidade.',
-            'page_title' => 'Editar Política de Privacidade | Painel CEDE',
-            'page_url' => 'https://cedern.org' . self::FORM_ACTION_PATH,
+            'page_title' => 'Editar Política de Privacidade | Painel NatalCode',
+            'page_url' => 'https://natalcode.com.br' . self::FORM_ACTION_PATH,
             'page_description' => 'Edição da Política de Privacidade exibida no site público.',
         ]);
     }

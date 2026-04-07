@@ -207,9 +207,9 @@ class AgendaPageAction extends AbstractPageAction
                 'next_url' => $nextPageUrl,
                 'page_size_options' => $pageSizeOptions,
             ],
-            'page_title' => 'Agenda | CEDE',
-            'page_url' => 'https://cedern.org/agenda',
-            'page_description' => 'Confira o cronograma semanal de atividades e reuniões públicas do CEDE.',
+            'page_title' => 'Agenda | NatalCode',
+            'page_url' => 'https://natalcode.com.br/agenda',
+            'page_description' => 'Confira o cronograma semanal de atividades e reuniões públicas do NatalCode.',
         ]);
     }
 }

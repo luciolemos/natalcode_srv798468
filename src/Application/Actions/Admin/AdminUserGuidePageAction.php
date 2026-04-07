@@ -23,9 +23,9 @@ class AdminUserGuidePageAction extends AbstractPageAction
         }
 
         return $this->renderPage($response, 'pages/admin-user-guide.twig', [
-            'page_title' => 'Guia do Usuário | Painel CEDE',
-            'page_url' => 'https://cedern.org/painel/guia-do-usuario',
-            'page_description' => 'Guia de uso do painel administrativo do CEDE.',
+            'page_title' => 'Guia do Usuário | Painel NatalCode',
+            'page_url' => 'https://natalcode.com.br/painel/guia-do-usuario',
+            'page_description' => 'Guia de uso do painel administrativo do NatalCode.',
             'admin_project_readme_html' => $this->renderMarkdown($readmeContent),
         ]);
     }

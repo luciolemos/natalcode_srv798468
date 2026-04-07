@@ -8,10 +8,10 @@
 
 {% block content %}
   <main class="nc-main nc-container nc-home-flow">
-    <section class="nc-section nc-about-detail-copy" aria-label="Base de conhecimento do CEDE">
+    <section class="nc-section nc-about-detail-copy" aria-label="Base de conhecimento do NatalCode">
       {% include 'components/section-header.twig' with {
         kicker: 'Base de conhecimento',
-        title: 'Base de conhecimento do CEDE',
+        title: 'Base de conhecimento do NatalCode',
         lead: 'Consulte obras, referências editoriais e materiais em PDF organizados para estudo, pesquisa e aprofundamento doutrinário.'
       } %}
 
@@ -175,7 +175,7 @@
                 <div class="nc-knowledge-row-main">
                   <div class="nc-library-card-topline">
                     <span class="nc-library-category-badge{% if category_color %} is-colored{% endif %}">
-                      {{ book.category_name|default('Base do CEDE') }}
+                      {{ book.category_name|default('Base do NatalCode') }}
                     </span>
                   </div>
 
@@ -257,7 +257,7 @@
                       {% endif %}
                       <div>
                         <dt>Categoria</dt>
-                        <dd>{{ book.category_name|default('Base do CEDE') }}</dd>
+                        <dd>{{ book.category_name|default('Base do NatalCode') }}</dd>
                       </div>
                     </dl>
                   </article>

@@ -34,7 +34,7 @@ class AdminBookshopBookViewPageAction extends AbstractAdminBookshopAction
         return $this->renderPage($response, 'pages/admin-bookshop-book-view.twig', [
             'bookshop_book' => $book,
             'page_title' => ($book['title'] ?? 'Item') . ' | Acervo | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/acervo/' . $id,
+            'page_url' => 'https://natalcode.com.br/painel/livraria/acervo/' . $id,
             'page_description' => 'Visualização do item do acervo da livraria.',
         ]);
     }

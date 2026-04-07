@@ -238,8 +238,8 @@ class AdminStatutePageAction extends AbstractPageAction
             'admin_document_dashboard_lead' => 'Edite o texto do Estatuto exibido para visitantes em /quem-somos/estatuto.',
             'admin_document_saved_message' => 'Estatuto atualizado com sucesso.',
             'admin_document_error_message' => 'Não foi possível salvar o estatuto.',
-            'page_title' => 'Editar Estatuto | Painel CEDE',
-            'page_url' => 'https://cedern.org' . self::FORM_ACTION_PATH,
+            'page_title' => 'Editar Estatuto | Painel NatalCode',
+            'page_url' => 'https://natalcode.com.br' . self::FORM_ACTION_PATH,
             'page_description' => 'Edição do Estatuto institucional exibido no site público.',
         ]);
     }

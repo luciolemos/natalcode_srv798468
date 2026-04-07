@@ -12,12 +12,15 @@ final class InstitutionalEmailTemplate
     ): string {
         $resolvedInstitutionName = trim((string) $institutionName);
         if ($resolvedInstitutionName === '') {
-            $resolvedInstitutionName = 'CENTRO DE ESTUDOS DA DOUTRINA ESPÍRITA';
+            $resolvedInstitutionName = 'NATALCODE AGENCIA DIGITAL';
         }
 
         $resolvedCnpj = trim((string) $cnpj);
         if ($resolvedCnpj === '') {
-            $resolvedCnpj = '04.242.556/0001-45';
+            $resolvedCnpj = trim((string) ($_ENV['APP_DEFAULT_CNPJ'] ?? ''));
+        }
+        if ($resolvedCnpj === '') {
+            $resolvedCnpj = 'Nao informado';
         }
 
         $safeInstitutionName = htmlspecialchars($resolvedInstitutionName, ENT_QUOTES, 'UTF-8');
@@ -37,18 +40,18 @@ final class InstitutionalEmailTemplate
         ?string $headerMetaHtml = null
     ): string {
         $titleSafe = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-        $siteName = htmlspecialchars((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'CEDE'), ENT_QUOTES, 'UTF-8');
-        $baseUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org/'), '/');
+        $siteName = htmlspecialchars((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'NatalCode'), ENT_QUOTES, 'UTF-8');
+        $baseUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'), '/');
         $siteUrl = htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8');
-        $resolvedLogoSrc = $logoSrc ?: ($baseUrl . '/assets/img/brands/cede4_logo.png');
+        $resolvedLogoSrc = $logoSrc ?: ($baseUrl . '/assets/img/brand/natalcode1.png');
         $logoUrl = htmlspecialchars($resolvedLogoSrc, ENT_QUOTES, 'UTF-8');
         $resolvedHeaderMetaHtml = trim((string) $headerMetaHtml);
 
         $institutionalEmail = trim((string) (
-        $_ENV['MAIL_PUBLIC_EMAIL'] ?? ($_ENV['MAIL_FROM_ADDRESS'] ?? 'cede@cedern.org')
+        $_ENV['MAIL_PUBLIC_EMAIL'] ?? ($_ENV['MAIL_FROM_ADDRESS'] ?? 'contato@natalcode.com.br')
         ));
         if ($institutionalEmail === '') {
-            $institutionalEmail = 'cede@cedern.org';
+            $institutionalEmail = 'contato@natalcode.com.br';
         }
 
         $institutionalEmailEscaped = htmlspecialchars($institutionalEmail, ENT_QUOTES, 'UTF-8');
@@ -76,7 +79,7 @@ final class InstitutionalEmailTemplate
                   <h1 style="margin:8px 0 0;font-size:20px;line-height:1.25;color:#1e293b;">
                     {$titleSafe}
                   </h1>
-                  <p style="margin:7px 0 0;font-size:12px;color:#475569;">Comunicação oficial · CEDE</p>
+                  <p style="margin:7px 0 0;font-size:12px;color:#475569;">Comunicação oficial · NatalCode</p>
                 </div>
                 <div style="padding:18px 20px;font-size:14px;line-height:1.6;color:#1e293b;">
                   {$contentHtml}

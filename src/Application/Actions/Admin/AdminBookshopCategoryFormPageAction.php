@@ -181,7 +181,7 @@ class AdminBookshopCategoryFormPageAction extends AbstractAdminBookshopAction
             'bookshop_category_form_is_edit' => $isEdit,
             'bookshop_category_id' => $existingCategory['id'] ?? null,
             'page_title' => ($isEdit ? 'Editar categoria doutrinária da livraria' : 'Nova categoria doutrinária da livraria') . ' | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/categorias',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/categorias',
             'page_description' => 'Formulário do dashboard para categorias doutrinárias do acervo da livraria.',
         ]);
     }

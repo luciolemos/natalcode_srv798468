@@ -334,8 +334,8 @@ class AdminBookshopBookListPageAction extends AbstractAdminBookshopAction
                 'page_size_options' => $pageSizeOptions,
             ],
             'page_title' => 'Acervo da Livraria | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/acervo',
-            'page_description' => 'Gestão administrativa do acervo da livraria do CEDE.',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/acervo',
+            'page_description' => 'Gestão administrativa do acervo da livraria do NatalCode.',
         ]);
     }
 

@@ -8,7 +8,7 @@
       {% set has_public_online_access = current_event and current_event.meeting_url and current_event.mode|default('') in ['online', 'hibrido'] and not is_internal_event %}
       {% include 'components/section-header.twig' with {
         kicker: current_event.category_name|default(agenda.kicker|default('Agenda')),
-        title: current_event.title|default(agenda.title|default('Atividade do CEDE')),
+        title: current_event.title|default(agenda.title|default('Atividade do NatalCode')),
         lead: current_event.description|default(agenda.lead|default('Veja os detalhes deste encontro e organize sua participação na rotina fraterna da casa.'))
       } %}
 
@@ -36,7 +36,7 @@
           {% include 'components/check-item.twig' with {
             step: '02',
             title: 'Formato e local',
-            description: current_event.mode_label|default('Presencial') ~ ' • ' ~ current_event.location_name|default('CEDE') ~ (current_event.location_address ? ' • ' ~ current_event.location_address : ''),
+            description: current_event.mode_label|default('Presencial') ~ ' • ' ~ current_event.location_name|default('NatalCode') ~ (current_event.location_address ? ' • ' ~ current_event.location_address : ''),
             delay: 180
           } %}
 

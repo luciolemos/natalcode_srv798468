@@ -16,9 +16,9 @@ class AgendaGospelStudyPageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/agenda-detail.twig', [
             'agenda' => $agenda,
-            'page_title' => 'Estudo do Evangelho | CEDE',
-            'page_url' => 'https://cedern.org/agenda/estudo-do-evangelho',
-            'page_description' => 'Detalhes do Estudo do Evangelho na agenda semanal do CEDE.',
+            'page_title' => 'Estudo do Evangelho | NatalCode',
+            'page_url' => 'https://natalcode.com.br/agenda/estudo-do-evangelho',
+            'page_description' => 'Detalhes do Estudo do Evangelho na agenda semanal do NatalCode.',
         ]);
     }
 }

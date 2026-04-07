@@ -16,9 +16,9 @@ class EadePageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/study-detail.twig', [
             'study' => $study,
-            'page_title' => 'EADE | CEDE',
-            'page_url' => 'https://cedern.org/estudos/eade',
-            'page_description' => 'Conheça o Estudo Aprofundado da Doutrina Espírita (EADE) no CEDE.',
+            'page_title' => 'EADE | NatalCode',
+            'page_url' => 'https://natalcode.com.br/estudos/eade',
+            'page_description' => 'Conheca a solucao de Sites Institucionais da NatalCode.',
         ]);
     }
 }

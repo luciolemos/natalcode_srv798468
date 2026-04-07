@@ -52,9 +52,9 @@ class TermsOfUsePageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/legal-document.twig', [
             'legal_document' => $document,
-            'page_title' => 'Termos de Uso | CEDE',
-            'page_url' => 'https://cedern.org/termos-de-uso',
-            'page_description' => 'Termos de Uso do site institucional do CEDE.',
+            'page_title' => 'Termos de Uso | NatalCode',
+            'page_url' => 'https://natalcode.com.br/termos-de-uso',
+            'page_description' => 'Termos de Uso do site institucional do NatalCode.',
         ]);
     }
 
@@ -77,7 +77,7 @@ class TermsOfUsePageAction extends AbstractPageAction
         return [
             'kicker' => 'Institucional',
             'title' => trim((string) ($defaults['title'] ?? 'Termos de Uso')),
-            'lead' => 'Regras de uso do site institucional do CEDE e das áreas restritas.',
+            'lead' => 'Regras de uso do site institucional do NatalCode e das áreas restritas.',
             'body' => str_replace(["\r\n", "\r"], "\n", (string) ($defaults['body'] ?? '')),
             'updated_at_label' => '',
         ];

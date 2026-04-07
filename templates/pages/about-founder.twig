@@ -3,7 +3,7 @@
 {% block content %}
   <main class="nc-main nc-container nc-home-flow">
     {% set founder_name = founder.name|default('')|trim %}
-    {% set founder_role = founder.role|default('Fundador do CEDE')|trim %}
+    {% set founder_role = founder.role|default('Fundador do NatalCode')|trim %}
     {% set founder_photo = founder.photo|default('')|trim %}
     {% set founder_intro = founder.intro|default([]) %}
     {% set founder_topics = founder.topics|default([]) %}
@@ -16,7 +16,7 @@
       {% include 'components/section-header.twig' with {
         kicker: founder.kicker|default('Quem Somos'),
         title: founder.title|default('Nosso Fundador'),
-        lead: founder.lead|default('Conheça mais sobre a pessoa que inspirou a origem do CEDE.')
+        lead: founder.lead|default('Conheça mais sobre a pessoa que inspirou a origem do NatalCode.')
       } %}
 
       <article class="nc-card nc-about-founder-profile" data-aos="fade-up" data-aos-delay="80">
@@ -26,7 +26,7 @@
               <img
                 class="nc-about-founder-portrait"
                 src="{{ founder_photo }}"
-                alt="{{ founder.photo_alt|default('Retrato do fundador do CEDE') }}"
+                alt="{{ founder.photo_alt|default('Retrato do fundador do NatalCode') }}"
               >
             {% else %}
               <span class="nc-about-founder-portrait nc-about-founder-portrait-fallback" aria-hidden="true">
@@ -76,7 +76,7 @@
 
       <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="180">
         <a class="nc-btn nc-btn-secondary" href="/quem-somos">Voltar para Quem Somos</a>
-        <a class="nc-btn nc-btn-primary" href="/contato">Falar com o CEDE</a>
+        <a class="nc-btn nc-btn-primary" href="/contato">Falar com o NatalCode</a>
       </div>
     </section>
   </main>

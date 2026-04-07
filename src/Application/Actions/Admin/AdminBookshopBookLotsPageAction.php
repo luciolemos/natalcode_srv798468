@@ -86,7 +86,7 @@ class AdminBookshopBookLotsPageAction extends AbstractAdminBookshopAction
                 'available_sale_value_label' => 'R$ ' . number_format($summary['available_sale_value'], 2, ',', '.'),
             ],
             'page_title' => ($book['title'] ?? 'Item') . ' | Lotes | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/acervo/' . $id . '/lotes',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/acervo/' . $id . '/lotes',
             'page_description' => 'Visualização dos lotes de estoque do título da livraria.',
         ]);
     }

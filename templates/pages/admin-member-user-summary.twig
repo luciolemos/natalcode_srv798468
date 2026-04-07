@@ -91,7 +91,7 @@
             <dd>{{ summary_user.birth_place|default('-') }}</dd>
           </div>
           <div>
-            <dt>Função no CEDE</dt>
+            <dt>Função no NatalCode</dt>
             <dd>{{ summary_user.institutional_role|default('Sem função definida') }}</dd>
           </div>
         </dl>
@@ -125,9 +125,9 @@
           </div>
 
           <div class="nc-admin-login-field">
-            <label class="nc-admin-login-label" for="nc-summary-institutional-role">Função no CEDE</label>
+            <label class="nc-admin-login-label" for="nc-summary-institutional-role">Função no NatalCode</label>
             <select class="nc-admin-login-input" id="nc-summary-institutional-role" name="institutional_role">
-              <option value="">Função no CEDE (opcional)</option>
+              <option value="">Função no NatalCode (opcional)</option>
               {% for institutional_role_option in summary_institutional_role_options %}
                 <option value="{{ institutional_role_option }}"{% if summary_user.institutional_role|default('') == institutional_role_option %} selected{% endif %}>{{ institutional_role_option }}</option>
               {% endfor %}

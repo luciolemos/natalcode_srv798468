@@ -9,25 +9,25 @@
       {% include 'components/section-header.twig' with {
         kicker: 'Quem Somos',
         title: 'Conheça nossa identidade',
-        lead: 'Acesse conteúdos específicos sobre história, missão, valores, fundador, marca institucional, gestão, estatuto e base de conhecimento do CEDE.'
+        lead: 'Acesse conteudos especificos sobre historia, missao, valores, lideranca, marca, gestao, diretrizes e base de conhecimento da NatalCode.'
       } %}
       <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="120">
         <a class="nc-btn nc-btn-secondary" href="/quem-somos/historia">História</a>
-        <a class="nc-btn nc-btn-secondary" href="/quem-somos/missao">Missão</a>
+        <a class="nc-btn nc-btn-secondary" href="/quem-somos/missao">Missao</a>
         <a class="nc-btn nc-btn-secondary" href="/quem-somos/valores">Valores</a>
-        <a class="nc-btn nc-btn-secondary" href="/quem-somos/fundador">Fundador</a>
+        <a class="nc-btn nc-btn-secondary" href="/quem-somos/fundador">Lideranca</a>
         <a class="nc-btn nc-btn-secondary" href="/quem-somos/nossa-marca">Nossa Marca</a>
-        <a class="nc-btn nc-btn-secondary" href="/quem-somos/gestao-cede">Gestão CEDE</a>
-        <a class="nc-btn nc-btn-secondary" href="/quem-somos/estatuto">Estatuto</a>
+        <a class="nc-btn nc-btn-secondary" href="/quem-somos/gestao-cede">Gestao NatalCode</a>
+        <a class="nc-btn nc-btn-secondary" href="/quem-somos/estatuto">Diretrizes</a>
         <a class="nc-btn nc-btn-secondary" href="/quem-somos/base-de-conhecimento">Base de conhecimento</a>
       </div>
     </section>
 
-    <section class="nc-section nc-about-founder-overview" aria-label="Fundador do CEDE" data-aos="fade-up" data-aos-delay="30">
+    <section class="nc-section nc-about-founder-overview" aria-label="Fundador do NatalCode" data-aos="fade-up" data-aos-delay="30">
       {% include 'components/section-header.twig' with {
         kicker: founder.kicker|default('Quem Somos'),
-        title: founder.title|default('Nosso Fundador'),
-        lead: founder.lead|default('Conheça a origem humana e espiritual que ajudou a dar início ao CEDE.')
+        title: founder.title|default('Lideranca NatalCode'),
+        lead: founder.lead|default('Conheca a visao que sustenta o posicionamento e a operacao da NatalCode.')
       } %}
 
       <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="140">
@@ -38,29 +38,29 @@
     <section class="nc-section" aria-label="Natureza jurídica e sede" data-aos="fade-up" data-aos-delay="20">
       {% include 'components/section-header.twig' with {
         kicker: 'Institucional',
-        title: 'Natureza jurídica e sede',
-        lead: 'Base estatutária e dados institucionais do CEDE.'
+        title: 'Diretrizes e estrutura',
+        lead: 'Base institucional e diretrizes de atuacao da NatalCode.'
       } %}
 
       <div class="nc-about-legal-copy" data-aos="fade-up" data-aos-delay="120">
-        <h3>Constituição do CEDE</h3>
-        <p>{{ institutional.statuteExcerpt|default('O Centro de Estudos da Doutrina Espírita - CEDE, fundado em 09 de janeiro de 2001, é uma associação civil de caráter religioso, filosófico, científico, cultural e filantrópico, sem fins lucrativos, com sede e foro na cidade de Parnamirim/RN, localizada à Rua Frejó, nº 44, bairro Nova Parnamirim.') }}</p>
+        <h3>Estrutura institucional NatalCode</h3>
+        <p>{{ institutional.statuteExcerpt|default('A NatalCode e uma agencia digital focada em estrategia, design e desenvolvimento web, com atuacao orientada a resultado e experiencia do usuario.') }}</p>
       </div>
 
       <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="160">
-        <a class="nc-btn nc-btn-primary" href="/quem-somos/estatuto">Ler estatuto completo</a>
+        <a class="nc-btn nc-btn-primary" href="/quem-somos/estatuto">Ler diretrizes completas</a>
       </div>
     </section>
 
-    <section class="nc-section nc-about-management-preview" aria-label="Gestão CEDE" data-aos="fade-up" data-aos-delay="40">
+    <section class="nc-section nc-about-management-preview" aria-label="Gestão NatalCode" data-aos="fade-up" data-aos-delay="40">
       {% include 'components/section-header.twig' with {
-        kicker: 'Gestão CEDE',
+        kicker: 'Gestão NatalCode',
         title: 'Diretoria e funções institucionais',
-        lead: 'Conheça a gestão atual do CEDE: acesse a página dedicada e descubra quem são os responsáveis e as atribuições que sustentam a organização e o funcionamento da instituição.'
+        lead: 'Conheca a gestao atual da NatalCode: acesse a pagina dedicada e veja as atribuicoes que sustentam a operacao.'
       } %}
 
       <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="140">
-        <a class="nc-btn nc-btn-primary" href="/quem-somos/gestao-cede">Abrir Gestão CEDE</a>
+        <a class="nc-btn nc-btn-primary" href="/quem-somos/gestao-cede">Abrir Gestao NatalCode</a>
       </div>
     </section>
 

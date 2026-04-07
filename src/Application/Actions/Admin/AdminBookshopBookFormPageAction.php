@@ -13,7 +13,7 @@ class AdminBookshopBookFormPageAction extends AbstractAdminBookshopAction
 {
     private const FLASH_KEY_PREFIX = 'admin_bookshop_book_form_';
 
-    private const SKU_PATTERN = '/^CEDE-LIV-\d{4}$/';
+    private const SKU_PATTERN = '/^(?:CEDE|NATALCODE)-LIV-\d{4}$/';
 
     public function __invoke(Request $request, Response $response): Response
     {
@@ -280,7 +280,7 @@ class AdminBookshopBookFormPageAction extends AbstractAdminBookshopAction
         if ((string) ($payload['sku'] ?? '') === '') {
             $errors[] = 'SKU é obrigatório.';
         } elseif (!preg_match(self::SKU_PATTERN, (string) $payload['sku'])) {
-            $errors[] = 'SKU inválido. Use o padrão CEDE-LIV-0001.';
+            $errors[] = 'SKU inválido. Use o padrão NATALCODE-LIV-0001.';
         }
 
         if ((string) ($payload['slug'] ?? '') === '') {
@@ -411,7 +411,7 @@ class AdminBookshopBookFormPageAction extends AbstractAdminBookshopAction
             try {
                 $generatedSku = $this->bookshopRepository->generateNextBookSku();
             } catch (\Throwable $exception) {
-                $generatedSku = 'CEDE-LIV-0001';
+                $generatedSku = 'NATALCODE-LIV-0001';
             }
         }
 
@@ -480,7 +480,7 @@ class AdminBookshopBookFormPageAction extends AbstractAdminBookshopAction
             'bookshop_book_collections' => $collections,
             'bookshop_book_language_options' => $languageOptions,
             'page_title' => ($isEdit ? 'Editar item do acervo' : 'Novo item do acervo') . ' | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/acervo',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/acervo',
             'page_description' => 'Formulário do acervo da livraria no dashboard.',
         ]);
     }

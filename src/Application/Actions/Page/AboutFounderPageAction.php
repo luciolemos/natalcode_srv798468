@@ -25,12 +25,12 @@ class AboutFounderPageAction extends AbstractPageAction
         return $this->renderPage($response, 'pages/about-founder.twig', [
             'founder' => $founder,
             'page_title' => $founderName !== ''
-                ? $founderName . ' | Nosso Fundador | CEDE'
-                : 'Nosso Fundador | CEDE',
-            'page_url' => 'https://cedern.org/quem-somos/fundador',
+                ? $founderName . ' | Nosso Fundador | NatalCode'
+                : 'Nosso Fundador | NatalCode',
+            'page_url' => 'https://natalcode.com.br/quem-somos/fundador',
             'page_description' => $pageDescription !== ''
                 ? $pageDescription
-                : 'Conheça o legado espiritual e institucional que inspirou a origem do CEDE.',
+                : 'Conheca a lideranca e a visao que inspiraram a origem da NatalCode.',
         ]);
     }
 }

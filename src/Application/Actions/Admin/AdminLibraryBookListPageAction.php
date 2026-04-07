@@ -199,8 +199,8 @@ class AdminLibraryBookListPageAction extends AbstractAdminLibraryAction
                 'page_size_options' => $pageSizeOptions,
             ],
             'page_title' => 'Conteúdos da Central de conteúdo | Dashboard',
-            'page_url' => 'https://cedern.org/painel/biblioteca/livros',
-            'page_description' => 'Painel para gestão da central de conteúdo do CEDE.',
+            'page_url' => 'https://natalcode.com.br/painel/biblioteca/livros',
+            'page_description' => 'Painel para gestão da central de conteúdo do NatalCode.',
         ]);
     }
 }

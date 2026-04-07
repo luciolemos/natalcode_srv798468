@@ -83,8 +83,8 @@ class AdminDashboardPageAction extends AbstractPageAction
         }
 
         return $this->renderPage($response, 'pages/admin-dashboard-home.twig', [
-            'page_title' => 'Dashboard Admin | CEDE',
-            'page_url' => 'https://cedern.org/painel',
+            'page_title' => 'Dashboard Admin | NatalCode',
+            'page_url' => 'https://natalcode.com.br/painel',
             'page_description' => 'Painel administrativo da agenda.',
             'dashboard_visit_metrics' => $visitMetrics,
             'dashboard_visit_metrics_top_pages' => $this->formatTopPages(
@@ -191,7 +191,7 @@ class AdminDashboardPageAction extends AbstractPageAction
             'esde' => 'ESDE',
             'estatuto' => 'Estatuto',
             'estudos' => 'Estudos',
-            'gestao-cede' => 'Gestão CEDE',
+            'gestao-cede' => 'Gestão NatalCode',
             'historia' => 'História',
             'missao' => 'Missão',
             'nossa-marca' => 'Nossa Marca',

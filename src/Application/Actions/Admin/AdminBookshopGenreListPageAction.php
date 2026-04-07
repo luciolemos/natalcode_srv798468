@@ -214,8 +214,8 @@ class AdminBookshopGenreListPageAction extends AbstractAdminBookshopAction
                 'page_size_options' => $pageSizeOptions,
             ],
             'page_title' => 'Gêneros Literários da Livraria | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/generos',
-            'page_description' => 'Painel para gestão de gêneros literários do acervo da livraria do CEDE.',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/generos',
+            'page_description' => 'Painel para gestão de gêneros literários do acervo da livraria do NatalCode.',
         ]);
     }
 }

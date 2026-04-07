@@ -16,9 +16,9 @@ class AboutHistoryPageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/about-detail.twig', [
             'about' => $about,
-            'page_title' => 'História | CEDE',
-            'page_url' => 'https://cedern.org/quem-somos/historia',
-            'page_description' => 'Conheça a história e trajetória do CEDE.',
+            'page_title' => 'História | NatalCode',
+            'page_url' => 'https://natalcode.com.br/quem-somos/historia',
+            'page_description' => 'Conheça a história e trajetória do NatalCode.',
         ]);
     }
 }

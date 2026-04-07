@@ -14,10 +14,10 @@ use Throwable;
 class AboutManagementPageAction extends AbstractPageAction
 {
     private const ROLE_RESPONSIBILITIES = [
-        'Presidente CEDE' =>
-            'Representa institucionalmente o CEDE, coordena decisões estratégicas '
-            . 'e acompanha o cumprimento do plano anual da casa.',
-        'Vice-presidente CEDE' =>
+        'Presidente NatalCode' =>
+            'Representa institucionalmente o NatalCode, coordena decisões estratégicas '
+            . 'e acompanha o cumprimento do plano anual da operacao.',
+        'Vice-presidente NatalCode' =>
             'Apoia a presidência na coordenação geral, acompanha frentes prioritárias '
             . 'e substitui a presidência quando necessário.',
         'Secretário' =>
@@ -30,14 +30,14 @@ class AboutManagementPageAction extends AbstractPageAction
             'Coordena planejamento e execução de eventos e atividades, '
             . 'alinhando logística, equipes e calendário institucional.',
         'Diretor de Patrimônio' =>
-            'Zela pelos espaços e bens do CEDE, organizando manutenção, '
+            'Zela pelos espaços e bens do NatalCode, organizando manutenção, '
             . 'conservação e uso adequado da infraestrutura.',
         'Diretor de Estudos' =>
-            'Orienta frentes formativas e estudos doutrinários, estruturando '
+            'Orienta frentes formativas e estudos de produto, estruturando '
             . 'conteúdos e acompanhando ciclos de aprendizagem.',
         'Diretor de Atendimento Fraterno' =>
-            'Coordena o acolhimento fraterno e o encaminhamento das demandas '
-            . 'de atendimento espiritual e humano.',
+            'Coordena suporte, atendimento e encaminhamento das demandas '
+            . 'operacionais e comerciais.',
         'Diretor de Comunicação' =>
             'Conduz a comunicação institucional e os canais oficiais, garantindo '
             . 'clareza, unidade e responsabilidade na divulgação.',
@@ -46,7 +46,7 @@ class AboutManagementPageAction extends AbstractPageAction
             . 'e garante execução das atividades previstas.',
         'Conselheiro' =>
             'Contribui com orientação e acompanhamento institucional, '
-            . 'apoiando decisões e o fortalecimento da missão do CEDE.',
+            . 'apoiando decisões e o fortalecimento da missão do NatalCode.',
     ];
 
     private MemberAuthRepository $memberAuthRepository;
@@ -81,22 +81,22 @@ class AboutManagementPageAction extends AbstractPageAction
             $managementMembers = array_map(function (array $member): array {
                 $role = trim((string) ($member['institutional_role'] ?? ''));
                 $member['institutional_role_description'] = self::ROLE_RESPONSIBILITIES[$role]
-                    ?? 'Atua na organização e no fortalecimento das atividades institucionais do CEDE.';
+                    ?? 'Atua na organização e no fortalecimento das atividades institucionais do NatalCode.';
 
                 return $member;
             }, $managementMembers);
         } catch (Throwable $exception) {
-            $this->logger->warning('Falha ao carregar gestão CEDE para página dedicada pública.', [
+            $this->logger->warning('Falha ao carregar gestão NatalCode para página dedicada pública.', [
                 'exception' => $exception,
             ]);
         }
 
         return $this->renderPage($response, 'pages/about-management.twig', [
             'public_cede_management' => $managementMembers,
-            'page_title' => 'Gestão CEDE | Quem Somos | CEDE',
-            'page_url' => 'https://cedern.org/quem-somos/gestao-cede',
+            'page_title' => 'Gestão NatalCode | Quem Somos | NatalCode',
+            'page_url' => 'https://natalcode.com.br/quem-somos/gestao-cede',
             'page_description' =>
-                'Conheça a composição da gestão atual do CEDE '
+                'Conheça a composição da gestão atual do NatalCode '
                 . 'e as atribuições institucionais de cada função.',
         ]);
     }

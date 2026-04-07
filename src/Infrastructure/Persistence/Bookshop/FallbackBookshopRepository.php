@@ -50,7 +50,7 @@ class FallbackBookshopRepository implements BookshopRepository
 
     public function generateNextBookSku(): string
     {
-        return 'CEDE-LIV-0001';
+        return 'NATALCODE-LIV-0001';
     }
 
     public function renumberBookSkusSequentially(): int

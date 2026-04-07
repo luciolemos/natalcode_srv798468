@@ -133,9 +133,9 @@ class ContactPageAction extends AbstractPageAction
             'contact_form' => $form,
             'contact_form_errors' => $errors,
             'contact_form_status' => $status,
-            'page_title' => 'Contato | CEDE',
-            'page_url' => 'https://cedern.org/contato',
-            'page_description' => 'Veja o endereço, mapa e canais de contato do CEDE.',
+            'page_title' => 'Contato | NatalCode',
+            'page_url' => 'https://natalcode.com.br/contato',
+            'page_description' => 'Veja o endereço, mapa e canais de contato do NatalCode.',
         ]);
     }
 
@@ -149,7 +149,7 @@ class ContactPageAction extends AbstractPageAction
         $smtpUser = trim((string) ($_ENV['MAIL_USERNAME'] ?? ''));
         $smtpPass = (string) ($_ENV['MAIL_PASSWORD'] ?? '');
         $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? $smtpUser));
-        $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'CEDE - Site'));
+        $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'NatalCode - Site'));
         $toEmail = trim((string) ($_ENV['MAIL_TO_ADDRESS'] ?? $fromEmail));
 
         if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '' || $fromEmail === '' || $toEmail === '') {
@@ -168,7 +168,7 @@ class ContactPageAction extends AbstractPageAction
         $mailer->Sender = $fromEmail;
 
         $hostFromUrl = (string) parse_url(
-            (string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org/'),
+            (string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'),
             PHP_URL_HOST
         );
         if ($hostFromUrl !== '') {
@@ -195,11 +195,11 @@ class ContactPageAction extends AbstractPageAction
             'UTF-8'
         );
 
-        $logoCid = 'cedern-logo';
-        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brands/cede4_logo.png';
+        $logoCid = 'natalcode-logo';
+        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brand/natalcode1.png';
         $logoSrc = null;
         if (is_file($logoPath)) {
-            $mailer->addEmbeddedImage($logoPath, $logoCid, 'cede4_logo.png', 'base64', 'image/png');
+            $mailer->addEmbeddedImage($logoPath, $logoCid, 'natalcode1.png', 'base64', 'image/png');
             $logoSrc = 'cid:' . $logoCid;
         }
 
@@ -207,7 +207,7 @@ class ContactPageAction extends AbstractPageAction
 
         $htmlBody = InstitutionalEmailTemplate::buildLayout(
             'Novo contato pelo site',
-            '<p style="margin:0 0 14px;">Mensagem recebida pelo formulario institucional do site do CEDE.</p>'
+            '<p style="margin:0 0 14px;">Mensagem recebida pelo formulario institucional do site do NatalCode.</p>'
             . '<div style="margin:0 0 16px;padding:14px 16px;border:1px solid #dbe4ee;'
             . 'border-radius:12px;background:#f8fafc;">'
             . '<p style="margin:0 0 8px;"><strong>Nome:</strong> ' . $safeName . '</p>'

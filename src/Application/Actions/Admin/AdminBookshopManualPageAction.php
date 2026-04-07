@@ -14,8 +14,8 @@ class AdminBookshopManualPageAction extends AbstractPageAction
     {
         return $this->renderPage($response, 'pages/admin-bookshop-manual.twig', [
             'page_title' => 'Guia Operacional da Livraria | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/manual',
-            'page_description' => 'Manual operacional da livraria física e do PDV administrativo do CEDE.',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/manual',
+            'page_description' => 'Manual operacional da livraria física e do PDV administrativo do NatalCode.',
         ]);
     }
 }

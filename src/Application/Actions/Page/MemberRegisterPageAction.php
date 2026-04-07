@@ -157,9 +157,9 @@ class MemberRegisterPageAction extends AbstractPageAction
             'member_register_errors' => $errors,
             'member_register_success' => $success,
             'member_register_form' => $form,
-            'page_title' => 'Cadastro de Membro | CEDE',
-            'page_url' => 'https://cedern.org/cadastro',
-            'page_description' => 'Cadastro de frequentador para área de membros do CEDE.',
+            'page_title' => 'Cadastro de Membro | NatalCode',
+            'page_url' => 'https://natalcode.com.br/cadastro',
+            'page_description' => 'Cadastro de frequentador para área de membros do NatalCode.',
         ]);
     }
 
@@ -173,9 +173,9 @@ class MemberRegisterPageAction extends AbstractPageAction
         $smtpUser = trim((string) ($_ENV['MAIL_USERNAME'] ?? ''));
         $smtpPass = (string) ($_ENV['MAIL_PASSWORD'] ?? '');
         $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? $smtpUser));
-        $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'CEDE - Contato'));
+        $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'NatalCode - Contato'));
         $notifyEmail = trim((string) ($_ENV['MAIL_TO_ADDRESS'] ?? $fromEmail));
-        $siteUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org'), '/');
+        $siteUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br'), '/');
 
         if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '' || $fromEmail === '') {
             throw new \RuntimeException('Configuração SMTP incompleta para envio de e-mails de cadastro.');
@@ -187,7 +187,7 @@ class MemberRegisterPageAction extends AbstractPageAction
         $contactUrl = $siteUrl . '/contato';
         $adminReplyUrl = $this->buildMailToLink(
             strtolower(trim($email)),
-            'Sobre sua solicitacao de cadastro no CEDE'
+            'Sobre sua solicitacao de cadastro no NatalCode'
         );
         $safeFullName = htmlspecialchars(trim($fullName), ENT_QUOTES, 'UTF-8');
         $safeEmail = htmlspecialchars(strtolower(trim($email)), ENT_QUOTES, 'UTF-8');
@@ -211,7 +211,7 @@ class MemberRegisterPageAction extends AbstractPageAction
             ],
             [
                 'href' => $contactUrl,
-                'label' => 'Falar com o CEDE',
+                'label' => 'Falar com o NatalCode',
                 'is_primary' => false,
             ],
         ]);
@@ -258,7 +258,7 @@ class MemberRegisterPageAction extends AbstractPageAction
                 $fromEmail,
                 $fromName,
                 $notifyEmail,
-                'Administração CEDE',
+                'Administração NatalCode',
                 $email,
                 $fullName,
                 $adminSubject,
@@ -266,12 +266,12 @@ class MemberRegisterPageAction extends AbstractPageAction
             );
         }
 
-        $memberSubject = 'Seja bem-vindo(a)! Recebemos seu cadastro no CEDE';
+        $memberSubject = 'Seja bem-vindo(a)! Recebemos seu cadastro no NatalCode';
         $memberLogoSrc = $this->resolveEmbeddedLogoSrc();
         $memberBody = InstitutionalEmailTemplate::buildLayout(
-            'Boas-vindas ao CEDE',
+            'Boas-vindas ao NatalCode',
             '<p style="margin:0 0 14px;">Olá, <strong>' . $safeFullName . '</strong>.</p>'
-            . '<p style="margin:0 0 14px;">Recebemos sua solicitacao de cadastro na area de membros do CEDE. '
+            . '<p style="margin:0 0 14px;">Recebemos sua solicitacao de cadastro na area de membros do NatalCode. '
             . 'Seu pedido foi registrado com sucesso e agora aguarda validacao da equipe.</p>'
             . '<div style="margin:0 0 16px;padding:14px 16px;border:1px solid #dbe4ee;'
             . 'border-radius:12px;background:#f8fafc;">'
@@ -294,7 +294,7 @@ class MemberRegisterPageAction extends AbstractPageAction
             . '<p style="margin:0;font-size:13px;color:#475569;">'
             . 'Guarde este e-mail para consulta. Enquanto a solicitacao estiver em analise, o acesso '
             . 'permanecera pendente. Se precisar de ajuda ou quiser complementar alguma informacao, use '
-            . 'o canal oficial de contato do CEDE.</p>'
+            . 'o canal oficial de contato do NatalCode.</p>'
             . '</div>',
             $memberLogoSrc,
             $headerMetaHtml
@@ -345,7 +345,7 @@ class MemberRegisterPageAction extends AbstractPageAction
         $mailer->Sender = $fromEmail;
 
         $hostFromUrl = (string) parse_url(
-            (string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org/'),
+            (string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'),
             PHP_URL_HOST
         );
         if ($hostFromUrl !== '') {
@@ -356,9 +356,9 @@ class MemberRegisterPageAction extends AbstractPageAction
         $mailer->addAddress($toEmail, $toName);
         $mailer->addReplyTo($replyToEmail, $replyToName);
 
-        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brands/cede4_logo.png';
+        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brand/natalcode1.png';
         if (is_file($logoPath)) {
-            $mailer->addEmbeddedImage($logoPath, 'cedern-logo', 'cede4_logo.png', 'base64', 'image/png');
+            $mailer->addEmbeddedImage($logoPath, 'natalcode-logo', 'natalcode1.png', 'base64', 'image/png');
         }
 
         $mailer->isHTML(true);
@@ -375,9 +375,9 @@ class MemberRegisterPageAction extends AbstractPageAction
 
     private function resolveEmbeddedLogoSrc(): ?string
     {
-        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brands/cede4_logo.png';
+        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brand/natalcode1.png';
 
-        return is_file($logoPath) ? 'cid:cedern-logo' : null;
+        return is_file($logoPath) ? 'cid:natalcode-logo' : null;
     }
 
     private function buildMailToLink(string $email, string $subject): string

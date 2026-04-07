@@ -12,9 +12,9 @@ class FaqPageAction extends AbstractPageAction
     public function __invoke(Request $request, Response $response): Response
     {
         return $this->renderPage($response, 'pages/faq.twig', [
-            'page_title' => 'FAQ | CEDE',
-            'page_url' => 'https://cedern.org/faq',
-            'page_description' => 'Dúvidas frequentes sobre o Espiritismo e as atividades do CEDE.',
+            'page_title' => 'FAQ | NatalCode',
+            'page_url' => 'https://natalcode.com.br/faq',
+            'page_description' => 'Duvidas frequentes sobre servicos e processos da NatalCode.',
         ]);
     }
 }

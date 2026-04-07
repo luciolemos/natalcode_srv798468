@@ -181,7 +181,7 @@ class AdminBookshopCollectionFormPageAction extends AbstractAdminBookshopAction
             'bookshop_collection_form_is_edit' => $isEdit,
             'bookshop_collection_id' => $existingCollection['id'] ?? null,
             'page_title' => ($isEdit ? 'Editar coleção da livraria' : 'Nova coleção da livraria') . ' | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/colecoes',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/colecoes',
             'page_description' => 'Formulário do dashboard para coleções e séries do acervo da livraria.',
         ]);
     }

@@ -142,9 +142,9 @@ class MemberLoginPageAction extends AbstractPageAction
             'member_login_success' => $success,
             'member_login_form' => $form,
             'member_login_redirect_to' => $redirectTo,
-            'page_title' => 'Acessar área do membro | CEDE',
-            'page_url' => 'https://cedern.org/entrar',
-            'page_description' => 'Acesso à área do membro do CEDE conforme seu perfil de permissão.',
+            'page_title' => 'Acessar área do membro | NatalCode',
+            'page_url' => 'https://natalcode.com.br/entrar',
+            'page_description' => 'Acesso à área do membro do NatalCode conforme seu perfil de permissão.',
         ]);
     }
 

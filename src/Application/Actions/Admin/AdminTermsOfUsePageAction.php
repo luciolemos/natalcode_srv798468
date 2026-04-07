@@ -238,8 +238,8 @@ class AdminTermsOfUsePageAction extends AbstractPageAction
             'admin_document_dashboard_lead' => 'Edite os Termos de Uso exibidos para visitantes em /termos-de-uso.',
             'admin_document_saved_message' => 'Termos de Uso atualizados com sucesso.',
             'admin_document_error_message' => 'Não foi possível salvar os Termos de Uso.',
-            'page_title' => 'Editar Termos de Uso | Painel CEDE',
-            'page_url' => 'https://cedern.org' . self::FORM_ACTION_PATH,
+            'page_title' => 'Editar Termos de Uso | Painel NatalCode',
+            'page_url' => 'https://natalcode.com.br' . self::FORM_ACTION_PATH,
             'page_description' => 'Edição dos Termos de Uso exibidos no site público.',
         ]);
     }

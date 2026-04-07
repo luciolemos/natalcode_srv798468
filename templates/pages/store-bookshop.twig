@@ -33,11 +33,11 @@
       {% set has_active_toolbar_filters = true %}
     {% endif %}
 
-    <section class="nc-section nc-about-detail-copy" aria-label="Livraria Auta de Sousa">
+    <section class="nc-section nc-about-detail-copy" aria-label="NatalCode Labs">
       {% include 'components/section-header.twig' with {
         kicker: 'Loja',
-        title: 'Livraria Auta de Sousa',
-        lead: 'Consulte o catálogo público da livraria e conheça os títulos disponíveis. A venda é presencial, diretamente no balcão do CEDE.'
+        title: 'NatalCode Labs',
+        lead: 'Consulte o catálogo público da livraria e conheça os títulos disponíveis. A venda é presencial, diretamente no balcão do NatalCode.'
       } %}
 
       <div class="nc-library-overview nc-bookshop-overview">
@@ -45,13 +45,13 @@
           <p class="nc-library-overview-kicker">Venda presencial</p>
           <h3 class="nc-library-overview-title">Escolha no catálogo e adquira no balcão da casa</h3>
           <p class="nc-library-overview-copy">
-            Esta vitrine apresenta os títulos cadastrados na Livraria Auta de Sousa. Não há compra online: a retirada e a venda acontecem presencialmente, com atendimento direto no CEDE.
+            Esta vitrine apresenta os títulos cadastrados na NatalCode Labs. Não há compra online: a retirada e a venda acontecem presencialmente, com atendimento direto no NatalCode.
           </p>
           {% if site_contact.address|default('') %}
             <p class="nc-bookshop-presential-note">{{ site_contact.address }}</p>
           {% endif %}
           <div class="nc-actions is-stacked-mobile">
-            <a class="nc-btn nc-btn-primary" href="/contato">Falar com o CEDE</a>
+            <a class="nc-btn nc-btn-primary" href="/contato">Falar com o NatalCode</a>
             {% if site_contact.mapUrl|default('') %}
               <a class="nc-btn nc-btn-secondary" href="{{ site_contact.mapUrl }}" target="_blank" rel="noopener noreferrer">Como chegar</a>
             {% endif %}
@@ -82,7 +82,7 @@
         <div class="nc-library-filter-copy">
           <p class="nc-library-overview-kicker">Refinar o catálogo</p>
           <h3 class="nc-library-filter-title">Busque por obra, autor, coleção, categoria ou gênero</h3>
-          <p class="nc-library-filter-lead">Use os filtros para encontrar um título e depois venha ao balcão do CEDE para adquirir seu exemplar.</p>
+          <p class="nc-library-filter-lead">Use os filtros para encontrar um título e depois venha ao balcão do NatalCode para adquirir seu exemplar.</p>
         </div>
 
         <form class="nc-library-filter-form nc-admin-login-form" method="get" action="{{ bookshop_base_path }}">
@@ -198,7 +198,7 @@
                       {% include 'components/library-bookplate-fallback.twig' with {
                         bookplate_title: book.title,
                         bookplate_author: book.author_name|default(''),
-                        bookplate_collection_label: 'Livraria Auta de Sousa',
+                        bookplate_collection_label: 'NatalCode Labs',
                         bookplate_section_title: 'Livraria'
                       } only %}
                     {% endif %}
@@ -345,7 +345,7 @@
             {{ filters.search|default('') or filters.category|default('') or filters.genre|default('') ? 'Nenhum título encontrado para os filtros informados.' : 'A vitrine da livraria ainda não possui títulos publicados no momento.' }}
           </p>
           <div class="nc-actions is-stacked-mobile">
-            <a class="nc-btn nc-btn-primary" href="/contato">Falar com o CEDE</a>
+            <a class="nc-btn nc-btn-primary" href="/contato">Falar com o NatalCode</a>
             <a class="nc-btn nc-btn-secondary" href="/loja">Voltar para Loja</a>
           </div>
         </article>
@@ -353,8 +353,8 @@
 
       <article class="nc-card nc-bookshop-presential-card">
         <span class="nc-store-status is-live">Venda presencial</span>
-        <h3 class="nc-store-card-title">Atendimento no balcão da Livraria Auta de Sousa</h3>
-        <p>A vitrine é apenas informativa. A compra, a conferência final de disponibilidade e a retirada do livro acontecem diretamente no CEDE.</p>
+        <h3 class="nc-store-card-title">Atendimento no balcão da NatalCode Labs</h3>
+        <p>A vitrine é apenas informativa. A compra, a conferência final de disponibilidade e a retirada do livro acontecem diretamente no NatalCode.</p>
         <div class="nc-actions is-stacked-mobile">
           <a class="nc-btn nc-btn-primary" href="/contato">Tirar dúvidas</a>
           {% if site_contact.mapUrl|default('') %}

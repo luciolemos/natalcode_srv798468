@@ -94,9 +94,9 @@ class MemberResetPasswordPageAction extends AbstractPageAction
             'member_password_reset_token' => $token,
             'member_password_reset_token_valid' => $tokenValid,
             'member_password_reset_email' => strtolower(trim((string) ($resetRecord['user_email'] ?? ''))),
-            'page_title' => 'Redefinir senha | CEDE',
-            'page_url' => 'https://cedern.org/redefinir-senha',
-            'page_description' => 'Defina uma nova senha para acessar sua área do membro no CEDE.',
+            'page_title' => 'Redefinir senha | NatalCode',
+            'page_url' => 'https://natalcode.com.br/redefinir-senha',
+            'page_description' => 'Defina uma nova senha para acessar sua área do membro no NatalCode.',
         ]);
     }
 

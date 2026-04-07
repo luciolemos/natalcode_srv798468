@@ -1,5 +1,10 @@
 {% extends 'layouts/base.twig' %}
 
+{% block head %}
+  {% set asset_version = app_asset_version|default('1') %}
+  <script src="/assets/js/cedern-hero-carousel.js?v={{ asset_version }}" defer></script>
+{% endblock %}
+
 {% block content %}
   <main class="nc-main nc-container nc-home-flow">
     {% include 'home/hero.twig' %}
@@ -9,38 +14,38 @@
     <section class="nc-section nc-home-quick-access" aria-label="Acesso rápido" data-aos="fade-up" data-aos-delay="0">
       {% include 'components/section-header.twig' with {
         kicker: 'Caminhos',
-        title: 'Encontre o que você busca no CEDE',
-        lead: 'Reunimos aqui os principais caminhos para acolhimento, estudo, participação e contato fraterno.'
+        title: 'Encontre o que voce precisa na NatalCode',
+        lead: 'Reunimos aqui os principais caminhos para estrategia, execucao, suporte e contato comercial.'
       } %}
 
       <div class="nc-feature-grid nc-tonal-feature-grid">
         {% include 'components/feature-card.twig' with {
           title: 'Quem Somos',
-          description: 'Conheça nossa identidade, missão, valores, história e o significado da marca institucional.',
+          description: 'Conheca nossa identidade, missao, valores, historia e direcao de marca.',
           href: '/quem-somos',
-          link_label: 'Conhecer o CEDE',
+          link_label: 'Conhecer a NatalCode',
           delay: 120
         } %}
 
         {% include 'components/feature-card.twig' with {
-          title: 'Estudos',
-          description: 'Participe das frentes de estudo da Doutrina Espírita e acompanhe os conteúdos formativos da casa.',
+          title: 'Servicos',
+          description: 'Veja como estruturamos sites, landing pages, SEO e manutencao para gerar resultado.',
           href: '/estudos',
-          link_label: 'Ver estudos',
+          link_label: 'Ver servicos',
           delay: 160
         } %}
 
         {% include 'components/feature-card.twig' with {
-          title: 'Agenda',
-          description: 'Consulte os dias e horários das atividades públicas e dos encontros semanais do CEDE.',
+          title: 'Processo',
+          description: 'Entenda as etapas do nosso fluxo de trabalho: descoberta, implementacao e otimizacao.',
           href: '/agenda',
-          link_label: 'Ver agenda',
+          link_label: 'Ver processo',
           delay: 200
         } %}
 
         {% include 'components/feature-card.twig' with {
           title: 'FAQ',
-          description: 'Tire dúvidas frequentes sobre doutrina, participação e práticas da casa espírita.',
+          description: 'Tire duvidas sobre prazo, escopo, investimento e acompanhamento pos-entrega.',
           href: '/faq',
           link_label: 'Ler FAQ',
           delay: 240
@@ -48,35 +53,34 @@
 
         {% include 'components/feature-card.twig' with {
           title: 'Contato',
-          description: 'Entre em contato conosco, consulte o endereço e acesse nossos canais oficiais de comunicação.',
+          description: 'Envie seu briefing e fale com nosso time para iniciar seu projeto.',
           href: '/contato',
-          link_label: 'Falar com o CEDE',
+          link_label: 'Falar com a NatalCode',
           delay: 280
         } %}
 
         {% include 'components/feature-card.twig' with {
-          title: 'Central de Conteúdos',
-          description: 'Acesse a base de conhecimento com materiais, referências e conteúdos de apoio ao estudo.',
+          title: 'Base de Conteudo',
+          description: 'Acesse materiais, referencias e guias praticos para evolucao digital.',
           href: '/quem-somos/base-de-conhecimento',
-          link_label: 'Ver conteúdos',
+          link_label: 'Ver conteudos',
           delay: 320
         } %}
       </div>
     </section>
 
-    <section class="nc-section" aria-label="Gestão CEDE" data-aos="fade-up" data-aos-delay="40">
+    <section class="nc-section" aria-label="Gestao NatalCode" data-aos="fade-up" data-aos-delay="40">
       {% include 'components/section-header.twig' with {
-        kicker: 'Transparência',
-        title: 'Gestão CEDE',
-        lead: 'Consulte a diretoria e as funções institucionais atualizadas na página Quem Somos.'
+        kicker: 'Time',
+        title: 'Gestao NatalCode',
+        lead: 'Consulte os perfis institucionais e funcoes de operacao na pagina Quem Somos.'
       } %}
 
       <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="140">
-        <a class="nc-btn nc-btn-primary" href="/quem-somos/gestao-cede">Ver gestão completa</a>
+        <a class="nc-btn nc-btn-primary" href="/quem-somos/gestao-cede">Ver time completo</a>
       </div>
     </section>
 
     {% include 'home/final-cta.twig' %}
-    {% include 'home/donation.twig' %}
   </main>
 {% endblock %}

@@ -32,8 +32,8 @@ class MemberManagerAreaPageAction extends AbstractMemberGuardedPageAction
 
         return $this->renderPage($response, 'pages/member-manager.twig', [
             'member_data' => $member,
-            'page_title' => 'Área de Gestão | CEDE',
-            'page_url' => 'https://cedern.org/membro/gestao',
+            'page_title' => 'Área de Gestão | NatalCode',
+            'page_url' => 'https://natalcode.com.br/membro/gestao',
             'page_description' => 'Área interna disponível para gerente e administrador.',
         ]);
     }

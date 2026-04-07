@@ -376,7 +376,7 @@ class AdminBookshopStockMovementFormPageAction extends AbstractAdminBookshopActi
             'bookshop_stock_movement_lot_required' => $this->isStockLotRequired($mode, $selectedMovementType, $selectedLots),
             'bookshop_stock_movement_book_options' => $bookOptions,
             'page_title' => ($mode === 'adjustment' ? 'Novo ajuste de estoque' : 'Nova entrada de estoque') . ' | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/movimentacoes/nova?mode=' . rawurlencode($mode),
+            'page_url' => 'https://natalcode.com.br/painel/livraria/movimentacoes/nova?mode=' . rawurlencode($mode),
             'page_description' => 'Formulário do dashboard para registrar entradas e ajustes de estoque da livraria.',
         ]);
     }

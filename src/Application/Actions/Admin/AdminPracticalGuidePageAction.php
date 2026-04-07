@@ -13,9 +13,9 @@ class AdminPracticalGuidePageAction extends AbstractPageAction
     public function __invoke(Request $request, Response $response): Response
     {
         return $this->renderPage($response, 'pages/admin-practical-guide.twig', [
-            'page_title' => 'Guia Prático | Painel CEDE',
-            'page_url' => 'https://cedern.org/painel/guia-pratico',
-            'page_description' => 'Guia operacional para uso da agenda e rotinas administrativas no painel CEDE.',
+            'page_title' => 'Guia Prático | Painel NatalCode',
+            'page_url' => 'https://natalcode.com.br/painel/guia-pratico',
+            'page_description' => 'Guia operacional para uso da agenda e rotinas administrativas no painel NatalCode.',
         ]);
     }
 }

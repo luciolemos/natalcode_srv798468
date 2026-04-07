@@ -35,7 +35,7 @@ class AdminBookshopSaleViewPageAction extends AbstractAdminBookshopAction
             'bookshop_sale' => $sale,
             'admin_status' => trim((string) ($flash['status'] ?? '')),
             'page_title' => 'Venda ' . (string) ($sale['sale_code'] ?? '') . ' | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/vendas/' . $id,
+            'page_url' => 'https://natalcode.com.br/painel/livraria/vendas/' . $id,
             'page_description' => 'Resumo administrativo da venda de balcão da livraria.',
         ]);
     }

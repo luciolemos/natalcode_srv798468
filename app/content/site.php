@@ -3,39 +3,36 @@
 declare(strict_types=1);
 
 return [
-    'name' => 'CEDE',
-    'legalName' => 'Centro de Estudos da Doutrina Espírita (CEDE)',
-    'tagline' => 'Estudo, acolhimento fraterno e prática do bem à luz do Espiritismo.',
+    'name' => 'NatalCode',
+    'legalName' => 'NatalCode Agencia Digital',
+    'tagline' => 'Estrategia, design e tecnologia para negocios digitais.',
     'brand' => [
         'homeHref' => '/',
-        'logoSrc' => '/assets/img/brands/cede4_logo.png',
-        'logoAlt' => 'CEDE',
-        'motto' => 'Iluminando consciências, transformando vidas.',
+        'logoSrc' => '/assets/img/brand/natalcode_logo_horizontal_black_1158x314.png',
+        'logoLightSrc' => '/assets/img/brand/natalcode_logo_horizontal_black_1158x314.png',
+        'logoDarkSrc' => '/assets/img/brand/natalcode_logo_horizontal_white_1158x314.png',
+        'logoAlt' => 'NatalCode',
+        'motto' => 'Codigo com proposito, design com resultado.',
     ],
     'contact' => [
-        'email' => 'cede@cedern.org',
-        'address' => 'R. Frejó, 44 - Nova Parnamirim, Parnamirim - RN, 59150-663.',
-        'mapUrl' => 'https://www.google.com/maps/search/?api=1&query=R.%20Frej%C3%B3%2C%2044%20-%20Nova%20Parnamirim%2C%20Parnamirim%20-%20RN%2C%2059150-663',
+        'email' => 'contato@natalcode.com.br',
+        'address' => 'Atendimento remoto para todo o Brasil.',
+        'mapUrl' => 'https://natalcode.com.br/contato',
     ],
     'social' => [
         'instagram' => [
-            'url' => 'https://www.instagram.com/cedeoficialrn/',
-            'label' => 'Instagram oficial: @cedeoficialrn',
+            'url' => 'https://www.instagram.com/natalcode/',
+            'label' => 'Instagram oficial: @natalcode',
         ],
     ],
     'institutional' => [
-        'statuteExcerpt' => 'O Centro de Estudos da Doutrina Espírita - CEDE, fundado em 09 de janeiro de 2001, '
-            . 'é uma associação civil de caráter religioso, '
-            . 'filosófico, científico, cultural e filantrópico, sem fins lucrativos, com sede e foro na cidade de '
-            . 'Parnamirim/RN, localizada à Rua Frejó, nº 44, bairro Nova Parnamirim.',
-        'contactSummary' => 'Fundado em 09 de janeiro de 2001, o CEDE é uma associação civil sem fins lucrativos '
-            . 'com sede em Parnamirim/RN, à Rua Frejó, nº 44, bairro Nova Parnamirim.',
-        'footerSummary' => 'Fundado em 09 de janeiro de 2001 • Associação civil sem fins lucrativos • '
-            . 'Parnamirim/RN',
+        'statuteExcerpt' => 'A NatalCode e uma agencia digital focada em estrategia, design e desenvolvimento web, com atuacao orientada a resultado e experiencia do usuario.',
+        'contactSummary' => 'Atendemos empresas, profissionais e projetos que precisam de presenca digital clara, rapida e confiavel.',
+        'footerSummary' => 'Agencia digital • Desenvolvimento web • SEO • Performance',
     ],
     'footer' => [
-        'kicker' => 'Presença e acolhimento',
-        'description' => 'O CEDE mantém suas portas abertas à comunidade, oferecendo estudo doutrinário, atendimento fraterno e convivência cristã, com seriedade, organização e acolhimento.',
+        'kicker' => 'Presenca digital orientada a resultado',
+        'description' => 'Da landing page ao sistema sob medida, estruturamos projetos digitais com visao de produto, performance e evolucao continua.',
         'navGroups' => [
             [
                 'title' => 'Institucional',
@@ -54,7 +51,7 @@ return [
                 ],
             ],
             [
-                'title' => 'Loja',
+                'title' => 'Recursos',
                 'links' => [
                     ['path' => '/loja', 'key' => 'loja'],
                     ['path' => '/loja/livraria', 'key' => 'livraria'],
@@ -62,10 +59,10 @@ return [
                 ],
             ],
         ],
-        'contactKicker' => 'Visite o CEDE',
-        'contactTitle' => 'Fale conosco ou venha nos conhecer',
-        'contactLead' => 'Acompanhe a agenda pública, envie sua mensagem ou trace sua rota até a casa.',
-        'bottomNote' => 'Parnamirim/RN',
+        'contactKicker' => 'Vamos conversar',
+        'contactTitle' => 'Fale com a NatalCode',
+        'contactLead' => 'Envie sua ideia e retornamos com proximo passo, escopo inicial e estimativa.',
+        'bottomNote' => 'Atendimento nacional',
         'cnpj' => '04.242.556/0001-45',
     ],
 ];

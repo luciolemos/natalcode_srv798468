@@ -209,8 +209,8 @@ class AdminAgendaListPageAction extends AbstractAdminAgendaAction
                 'next_url' => $nextPageUrl,
                 'page_size_options' => $pageSizeOptions,
             ],
-            'page_title' => 'Dashboard Agenda | CEDE',
-            'page_url' => 'https://cedern.org/painel/eventos',
+            'page_title' => 'Dashboard Agenda | NatalCode',
+            'page_url' => 'https://natalcode.com.br/painel/eventos',
             'page_description' => 'Painel do dashboard para gestão de eventos da agenda.',
         ]);
     }

@@ -48,13 +48,13 @@ class StoreBookshopPageAction extends AbstractPageAction
 
     protected function getPageTitle(): string
     {
-        return 'Livraria | Loja | CEDE';
+        return 'NatalCode Labs | Loja | NatalCode';
     }
 
     protected function getPageDescription(): string
     {
-        return 'Consulte o catalogo publico da Livraria Auta de Sousa. '
-            . 'A venda dos livros e presencial, diretamente no balcao da casa.';
+        return 'Consulte o catalogo publico da NatalCode Labs. '
+            . 'A venda dos itens e presencial, com atendimento direto da equipe.';
     }
 
     public function __invoke(Request $request, Response $response): Response
@@ -64,7 +64,7 @@ class StoreBookshopPageAction extends AbstractPageAction
         $genres = [];
         $basePath = rtrim((string) $request->getUri()->getPath(), '/');
         $basePath = $basePath !== '' ? $basePath : $this->getFallbackBasePath();
-        $pageUrlBase = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://cedern.org/'), '/');
+        $pageUrlBase = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'), '/');
 
         try {
             $books = $this->bookshopRepository->findCatalogBooks();

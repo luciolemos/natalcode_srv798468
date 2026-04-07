@@ -16,9 +16,9 @@ class AboutMissionPageAction extends AbstractPageAction
 
         return $this->renderPage($response, 'pages/about-detail.twig', [
             'about' => $about,
-            'page_title' => 'Missão | CEDE',
-            'page_url' => 'https://cedern.org/quem-somos/missao',
-            'page_description' => 'Conheça a missão institucional do CEDE.',
+            'page_title' => 'Missão | NatalCode',
+            'page_url' => 'https://natalcode.com.br/quem-somos/missao',
+            'page_description' => 'Conheça a missão institucional do NatalCode.',
         ]);
     }
 }

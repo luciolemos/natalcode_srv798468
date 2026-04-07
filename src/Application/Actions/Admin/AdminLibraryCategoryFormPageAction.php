@@ -184,7 +184,7 @@ class AdminLibraryCategoryFormPageAction extends AbstractAdminLibraryAction
             'library_category_form_is_edit' => $isEdit,
             'library_category_id' => $existingCategory['id'] ?? null,
             'page_title' => ($isEdit ? 'Editar categoria da central' : 'Nova categoria da central') . ' | Dashboard',
-            'page_url' => 'https://cedern.org/painel/biblioteca/categorias',
+            'page_url' => 'https://natalcode.com.br/painel/biblioteca/categorias',
             'page_description' => 'Formulário do dashboard para categorias da central de conteúdo.',
         ]);
     }

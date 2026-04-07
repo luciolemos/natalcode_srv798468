@@ -390,7 +390,7 @@ class AdminLibraryBookFormPageAction extends AbstractAdminLibraryAction
             'library_book_id' => $existingBook['id'] ?? null,
             'library_book_categories' => $categoryOptions,
             'page_title' => ($isEdit ? 'Editar livro' : 'Novo livro') . ' | Dashboard',
-            'page_url' => 'https://cedern.org/painel/biblioteca/livros',
+            'page_url' => 'https://natalcode.com.br/painel/biblioteca/livros',
             'page_description' => 'Formulário do dashboard para cadastro de conteúdos da central de conteúdo.',
         ]);
     }

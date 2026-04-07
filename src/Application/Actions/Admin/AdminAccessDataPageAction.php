@@ -237,8 +237,8 @@ class AdminAccessDataPageAction extends AbstractPageAction
             'admin_document_dashboard_lead' => 'Edite o registro interno de dados de acesso disponível apenas no painel administrativo.',
             'admin_document_saved_message' => 'Dados de acesso atualizados com sucesso.',
             'admin_document_error_message' => 'Não foi possível salvar Dados de acesso.',
-            'page_title' => 'Dados de acesso | Painel CEDE',
-            'page_url' => 'https://cedern.org' . self::FORM_ACTION_PATH,
+            'page_title' => 'Dados de acesso | Painel NatalCode',
+            'page_url' => 'https://natalcode.com.br' . self::FORM_ACTION_PATH,
             'page_description' => 'Edição da página institucional de dados de acesso.',
         ]);
     }

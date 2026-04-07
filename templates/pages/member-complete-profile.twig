@@ -18,11 +18,11 @@
 
         <div class="nc-member-profile-notice" role="note" aria-label="Orientações sobre dados do perfil">
           <strong>Dados necessários para ativar sua área do membro</strong>
-          <p>Usamos essas informações para identificar seu cadastro, manter contato com você e proteger o acesso à área restrita do CEDE.</p>
+          <p>Usamos essas informações para identificar seu cadastro, manter contato com você e proteger o acesso à área restrita do NatalCode.</p>
           <ul class="nc-member-profile-notice-list">
             <li><span>Obrigatórios:</span> foto de perfil, celular e data de nascimento.</li>
             <li><span>Opcional:</span> telefone fixo.</li>
-            <li class="nc-member-profile-notice-line"><span>Transparência:</span> o tratamento segue a <a class="nc-link" href="/politica-de-privacidade">Política de Privacidade</a> do CEDE.</li>
+            <li class="nc-member-profile-notice-line"><span>Transparência:</span> o tratamento segue a <a class="nc-link" href="/politica-de-privacidade">Política de Privacidade</a> do NatalCode.</li>
           </ul>
         </div>
 
@@ -136,7 +136,7 @@
                 {% if member_profile_privacy_notice_required %}
                   <label class="nc-member-profile-consent" for="privacy_notice_acknowledged">
                     <input id="privacy_notice_acknowledged" name="privacy_notice_acknowledged" type="checkbox" value="1"{% if member_profile_form.privacy_notice_acknowledged|default('') == '1' %} checked{% endif %} required>
-                    <span>Declaro ciência do aviso acima e da <a class="nc-link" href="/politica-de-privacidade" target="_blank" rel="noopener">Política de Privacidade</a> do CEDE para tratamento dos meus dados nesta etapa de ativação da área do membro.</span>
+                    <span>Declaro ciência do aviso acima e da <a class="nc-link" href="/politica-de-privacidade" target="_blank" rel="noopener">Política de Privacidade</a> do NatalCode para tratamento dos meus dados nesta etapa de ativação da área do membro.</span>
                   </label>
                   <small class="nc-member-profile-help">Ao salvar, o sistema registrará a ciência deste aviso para a versão {{ member_profile_privacy_notice_version }}.</small>
                 {% elseif member_profile_privacy_notice_acknowledged_at %}

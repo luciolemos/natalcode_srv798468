@@ -12,9 +12,9 @@ class StoreBazaarPageAction extends AbstractPageAction
     public function __invoke(Request $request, Response $response): Response
     {
         $response = $this->renderPage($response, 'pages/store-bazaar.twig', [
-            'page_title' => 'Bazar | Loja | CEDE',
-            'page_url' => 'https://cedern.org/loja/bazar',
-            'page_description' => 'O Bazar do CEDE está em preparação e ainda não foi disponibilizado no site.',
+            'page_title' => 'Bazar | Loja | NatalCode',
+            'page_url' => 'https://natalcode.com.br/loja/bazar',
+            'page_description' => 'O Bazar do NatalCode está em preparação e ainda não foi disponibilizado no site.',
         ]);
 
         return $response->withStatus(404);

@@ -25,8 +25,8 @@ class AdminMemberUsersPageAction extends AbstractPageAction
     private const SORT_FIELDS = ['id', 'full_name', 'email', 'status', 'role_name', 'member_type_label'];
 
     private const INSTITUTIONAL_ROLE_OPTIONS = [
-        'Presidente CEDE',
-        'Vice-presidente CEDE',
+        'Presidente NatalCode',
+        'Vice-presidente NatalCode',
         'Secretário',
         'Diretor de Finanças',
         'Diretor de Eventos',
@@ -414,7 +414,7 @@ class AdminMemberUsersPageAction extends AbstractPageAction
                 'page_size_options' => $pageSizeOptions,
             ],
             'page_title' => 'Usuários | Dashboard Agenda',
-            'page_url' => 'https://cedern.org/painel/usuarios',
+            'page_url' => 'https://natalcode.com.br/painel/usuarios',
             'page_description' => 'Validação de cadastro e atribuição de perfis de usuário.',
         ]);
     }

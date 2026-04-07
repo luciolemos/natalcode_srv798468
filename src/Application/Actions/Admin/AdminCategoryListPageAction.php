@@ -202,7 +202,7 @@ class AdminCategoryListPageAction extends AbstractAdminAgendaAction
                 'page_size_options' => $pageSizeOptions,
             ],
             'page_title' => 'Categorias | Dashboard Agenda',
-            'page_url' => 'https://cedern.org/painel/categorias',
+            'page_url' => 'https://natalcode.com.br/painel/categorias',
             'page_description' => 'Painel do dashboard para gestão de categorias de eventos.',
         ]);
     }

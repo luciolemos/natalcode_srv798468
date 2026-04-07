@@ -13,10 +13,9 @@ class FaqPracticesPageAction extends AbstractPageAction
     {
         return $this->renderPage($response, 'pages/faq-category.twig', [
             'faq_category_slug' => 'praticas',
-            'page_title' => 'FAQ Práticas da Casa | CEDE',
-            'page_url' => 'https://cedern.org/faq/praticas',
-            'page_description' => 'Perguntas frequentes sobre atendimento fraterno, '
-                . 'passes e práticas da casa espírita.',
+            'page_title' => 'FAQ Entrega | NatalCode',
+            'page_url' => 'https://natalcode.com.br/faq/praticas',
+            'page_description' => 'Perguntas frequentes sobre suporte, manutencao e rotina de entrega.',
         ]);
     }
 }

@@ -189,12 +189,12 @@
         {% set receipt_address = site_contact.address|default('') %}
         <div class="nc-bookshop-receipt-brand-copy">
           <p class="nc-bookshop-receipt-kicker">Comprovante institucional</p>
-          <h3>{{ site.legalName|default(site.name|default('CEDE')) }}</h3>
+          <h3>{{ site.legalName|default(site.name|default('NatalCode')) }}</h3>
           {% if receipt_address %}
             <p>{{ receipt_address|replace({' - Nova Parnamirim, ': ' - Nova Parnamirim<br>'})|raw }}</p>
           {% endif %}
           <p class="nc-bookshop-receipt-brand-inline">
-            <span>www.cedern.org</span>
+            <span>www.natalcode.com.br</span>
           </p>
         </div>
       </div>

@@ -13,7 +13,7 @@ class MySqlBookshopRepository implements BookshopRepository
 
     private const SALE_DISPLAY_TIMEZONE = 'America/Fortaleza';
 
-    private const BOOK_SKU_PREFIX = 'CEDE-LIV-';
+    private const BOOK_SKU_PREFIX = 'NATALCODE-LIV-';
 
     private const BOOK_SKU_PADDING = 4;
 
@@ -208,7 +208,7 @@ class MySqlBookshopRepository implements BookshopRepository
             $statement = $this->pdo->query(<<<SQL
                 SELECT sku
                 FROM bookshop_books
-                WHERE sku REGEXP '^CEDE-LIV-[0-9]{4}$'
+                WHERE sku REGEXP '^(CEDE|NATALCODE)-LIV-[0-9]{4}$'
                 ORDER BY CAST(RIGHT(sku, 4) AS UNSIGNED) DESC
                 LIMIT 1
             SQL);
@@ -1730,7 +1730,7 @@ class MySqlBookshopRepository implements BookshopRepository
 
     private function extractGeneratedBookSkuNumber(string $sku): int
     {
-        if (preg_match('/^CEDE-LIV-(\d{4})$/', trim($sku), $matches) !== 1) {
+        if (preg_match('/^(?:CEDE|NATALCODE)-LIV-(\d{4})$/', trim($sku), $matches) !== 1) {
             return 0;
         }
 

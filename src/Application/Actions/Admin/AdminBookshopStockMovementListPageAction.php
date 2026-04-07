@@ -209,8 +209,8 @@ class AdminBookshopStockMovementListPageAction extends AbstractAdminBookshopActi
                 'stock_quantity' => $flashStockQuantity,
             ],
             'page_title' => 'Movimentações de estoque | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/movimentacoes',
-            'page_description' => 'Histórico de entradas e ajustes de estoque da livraria do CEDE.',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/movimentacoes',
+            'page_description' => 'Histórico de entradas e ajustes de estoque da livraria do NatalCode.',
         ]);
     }
 }

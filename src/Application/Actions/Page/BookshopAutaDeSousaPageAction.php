@@ -25,12 +25,12 @@ class BookshopAutaDeSousaPageAction extends AbstractPageAction
         return $this->renderPage($response, 'pages/bookshop-auta-de-sousa.twig', [
             'bookshop_auta' => $autaPage,
             'page_title' => $autaName !== ''
-                ? $autaName . ' | Livraria | CEDE'
-                : 'Livraria Auta de Sousa | CEDE',
-            'page_url' => 'https://cedern.org/loja/livraria-auta-de-sousa',
+                ? $autaName . ' | Labs | NatalCode'
+                : 'NatalCode Labs | NatalCode',
+            'page_url' => 'https://natalcode.com.br/loja/livraria-auta-de-sousa',
             'page_description' => $pageDescription !== ''
                 ? $pageDescription
-                : 'Conheça a inspiração que dá nome à Livraria Auta de Sousa.',
+                : 'Conheca os principios e experimentos da NatalCode Labs.',
         ]);
     }
 }

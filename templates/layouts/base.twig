@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% set page_title = page_title|default(app_default_page_title|default('CEDE | Centro de Estudos da Doutrina Espírita')) %}
-  {% set page_description = page_description|default(app_default_page_description|default('Centro de Estudos da Doutrina Espírita (CEDE): instituição filantrópica dedicada ao estudo, à prática e à divulgação da Doutrina Espírita.')) %}
-  {% set page_url = page_url|default(app_default_page_url|default('https://cedern.org/')) %}
-  {% set page_image = page_image|default(app_default_page_image|default('https://cedern.org/assets/img/cedern/cede1_1600_1000.png')) %}
-  {% set site_name = site_name|default(app_default_site_name|default('CEDE')) %}
-  {% set twitter_site = twitter_site|default(app_default_twitter_site|default('@cedeoficialrn')) %}
+  {% set page_title = page_title|default(app_default_page_title|default('NatalCode | Agencia Digital')) %}
+  {% set page_description = page_description|default(app_default_page_description|default('NatalCode Agencia Digital: criacao de sites, landing pages e sistemas web com foco em performance e conversao.')) %}
+  {% set page_url = page_url|default(app_default_page_url|default('https://natalcode.com.br/')) %}
+  {% set page_image = page_image|default(app_default_page_image|default('https://natalcode.com.br/assets/img/brand/natalcode1.png')) %}
+  {% set site_name = site_name|default(app_default_site_name|default('NatalCode')) %}
+  {% set twitter_site = twitter_site|default(app_default_twitter_site|default('@natalcode')) %}
   <title>{% block title %}{{ page_title }}{% endblock %}</title>
   <meta name="description" content="{{ page_description }}">
   <meta property="og:title" content="{{ page_title }}">
@@ -56,9 +56,9 @@
   {# <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"> #}
   {% set asset_version = app_asset_version|default('1') %}
   <link rel="stylesheet" href="/assets/css/cedern.css?v={{ asset_version }}">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/brands/cede4_logo.png?v={{ asset_version }}">
-  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/brands/cede4_logo.png?v={{ asset_version }}">
-  <link rel="apple-touch-icon" href="/assets/img/brands/cede4_logo.png?v={{ asset_version }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/brand/nc5.png?v={{ asset_version }}">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/brand/nc5.png?v={{ asset_version }}">
+  <link rel="apple-touch-icon" href="/assets/img/brand/nc5.png?v={{ asset_version }}">
   {% if app_recaptcha_enabled and app_recaptcha_site_key|default('') %}
     <script src="https://www.google.com/recaptcha/api.js?render={{ app_recaptcha_site_key|url_encode }}" async defer></script>
     <script src="/assets/js/cedern-recaptcha.js?v={{ asset_version }}" defer></script>

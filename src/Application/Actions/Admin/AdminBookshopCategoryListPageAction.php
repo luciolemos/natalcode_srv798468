@@ -214,8 +214,8 @@ class AdminBookshopCategoryListPageAction extends AbstractAdminBookshopAction
                 'page_size_options' => $pageSizeOptions,
             ],
             'page_title' => 'Categorias Doutrinárias da Livraria | Dashboard',
-            'page_url' => 'https://cedern.org/painel/livraria/categorias',
-            'page_description' => 'Painel para gestão de categorias doutrinárias do acervo da livraria do CEDE.',
+            'page_url' => 'https://natalcode.com.br/painel/livraria/categorias',
+            'page_description' => 'Painel para gestão de categorias doutrinárias do acervo da livraria do NatalCode.',
         ]);
     }
 }
