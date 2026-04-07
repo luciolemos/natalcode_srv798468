@@ -1,5 +1,39 @@
 (function () {
-  const parseImages = (rawValue) => {
+  const normalizeMediaItem = (item) => {
+    if (typeof item === 'string') {
+      const source = item.trim();
+      if (!source) {
+        return null;
+      }
+
+      return {
+        src: source,
+        srcset: '',
+        avifSrcset: '',
+        webpSrcset: '',
+        sizes: '100vw',
+      };
+    }
+
+    if (!item || typeof item !== 'object') {
+      return null;
+    }
+
+    const source = typeof item.src === 'string' ? item.src.trim() : '';
+    if (!source) {
+      return null;
+    }
+
+    return {
+      src: source,
+      srcset: typeof item.srcset === 'string' ? item.srcset.trim() : '',
+      avifSrcset: typeof item.avifSrcset === 'string' ? item.avifSrcset.trim() : '',
+      webpSrcset: typeof item.webpSrcset === 'string' ? item.webpSrcset.trim() : '',
+      sizes: typeof item.sizes === 'string' && item.sizes.trim() ? item.sizes.trim() : '100vw',
+    };
+  };
+
+  const parseMediaItems = (rawValue) => {
     if (!rawValue) {
       return [];
     }
@@ -10,9 +44,7 @@
         return [];
       }
 
-      return parsed
-        .map((item) => (typeof item === 'string' ? item.trim() : ''))
-        .filter((item) => item !== '');
+      return parsed.map(normalizeMediaItem).filter((item) => item !== null);
     } catch (error) {
       return [];
     }
@@ -31,12 +63,13 @@
   const preloadImage = (() => {
     const cache = new Map();
 
-    return (imagePath) => {
-      if (!imagePath) {
+    return (media) => {
+      if (!media || !media.src) {
         return Promise.resolve(null);
       }
 
-      const cachedLoad = cache.get(imagePath);
+      const cacheKey = [media.src, media.srcset || '', media.sizes || ''].join('|');
+      const cachedLoad = cache.get(cacheKey);
       if (cachedLoad) {
         return cachedLoad;
       }
@@ -77,25 +110,44 @@
           { once: true }
         );
 
+        if (media.srcset) {
+          image.srcset = media.srcset;
+        }
+
+        if (media.sizes) {
+          image.sizes = media.sizes;
+        }
+
         image.decoding = 'async';
-        image.src = imagePath;
+        image.src = media.src;
 
         if (image.complete) {
           finalize();
         }
       });
 
-      cache.set(imagePath, loadPromise);
+      cache.set(cacheKey, loadPromise);
       return loadPromise;
     };
   })();
 
   const initHeroCarousel = () => {
-    const heroes = document.querySelectorAll('.nc-home-hero[data-hero-images]');
+    const heroes = document.querySelectorAll('.nc-home-hero[data-hero-media], .nc-home-hero[data-hero-images]');
 
     heroes.forEach((hero) => {
-      const images = parseImages(hero.getAttribute('data-hero-images'));
-      if (images.length < 2) {
+      const mediaItems = parseMediaItems(
+        hero.getAttribute('data-hero-media') || hero.getAttribute('data-hero-images')
+      );
+      if (mediaItems.length < 2) {
+        return;
+      }
+
+      const picture = hero.querySelector('[data-hero-picture]');
+      const avifSource = hero.querySelector('[data-hero-source-avif]');
+      const webpSource = hero.querySelector('[data-hero-source-webp]');
+      const imageElement = hero.querySelector('[data-hero-image]');
+
+      if (!picture || !imageElement) {
         return;
       }
 
@@ -111,32 +163,51 @@
       let isUserInteracting = false;
       let prefersReducedMotion = reducedMotionQuery ? reducedMotionQuery.matches : false;
 
+      const setOrRemoveAttr = (element, attributeName, value) => {
+        if (!element) {
+          return;
+        }
+
+        if (!value) {
+          element.removeAttribute(attributeName);
+          return;
+        }
+
+        element.setAttribute(attributeName, value);
+      };
+
+      const applyMediaMarkup = (media) => {
+        if (!media) {
+          return;
+        }
+
+        setOrRemoveAttr(avifSource, 'srcset', media.avifSrcset);
+        setOrRemoveAttr(webpSource, 'srcset', media.webpSrcset);
+        setOrRemoveAttr(imageElement, 'srcset', media.srcset);
+        setOrRemoveAttr(imageElement, 'sizes', media.sizes || '100vw');
+        imageElement.src = media.src;
+      };
+
       const applyImage = async () => {
-        const imagePath = images[currentIndex];
-        if (!imagePath) {
+        const media = mediaItems[currentIndex];
+        if (!media || !media.src) {
           return;
         }
 
         const currentRequestId = renderRequestId + 1;
         renderRequestId = currentRequestId;
 
-        const decodedImage = await preloadImage(imagePath);
+        const decodedImage = await preloadImage(media);
         if (!decodedImage || currentRequestId !== renderRequestId) {
           return;
         }
 
-        hero.style.setProperty('--nc-hero-bg-image', "url('" + imagePath + "')");
+        applyMediaMarkup(media);
       };
 
       const preloadNext = () => {
-        const nextIndex = (currentIndex + 1) % images.length;
-        const nextImagePath = images[nextIndex];
-
-        if (!nextImagePath) {
-          return;
-        }
-
-        void preloadImage(nextImagePath);
+        const nextIndex = (currentIndex + 1) % mediaItems.length;
+        void preloadImage(mediaItems[nextIndex]);
       };
 
       const stopAutoplay = () => {
@@ -155,7 +226,7 @@
         }
 
         autoplayTimer = window.setInterval(() => {
-          currentIndex = (currentIndex + 1) % images.length;
+          currentIndex = (currentIndex + 1) % mediaItems.length;
           void applyImage();
           preloadNext();
         }, intervalMs);
