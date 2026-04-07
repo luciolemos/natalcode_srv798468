@@ -64,6 +64,43 @@ return function (App $app) {
     $cookieName = 'natalcode_vid';
     $cookieMaxAge = 31536000;
 
+    $buildSecurityHeaders = static function (Request $request): array {
+        $uriScheme = strtolower($request->getUri()->getScheme());
+        $forwardedProto = strtolower(trim((string) $request->getHeaderLine('X-Forwarded-Proto')));
+        $serverHttps = strtolower((string) ($_SERVER['HTTPS'] ?? ''));
+        $isHttps = $uriScheme === 'https'
+            || $forwardedProto === 'https'
+            || ($serverHttps !== '' && $serverHttps !== 'off');
+
+        $cspDirectives = [
+            "default-src 'self'",
+            "base-uri 'self'",
+            "form-action 'self'",
+            "frame-ancestors 'self'",
+            "object-src 'none'",
+            "img-src 'self' data: https:",
+            "font-src 'self' data: https://fonts.gstatic.com",
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+            "script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com",
+            "connect-src 'self' https://www.google.com https://www.gstatic.com https://www.google-analytics.com https://region1.google-analytics.com",
+            "frame-src 'self' https://www.google.com https://www.gstatic.com https://recaptcha.google.com https://www.googletagmanager.com",
+        ];
+
+        $headers = [
+            'X-Content-Type-Options' => 'nosniff',
+            'X-Frame-Options' => 'SAMEORIGIN',
+            'Referrer-Policy' => 'strict-origin-when-cross-origin',
+            'Permissions-Policy' => 'geolocation=(), microphone=(), camera=(), payment=()',
+            'Content-Security-Policy' => implode('; ', $cspDirectives),
+        ];
+
+        if ($isHttps) {
+            $headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
+        }
+
+        return $headers;
+    };
+
     $app->add(function (
         Request $request,
         RequestHandler $handler
@@ -289,6 +326,32 @@ return function (App $app) {
         }
 
         return $handler->handle($request);
+    });
+
+    $app->add(function (
+        Request $request,
+        RequestHandler $handler
+    ) use (
+        $buildSecurityHeaders
+    ) {
+        $response = $handler->handle($request);
+        $contentType = strtolower($response->getHeaderLine('Content-Type'));
+        $isHtmlResponse = $contentType === '' || str_contains($contentType, 'text/html');
+        $securityHeaders = $buildSecurityHeaders($request);
+
+        foreach ($securityHeaders as $headerName => $headerValue) {
+            if ($headerName === 'Content-Security-Policy' && !$isHtmlResponse) {
+                continue;
+            }
+
+            if ($response->hasHeader($headerName)) {
+                continue;
+            }
+
+            $response = $response->withHeader($headerName, $headerValue);
+        }
+
+        return $response;
     });
 
     $app->add(SessionMiddleware::class);

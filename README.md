@@ -24,7 +24,7 @@ Atualmente, a aplicação entrega:
 
 ## Stack
 
-- PHP 8.x
+- PHP 8.4+
 - Slim Framework 4
 - PHP-DI
 - Twig (`slim/twig-view`)
@@ -56,8 +56,11 @@ Atualmente, a aplicação entrega:
 │   ├── routes.php
 │   └── settings.php
 ├── tests/
+│   ├── Application/             # Testes de aplicação e rotas críticas
+│   ├── Domain/                  # Testes de domínio
 │   └── visual/
-│       └── home.spec.js         # Regressão visual da home
+│       ├── home.spec.js         # Regressão visual da home
+│       └── about.spec.js        # Regressão visual da página Quem Somos
 ├── public/
 │   ├── assets/
 │   │   ├── css/cedern.css      # Tokens + componentes + temas

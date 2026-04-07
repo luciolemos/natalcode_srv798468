@@ -92,6 +92,8 @@ return function (ContainerBuilder $containerBuilder) {
             $appDefaultSiteName = trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'NatalCode'));
             $appDefaultTwitterSite = trim((string) ($_ENV['APP_DEFAULT_TWITTER_SITE'] ?? '@natalcode'));
             $appAssetVersion = trim((string) ($_ENV['APP_ASSET_VERSION'] ?? '1'));
+            $appGtmId = strtoupper(trim((string) ($_ENV['APP_GTM_ID'] ?? '')));
+            $appGa4Id = strtoupper(trim((string) ($_ENV['APP_GA4_ID'] ?? '')));
             $recaptchaVerifier = new RecaptchaVerifier();
             $appRecaptchaEnabled = $recaptchaVerifier->isReady();
             $appRecaptchaSiteKey = $recaptchaVerifier->getSiteKey();
@@ -122,6 +124,14 @@ return function (ContainerBuilder $containerBuilder) {
 
             if ($appAssetVersion === '') {
                 $appAssetVersion = '1';
+            }
+
+            if (!preg_match('/^GTM-[A-Z0-9]+$/', $appGtmId)) {
+                $appGtmId = '';
+            }
+
+            if (!preg_match('/^G-[A-Z0-9]+$/', $appGa4Id)) {
+                $appGa4Id = '';
             }
 
             $defaultTheme = $resolveEnvChoice('APP_DEFAULT_THEME');
@@ -248,6 +258,8 @@ return function (ContainerBuilder $containerBuilder) {
             $twig->getEnvironment()->addGlobal('app_default_site_name', $appDefaultSiteName);
             $twig->getEnvironment()->addGlobal('app_default_twitter_site', $appDefaultTwitterSite);
             $twig->getEnvironment()->addGlobal('app_asset_version', $appAssetVersion);
+            $twig->getEnvironment()->addGlobal('app_gtm_id', $appGtmId);
+            $twig->getEnvironment()->addGlobal('app_ga4_id', $appGa4Id);
             $twig->getEnvironment()->addGlobal('app_recaptcha_enabled', $appRecaptchaEnabled);
             $twig->getEnvironment()->addGlobal('app_recaptcha_site_key', $appRecaptchaSiteKey);
             $twig->getEnvironment()->addGlobal('default_theme', $defaultTheme);

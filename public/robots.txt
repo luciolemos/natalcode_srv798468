@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /painel/
+Disallow: /membro/
+Disallow: /entrar
+Disallow: /cadastro
+Disallow: /esqueci-senha
+
+Sitemap: https://natalcode.com.br/sitemap.xml

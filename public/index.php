@@ -23,8 +23,17 @@ if (is_file($projectRoot . '/.env')) {
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
 
-if (false) { // Should be set to true in production
-	$containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
+$appEnv = strtolower(trim((string) ($_ENV['APP_ENV'] ?? 'production')));
+$enableContainerCompilation = !in_array($appEnv, ['dev', 'development', 'local', 'test'], true);
+
+if ($enableContainerCompilation) {
+    $cacheDirectory = $projectRoot . '/var/cache';
+
+    if (!is_dir($cacheDirectory)) {
+        mkdir($cacheDirectory, 0775, true);
+    }
+
+    $containerBuilder->enableCompilation($cacheDirectory);
 }
 
 // Set up settings

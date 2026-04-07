@@ -30,8 +30,19 @@ if grep -q '"statusCode": 500' "$TMP_FILE"; then
   exit 1
 fi
 
-if ! grep -q 'cedern-nav.js' "$TMP_FILE"; then
-  echo "[FAIL] Navigation script reference not found in response"
+if ! grep -qi '<title>.*</title>' "$TMP_FILE"; then
+  echo "[FAIL] Page title not found in HTML response"
+  exit 1
+fi
+
+if ! grep -qi 'name="description"' "$TMP_FILE"; then
+  echo "[FAIL] Meta description not found in HTML response"
+  exit 1
+fi
+
+EXPECTED_SNIPPET="${SMOKE_EXPECTED_SNIPPET:-}"
+if [[ -n "$EXPECTED_SNIPPET" ]] && ! grep -q "$EXPECTED_SNIPPET" "$TMP_FILE"; then
+  echo "[FAIL] Expected snippet not found: $EXPECTED_SNIPPET"
   exit 1
 fi
 
