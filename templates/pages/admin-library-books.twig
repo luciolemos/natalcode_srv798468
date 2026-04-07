@@ -1,0 +1,187 @@
+{% extends 'layouts/admin-dashboard.twig' %}
+
+{% set dashboard_page_kicker = 'Dashboard' %}
+{% set dashboard_page_title = 'Gerenciar Central de conteúdo' %}
+{% set dashboard_page_lead = 'Cadastre, edite e exclua obras com PDF para exibição na central de conteúdo pública.' %}
+
+{% block admin_content %}
+    <section class="nc-section" aria-label="Administração da central de conteúdo" data-aos="fade-up" data-aos-delay="0">
+      {% set toast_message = '' %}
+      {% set toast_tone = 'success' %}
+      {% if admin_status == 'created' %}
+        {% set toast_message = 'Livro criado com sucesso.' %}
+      {% elseif admin_status == 'updated' %}
+        {% set toast_message = 'Livro atualizado com sucesso.' %}
+      {% elseif admin_status == 'deleted' %}
+        {% set toast_message = 'Livro excluído com sucesso.' %}
+      {% elseif admin_status == 'not-found' %}
+        {% set toast_message = 'Livro não encontrado.' %}
+        {% set toast_tone = 'error' %}
+      {% elseif admin_status == 'delete-error' %}
+        {% set toast_message = 'Não foi possível excluir o livro.' %}
+        {% set toast_tone = 'error' %}
+      {% endif %}
+
+      {% include 'components/admin-toast.twig' with {
+        message: toast_message,
+        tone: toast_tone
+      } %}
+
+      <div class="nc-actions nc-admin-toolbar is-stacked-mobile" data-aos="fade-up" data-aos-delay="80">
+        <a class="nc-btn nc-btn-secondary nc-btn-back" href="/painel">Voltar ao painel</a>
+        <a class="nc-btn nc-btn-secondary" href="/painel/biblioteca/categorias">Categorias</a>
+        <a class="nc-btn nc-btn-secondary" href="/quem-somos/base-de-conhecimento">Abrir página pública</a>
+        <a class="nc-btn nc-btn-primary nc-admin-action-create nc-actions-edge-button" href="/painel/biblioteca/livros/novo" aria-label="Nova obra" title="Nova obra">+ Conteúdo</a>
+      </div>
+
+      {% set pagination = library_books_pagination|default({}) %}
+      {% set sort_links = library_books_sort_links|default({}) %}
+      {% set search_term = library_books_search|default('') %}
+
+      {% if library_books|length == 0 %}
+        <form class="nc-admin-table-search" method="get" action="/painel/biblioteca/livros" data-aos="fade-up" data-aos-delay="95">
+          <label for="nc-library-books-search">Buscar conteúdos</label>
+          <div class="nc-admin-table-search-controls">
+            <input id="nc-library-books-search" name="q" type="search" value="{{ search_term }}" placeholder="Título, autor, editora, ISBN, categoria...">
+            <input type="hidden" name="sort" value="{{ pagination.sort|default('title') }}">
+            <input type="hidden" name="dir" value="{{ pagination.dir|default('asc') }}">
+            <input type="hidden" name="per_page" value="{{ pagination.page_size|default(10) }}">
+            <button class="nc-btn nc-btn-secondary" type="submit">Buscar</button>
+          </div>
+        </form>
+        <p>{{ search_term ? 'Nenhum conteúdo encontrado para a busca informada.' : 'Nenhum conteúdo cadastrado.' }}</p>
+      {% else %}
+        <form class="nc-admin-table-search" method="get" action="/painel/biblioteca/livros" data-aos="fade-up" data-aos-delay="95">
+          <label for="nc-library-books-search">Buscar conteúdos</label>
+          <div class="nc-admin-table-search-controls">
+            <input id="nc-library-books-search" name="q" type="search" value="{{ search_term }}" placeholder="Título, autor, editora, ISBN, categoria...">
+            <input type="hidden" name="sort" value="{{ pagination.sort|default('title') }}">
+            <input type="hidden" name="dir" value="{{ pagination.dir|default('asc') }}">
+            <input type="hidden" name="per_page" value="{{ pagination.page_size|default(10) }}">
+            <button class="nc-btn nc-btn-secondary" type="submit">Buscar</button>
+          </div>
+        </form>
+
+        <div class="nc-admin-table-toolbar" data-aos="fade-up" data-aos-delay="110">
+          <p class="nc-admin-table-counter">
+            Mostrando {{ pagination.start_item }}-{{ pagination.end_item }} de {{ pagination.total_items }} registros
+          </p>
+
+          <form class="nc-admin-table-page-size" method="get" action="/painel/biblioteca/livros">
+            <label for="nc-library-books-per-page">Registros por página</label>
+            <select id="nc-library-books-per-page" name="per_page" onchange="this.form.submit()">
+              {% for option in pagination.page_size_options %}
+                <option value="{{ option.value }}"{% if option.selected %} selected{% endif %}>{{ option.label|default(option.value) }}</option>
+              {% endfor %}
+            </select>
+            <input type="hidden" name="sort" value="{{ pagination.sort|default('title') }}">
+            <input type="hidden" name="dir" value="{{ pagination.dir|default('asc') }}">
+            <input type="hidden" name="q" value="{{ search_term }}">
+            <noscript>
+              <button class="nc-btn nc-btn-secondary" type="submit">Aplicar</button>
+            </noscript>
+          </form>
+        </div>
+
+        <div class="nc-admin-table-wrap" data-aos="fade-up" data-aos-delay="140">
+          <table class="nc-admin-table nc-admin-table-events">
+            <thead>
+              <tr>
+                <th>
+                  <a class="nc-admin-sort-link{% if sort_links.title.active %} is-active{% endif %}" href="{{ sort_links.title.url }}">Título <span aria-hidden="true">{{ sort_links.title.indicator }}</span></a>
+                </th>
+                <th>
+                  <a class="nc-admin-sort-link{% if sort_links.category_name.active %} is-active{% endif %}" href="{{ sort_links.category_name.url }}">Categoria <span aria-hidden="true">{{ sort_links.category_name.indicator }}</span></a>
+                </th>
+                <th>
+                  <a class="nc-admin-sort-link{% if sort_links.author_name.active %} is-active{% endif %}" href="{{ sort_links.author_name.url }}">Autor <span aria-hidden="true">{{ sort_links.author_name.indicator }}</span></a>
+                </th>
+                <th>
+                  <a class="nc-admin-sort-link{% if sort_links.publisher_name.active %} is-active{% endif %}" href="{{ sort_links.publisher_name.url }}">Editora <span aria-hidden="true">{{ sort_links.publisher_name.indicator }}</span></a>
+                </th>
+                <th>
+                  <a class="nc-admin-sort-link{% if sort_links.publication_year.active %} is-active{% endif %}" href="{{ sort_links.publication_year.url }}">Ano <span aria-hidden="true">{{ sort_links.publication_year.indicator }}</span></a>
+                </th>
+                <th>
+                  <a class="nc-admin-sort-link{% if sort_links.status.active %} is-active{% endif %}" href="{{ sort_links.status.url }}">Status <span aria-hidden="true">{{ sort_links.status.indicator }}</span></a>
+                </th>
+                <th>PDF</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for book in library_books %}
+                <tr>
+                  <td class="nc-agenda-activity-cell" data-label="Título">
+                    <strong>{{ book.title }}</strong>
+                    {% if book.subtitle|default('') %}
+                      <small>{{ book.subtitle }}</small>
+                    {% endif %}
+                  </td>
+                  <td data-label="Categoria">{{ book.category_name|default('-') }}</td>
+                  <td data-label="Autor">{{ book.author_name|default('-') }}</td>
+                  <td data-label="Editora">{{ book.publisher_name|default('-') ?: '-' }}</td>
+                  <td data-label="Ano">{{ book.publication_year|default('-') ?: '-' }}</td>
+                  <td data-label="Status">
+                    <span class="nc-admin-featured-flag{{ book.status == 'published' ? ' is-on' : ' is-off' }}">{{ book.status_label|default('-') }}</span>
+                  </td>
+                  <td data-label="PDF">{{ book.pdf_size_label|default('') ?: 'Sem arquivo' }}</td>
+                  <td class="nc-admin-table-actions" data-label="Ações">
+                    <a class="nc-btn nc-btn-secondary nc-btn-icon nc-admin-action-edit" href="/painel/biblioteca/livros/{{ book.id }}/editar" aria-label="Editar conteúdo {{ book.title }}" title="Editar">
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M4 20H8L18.5 9.5C19.3 8.7 19.3 7.3 18.5 6.5L17.5 5.5C16.7 4.7 15.3 4.7 14.5 5.5L4 16V20Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span class="nc-sr-only">Editar</span>
+                    </a>
+                    <form method="post" action="/painel/biblioteca/livros/{{ book.id }}/excluir" onsubmit="return confirm('Tem certeza que deseja excluir este conteúdo?');">
+                      <button class="nc-btn nc-btn-secondary nc-btn-icon nc-admin-action-delete" type="submit" aria-label="Excluir conteúdo {{ book.title }}" title="Excluir">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M4 7H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                          <path d="M9 11V17M15 11V17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                          <path d="M7 7L8 19C8.08 19.9 8.84 20.6 9.75 20.6H14.25C15.16 20.6 15.92 19.9 16 19L17 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M10 4H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                        <span class="nc-sr-only">Excluir</span>
+                      </button>
+                    </form>
+                    {% if book.pdf_url|default('') %}
+                      <a class="nc-btn nc-btn-secondary nc-btn-icon nc-admin-action-open" href="{{ book.pdf_url }}" target="_blank" rel="noopener" aria-label="Abrir PDF de {{ book.title }}" title="Abrir PDF">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M14 5H19V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M10 14L19 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                          <rect x="5" y="9" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                        </svg>
+                        <span class="nc-sr-only">Abrir PDF</span>
+                      </a>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        {% if pagination.total_pages > 1 %}
+          <nav class="nc-admin-pagination" aria-label="Paginação da central de conteúdo" data-aos="fade-up" data-aos-delay="170">
+            {% if pagination.previous_url %}
+              <a class="nc-link" href="{{ pagination.previous_url }}">← Anterior</a>
+            {% else %}
+              <span class="is-disabled">← Anterior</span>
+            {% endif %}
+
+            <div class="nc-admin-pagination-pages">
+              {% for link in pagination.links %}
+                <a class="nc-link{% if link.active %} is-active{% endif %}" href="{{ link.url }}">{{ link.number }}</a>
+              {% endfor %}
+            </div>
+
+            {% if pagination.next_url %}
+              <a class="nc-link" href="{{ pagination.next_url }}">Próxima →</a>
+            {% else %}
+              <span class="is-disabled">Próxima →</span>
+            {% endif %}
+          </nav>
+        {% endif %}
+      {% endif %}
+    </section>
+{% endblock %}

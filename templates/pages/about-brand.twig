@@ -1,0 +1,56 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <main class="nc-main nc-container nc-home-flow">
+    <section class="nc-section nc-about-detail-copy" aria-label="Nossa marca" data-aos="fade-up" data-aos-delay="0">
+      {% include 'components/section-header.twig' with {
+        kicker: 'Quem Somos',
+        title: 'Nossa Marca',
+        lead: 'A identidade da NatalCode foi desenhada para comunicar clareza tecnica, confianca e foco em resultado.'
+      } %}
+
+      <div class="nc-brand-hero" data-aos="fade-up" data-aos-delay="80">
+        <img
+          src="{{ base_url ?? '' }}/assets/img/brand/natalcode1.png"
+          alt="Marca institucional da NatalCode"
+          class="nc-brand-hero-logo"
+        >
+      </div>
+
+      <div class="nc-list nc-brand-description-list" data-aos="fade-up" data-aos-delay="120">
+        <article class="nc-list-item">
+          <h3>Direcao de marca</h3>
+          <p>A NatalCode adota uma linguagem visual limpa, com contraste forte e tipografia funcional para destacar informacao importante sem ruido.</p>
+        </article>
+
+        <article class="nc-list-item">
+          <h3>Princípios visuais</h3>
+          <ul>
+            <li><strong>Clareza:</strong> composicoes objetivas para facilitar leitura e tomada de decisao.</li>
+            <li><strong>Consistencia:</strong> componentes reutilizaveis para manter padrao entre paginas e produtos.</li>
+            <li><strong>Confianca:</strong> direcao visual profissional para reforcar credibilidade comercial.</li>
+          </ul>
+        </article>
+
+        <article class="nc-list-item">
+          <h3>Aplicacao da marca</h3>
+          <ul>
+            <li><strong>Site institucional:</strong> posicionamento, servicos e conversao.</li>
+            <li><strong>Materiais comerciais:</strong> propostas, apresentacoes e landing pages.</li>
+            <li><strong>Produtos digitais:</strong> interfaces web com foco em usabilidade e performance.</li>
+          </ul>
+        </article>
+
+        <article class="nc-list-item">
+          <h3>Mensagem central</h3>
+          <p>A marca da NatalCode representa execucao tecnica com visao de negocio: menos ruido, mais resultado.</p>
+        </article>
+      </div>
+
+      <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="180">
+        <a class="nc-btn nc-btn-secondary" href="/quem-somos">Voltar para Quem Somos</a>
+        <a class="nc-btn nc-btn-primary" href="/contato">Falar com a NatalCode</a>
+      </div>
+    </section>
+  </main>
+{% endblock %}

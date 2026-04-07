@@ -1,0 +1,20 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <main class="nc-main nc-container nc-home-flow">
+    {% include 'home/faq.twig' %}
+    <section class="nc-section" aria-label="Categorias de dúvidas">
+      {% include 'components/section-header.twig' with {
+        kicker: 'FAQ',
+        title: 'Encontre respostas por tema',
+        lead: 'Selecione a categoria desejada para esclarecer duvidas sobre estrategia, contratacao e entrega.'
+      } %}
+      <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="120">
+        <a class="nc-btn nc-btn-secondary" href="/faq/doutrina">Estrategia</a>
+        <a class="nc-btn nc-btn-secondary" href="/faq/participacao">Contratacao</a>
+        <a class="nc-btn nc-btn-secondary" href="/faq/praticas">Entrega</a>
+      </div>
+    </section>
+    {% include 'home/final-cta.twig' %}
+  </main>
+{% endblock %}

@@ -1,5 +1,108 @@
-<footer class="nc-footer">
+{% set footer = site.footer|default({}) %}
+{% set footer_nav_groups = footer.navGroups|default([]) %}
+{% set hidden_footer_group_titles = ['Institucional'] %}
+{% set site_contact = site.contact|default({}) %}
+{% set site_instagram = site.social.instagram|default({}) %}
+{% set brand = site.brand|default({}) %}
+{% set brand_logo_default = '/assets/img/brand/natalcode_logo_horizontal_black_1158x314.png' %}
+{% set brand_logo_src = brand.logoSrc|default(brand_logo_default) %}
+{% set brand_logo_dark_src = brand.logoDarkSrc|default(brand_logo_src) %}
+{% set brand_logo_light_src = brand.logoLightSrc|default(brand_logo_src) %}
+{% set institutional = site.institutional|default({}) %}
+
+<footer id="contato" class="nc-footer">
   <div class="nc-container">
-    <p class="nc-footer-copy">Centro de Estudos da Doutrina Espírita - CEDE &copy; {{ "now"|date("Y") }}</p>
+    <div class="nc-footer-layout">
+      <section class="nc-footer-block nc-footer-brand-block" aria-label="Identidade institucional">
+        <a class="nc-footer-brand" href="{{ brand.homeHref|default('/') }}" aria-label="{{ site.name|default('NatalCode') }} - Início">
+          <img
+            src="{{ (base_url ?? '') ~ brand_logo_dark_src }}"
+            alt="{{ brand.logoAlt|default(site.name|default('NatalCode')) }} (tema escuro)"
+            class="footer-logo logo-dark"
+          >
+          <img
+            src="{{ (base_url ?? '') ~ brand_logo_light_src }}"
+            alt="{{ brand.logoAlt|default(site.name|default('NatalCode')) }} (tema claro)"
+            class="footer-logo logo-light"
+          >
+        </a>
+        {% if footer.kicker|default('') %}
+          <p class="nc-footer-kicker">{{ footer.kicker }}</p>
+        {% endif %}
+        <p class="nc-footer-heading">{{ site.legalName|default(site.name|default('NatalCode')) }}</p>
+        <p class="nc-footer-copy">{{ footer.description|default(site.tagline|default('')) }}</p>
+      </section>
+
+      <div class="nc-footer-nav-grid">
+        {% for group in footer_nav_groups %}
+          {% set group_title = group.title|default('Links') %}
+          {% if group_title not in hidden_footer_group_titles %}
+            {% set group_modifier = '' %}
+            {% if group_title == 'Institucional' %}
+              {% set group_modifier = ' is-institutional' %}
+            {% elseif group_title == 'Loja' or group_title == 'Recursos' %}
+              {% set group_modifier = ' is-store' %}
+            {% endif %}
+            <nav class="nc-footer-block nc-footer-nav-column{{ group_modifier }}" aria-label="{{ group_title|default('Navegação do rodapé') }}">
+              <h3 class="nc-footer-title">{{ group_title|default('Links') }}</h3>
+              {% if group.links|default([]) %}
+                <ul class="nc-footer-links">
+                  {% for link in group.links %}
+                    <li><a class="nc-footer-link" href="{{ link.path }}">{{ link.label|default(link.path) }}</a></li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </nav>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="nc-footer-contact-group">
+        {% if footer.contactKicker|default('') %}
+          <p class="nc-footer-kicker">{{ footer.contactKicker }}</p>
+        {% endif %}
+        <section class="nc-footer-block" aria-label="Informações de contato">
+          <h3 class="nc-footer-contact-title">{{ footer.contactTitle|default('Fale com o NatalCode') }}</h3>
+          {% if footer.contactLead|default('') %}
+            <p class="nc-footer-copy">{{ footer.contactLead }}</p>
+          {% endif %}
+          {% if institutional.footerSummary|default('') %}
+            <p class="nc-footer-copy">{{ institutional.footerSummary }}</p>
+          {% endif %}
+
+          <address class="nc-footer-contact-list">
+            {% if site_contact.address|default('') %}
+              <p class="nc-footer-copy">
+                {% if site_contact.mapUrl|default('') %}
+                  <a class="nc-footer-link nc-footer-contact-link" href="{{ site_contact.mapUrl }}" target="_blank" rel="noopener noreferrer">{{ site_contact.address }}</a>
+                {% else %}
+                  {{ site_contact.address }}
+                {% endif %}
+              </p>
+            {% endif %}
+
+            {% if site_contact.email|default('') %}
+              <p class="nc-footer-copy">
+                <a class="nc-footer-link nc-footer-contact-link" href="mailto:{{ site_contact.email }}">{{ site_contact.email }}</a>
+              </p>
+            {% endif %}
+
+            {% if site_instagram.url|default('') %}
+              <p class="nc-footer-copy">
+                <a class="nc-footer-link nc-footer-contact-link" href="{{ site_instagram.url }}" target="_blank" rel="noopener noreferrer">{{ site_instagram.label|default('Instagram oficial') }}</a>
+              </p>
+            {% endif %}
+          </address>
+
+        </section>
+      </div>
+    </div>
+
+    <div class="nc-footer-bottom">
+      <p class="nc-footer-copy">© {{ "now"|date("Y") }} {{ site.name|default('NatalCode') }}. Todos os direitos reservados.</p>
+      {% if footer.bottomNote|default('') %}
+        <p class="nc-footer-copy">{{ footer.bottomNote }}</p>
+      {% endif %}
+    </div>
   </div>
 </footer>

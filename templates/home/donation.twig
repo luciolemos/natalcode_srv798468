@@ -1,0 +1,51 @@
+<section class="nc-section" aria-label="Solicitar orcamento" data-aos="fade-up" data-aos-delay="20">
+  {% set donation_section = homeContent.sections.donation|default({}) %}
+  {% set donation_options = homeContent.donationOptions|default([]) %}
+
+  <p class="nc-section-kicker" data-aos="fade-up" data-aos-delay="20">{{ donation_section.kicker|default('Orcamento rapido') }}</p>
+
+  <div class="nc-donation-layout">
+    <div class="nc-donation-copy" data-aos="fade-up" data-aos-delay="20">
+      <h2 class="nc-section-title">{{ donation_section.title|default('Inicie seu projeto') }}</h2>
+      <p class="nc-section-lead">
+        {{ donation_section.lead|default('Envie seu briefing para receber escopo inicial e direcionamento tecnico para o seu momento de negocio.') }}
+      </p>
+      <p class="nc-section-lead">
+        {{ donation_section.leadSecondary|default('Escolha o canal de contato mais conveniente para falar com nosso time.') }}
+      </p>
+    </div>
+
+    {% if donation_options|length > 0 %}
+      <div class="nc-feature-grid nc-donation-grid">
+        {% for option in donation_options %}
+          <article class="nc-feature-card" data-aos="fade-up" data-aos-delay="{{ 120 + (loop.index0 * 60) }}">
+            <h3>{{ option.title|default('Canal de contato') }}</h3>
+            <p>{{ option.description|default('Escolha a forma de contato mais conveniente.') }}</p>
+
+            {% if option.qrImage|default('') %}
+              <img class="nc-donation-qr" src="{{ option.qrImage }}" alt="{{ option.qrAlt|default('Imagem de apoio do contato') }}">
+            {% else %}
+              <div class="nc-donation-qr-placeholder" aria-hidden="true">QR Code</div>
+              <p class="nc-donation-helper">{{ option.hint|default('Configure esta opcao no conteudo da home.') }}</p>
+            {% endif %}
+
+            {% if option.pixKey|default('') %}
+              {% set pix_key = option.pixKey|trim %}
+              <div class="nc-donation-key-wrap">
+                <p class="nc-donation-key"><strong>Chave:</strong> <span>{{ pix_key }}</span></p>
+                <button class="nc-btn nc-btn-secondary nc-btn-copy-pix" type="button" data-pix-copy data-pix-key="{{ pix_key }}" aria-label="Copiar chave" title="Copiar chave">Copiar chave</button>
+                <span class="nc-pix-copy-feedback" data-pix-copy-feedback hidden>Copiado!</span>
+              </div>
+            {% endif %}
+
+            {% if option.href|default('') %}
+              <div class="nc-feature-card-action">
+                <a class="nc-btn nc-btn-primary" href="{{ option.href }}" target="_blank" rel="noopener">{{ option.linkLabel|default('Abrir contato') }}</a>
+              </div>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>

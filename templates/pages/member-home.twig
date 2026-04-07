@@ -1,0 +1,280 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <main class="nc-main nc-home-flow">
+    <section class="nc-section" aria-label="Área do membro" data-aos="fade-up" data-aos-delay="0">
+      <div class="nc-container">
+        {% include 'components/section-header.twig' with {
+          kicker: 'Área do Membro',
+          title: 'Bem-vindo, ' ~ (member_data.full_name|default(member_name|default('Membro'))),
+          lead: 'Sua área pessoal está ativa. Perfil: ' ~ (member_data.role_name|default(member_role_name|default('Membro'))) ~ ' • Tipo de Sócio: ' ~ (member_data.member_type_label|default(member_data.member_type|default('Não definido'))) ~ ' • Função no NatalCode: ' ~ (member_data.institutional_role|default('Sem função definida')) ~ '.'
+        } %}
+
+        {% if member_home_status == 'forbidden' %}
+          <p class="nc-admin-login-error" role="alert">Seu perfil não possui permissão para acessar a área solicitada.</p>
+        {% elseif member_home_status == 'profile-updated' %}
+          <p class="nc-admin-login-success" role="status">Perfil atualizado com sucesso.</p>
+        {% elseif member_home_status == 'profile-updated-no-photo' %}
+          <p class="nc-admin-login-success" role="status">Perfil atualizado, mas não foi possível salvar a foto agora. Tente novamente em instantes.</p>
+        {% elseif member_home_status == 'interest-added' %}
+          <p class="nc-admin-login-success" role="status">Evento salvo no seu calendário pessoal.</p>
+        {% elseif member_home_status == 'interest-removed' %}
+          <p class="nc-admin-login-success" role="status">Evento removido do seu calendário pessoal.</p>
+        {% elseif member_home_status == 'interest-error' %}
+          <p class="nc-admin-login-error" role="alert">Não foi possível atualizar seu calendário agora. Tente novamente.</p>
+        {% endif %}
+
+        <section class="nc-member-dashboard" aria-label="Resumo do perfil">
+          <article class="nc-card nc-member-panel nc-member-primary-action">
+            <h3>Ação principal</h3>
+            <p class="nc-member-subtitle">Foque no próximo passo mais importante para avançar na sua jornada.</p>
+            <div class="nc-member-primary-content">
+              <strong>{{ member_primary_action.title|default('Revise seu painel') }}</strong>
+              <p>{{ member_primary_action.description|default('Seu painel está pronto para uso.') }}</p>
+              <a class="nc-btn nc-btn-secondary nc-btn-block-mobile" href="{{ member_primary_action.href|default('/membro') }}">
+                {{ member_primary_action.button_label|default('Continuar') }}
+              </a>
+            </div>
+          </article>
+
+          <article class="nc-card nc-member-panel">
+            <h3>Notificações do membro</h3>
+            <p class="nc-member-subtitle">Avisos relevantes para você agir com rapidez no que importa.</p>
+            <ul class="nc-member-notification-list" aria-live="polite">
+              {% for notification in member_notifications|default([]) %}
+                <li class="is-{{ notification.type|default('info') }}">
+                  <div>
+                    <strong>{{ notification.title }}</strong>
+                    <p>{{ notification.description }}</p>
+                  </div>
+                  <a class="nc-link" href="{{ notification.href|default('/membro') }}">{{ notification.cta|default('Abrir') }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </article>
+
+          <article class="nc-card nc-member-panel">
+            <h3>Aniversariantes do dia</h3>
+            <p class="nc-member-subtitle">Celebre com fraternidade os membros que fazem aniversario hoje.</p>
+
+            {% if member_birthday_members|default([])|length > 0 %}
+              <ul class="nc-member-birthday-list">
+                {% for birthday_member in member_birthday_members %}
+                  <li class="{{ birthday_member.is_current_member ? 'is-current-member' : '' }}">
+                    <div class="nc-member-birthday-person">
+                      <span class="nc-member-birthday-avatar" aria-hidden="true">
+                        {% if birthday_member.profile_photo_path|default('') %}
+                          <img src="/{{ birthday_member.profile_photo_path }}" alt="">
+                        {% else %}
+                          <span>{{ birthday_member.initial|default('M') }}</span>
+                        {% endif %}
+                      </span>
+                      <div>
+                        <strong>{{ birthday_member.display_name|default(birthday_member.full_name|default('Membro')) }}</strong>
+                        <p>{{ birthday_member.caption|default('Aniversaria hoje.') }}</p>
+                      </div>
+                    </div>
+                    {% if birthday_member.is_current_member %}
+                      <span class="nc-member-birthday-badge">Voce</span>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="nc-member-empty">Hoje nao ha aniversariantes cadastrados na area do membro.</p>
+            {% endif %}
+          </article>
+
+          <article class="nc-card nc-member-panel">
+            <h3>Resumo semanal</h3>
+            <p class="nc-member-subtitle">Veja rapidamente como está seu momento atual na área do membro.</p>
+
+            <ul class="nc-member-weekly-highlights">
+              {% for highlight in member_weekly_highlights|default([]) %}
+                <li>
+                  <span>{{ highlight.label }}</span>
+                  <strong>{{ highlight.value }}</strong>
+                </li>
+              {% endfor %}
+            </ul>
+
+            <div class="nc-member-weekly-focus">
+              <h4>{{ member_weekly_focus.title|default('Leitura do momento') }}</h4>
+              <p>{{ member_weekly_focus.description|default('Seu painel está em dia. Continue acompanhando a agenda e as novidades da casa.') }}</p>
+            </div>
+          </article>
+
+          <article class="nc-card nc-member-panel">
+            <h3>Meu calendário pessoal</h3>
+            <p class="nc-member-subtitle">Marque presença nas atividades e acompanhe seus próximos compromissos.</p>
+
+            {% if member_my_upcoming_events|default([])|length > 0 %}
+              <ul class="nc-member-my-events-list">
+                {% for event in member_my_upcoming_events %}
+                  <li>
+                    <div>
+                      <strong>{{ event.title|default('Atividade') }}</strong>
+                      <p>{{ event.starts_at_label|default('Data a confirmar') }}</p>
+                    </div>
+                    <div class="nc-member-my-events-actions">
+                      <a class="nc-link" href="/agenda/{{ event.slug|default('') }}">Detalhes</a>
+                      <a class="nc-link" href="/agenda/{{ event.slug|default('') }}/ics">Baixar .ics</a>
+                      {% if event.google_calendar_url|default('') %}
+                        <a class="nc-link" href="{{ event.google_calendar_url }}" target="_blank" rel="noopener noreferrer">Google Agenda</a>
+                      {% endif %}
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="nc-member-empty">Você ainda não marcou participação em eventos.</p>
+            {% endif %}
+          </article>
+
+          <article class="nc-card nc-member-panel">
+            <h3>Onboarding do membro</h3>
+            <p class="nc-member-subtitle">Acompanhe o progresso da sua conta e finalize os pontos pendentes.</p>
+            <div class="nc-member-onboarding-progress" role="status" aria-live="polite">
+              <div class="nc-member-onboarding-bar" aria-hidden="true">
+                <span style="width: {{ member_onboarding_percent|default(0) }}%;"></span>
+              </div>
+              <p>{{ member_onboarding_completed|default(0) }}/{{ member_onboarding_total|default(0) }} concluídos · {{ member_onboarding_percent|default(0) }}%</p>
+            </div>
+
+            <ul class="nc-member-checklist">
+              {% for item in member_onboarding_checklist|default([]) %}
+                <li class="{{ item.done ? 'is-done' : 'is-pending' }}">
+                  <span class="nc-member-check-indicator" aria-hidden="true">{{ item.done ? '✓' : '•' }}</span>
+                  <span>{{ item.label }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+
+            <div class="nc-actions nc-admin-login-actions nc-member-actions">
+              <a class="nc-btn nc-btn-secondary nc-btn-block-mobile" href="/membro/perfil/completar">Completar perfil</a>
+            </div>
+          </article>
+
+          <article class="nc-card nc-member-panel">
+            <h3>O que fazer agora</h3>
+            <p class="nc-member-subtitle">Próximas ações sugeridas para sua jornada na área de membro.</p>
+
+            {% if member_next_actions|default([])|length > 0 %}
+              <ul class="nc-member-next-actions">
+                {% for action in member_next_actions %}
+                  <li>
+                    <strong>{{ action.title }}</strong>
+                    <p>{{ action.description }}</p>
+                    <a class="nc-link" href="{{ action.href }}">Ir para ação</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="nc-member-empty">Tudo certo por aqui. Seu painel não possui pendências imediatas.</p>
+            {% endif %}
+
+            {% if member_upcoming_events|default([])|length > 0 %}
+              <div class="nc-member-upcoming-block">
+                <h4>Próximos eventos</h4>
+                <ul class="nc-member-upcoming-events">
+                  {% for event in member_upcoming_events %}
+                    <li>
+                      <strong>{{ event.title|default('Atividade') }}</strong>
+                      <span>{{ event.starts_at_label|default('Data a confirmar') }}</span>
+                      <div class="nc-member-upcoming-actions">
+                        <a class="nc-link" href="/agenda/{{ event.slug|default('') }}">Ver detalhes</a>
+                        <a class="nc-link" href="/agenda/{{ event.slug|default('') }}/ics">Baixar .ics</a>
+                        <form method="post" action="/membro/eventos/{{ event.id|default(0) }}/participacao">
+                          <input type="hidden" name="redirect_to" value="/membro">
+                          <input type="hidden" name="intent" value="{{ event.member_interested|default(false) ? 'remove' : 'add' }}">
+                          <button class="nc-link nc-link-button" type="submit">
+                            {{ event.member_interested|default(false) ? 'Não vou' : 'Quero participar' }}
+                          </button>
+                        </form>
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% else %}
+              <p class="nc-member-empty">Nenhum evento publicado no momento. Acompanhe a agenda para novidades.</p>
+            {% endif %}
+          </article>
+
+          <article class="nc-card nc-member-panel">
+            <h3>Últimas movimentações</h3>
+            <p class="nc-member-subtitle">Acompanhe aqui apenas as ações que você acabou de realizar na sua conta.</p>
+            {% if member_recent_timeline|default([])|length > 0 %}
+              <ul class="nc-member-history-list">
+                {% for entry in member_recent_timeline|default([]) %}
+                  <li>
+                    <div>
+                      <strong>{{ entry.title }}</strong>
+                      <p>{{ entry.detail }}</p>
+                    </div>
+                    <span>{{ entry.meta }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="nc-member-empty">Nenhuma movimentação recente registrada nesta sessão.</p>
+            {% endif %}
+          </article>
+
+          <article class="nc-card nc-member-panel">
+            <div class="nc-member-header">
+              <div class="nc-member-avatar-wrap" aria-hidden="true">
+                {% if member_data.profile_photo_path %}
+                  <img class="nc-member-avatar" src="/{{ member_data.profile_photo_path }}" alt="">
+                {% else %}
+                  <div class="nc-member-avatar-placeholder">{{ (member_data.full_name|default('M')|slice(0, 1)|upper) }}</div>
+                {% endif %}
+              </div>
+              <div class="nc-member-header-text">
+                <h3>Dados do cadastro</h3>
+                <p>Essas informações ficam associadas à sua conta de membro.</p>
+              </div>
+            </div>
+
+            <dl class="nc-member-grid">
+              <div><dt>Perfil</dt><dd>{{ member_data.role_name|default('Membro') }}</dd></div>
+              <div><dt>Tipo de Sócio</dt><dd>{{ member_data.member_type_label|default(member_data.member_type|default('Não definido')) }}</dd></div>
+              <div><dt>E-mail</dt><dd>{{ member_data.email|default('-') }}</dd></div>
+              <div><dt>Celular</dt><dd>{{ member_data.phone_mobile|default('-') }}</dd></div>
+              <div><dt>Telefone</dt><dd>{{ member_data.phone_landline|default('-') }}</dd></div>
+              <div><dt>Data de nascimento</dt><dd>{{ member_data.birth_date|default('-') }}</dd></div>
+              <div><dt>Naturalidade</dt><dd>{{ member_data.birth_place|default('-') }}</dd></div>
+              <div><dt>Função no NatalCode</dt><dd>{{ member_data.institutional_role|default('Sem função definida') }}</dd></div>
+            </dl>
+
+            <div class="nc-actions nc-admin-login-actions nc-member-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="80">
+              <a class="nc-btn nc-btn-secondary" href="/membro/perfil/completar">Editar dados do perfil</a>
+              <a class="nc-btn nc-btn-secondary" href="/">Voltar ao site</a>
+              <form method="post" action="/membro/sair" onsubmit="return confirm('Deseja realmente encerrar sua sessão?');">
+                <button class="nc-btn nc-admin-action-delete" type="submit">Encerrar sessão</button>
+              </form>
+            </div>
+          </article>
+
+          <article class="nc-card nc-member-panel">
+            <h3>Permissões e trilhas de acesso</h3>
+            <p class="nc-member-subtitle">Veja claramente o que já está liberado e o que depende de novo papel.</p>
+            <ul class="nc-member-access-list nc-member-permission-list">
+              {% for permission in member_permission_feedback|default([]) %}
+                <li class="{{ permission.unlocked ? 'is-unlocked' : 'is-locked' }}">
+                  <div>
+                    <strong>{{ permission.title }}</strong>
+                    <p>{{ permission.reason }}</p>
+                  </div>
+                  {% if permission.unlocked %}
+                    <a class="nc-link" href="{{ permission.href }}">Acessar</a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </article>
+        </section>
+      </div>
+    </section>
+  </main>
+{% endblock %}

@@ -2,28 +2,28 @@
 
 Descreva objetivamente o que mudou e o motivo.
 
-## Tipo de mudanca
+## Tipo de mudança
 
-- [ ] Conteudo (textos/links em `app/content/home.php`)
+- [ ] Conteúdo (textos/links em `app/content/home.php`)
 - [ ] UI/estilo (Twig/CSS/JS)
 - [ ] CI/qualidade (workflows/checks)
 - [ ] Outro
 
-## Checklist rapido
+## Checklist rápido
 
-- [ ] Mantive a estrutura dos arrays de conteudo (sem remover chaves obrigatorias)
+- [ ] Mantive a estrutura dos arrays de conteúdo (sem remover chaves obrigatórias)
 - [ ] Validei links alterados (`href`) localmente
-- [ ] Mantive delays de animacao em ordem progressiva (quando aplicavel)
-- [ ] Rodei os testes/checks aplicaveis localmente
-- [ ] Se houve mudanca visual intencional, rodei `npm run test:visual:update` e versionei snapshots
+- [ ] Mantive delays de animação em ordem progressiva (quando aplicável)
+- [ ] Rodei os testes/checks aplicáveis localmente
+- [ ] Se houve mudança visual intencional, rodei `npm run test:visual:update` e versionei snapshots
 
-## Validacoes executadas
+## Validações executadas
 
 - [ ] `vendor/bin/phpunit --configuration phpunit.xml`
 - [ ] `vendor/bin/phpstan analyse --configuration phpstan.neon.dist --no-progress`
 - [ ] `vendor/bin/phpcs --standard=phpcs.xml --extensions=php -n src app tests`
 - [ ] `npm run test:visual`
 
-## Evidencias (opcional)
+## Evidências (opcional)
 
-Inclua prints, GIFs, links de preview ou observacoes relevantes.
+Inclua prints, GIFs, links de preview ou observações relevantes.

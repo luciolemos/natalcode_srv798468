@@ -1,0 +1,75 @@
+{% extends 'layouts/admin-dashboard.twig' %}
+
+{% set dashboard_page_kicker = admin_document_dashboard_kicker|default('Dashboard') %}
+{% set dashboard_page_title = admin_document_dashboard_title|default('Documento institucional') %}
+{% set dashboard_page_lead = admin_document_dashboard_lead|default('Edite o conteúdo que será exibido no site público.') %}
+
+{% block admin_content %}
+  <section class="nc-section" aria-label="Edição de documento institucional" data-aos="fade-up" data-aos-delay="0">
+    {% set toast_message = '' %}
+    {% set toast_tone = 'info' %}
+    {% if admin_status == 'saved' %}
+      {% set toast_message = admin_document_saved_message|default('Conteúdo atualizado com sucesso.') %}
+      {% set toast_tone = 'success' %}
+    {% elseif admin_status == 'save-error' %}
+      {% set toast_message = admin_document_error_message|default('Não foi possível salvar o conteúdo.') %}
+      {% set toast_tone = 'error' %}
+    {% endif %}
+
+    {% include 'components/admin-toast.twig' with {
+      message: toast_message,
+      tone: toast_tone
+    } %}
+
+    {% if institution_document_form_errors|length > 0 %}
+      <article class="nc-admin-form-errors" role="alert">
+        <strong>Corrija os campos abaixo:</strong>
+        <ul>
+          {% for error in institution_document_form_errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </article>
+    {% endif %}
+
+    <div class="nc-actions nc-admin-toolbar" data-aos="fade-up" data-aos-delay="60">
+      <a class="nc-btn nc-btn-secondary nc-btn-back" href="/painel">Voltar ao painel</a>
+      {% if admin_document_has_public_page|default(true) %}
+        <a class="nc-btn nc-btn-secondary" href="{{ admin_document_public_url|default('/') }}" target="_blank" rel="noopener">Ver página pública</a>
+      {% endif %}
+    </div>
+
+    <article class="nc-card nc-admin-form-card">
+      <form class="nc-admin-form" method="post" action="{{ admin_document_form_action|default('/painel') }}">
+        <div class="nc-admin-form-grid">
+          <div class="nc-admin-form-field">
+            <label class="nc-admin-form-label" for="title">Título público</label>
+            <input class="nc-admin-form-input" id="title" name="title" type="text" required value="{{ institution_document_form.title|default('') }}">
+          </div>
+
+          <div class="nc-admin-form-field nc-admin-form-field-full">
+            <label class="nc-admin-form-label" for="body">Texto completo de {{ admin_document_label|default('Documento') }}</label>
+            <textarea class="nc-admin-form-input nc-admin-form-input-statute" id="body" name="body" rows="30" required>{{ institution_document_form.body|default('') }}</textarea>
+            <p class="nc-admin-statute-meta">Mantenha capítulos, artigos, tópicos e parágrafos com as quebras de linha desejadas.</p>
+          </div>
+        </div>
+
+        {% if institution_document_record.updated_at_label|default('') %}
+          <p class="nc-admin-statute-meta">
+            Última atualização: {{ institution_document_record.updated_at_label }}
+            {% if institution_document_record.updated_by_member_id is not null %}
+              • ID do editor: {{ institution_document_record.updated_by_member_id }}
+            {% endif %}
+          </p>
+        {% endif %}
+
+        <div class="nc-actions nc-admin-form-actions" data-aos="fade-up" data-aos-delay="120">
+          <button class="nc-btn nc-btn-primary nc-admin-action-create" type="submit">Salvar {{ admin_document_label|default('documento') }}</button>
+          {% if admin_document_has_public_page|default(true) %}
+            <a class="nc-btn nc-btn-secondary" href="{{ admin_document_public_url|default('/') }}" target="_blank" rel="noopener">Ver página pública</a>
+          {% endif %}
+        </div>
+      </form>
+    </article>
+  </section>
+{% endblock %}

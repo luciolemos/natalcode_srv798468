@@ -1,0 +1,13 @@
+{% extends 'layouts/admin-dashboard.twig' %}
+
+{% set dashboard_page_kicker = 'Dashboard' %}
+{% set dashboard_page_title = 'Guia Operacional da Livraria' %}
+{% set dashboard_page_lead = 'Guia dedicado da operação da livraria física: acervo, importação da planilha e vendas de balcão.' %}
+
+{% block admin_content %}
+  <section class="nc-section" aria-label="Guia operacional da livraria" data-aos="fade-up" data-aos-delay="0">
+    {% include 'pages/partials/admin-bookshop-manual-content.twig' with {
+      manual_pdf_mode: false
+    } %}
+  </section>
+{% endblock %}

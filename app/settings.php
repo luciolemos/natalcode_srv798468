@@ -8,20 +8,34 @@ use DI\ContainerBuilder;
 use Monolog\Logger;
 
 return function (ContainerBuilder $containerBuilder) {
+    $appEnv = strtolower((string) ($_ENV['APP_ENV'] ?? 'production'));
+    $isDevelopment = in_array($appEnv, ['dev', 'development', 'local', 'test'], true);
 
     // Global Settings Object
     $containerBuilder->addDefinitions([
-        SettingsInterface::class => function () {
+        SettingsInterface::class => function () use ($isDevelopment) {
             return new Settings([
-                'displayErrorDetails' => true, // Should be set to false in production
-                'logError'            => false,
-                'logErrorDetails'     => false,
+                'displayErrorDetails' => $isDevelopment,
+                'logError'            => !$isDevelopment,
+                'logErrorDetails'     => !$isDevelopment,
+                'db' => [
+                    'host' => trim((string) ($_ENV['DB_HOST'] ?? '')),
+                    'port' => (int) ($_ENV['DB_PORT'] ?? 3306),
+                    'name' => trim((string) ($_ENV['DB_NAME'] ?? '')),
+                    'user' => trim((string) ($_ENV['DB_USER'] ?? '')),
+                    'pass' => (string) ($_ENV['DB_PASS'] ?? ''),
+                    'charset' => trim((string) ($_ENV['DB_CHARSET'] ?? 'utf8mb4')),
+                    'timezone' => trim((string) ($_ENV['DB_TIMEZONE'] ?? '+00:00')),
+                ],
                 'logger' => [
                     'name' => 'slim-app',
                     'path' => ($_ENV['APP_ENV'] ?? '') === 'test'
                         ? 'php://stderr'
                         : (isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log'),
                     'level' => Logger::DEBUG,
+                ],
+                'agenda' => [
+                    'public_upcoming_limit' => max(1, min(100, (int) ($_ENV['APP_AGENDA_PUBLIC_LIMIT'] ?? 12))),
                 ],
             ]);
         }

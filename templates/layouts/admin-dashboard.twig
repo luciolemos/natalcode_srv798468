@@ -1,0 +1,1005 @@
+{% extends 'layouts/dashboard-base.twig' %}
+
+{% block content %}
+  {% set panel_is_superuser = dashboard_is_admin_session|default(false) %}
+  {% set panel_role_key = member_role_key|default('member') %}
+  {% set panel_can_events = panel_is_superuser or panel_role_key in ['operator', 'manager', 'admin'] %}
+  {% set panel_can_categories = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
+  {% set panel_can_library_books = panel_is_superuser or panel_role_key in ['operator', 'manager', 'admin'] %}
+  {% set panel_can_library_categories = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
+  {% set panel_can_bookshop = panel_is_superuser or panel_role_key in ['bookshop_operator', 'admin'] %}
+  {% set panel_can_users = panel_is_superuser or panel_role_key == 'admin' %}
+  {% set panel_can_cede_management = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
+
+  <main class="nc-dashboard-shell" aria-label="Dashboard administrativo">
+    <header class="nc-dashboard-topbar">
+      <div class="nc-dashboard-topbar-left">
+        <button id="nc-dashboard-sidebar-toggle" class="nc-dashboard-sidebar-toggle" type="button" aria-expanded="false" aria-controls="nc-dashboard-sidebar" aria-label="Abrir menu do dashboard">
+          ☰
+        </button>
+      </div>
+
+      <div class="nc-dashboard-topbar-right">
+        <span class="nc-dashboard-env-badge nc-dashboard-env-badge-{{ dashboard_env_tone|default('prod') }}">
+          {{ dashboard_env_label|default('Produção') }}
+        </span>
+        <span id="nc-dashboard-theme-badge" class="nc-dashboard-theme-badge" aria-live="polite">Tema: padrão</span>
+        {% set dashboard_notification_count = dashboard_admin_notification_count|default(0) %}
+        <details class="nc-dashboard-alerts">
+          <summary aria-label="Notificações administrativas">
+            <span class="nc-dashboard-alerts-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4C9.23858 4 7 6.23858 7 9V11.5C7 13.05 6.41071 14.5446 5.35195 15.6841L4 17.1389H20L18.648 15.6841C17.5893 14.5446 17 13.05 17 11.5V9C17 6.23858 14.7614 4 12 4Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 19C10.4174 19.6227 11.1318 20 12 20C12.8682 20 13.5826 19.6227 14 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="nc-dashboard-alerts-label">Notificações</span>
+            {% if dashboard_notification_count > 0 %}
+              <span class="nc-dashboard-alerts-badge" aria-live="polite">{{ dashboard_notification_count }}</span>
+            {% endif %}
+          </summary>
+          <div class="nc-dashboard-alerts-content">
+            {% if dashboard_notification_count == 0 %}
+              <p class="nc-dashboard-alerts-empty">Nenhuma pendência administrativa no momento.</p>
+            {% else %}
+              {% for notice in dashboard_admin_notifications|default([]) %}
+                <article class="nc-dashboard-alert-item">
+                  <strong>{{ notice.title }}</strong>
+                  <p>{{ notice.description }}</p>
+                  <a class="nc-link" href="{{ notice.href|default('/painel/usuarios') }}">{{ notice.cta|default('Abrir') }}</a>
+                </article>
+              {% endfor %}
+
+              {% if dashboard_admin_pending_users|default([])|length > 0 %}
+                <ul class="nc-dashboard-alert-users" aria-label="Cadastros pendentes mais recentes">
+                  {% for pending_user in dashboard_admin_pending_users %}
+                    <li>
+                      <span>{{ pending_user.full_name|default('Usuário') }}</span>
+                      <small>{{ pending_user.email|default('Sem e-mail') }}</small>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endif %}
+          </div>
+        </details>
+        <details class="nc-dashboard-user-menu">
+          {% set dashboard_user_label = dashboard_user|default('Usuário') %}
+          {% set dashboard_user_role_label = member_role_name|default({
+            'admin': 'Administrador',
+            'bookshop_operator': 'Operador da Livraria',
+            'manager': 'Gestor',
+            'operator': 'Operador',
+            'member': 'Membro'
+          }[panel_role_key]|default('Membro')) %}
+          {% set dashboard_user_initial = dashboard_user_label|slice(0, 1)|upper %}
+          {% set dashboard_user_photo_path = dashboard_user_photo_path|default('') %}
+          <summary>
+            <span class="nc-dashboard-user-avatar">
+              {% if dashboard_user_photo_path %}
+                <img src="/{{ dashboard_user_photo_path }}" alt="">
+              {% else %}
+                {{ dashboard_user_initial }}
+              {% endif %}
+            </span>
+            <span class="nc-dashboard-user-meta">
+              <span class="nc-dashboard-user-name">{{ dashboard_user_label }}</span>
+              <span class="nc-dashboard-user-role">{{ dashboard_user_role_label }}</span>
+            </span>
+            <span class="nc-dashboard-user-caret" aria-hidden="true">▾</span>
+          </summary>
+          <div class="nc-dashboard-user-menu-content">
+            <div class="nc-dashboard-user-menu-identity" aria-label="Identificação do usuário">
+              <strong>{{ dashboard_user_label }}</strong>
+              <small>{{ dashboard_user_role_label }}</small>
+            </div>
+            <a class="nc-link nc-dashboard-user-menu-link" href="/painel">
+              <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V14H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span>Início do painel</span>
+            </a>
+            <details class="nc-dashboard-user-menu-group" {% if current_path starts with '/painel/eventos' or current_path starts with '/painel/categorias' %}open{% endif %}>
+              <summary class="nc-dashboard-user-menu-group-title">AGENDA</summary>
+              <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/eventos">
+                <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 7H20M8 12H20M8 17H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="4.5" cy="7" r="1.5" fill="currentColor"/>
+                    <circle cx="4.5" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="4.5" cy="17" r="1.5" fill="currentColor"/>
+                  </svg>
+                </span>
+                <span>Lista de eventos</span>
+              </a>
+              {% if panel_can_categories %}
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/categorias">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 6.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M5 17.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <circle cx="4" cy="6.5" r="1" fill="currentColor"/>
+                      <circle cx="4" cy="12" r="1" fill="currentColor"/>
+                      <circle cx="4" cy="17.5" r="1" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <span>Lista de categorias</span>
+                </a>
+              {% endif %}
+            </details>
+            {% if panel_can_library_books %}
+              <details class="nc-dashboard-user-menu-group" {% if current_path starts with '/painel/biblioteca/' %}open{% endif %}>
+                <summary class="nc-dashboard-user-menu-group-title">CONTEÚDOS</summary>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/biblioteca/livros">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 4.5A2.5 2.5 0 0 1 8.5 2H19v16H8.5A2.5 2.5 0 0 0 6 20.5V4.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M6 4.5A2.5 2.5 0 0 0 3.5 7V22H17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M9 7H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M9 11H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Conteúdos</span>
+                </a>
+                {% if panel_can_library_categories %}
+                  <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/biblioteca/categorias">
+                    <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 6.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M5 17.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        <circle cx="4" cy="6.5" r="1" fill="currentColor"/>
+                        <circle cx="4" cy="12" r="1" fill="currentColor"/>
+                        <circle cx="4" cy="17.5" r="1" fill="currentColor"/>
+                      </svg>
+                    </span>
+                    <span>Categorias</span>
+                  </a>
+                {% endif %}
+              </details>
+            {% endif %}
+            {% if panel_can_bookshop %}
+              <details class="nc-dashboard-user-menu-group" {% if current_path starts with '/painel/livraria' %}open{% endif %}>
+                <summary class="nc-dashboard-user-menu-group-title">LIVRARIA</summary>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/livraria/acervo">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4 6.5H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M4 17.5H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <circle cx="7" cy="6.5" r="1.2" fill="currentColor"/>
+                      <circle cx="7" cy="12" r="1.2" fill="currentColor"/>
+                      <circle cx="7" cy="17.5" r="1.2" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <span>Acervo</span>
+                </a>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/livraria">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 4H19V20H5V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M9 8H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M9 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M9 16H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Visão geral</span>
+                </a>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/livraria/manual">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 4.5A2.5 2.5 0 0 1 8.5 2H19v16H8.5A2.5 2.5 0 0 0 6 20.5V4.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M6 4.5A2.5 2.5 0 0 0 3.5 7V22H17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M9 7H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M9 11H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Guia operacional</span>
+                </a>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/livraria/relatorios">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 19V11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M12 19V5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M19 19V8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Relatórios</span>
+                </a>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/livraria/movimentacoes">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 7H17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M7 12H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M7 17H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M17 5V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M14.5 7.5H19.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Movimentações</span>
+                </a>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/livraria/colecoes">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 5H17C18.1 5 19 5.9 19 7V17C19 18.1 18.1 19 17 19H7C5.9 19 5 18.1 5 17V7C5 5.9 5.9 5 7 5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M8.5 9H15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M8.5 12H15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M8.5 15H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Coleções</span>
+                </a>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/livraria/categorias">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 6.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M5 17.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <circle cx="4" cy="6.5" r="1" fill="currentColor"/>
+                      <circle cx="4" cy="12" r="1" fill="currentColor"/>
+                      <circle cx="4" cy="17.5" r="1" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <span>Categorias doutrinárias</span>
+                </a>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/livraria/generos">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 6.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M5 17.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <circle cx="4" cy="6.5" r="1" fill="currentColor"/>
+                      <circle cx="4" cy="12" r="1" fill="currentColor"/>
+                      <circle cx="4" cy="17.5" r="1" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <span>Gêneros literários</span>
+                </a>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/livraria/importar">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 4V15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M8 11L12 15L16 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      <rect x="4" y="17" width="16" height="3" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+                    </svg>
+                  </span>
+                  <span>Importar CSV</span>
+                </a>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/livraria/vendas">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                      <path d="M8 10H16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M8 14H12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Vendas PDV</span>
+                </a>
+              </details>
+            {% endif %}
+            {% if panel_can_users %}
+              <details class="nc-dashboard-user-menu-group" {% if current_path starts with '/painel/institucional/' %}open{% endif %}>
+                <summary class="nc-dashboard-user-menu-group-title">INSTITUCIONAL</summary>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/institucional/estatuto">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Editar Estatuto</span>
+                </a>
+
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/institucional/dados-de-acesso">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Dados de acesso</span>
+                </a>
+
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/institucional/governanca-de-dados">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Governança de dados</span>
+                </a>
+
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/institucional/politica-de-privacidade">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Editar Privacidade</span>
+                </a>
+
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/institucional/termos-de-uso">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Editar Termos de Uso</span>
+                </a>
+              </details>
+
+              <details class="nc-dashboard-user-menu-group" {% if current_path starts with '/painel/usuarios' or current_path starts with '/painel/gestao-cede' %}open{% endif %}>
+                <summary class="nc-dashboard-user-menu-group-title">PESSOAL</summary>
+                <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/usuarios">
+                  <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M16 19C16 16.7909 14.2091 15 12 15C9.79086 15 8 16.7909 8 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <circle cx="12" cy="9" r="3" stroke="currentColor" stroke-width="1.8"/>
+                      <path d="M5 19C5 17.3431 3.65685 16 2 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M19 19C19 17.3431 20.3431 16 22 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Gestão de Pessoal</span>
+                </a>
+
+                {% if panel_can_cede_management %}
+                  <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/gestao-cede">
+                    <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/>
+                        <path d="M6 20C6 16.6863 8.68629 14 12 14C15.3137 14 18 16.6863 18 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M3 11H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M17 11H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      </svg>
+                    </span>
+                    <span>Gestão NatalCode</span>
+                  </a>
+                {% endif %}
+              </details>
+
+              <a class="nc-link nc-dashboard-user-menu-link" href="/painel/guia-pratico">
+                <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 4.5A2.5 2.5 0 0 1 8.5 2H19v16H8.5A2.5 2.5 0 0 0 6 20.5V4.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M6 4.5A2.5 2.5 0 0 0 3.5 7V22H17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 7H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M9 11H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span>Guia Prático</span>
+              </a>
+            {% endif %}
+            {% if panel_can_cede_management and not panel_can_users %}
+              <a class="nc-link nc-dashboard-user-menu-link" href="/painel/gestao-cede">
+                <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M6 20C6 16.6863 8.68629 14 12 14C15.3137 14 18 16.6863 18 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M3 11H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M17 11H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span>Gestão NatalCode</span>
+              </a>
+            {% endif %}
+            <a class="nc-link nc-dashboard-user-menu-link" href="/membro/perfil/completar">
+              <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="M5 19C5 15.6863 8.13401 13 12 13C15.866 13 19 15.6863 19 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span>Meu perfil</span>
+            </a>
+            <a class="nc-link nc-dashboard-user-menu-link" href="/">
+              <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 5H19V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 14L19 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="5" y="9" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                </svg>
+              </span>
+              <span>Home do site</span>
+            </a>
+            <a class="nc-link nc-dashboard-user-menu-link" href="/painel/logout">
+              <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 17L5 12M5 12L10 7M5 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M14 4H18C19.1046 4 20 4.89543 20 6V18C20 19.1046 19.1046 20 18 20H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span>Sair</span>
+            </a>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <div class="nc-dashboard-layout">
+      <aside id="nc-dashboard-sidebar" class="nc-admin-sidebar" aria-label="Menu do dashboard">
+        <a class="nc-dashboard-brand nc-dashboard-sidebar-brand" href="/painel" aria-label="Painel NatalCode">
+          <img src="{{ base_url ?? '' }}/assets/img/brand/natalcode1.png" alt="NatalCode" class="nc-dashboard-brand-logo">
+          <span class="nc-dashboard-sidebar-brand-note">AGENCIA DIGITAL</span>
+        </a>
+        <nav class="nc-admin-nav">
+          <a class="nc-link{{ current_path == '/painel' ? ' is-active' : '' }}" href="/painel">
+            <span class="nc-admin-link-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V14H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="nc-admin-link-label">Dashboard</span>
+          </a>
+
+          <details class="nc-admin-nav-group" aria-label="Seção agenda" {% if current_path starts with '/painel/eventos' or current_path starts with '/painel/categorias' %}open{% endif %}>
+            <summary class="nc-admin-nav-group-title">AGENDA</summary>
+            <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/eventos' ? ' is-active' : '' }}" href="/painel/eventos">
+              <span class="nc-admin-link-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 7H20M8 12H20M8 17H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="4.5" cy="7" r="1.5" fill="currentColor"/>
+                  <circle cx="4.5" cy="12" r="1.5" fill="currentColor"/>
+                  <circle cx="4.5" cy="17" r="1.5" fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="nc-admin-link-label">Gestão de eventos</span>
+            </a>
+            {% if panel_can_categories %}
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/categorias' ? ' is-active' : '' }}" href="/painel/categorias">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 7H20M8 12H20M8 17H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="4.5" cy="7" r="1.5" fill="currentColor"/>
+                    <circle cx="4.5" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="4.5" cy="17" r="1.5" fill="currentColor"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Gestão de categorias</span>
+              </a>
+            {% endif %}
+          </details>
+
+          {% if panel_can_bookshop %}
+            <details class="nc-admin-nav-group" aria-label="Seção livraria" {% if current_path starts with '/painel/livraria' %}open{% endif %}>
+              <summary class="nc-admin-nav-group-title">LIVRARIA</summary>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/livraria/acervo' ? ' is-active' : '' }}" href="/painel/livraria/acervo">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 6.5H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M4 17.5H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="7" cy="6.5" r="1.2" fill="currentColor"/>
+                    <circle cx="7" cy="12" r="1.2" fill="currentColor"/>
+                    <circle cx="7" cy="17.5" r="1.2" fill="currentColor"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Acervo</span>
+              </a>
+              <a class="nc-link nc-admin-submenu-link{{ current_path == '/painel/livraria' ? ' is-active' : '' }}" href="/painel/livraria">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 4H19V20H5V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M9 8H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M9 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M9 16H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Visão geral</span>
+              </a>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/livraria/manual' ? ' is-active' : '' }}" href="/painel/livraria/manual">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 4.5A2.5 2.5 0 0 1 8.5 2H19v16H8.5A2.5 2.5 0 0 0 6 20.5V4.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M6 4.5A2.5 2.5 0 0 0 3.5 7V22H17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 7H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M9 11H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Guia operacional</span>
+              </a>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/livraria/relatorios' ? ' is-active' : '' }}" href="/painel/livraria/relatorios">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 19V11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M12 19V5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M19 19V8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Relatórios</span>
+              </a>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/livraria/movimentacoes' ? ' is-active' : '' }}" href="/painel/livraria/movimentacoes">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 7H17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M7 12H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M7 17H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M17 5V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M14.5 7.5H19.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Movimentações</span>
+              </a>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/livraria/colecoes' ? ' is-active' : '' }}" href="/painel/livraria/colecoes">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 5H17C18.1 5 19 5.9 19 7V17C19 18.1 18.1 19 17 19H7C5.9 19 5 18.1 5 17V7C5 5.9 5.9 5 7 5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M8.5 9H15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M8.5 12H15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M8.5 15H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Coleções</span>
+              </a>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/livraria/generos' ? ' is-active' : '' }}" href="/painel/livraria/generos">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 6.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M5 17.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="4" cy="6.5" r="1" fill="currentColor"/>
+                    <circle cx="4" cy="12" r="1" fill="currentColor"/>
+                    <circle cx="4" cy="17.5" r="1" fill="currentColor"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Gêneros literários</span>
+              </a>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/livraria/categorias' ? ' is-active' : '' }}" href="/painel/livraria/categorias">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 6.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M5 17.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="4" cy="6.5" r="1" fill="currentColor"/>
+                    <circle cx="4" cy="12" r="1" fill="currentColor"/>
+                    <circle cx="4" cy="17.5" r="1" fill="currentColor"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Categorias doutrinárias</span>
+              </a>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/livraria/importar' ? ' is-active' : '' }}" href="/painel/livraria/importar">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4V15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M8 11L12 15L16 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="4" y="17" width="16" height="3" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Importar CSV</span>
+              </a>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/livraria/vendas' ? ' is-active' : '' }}" href="/painel/livraria/vendas">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M8 10H16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M8 14H12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Vendas PDV</span>
+              </a>
+            </details>
+          {% endif %}
+
+          {% if panel_can_users %}
+            <details class="nc-admin-nav-group" aria-label="Seção pessoal" {% if current_path starts with '/painel/usuarios' or current_path starts with '/painel/gestao-cede' %}open{% endif %}>
+              <summary class="nc-admin-nav-group-title">PESSOAL</summary>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/usuarios' ? ' is-active' : '' }}" href="/painel/usuarios">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 19C16 16.7909 14.2091 15 12 15C9.79086 15 8 16.7909 8 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="12" cy="9" r="3" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M5 19C5 17.3431 3.65685 16 2 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M19 19C19 17.3431 20.3431 16 22 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Gestão de Pessoal</span>
+              </a>
+              {% if panel_can_cede_management %}
+                <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/gestao-cede' ? ' is-active' : '' }}" href="/painel/gestao-cede">
+                  <span class="nc-admin-link-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/>
+                      <path d="M6 20C6 16.6863 8.68629 14 12 14C15.3137 14 18 16.6863 18 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M3 11H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M17 11H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span class="nc-admin-link-label">Gestão NatalCode</span>
+                </a>
+              {% endif %}
+            </details>
+          {% elseif panel_can_cede_management %}
+            <a class="nc-link{{ current_path starts with '/painel/gestao-cede' ? ' is-active' : '' }}" href="/painel/gestao-cede">
+              <span class="nc-admin-link-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="M6 20C6 16.6863 8.68629 14 12 14C15.3137 14 18 16.6863 18 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M3 11H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M17 11H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="nc-admin-link-label">Gestão NatalCode</span>
+            </a>
+          {% endif %}
+
+          {% if panel_can_library_books %}
+            <details class="nc-admin-nav-group" aria-label="Seção conteúdos" {% if current_path starts with '/painel/biblioteca/' %}open{% endif %}>
+              <summary class="nc-admin-nav-group-title">CONTEÚDOS</summary>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/biblioteca/livros' ? ' is-active' : '' }}" href="/painel/biblioteca/livros">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 4.5A2.5 2.5 0 0 1 8.5 2H19v16H8.5A2.5 2.5 0 0 0 6 20.5V4.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M6 4.5A2.5 2.5 0 0 0 3.5 7V22H17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 7H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M9 11H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Conteúdos</span>
+              </a>
+              {% if panel_can_library_categories %}
+                <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/biblioteca/categorias' ? ' is-active' : '' }}" href="/painel/biblioteca/categorias">
+                  <span class="nc-admin-link-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 6.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M5 17.5H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <circle cx="4" cy="6.5" r="1" fill="currentColor"/>
+                      <circle cx="4" cy="12" r="1" fill="currentColor"/>
+                      <circle cx="4" cy="17.5" r="1" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <span class="nc-admin-link-label">Categorias</span>
+                </a>
+              {% endif %}
+            </details>
+          {% endif %}
+
+          {% if panel_can_users %}
+            <details class="nc-admin-nav-group" aria-label="Seção governança" {% if current_path starts with '/painel/institucional/' %}open{% endif %}>
+              <summary class="nc-admin-nav-group-title">INSTITUCIONAL</summary>
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/institucional/estatuto' ? ' is-active' : '' }}" href="/painel/institucional/estatuto">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Editar Estatuto</span>
+              </a>
+
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/institucional/dados-de-acesso' ? ' is-active' : '' }}" href="/painel/institucional/dados-de-acesso">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Dados de acesso</span>
+              </a>
+
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/institucional/governanca-de-dados' ? ' is-active' : '' }}" href="/painel/institucional/governanca-de-dados">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Governança de dados</span>
+              </a>
+
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/institucional/politica-de-privacidade' ? ' is-active' : '' }}" href="/painel/institucional/politica-de-privacidade">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Editar Privacidade</span>
+              </a>
+
+              <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/institucional/termos-de-uso' ? ' is-active' : '' }}" href="/painel/institucional/termos-de-uso">
+                <span class="nc-admin-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 3H14L18 7V21H7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M14 3V7H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M10 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M10 16H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span class="nc-admin-link-label">Editar Termos de Uso</span>
+              </a>
+            </details>
+          {% endif %}
+
+          {% if panel_can_users %}
+            <a class="nc-link{{ current_path starts with '/painel/guia-pratico' ? ' is-active' : '' }}" href="/painel/guia-pratico">
+              <span class="nc-admin-link-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 4.5A2.5 2.5 0 0 1 8.5 2H19v16H8.5A2.5 2.5 0 0 0 6 20.5V4.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                  <path d="M6 4.5A2.5 2.5 0 0 0 3.5 7V22H17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 7H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M9 11H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="nc-admin-link-label">Guia Prático</span>
+            </a>
+          {% endif %}
+
+          <a class="nc-link" href="/">
+            <span class="nc-admin-link-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 5H19V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 14L19 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="5" y="9" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/>
+              </svg>
+            </span>
+            <span class="nc-admin-link-label">Home do site</span>
+          </a>
+
+          <a class="nc-link" href="/painel/logout">
+            <span class="nc-admin-link-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 17L5 12M5 12L10 7M5 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 4H18C19.1046 4 20 4.89543 20 6V18C20 19.1046 19.1046 20 18 20H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="nc-admin-link-label">Sair</span>
+          </a>
+        </nav>
+
+        <footer class="nc-admin-sidebar-footer" aria-label="Rodapé do painel">
+          <span class="nc-admin-sidebar-footer-copy">© {{ "now"|date("Y") }} NatalCode</span>
+        </footer>
+      </aside>
+
+      <section class="nc-admin-main" aria-label="Conteúdo do dashboard">
+        {% block dashboard_page_header %}
+          {% if dashboard_page_title is defined and dashboard_page_title %}
+            <header class="nc-dashboard-page-header">
+              {% include 'components/section-header.twig' with {
+                kicker: dashboard_page_kicker|default('Dashboard'),
+                title: dashboard_page_title,
+                lead: dashboard_page_lead|default(''),
+                lead_html: dashboard_page_lead_html|default('')
+              } %}
+            </header>
+          {% endif %}
+        {% endblock %}
+
+        {% block admin_content %}{% endblock %}
+
+      </section>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('nc-dashboard-sidebar-toggle');
+      var sidebar = document.getElementById('nc-dashboard-sidebar');
+      var shell = document.querySelector('.nc-dashboard-shell');
+      var root = document.documentElement;
+      var alertsMenu = document.querySelector('.nc-dashboard-alerts');
+      var userMenu = document.querySelector('.nc-dashboard-user-menu');
+      var themeBadge = document.getElementById('nc-dashboard-theme-badge');
+      var desktopMedia = window.matchMedia('(min-width: 981px)');
+      var desktopSidebarStorageKey = 'natalcode_dashboard_sidebar_collapsed';
+
+      function capitalize(value) {
+        if (!value) {
+          return '';
+        }
+
+        return value.charAt(0).toUpperCase() + value.slice(1);
+      }
+
+      function syncThemeBadge() {
+        if (!themeBadge) {
+          return;
+        }
+
+        var root = document.documentElement;
+        var theme = (root.getAttribute('data-theme') || '').toLowerCase();
+        var mode = (root.getAttribute('data-mode') || '').toLowerCase();
+        var intensity = (root.getAttribute('data-dark-intensity') || '').toLowerCase();
+
+        if (!theme) {
+          themeBadge.textContent = 'Tema: padrão';
+          return;
+        }
+
+        var modeLabel = mode ? capitalize(mode) : 'Light';
+        var intensityLabel = mode === 'dark' && intensity ? ' · ' + capitalize(intensity) : '';
+        themeBadge.textContent = 'Tema: ' + capitalize(theme) + ' · ' + modeLabel + intensityLabel;
+      }
+
+      syncThemeBadge();
+
+      window.addEventListener('storage', function (event) {
+        if (!event || (event.key !== 'natalcode_theme' && event.key !== 'natalcode_mode' && event.key !== 'natalcode_dark_intensity')) {
+          return;
+        }
+
+        syncThemeBadge();
+      });
+
+      if (!toggle || !sidebar) {
+        return;
+      }
+
+      function setMobileSidebarOpen(isOpen) {
+        sidebar.classList.toggle('is-open', isOpen);
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        toggle.setAttribute('aria-label', isOpen ? 'Fechar menu do dashboard' : 'Abrir menu do dashboard');
+      }
+
+      function setDesktopSidebarCollapsed(isCollapsed) {
+        if (!shell) {
+          return;
+        }
+
+        shell.classList.toggle('is-sidebar-collapsed', isCollapsed);
+        if (isCollapsed) {
+          root.setAttribute('data-dashboard-sidebar-collapsed', '1');
+        } else {
+          root.removeAttribute('data-dashboard-sidebar-collapsed');
+        }
+        toggle.setAttribute('aria-expanded', isCollapsed ? 'false' : 'true');
+        toggle.setAttribute('aria-label', isCollapsed ? 'Expandir menu do dashboard' : 'Recolher menu do dashboard');
+      }
+
+      function getSavedDesktopCollapsedState() {
+        try {
+          return localStorage.getItem(desktopSidebarStorageKey) === '1';
+        } catch (error) {
+          return false;
+        }
+      }
+
+      function saveDesktopCollapsedState(isCollapsed) {
+        try {
+          localStorage.setItem(desktopSidebarStorageKey, isCollapsed ? '1' : '0');
+        } catch (error) {
+          // noop
+        }
+      }
+
+      function syncSidebarByViewport() {
+        if (desktopMedia.matches) {
+          setMobileSidebarOpen(false);
+          setDesktopSidebarCollapsed(getSavedDesktopCollapsedState());
+          return;
+        }
+
+        setDesktopSidebarCollapsed(false);
+        setMobileSidebarOpen(false);
+      }
+
+      syncSidebarByViewport();
+
+      if (desktopMedia.addEventListener) {
+        desktopMedia.addEventListener('change', syncSidebarByViewport);
+      } else if (desktopMedia.addListener) {
+        desktopMedia.addListener(syncSidebarByViewport);
+      }
+
+      toggle.addEventListener('click', function () {
+        if (desktopMedia.matches) {
+          var isCollapsed = !shell.classList.contains('is-sidebar-collapsed');
+          setDesktopSidebarCollapsed(isCollapsed);
+          saveDesktopCollapsedState(isCollapsed);
+          return;
+        }
+
+        setMobileSidebarOpen(!sidebar.classList.contains('is-open'));
+      });
+
+      if (alertsMenu) {
+        var alertsSummary = alertsMenu.querySelector('summary');
+
+        if (alertsSummary) {
+          alertsSummary.addEventListener('click', function () {
+            if (userMenu && userMenu.open) {
+              userMenu.removeAttribute('open');
+            }
+          });
+        }
+
+        document.addEventListener('click', function (event) {
+          if (!alertsMenu.open) {
+            return;
+          }
+
+          if (!alertsMenu.contains(event.target)) {
+            alertsMenu.removeAttribute('open');
+          }
+        });
+      }
+
+      if (userMenu) {
+        var userMenuSummary = userMenu.querySelector('summary');
+
+        if (userMenuSummary) {
+          userMenuSummary.addEventListener('click', function () {
+            if (alertsMenu && alertsMenu.open) {
+              alertsMenu.removeAttribute('open');
+            }
+          });
+        }
+
+        document.addEventListener('click', function (event) {
+          if (!userMenu.open) {
+            return;
+          }
+
+          if (!userMenu.contains(event.target)) {
+            userMenu.removeAttribute('open');
+          }
+        });
+
+        document.addEventListener('keydown', function (event) {
+          if (event.key !== 'Escape') {
+            return;
+          }
+
+          if (alertsMenu && alertsMenu.open) {
+            alertsMenu.removeAttribute('open');
+          }
+
+          if (userMenu.open) {
+            userMenu.removeAttribute('open');
+          }
+        });
+      }
+
+      var toasts = document.querySelectorAll('[data-admin-toast]');
+
+      if (toasts.length > 0) {
+        toasts.forEach(function (toast) {
+          var closeButton = toast.querySelector('[data-admin-toast-close]');
+
+          window.requestAnimationFrame(function () {
+            toast.classList.add('is-visible');
+          });
+
+          function hideToast() {
+            toast.classList.add('is-hiding');
+            window.setTimeout(function () {
+              if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+              }
+            }, 180);
+          }
+
+          if (closeButton) {
+            closeButton.addEventListener('click', hideToast);
+          }
+
+          window.setTimeout(hideToast, 4500);
+        });
+      }
+    })();
+  </script>
+{% endblock %}

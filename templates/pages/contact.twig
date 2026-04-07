@@ -1,0 +1,87 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <main class="nc-main nc-container nc-home-flow">
+    {% set site_contact = site.contact|default({}) %}
+    {% set site_instagram = site.social.instagram|default({}) %}
+    {% set institutional = site.institutional|default({}) %}
+
+    <section class="nc-section nc-contact-overview" aria-label="Contato" data-aos="fade-up" data-aos-delay="0">
+      {% include 'components/section-header.twig' with {
+        kicker: 'Contato',
+        title: 'Fale com o NatalCode',
+        lead: 'Estamos de portas abertas para acolhimento, estudos e participação nas atividades da casa.'
+      } %}
+
+      <article class="nc-card nc-admin-login-card">
+        {% if contact_form_status == 'sent' %}
+          <p class="nc-admin-login-success" role="status">Mensagem enviada com sucesso. Em breve retornaremos seu contato.</p>
+        {% endif %}
+
+        {% if contact_form_errors|default([]) %}
+          <div class="nc-admin-login-error" role="alert">
+            <ul>
+              {% for error in contact_form_errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        <form class="nc-admin-login-form" method="post" action="/contato"{% if app_recaptcha_enabled %} data-recaptcha-action="contact_submit" data-recaptcha-site-key="{{ app_recaptcha_site_key }}"{% endif %}>
+          <div class="nc-admin-login-field">
+            <label class="nc-admin-login-label" for="name">Nome</label>
+            <input class="nc-admin-login-input" id="name" name="name" type="text" value="{{ contact_form.name|default('') }}" placeholder="Ex: Maria da Silva" autocomplete="name" required>
+          </div>
+
+          <div class="nc-admin-login-field">
+            <label class="nc-admin-login-label" for="email">E-mail</label>
+            <input class="nc-admin-login-input" id="email" name="email" type="email" value="{{ contact_form.email|default('') }}" placeholder="Ex: maria@email.com" autocomplete="email" required>
+          </div>
+
+          <div class="nc-admin-login-field">
+            <label class="nc-admin-login-label" for="subject">Assunto</label>
+            <input class="nc-admin-login-input" id="subject" name="subject" type="text" value="{{ contact_form.subject|default('') }}" placeholder="Ex: Dúvida sobre atividades">
+          </div>
+
+          <div class="nc-admin-login-field">
+            <label class="nc-admin-login-label" for="message">Mensagem</label>
+            <textarea class="nc-admin-login-input" id="message" name="message" rows="5" placeholder="Escreva aqui sua mensagem, dúvida ou solicitação." required>{{ contact_form.message|default('') }}</textarea>
+          </div>
+
+          <div class="nc-admin-login-field" style="display:none;" aria-hidden="true">
+            <label class="nc-admin-login-label" for="company">Empresa</label>
+            <input class="nc-admin-login-input" id="company" name="company" type="text" value="{{ contact_form.company|default('') }}" tabindex="-1" autocomplete="off">
+          </div>
+
+          {% include 'components/recaptcha-fields.twig' %}
+
+          <div class="nc-actions nc-admin-login-actions nc-contact-form-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="120">
+            <button class="nc-btn nc-btn-primary" type="submit">Enviar mensagem</button>
+            {% if site_contact.mapUrl|default('') %}
+              <a class="nc-btn nc-btn-secondary" href="{{ site_contact.mapUrl }}" target="_blank" rel="noopener noreferrer">Ver no mapa</a>
+            {% endif %}
+          </div>
+        </form>
+      </article>
+
+      <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="120">
+        {% if site_instagram.url|default('') %}
+          <a class="nc-btn nc-btn-secondary" href="{{ site_instagram.url }}" target="_blank" rel="noopener noreferrer">{{ site_instagram.label|default('Instagram oficial') }}</a>
+        {% endif %}
+        {% if site_contact.email|default('') %}
+          <a class="nc-btn nc-btn-secondary" href="mailto:{{ site_contact.email }}">E-mail direto</a>
+        {% endif %}
+      </div>
+
+      {% if institutional.contactSummary|default('') %}
+        <div class="nc-list" data-aos="fade-up" data-aos-delay="160">
+          <article class="nc-list-item">
+            <h3>Dados institucionais</h3>
+            <p>{{ institutional.contactSummary }}</p>
+          </article>
+        </div>
+      {% endif %}
+    </section>
+  </main>
+{% endblock %}

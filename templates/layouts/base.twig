@@ -3,26 +3,82 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}{{ app_default_page_title|default('CEDE | Estudos da Doutrina Espírita') }}{% endblock %}</title>
+  {% set page_title = page_title|default(app_default_page_title|default('NatalCode | Agencia Digital')) %}
+  {% set page_description = page_description|default(app_default_page_description|default('NatalCode Agencia Digital: criacao de sites, landing pages e sistemas web com foco em performance e conversao.')) %}
+  {% set page_url = page_url|default(app_default_page_url|default('https://natalcode.com.br/')) %}
+  {% set page_image = page_image|default(app_default_page_image|default('https://natalcode.com.br/assets/img/brand/natalcode1.png')) %}
+  {% set site_name = site_name|default(app_default_site_name|default('NatalCode')) %}
+  {% set twitter_site = twitter_site|default(app_default_twitter_site|default('@natalcode')) %}
+  <title>{% block title %}{{ page_title }}{% endblock %}</title>
+  <meta name="description" content="{{ page_description }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_description }}">
+  <meta property="og:url" content="{{ page_url }}">
+  <meta property="og:image" content="{{ page_image }}">
+  <meta property="og:site_name" content="{{ site_name }}">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title }}">
+  <meta name="twitter:description" content="{{ page_description }}">
+  <meta name="twitter:image" content="{{ page_image }}">
+  <meta name="twitter:site" content="{{ twitter_site }}">
+  <script>
+    (function () {
+      try {
+        var root = document.documentElement;
+        var allowedThemes = ['blue', 'red', 'green', 'violet', 'amber'];
+        var allowedModes = ['light', 'dark'];
+        var allowedDarkIntensities = ['neutral', 'vivid'];
+
+        var savedTheme = (localStorage.getItem('natalcode_theme') || '').toLowerCase();
+        var savedMode = (localStorage.getItem('natalcode_mode') || '').toLowerCase();
+        var savedDarkIntensity = (localStorage.getItem('natalcode_dark_intensity') || '').toLowerCase();
+
+        if (allowedThemes.indexOf(savedTheme) !== -1) {
+          root.setAttribute('data-theme', savedTheme);
+        }
+
+        if (allowedModes.indexOf(savedMode) !== -1) {
+          root.setAttribute('data-mode', savedMode);
+        }
+
+        if (allowedDarkIntensities.indexOf(savedDarkIntensity) !== -1) {
+          root.setAttribute('data-dark-intensity', savedDarkIntensity);
+        }
+      } catch (error) {
+      }
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Lora:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
   {# <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"> #}
-  <link rel="stylesheet" href="/assets/css/app.css">
-  <link rel="icon" type="image/png" href="/assets/img/brand/nc7.png">
+  {% set asset_version = app_asset_version|default('1') %}
+  <link rel="stylesheet" href="/assets/css/cedern.css?v={{ asset_version }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/brand/nc5.png?v={{ asset_version }}">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/brand/nc5.png?v={{ asset_version }}">
+  <link rel="apple-touch-icon" href="/assets/img/brand/nc5.png?v={{ asset_version }}">
+  {% if app_recaptcha_enabled and app_recaptcha_site_key|default('') %}
+    <script src="https://www.google.com/recaptcha/api.js?render={{ app_recaptcha_site_key|url_encode }}" async defer></script>
+    <script src="/assets/js/cedern-recaptcha.js?v={{ asset_version }}" defer></script>
+  {% endif %}
+  <script src="/assets/js/cedern-nav.js?v={{ asset_version }}" defer></script>
+  <script src="/assets/js/cedern-buttons.js?v={{ asset_version }}" defer></script>
+  <script src="/assets/js/cedern-theme.js?v={{ asset_version }}" defer></script>
+  <script src="/assets/js/cedern-cards-slideshow.js?v={{ asset_version }}" defer></script>
+    <script src="/assets/js/cedern-pix-copy.js?v={{ asset_version }}" defer></script>
+  <script src="/assets/js/cedern-testimonials-toggle.js?v={{ asset_version }}" defer></script>
   {% block head %}{% endblock %}
 </head>
 <body data-default-theme="{{ default_theme|default('amber') }}" data-default-mode="{{ default_mode|default('light') }}" data-default-dark-intensity="{{ default_dark_intensity|default('neutral') }}">
   <div class="nc-shell">
     {% include 'components/header.twig' %}
+    {% include 'components/breadcrumbs.twig' %}
     {% block content %}{% endblock %}
-    {% include 'components/theme-palette.twig' %}
     {% include 'components/footer.twig' %}
   </div>
   {# <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> #}
-  <script src="/assets/js/header-menu.js" defer></script>
-  <script src="/assets/js/button-states.js" defer></script>
-  <script src="/assets/js/theme-palette.js" defer></script>
   {# <script src="/assets/js/aos-init.js" defer></script> #}
 </body>
 </html>

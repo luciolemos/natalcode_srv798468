@@ -1,0 +1,28 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <main class="nc-main nc-container nc-home-flow">
+    <section class="nc-section" aria-label="Documento legal" data-aos="fade-up" data-aos-delay="0">
+      {% include 'components/section-header.twig' with {
+        kicker: legal_document.kicker|default('Institucional'),
+        title: legal_document.title|default('Documento institucional'),
+        lead: legal_document.lead|default('Consulte abaixo o conteúdo completo.')
+      } %}
+
+      {% if legal_document.updated_at_label|default('') %}
+        <p class="nc-statute-meta" data-aos="fade-up" data-aos-delay="80">
+          Última atualização: {{ legal_document.updated_at_label }}
+        </p>
+      {% endif %}
+
+      <article class="nc-statute-card" data-aos="fade-up" data-aos-delay="120">
+        <div class="nc-statute-text">{{ legal_document.body|default('Conteúdo indisponível no momento.') }}</div>
+      </article>
+
+      <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="160">
+        <a class="nc-btn nc-btn-secondary" href="/">Voltar para Início</a>
+        <a class="nc-btn nc-btn-primary" href="/contato">Falar com o NatalCode</a>
+      </div>
+    </section>
+  </main>
+{% endblock %}
