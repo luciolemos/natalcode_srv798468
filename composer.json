@@ -44,6 +44,9 @@
         "allow-plugins": {
             "phpstan/extension-installer": true
         },
+        "platform": {
+            "php": "8.3.0"
+        },
         "process-timeout": 0,
         "sort-packages": true
     },
