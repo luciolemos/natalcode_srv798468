@@ -1166,20 +1166,9 @@ h3 {
 
 .nc-home-hero-controls {
   position: absolute;
-  left: 50%;
-  bottom: var(--space-4);
-  transform: translateX(-50%);
+  inset: 0;
   z-index: 3;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  width: min(40rem, calc(100% - var(--container-gutter-mobile)));
-  padding: var(--space-2);
-  border-radius: var(--radius-pill);
-  border: 1px solid color-mix(in srgb, var(--surface-border) 70%, transparent);
-  background: color-mix(in srgb, var(--surface-main) 88%, transparent);
-  backdrop-filter: blur(8px);
-  box-shadow: var(--shadow-soft);
+  pointer-events: none;
 }
 
 .nc-home-hero-control-btn {
@@ -1194,6 +1183,81 @@ h3 {
   line-height: 1.2;
   cursor: pointer;
   transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+  pointer-events: auto;
+}
+
+.nc-home-hero-arrow-btn {
+  appearance: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3rem;
+  height: 3rem;
+  min-height: 3rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--white) 92%, var(--text-main));
+  text-shadow: 0 2px 12px rgb(15 23 42 / 0.58);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: color 180ms ease, transform 180ms ease;
+  touch-action: manipulation;
+}
+
+.nc-home-hero-controls [data-hero-prev] {
+  left: clamp(0.55rem, 1.8vw, 1.35rem);
+}
+
+.nc-home-hero-controls [data-hero-next] {
+  right: clamp(0.55rem, 1.8vw, 1.35rem);
+}
+
+.nc-home-hero-arrow-btn:hover {
+  transform: translateY(-50%) scale(1.05);
+  color: color-mix(in srgb, var(--theme-accent-2) 74%, var(--white));
+}
+
+.nc-home-hero-arrow-btn:focus-visible {
+  color: color-mix(in srgb, var(--theme-accent-2) 78%, var(--white));
+  outline: 2px solid color-mix(in srgb, var(--theme-accent-1) 56%, transparent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.nc-home-hero-arrow-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: translateY(-50%);
+}
+
+.nc-home-hero-control-icon {
+  display: inline-block;
+  font-size: 2.35rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.nc-home-hero-bottom-controls {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-4);
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: max-content;
+  max-width: min(24rem, calc(100% - var(--container-gutter-mobile)));
+  padding: 0.34rem 0.52rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, var(--surface-border) 70%, transparent);
+  background: color-mix(in srgb, var(--surface-main) 88%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-soft);
+  pointer-events: auto;
 }
 
 .nc-home-hero-control-btn:hover,
@@ -1217,7 +1281,7 @@ h3 {
   align-items: center;
   justify-content: center;
   gap: 0.38rem;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .nc-home-hero-dot {
@@ -1249,7 +1313,13 @@ h3 {
   border-color: color-mix(in srgb, var(--theme-accent-1) 65%, var(--surface-border));
 }
 
-[data-mode="dark"] .nc-home-hero-controls {
+.nc-home-hero-controls [data-hero-toggle] {
+  min-height: 1.85rem;
+  padding: 0.24rem 0.56rem;
+  font-size: 0.74rem;
+}
+
+[data-mode="dark"] .nc-home-hero-bottom-controls {
   border-color: color-mix(in srgb, var(--surface-border) 45%, transparent);
   background: color-mix(in srgb, #0b1220 82%, transparent);
 }
@@ -1258,6 +1328,11 @@ h3 {
   border-color: color-mix(in srgb, var(--surface-border) 50%, transparent);
   background: color-mix(in srgb, #111827 72%, transparent);
   color: var(--text-main);
+}
+
+[data-mode="dark"] .nc-home-hero-arrow-btn {
+  color: color-mix(in srgb, var(--white) 95%, #dbeafe);
+  text-shadow: 0 2px 14px rgb(2 6 23 / 0.75);
 }
 
 [data-mode="dark"] .nc-home-hero-dot {
@@ -3346,6 +3421,7 @@ body.is-library-cover-dialog-open {
     display: grid;
     justify-items: center;
     width: min(100%, 34rem);
+    padding-inline: clamp(3.1rem, 10vw, 4.1rem);
     text-align: center;
   }
 
@@ -3358,6 +3434,7 @@ body.is-library-cover-dialog-open {
   .nc-home-hero .nc-lead {
     margin-right: auto;
     margin-left: auto;
+    max-width: 34ch;
   }
 
   .nc-home-hero .nc-actions {
@@ -3366,28 +3443,40 @@ body.is-library-cover-dialog-open {
   }
 
   .nc-home-hero-controls {
-    width: min(25rem, calc(100% - var(--container-gutter-mobile)));
-    bottom: var(--space-3);
-    flex-wrap: wrap;
-    justify-content: center;
+    inset: 0;
+  }
+
+  .nc-home-hero-controls [data-hero-prev],
+  .nc-home-hero-controls [data-hero-next] {
+    width: 2.85rem;
+    height: 2.85rem;
+    min-height: 2.85rem;
+  }
+
+  .nc-home-hero-control-icon {
+    font-size: 2.05rem;
   }
 
   .nc-home-hero-controls [data-hero-prev] {
-    order: 1;
-  }
-
-  .nc-home-hero-controls [data-hero-dots] {
-    order: 2;
-    margin: 0;
+    left: 0.2rem;
   }
 
   .nc-home-hero-controls [data-hero-next] {
-    order: 3;
+    right: 0.2rem;
+  }
+
+  .nc-home-hero-bottom-controls {
+    bottom: var(--space-2);
+    gap: var(--space-1);
+    width: auto;
+    max-width: calc(100% - (var(--container-gutter-mobile) * 0.7));
+    padding: 0.28rem 0.44rem;
   }
 
   .nc-home-hero-controls [data-hero-toggle] {
-    order: 4;
-    width: 100%;
+    min-height: 1.72rem;
+    padding: 0.2rem 0.46rem;
+    font-size: 0.7rem;
   }
 
   .nc-home-hero.has-background-image .nc-home-hero-overlay {
