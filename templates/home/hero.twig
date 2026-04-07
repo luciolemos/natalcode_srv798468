@@ -4,34 +4,121 @@
 {% set hero_qr_url = hero.qrUrl|default('') %}
 {% set hero_qr_image = hero.qrImage|default('') %}
 {% set hero_image_src = hero.imageSrc|default('') %}
-{% set hero_images = [] %}
+{% set hero_media = [] %}
 {% for image in hero.images|default([]) %}
-  {% set normalized_image = image is not null ? image|trim : '' %}
-  {% if normalized_image != '' %}
-    {% set hero_images = hero_images|merge([normalized_image]) %}
+  {% if image.src is defined %}
+    {% set media_src = image.src is not null ? image.src|trim : '' %}
+    {% if media_src != '' %}
+      {% set hero_media = hero_media|merge([{
+        src: media_src,
+        srcset: image.srcset|default(''),
+        webpSrcset: image.webpSrcset|default(''),
+        avifSrcset: image.avifSrcset|default(''),
+        sizes: image.sizes|default('100vw')
+      }]) %}
+    {% endif %}
+  {% else %}
+    {% set media_src = image is not null ? image|trim : '' %}
+    {% if media_src != '' %}
+      {% set hero_media = hero_media|merge([{
+        src: media_src,
+        srcset: '',
+        webpSrcset: '',
+        avifSrcset: '',
+        sizes: '100vw'
+      }]) %}
+    {% endif %}
   {% endif %}
 {% endfor %}
-{% if hero_image_src and hero_image_src not in hero_images %}
-  {% set hero_images = [hero_image_src]|merge(hero_images) %}
+{% if hero_image_src %}
+  {% set has_hero_image_src = false %}
+  {% for media in hero_media %}
+    {% if media.src == hero_image_src %}
+      {% set has_hero_image_src = true %}
+    {% endif %}
+  {% endfor %}
+  {% if not has_hero_image_src %}
+    {% set hero_media = [{
+      src: hero_image_src,
+      srcset: '',
+      webpSrcset: '',
+      avifSrcset: '',
+      sizes: '100vw'
+    }]|merge(hero_media) %}
+  {% endif %}
 {% endif %}
-{% set hero_primary_image = hero_images|length > 0 ? hero_images[0] : hero_image_src %}
+{% set hero_primary_media = hero_media|length > 0 ? hero_media[0] : null %}
 {% set hero_image_alt = hero.imageAlt|default(hero.title|default('NatalCode')) %}
 {% set hero_panel_enabled = hero.showPanel is defined ? hero.showPanel : true %}
 {% set hero_panel_has_content = hero_metrics|length > 0 or (hero_qr_url and hero_qr_image) %}
 {% set show_hero_panel = hero_panel_enabled and hero_panel_has_content %}
 
 <section
-  class="nc-section nc-home-hero{% if hero_primary_image %} has-background-image{% endif %}"
+  class="nc-section nc-home-hero{% if hero_primary_media %} has-background-image{% endif %}"
   aria-label="Hero principal"
   data-aos="fade-up"
   data-aos-delay="0"
-  {% if hero_primary_image %}style="--nc-hero-bg-image: url('{{ hero_primary_image|e('html_attr') }}');"{% endif %}
-  {% if hero_images|length > 1 %}data-hero-images="{{ hero_images|json_encode|e('html_attr') }}" data-hero-interval="{{ hero.imageIntervalMs|default(5500) }}"{% endif %}
+  {% if hero_media|length > 1 %}data-hero-media="{{ hero_media|json_encode|e('html_attr') }}" data-hero-interval="{{ hero.imageIntervalMs|default(5500) }}"{% endif %}
 >
+  {% if hero_primary_media %}
+    <div class="nc-home-hero-media" aria-hidden="true">
+      <picture data-hero-picture>
+        <source data-hero-source-avif type="image/avif"{% if hero_primary_media.avifSrcset|default('') %} srcset="{{ hero_primary_media.avifSrcset|e('html_attr') }}"{% endif %}>
+        <source data-hero-source-webp type="image/webp"{% if hero_primary_media.webpSrcset|default('') %} srcset="{{ hero_primary_media.webpSrcset|e('html_attr') }}"{% endif %}>
+        <img
+          class="nc-home-hero-media-image"
+          data-hero-image
+          src="{{ hero_primary_media.src|e('html_attr') }}"
+          {% if hero_primary_media.srcset|default('') %}srcset="{{ hero_primary_media.srcset|e('html_attr') }}"{% endif %}
+          sizes="{{ hero_primary_media.sizes|default('100vw')|e('html_attr') }}"
+          alt=""
+          decoding="async"
+          loading="eager"
+          fetchpriority="high"
+        >
+      </picture>
+    </div>
+    <div class="nc-home-hero-overlay" aria-hidden="true"></div>
+  {% endif %}
+  {% if hero_media|length > 1 %}
+    <div class="nc-home-hero-controls" data-hero-controls role="group" aria-label="Controles do carrossel da hero">
+      <button type="button" class="nc-home-hero-arrow-btn" data-hero-prev aria-label="Imagem anterior">
+        <span class="nc-home-hero-control-icon" aria-hidden="true">&#8249;</span>
+        <span class="nc-sr-only">Imagem anterior</span>
+      </button>
+      <button type="button" class="nc-home-hero-arrow-btn" data-hero-next aria-label="Proxima imagem">
+        <span class="nc-home-hero-control-icon" aria-hidden="true">&#8250;</span>
+        <span class="nc-sr-only">Proxima imagem</span>
+      </button>
+      <div class="nc-home-hero-bottom-controls">
+        <div class="nc-home-hero-dots" data-hero-dots role="group" aria-label="Selecionar imagem da hero">
+          {% for media in hero_media %}
+            <button
+              type="button"
+              class="nc-home-hero-dot{% if loop.first %} is-active{% endif %}"
+              data-hero-dot
+              data-hero-index="{{ loop.index0 }}"
+              aria-label="Ir para imagem {{ loop.index }} de {{ hero_media|length }}"
+              {% if loop.first %}aria-current="true"{% endif %}
+            ></button>
+          {% endfor %}
+        </div>
+        <button
+          type="button"
+          class="nc-home-hero-control-btn"
+          data-hero-toggle
+          aria-pressed="false"
+          data-label-play="Reproduzir"
+          data-label-pause="Pausar"
+        >Pausar</button>
+      </div>
+      <p class="nc-sr-only" data-hero-status aria-live="off" aria-atomic="true"></p>
+    </div>
+  {% endif %}
 
   <div class="nc-hero-grid{% if not show_hero_panel %} is-single-column{% endif %}">
     <div data-aos="fade-up" data-aos-delay="80">
-      {% if hero_primary_image %}
+      {% if hero_primary_media %}
         <span class="nc-sr-only">{{ hero_image_alt }}</span>
       {% endif %}
       <p class="nc-section-kicker">{{ hero.kicker|default('Início') }}</p>

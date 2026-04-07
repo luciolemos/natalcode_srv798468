@@ -1106,6 +1106,32 @@ h3 {
   margin-left: calc(50% - 50vw);
   transform: translateY(calc(-1 * var(--main-padding-y)));
   background-color: color-mix(in srgb, #1f2937 12%, var(--surface-main));
+}
+
+.nc-home-hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.nc-home-hero-media picture,
+.nc-home-hero-media-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.nc-home-hero-media-image {
+  object-fit: cover;
+  object-position: 78% center;
+}
+
+.nc-home-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
   background-image:
     linear-gradient(
       90deg,
@@ -1115,15 +1141,17 @@ h3 {
       rgb(145 154 167 / 0.24) 72%,
       rgb(74 85 101 / 0.08) 100%
     ),
-    linear-gradient(180deg, rgb(15 23 42 / 0.14), rgb(15 23 42 / 0.08)),
-    var(--nc-hero-bg-image);
+    linear-gradient(180deg, rgb(15 23 42 / 0.14), rgb(15 23 42 / 0.08));
   background-repeat: no-repeat;
-  background-size: auto, auto, cover;
-  background-position: center center, center center, 78% center;
+  background-position: center center, center center;
+  background-size: auto, auto;
 }
 
 [data-mode="dark"] .nc-home-hero.has-background-image {
   background-color: color-mix(in srgb, #0b1220 72%, var(--surface-main));
+}
+
+[data-mode="dark"] .nc-home-hero-overlay {
   background-image:
     linear-gradient(
       90deg,
@@ -1133,8 +1161,188 @@ h3 {
       rgb(18 28 43 / 0.34) 72%,
       rgb(22 34 52 / 0.14) 100%
     ),
-    linear-gradient(180deg, rgb(3 8 16 / 0.3), rgb(3 8 16 / 0.12)),
-    var(--nc-hero-bg-image);
+    linear-gradient(180deg, rgb(3 8 16 / 0.3), rgb(3 8 16 / 0.12));
+}
+
+.nc-home-hero-controls {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.nc-home-hero-control-btn {
+  appearance: none;
+  border: 1px solid color-mix(in srgb, var(--surface-border) 70%, transparent);
+  background: color-mix(in srgb, var(--surface-main) 80%, transparent);
+  color: var(--text-main);
+  border-radius: var(--radius-pill);
+  min-height: 2.25rem;
+  padding: 0.35rem 0.7rem;
+  font-size: var(--font-size-sm);
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+  pointer-events: auto;
+}
+
+.nc-home-hero-arrow-btn {
+  appearance: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3rem;
+  height: 3rem;
+  min-height: 3rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--white) 92%, var(--text-main));
+  text-shadow: 0 2px 12px rgb(15 23 42 / 0.58);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: color 180ms ease, transform 180ms ease;
+  touch-action: manipulation;
+}
+
+.nc-home-hero-controls [data-hero-prev] {
+  left: clamp(0.55rem, 1.8vw, 1.35rem);
+}
+
+.nc-home-hero-controls [data-hero-next] {
+  right: clamp(0.55rem, 1.8vw, 1.35rem);
+}
+
+.nc-home-hero-arrow-btn:hover {
+  transform: translateY(-50%) scale(1.05);
+  color: color-mix(in srgb, var(--theme-accent-2) 74%, var(--white));
+}
+
+.nc-home-hero-arrow-btn:focus-visible {
+  color: color-mix(in srgb, var(--theme-accent-2) 78%, var(--white));
+  outline: 2px solid color-mix(in srgb, var(--theme-accent-1) 56%, transparent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.nc-home-hero-arrow-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: translateY(-50%);
+}
+
+.nc-home-hero-control-icon {
+  display: inline-block;
+  font-size: 2.35rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.nc-home-hero-bottom-controls {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-4);
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: max-content;
+  max-width: min(24rem, calc(100% - var(--container-gutter-mobile)));
+  padding: 0.34rem 0.52rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, var(--surface-border) 70%, transparent);
+  background: color-mix(in srgb, var(--surface-main) 88%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-soft);
+  pointer-events: auto;
+}
+
+.nc-home-hero-control-btn:hover,
+.nc-home-hero-control-btn:focus-visible {
+  background: color-mix(in srgb, var(--theme-soft-1) 24%, var(--surface-main));
+  border-color: color-mix(in srgb, var(--theme-soft-2) 46%, var(--surface-border));
+}
+
+.nc-home-hero-control-btn:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--theme-accent-1) 58%, transparent);
+  outline-offset: 1px;
+}
+
+.nc-home-hero-control-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.nc-home-hero-dots {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.38rem;
+  margin: 0;
+}
+
+.nc-home-hero-dot {
+  appearance: none;
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--surface-border) 78%, transparent);
+  background: color-mix(in srgb, var(--text-subtle) 40%, transparent);
+  padding: 0;
+  cursor: pointer;
+  transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+
+.nc-home-hero-dot:hover,
+.nc-home-hero-dot:focus-visible {
+  transform: scale(1.1);
+  border-color: color-mix(in srgb, var(--theme-soft-2) 56%, var(--surface-border));
+}
+
+.nc-home-hero-dot:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--theme-accent-1) 58%, transparent);
+  outline-offset: 2px;
+}
+
+.nc-home-hero-dot.is-active {
+  width: 1.7rem;
+  background: color-mix(in srgb, var(--theme-accent-1) 74%, var(--surface-main));
+  border-color: color-mix(in srgb, var(--theme-accent-1) 65%, var(--surface-border));
+}
+
+.nc-home-hero-controls [data-hero-toggle] {
+  min-height: 1.85rem;
+  padding: 0.24rem 0.56rem;
+  font-size: 0.74rem;
+}
+
+[data-mode="dark"] .nc-home-hero-bottom-controls {
+  border-color: color-mix(in srgb, var(--surface-border) 45%, transparent);
+  background: color-mix(in srgb, #0b1220 82%, transparent);
+}
+
+[data-mode="dark"] .nc-home-hero-control-btn {
+  border-color: color-mix(in srgb, var(--surface-border) 50%, transparent);
+  background: color-mix(in srgb, #111827 72%, transparent);
+  color: var(--text-main);
+}
+
+[data-mode="dark"] .nc-home-hero-arrow-btn {
+  color: color-mix(in srgb, var(--white) 95%, #dbeafe);
+  text-shadow: 0 2px 14px rgb(2 6 23 / 0.75);
+}
+
+[data-mode="dark"] .nc-home-hero-dot {
+  border-color: color-mix(in srgb, var(--surface-border) 55%, transparent);
+  background: color-mix(in srgb, #94a3b8 45%, transparent);
+}
+
+[data-mode="dark"] .nc-home-hero-dot.is-active {
+  background: color-mix(in srgb, var(--theme-accent-1) 70%, #111827);
+  border-color: color-mix(in srgb, var(--theme-accent-1) 62%, var(--surface-border));
 }
 
 .nc-card {
@@ -3129,7 +3337,7 @@ body.is-library-cover-dialog-open {
 }
 
 @media (min-width: 701px) and (max-width: 980px) {
-  .nc-home-hero.has-background-image {
+  .nc-home-hero.has-background-image .nc-home-hero-overlay {
     background-image:
       radial-gradient(
         circle at 50% 40%,
@@ -3139,12 +3347,14 @@ body.is-library-cover-dialog-open {
         rgb(120 130 144 / 0.18) 58%,
         transparent 78%
       ),
-      linear-gradient(180deg, rgb(15 23 42 / 0.16), rgb(15 23 42 / 0.08)),
-      var(--nc-hero-bg-image);
-    background-position: center center, center center, 80% center;
+      linear-gradient(180deg, rgb(15 23 42 / 0.16), rgb(15 23 42 / 0.08));
   }
 
-  [data-mode="dark"] .nc-home-hero.has-background-image {
+  .nc-home-hero.has-background-image .nc-home-hero-media-image {
+    object-position: 80% center;
+  }
+
+  [data-mode="dark"] .nc-home-hero.has-background-image .nc-home-hero-overlay {
     background-image:
       radial-gradient(
         circle at 50% 40%,
@@ -3154,8 +3364,7 @@ body.is-library-cover-dialog-open {
         rgb(10 15 24 / 0.24) 58%,
         transparent 78%
       ),
-      linear-gradient(180deg, rgb(3 8 16 / 0.28), rgb(3 8 16 / 0.12)),
-      var(--nc-hero-bg-image);
+      linear-gradient(180deg, rgb(3 8 16 / 0.28), rgb(3 8 16 / 0.12));
   }
 }
 
@@ -3212,6 +3421,7 @@ body.is-library-cover-dialog-open {
     display: grid;
     justify-items: center;
     width: min(100%, 34rem);
+    padding-inline: clamp(3.1rem, 10vw, 4.1rem);
     text-align: center;
   }
 
@@ -3224,6 +3434,7 @@ body.is-library-cover-dialog-open {
   .nc-home-hero .nc-lead {
     margin-right: auto;
     margin-left: auto;
+    max-width: 34ch;
   }
 
   .nc-home-hero .nc-actions {
@@ -3231,7 +3442,44 @@ body.is-library-cover-dialog-open {
     justify-content: center;
   }
 
-  .nc-home-hero.has-background-image {
+  .nc-home-hero-controls {
+    inset: 0;
+  }
+
+  .nc-home-hero-controls [data-hero-prev],
+  .nc-home-hero-controls [data-hero-next] {
+    width: 2.85rem;
+    height: 2.85rem;
+    min-height: 2.85rem;
+  }
+
+  .nc-home-hero-control-icon {
+    font-size: 2.05rem;
+  }
+
+  .nc-home-hero-controls [data-hero-prev] {
+    left: 0.2rem;
+  }
+
+  .nc-home-hero-controls [data-hero-next] {
+    right: 0.2rem;
+  }
+
+  .nc-home-hero-bottom-controls {
+    bottom: var(--space-2);
+    gap: var(--space-1);
+    width: auto;
+    max-width: calc(100% - (var(--container-gutter-mobile) * 0.7));
+    padding: 0.28rem 0.44rem;
+  }
+
+  .nc-home-hero-controls [data-hero-toggle] {
+    min-height: 1.72rem;
+    padding: 0.2rem 0.46rem;
+    font-size: 0.7rem;
+  }
+
+  .nc-home-hero.has-background-image .nc-home-hero-overlay {
     background-image:
       linear-gradient(
         180deg,
@@ -3244,12 +3492,14 @@ body.is-library-cover-dialog-open {
         rgb(219 224 231 / 0.64) 0%,
         rgb(169 178 190 / 0.3) 44%,
         rgb(74 85 101 / 0.08) 100%
-      ),
-      var(--nc-hero-bg-image);
-    background-position: center center, center center, 82% center;
+      );
   }
 
-  [data-mode="dark"] .nc-home-hero.has-background-image {
+  .nc-home-hero.has-background-image .nc-home-hero-media-image {
+    object-position: 82% center;
+  }
+
+  [data-mode="dark"] .nc-home-hero.has-background-image .nc-home-hero-overlay {
     background-image:
       linear-gradient(
         180deg,
@@ -3262,8 +3512,7 @@ body.is-library-cover-dialog-open {
         rgb(10 16 24 / 0.66) 0%,
         rgb(16 24 38 / 0.34) 44%,
         rgb(28 40 58 / 0.12) 100%
-      ),
-      var(--nc-hero-bg-image);
+      );
   }
 
   .nc-library-card-actions,
@@ -3445,6 +3694,11 @@ body.is-library-cover-dialog-open {
   gap: var(--space-4);
   width: min(var(--layout-max-width), 100% - var(--container-gutter-mobile));
   margin: 0 auto;
+}
+
+.nc-home-hero .nc-hero-grid {
+  position: relative;
+  z-index: 2;
 }
 
 .nc-hero-grid.is-single-column {

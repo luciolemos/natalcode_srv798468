@@ -59,6 +59,9 @@ abstract class AbstractMemberGuardedPageAction extends AbstractPageAction
         return $member;
     }
 
+    /**
+     * @param array<string, mixed> $member
+     */
     protected function ensureMinimumRole(Response $response, array $member, string $requiredRoleKey): ?Response
     {
         $weights = [

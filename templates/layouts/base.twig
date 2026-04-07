@@ -23,6 +23,52 @@
   <meta name="twitter:description" content="{{ page_description }}">
   <meta name="twitter:image" content="{{ page_image }}">
   <meta name="twitter:site" content="{{ twitter_site }}">
+  <link rel="canonical" href="{{ page_url }}">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "{{ site.name|default(site_name)|e('js') }}",
+      "legalName": "{{ site.legalName|default(site.name|default(site_name))|e('js') }}",
+      "url": "{{ app_default_page_url|default(page_url)|e('js') }}",
+      "logo": "{{ page_image|e('js') }}"{% if site.contact.email|default('') %},
+      "email": "{{ site.contact.email|e('js') }}"{% endif %}{% if site.social.instagram.url|default('') %},
+      "sameAs": ["{{ site.social.instagram.url|e('js') }}"]{% endif %}
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "{{ site.name|default(site_name)|e('js') }}",
+      "url": "{{ app_default_page_url|default(page_url)|e('js') }}"
+    }
+  </script>
+  {% if app_gtm_id|default('') %}
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', '{{ app_gtm_id|e('js') }}');
+    </script>
+  {% endif %}
+  {% if app_ga4_id|default('') and not app_gtm_id|default('') %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ app_ga4_id|url_encode }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', '{{ app_ga4_id|e('js') }}', { anonymize_ip: true });
+    </script>
+  {% endif %}
   <script>
     (function () {
       try {
@@ -72,6 +118,16 @@
   {% block head %}{% endblock %}
 </head>
 <body data-default-theme="{{ default_theme|default('amber') }}" data-default-mode="{{ default_mode|default('light') }}" data-default-dark-intensity="{{ default_dark_intensity|default('neutral') }}">
+  {% if app_gtm_id|default('') %}
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id={{ app_gtm_id|url_encode }}"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
+  {% endif %}
   <div class="nc-shell">
     {% include 'components/header.twig' %}
     {% include 'components/breadcrumbs.twig' %}

@@ -14,5 +14,5 @@ jobs:
       - name: Prepare script
         run: chmod +x scripts/smoke-check.sh
 
-      - name: Run smoke check (cedern)
-        run: ./scripts/smoke-check.sh https://cedern.org/
+      - name: Run smoke check (natalcode)
+        run: ./scripts/smoke-check.sh https://natalcode.com.br/
