@@ -35,6 +35,7 @@ Atualmente, a aplicação entrega:
 - JS vanilla para interações de tema
 - Playwright (regressão visual)
 - GitHub Actions (CI)
+- PHPStan nível 6 (`phpstan.neon.dist`)
 
 ## Estrutura do projeto
 
@@ -130,6 +131,12 @@ Guia detalhado de edição:
 2. validar localmente em `http://localhost:8080`;
 3. rodar checks (`npm run test:visual` e checks PHP no CI);
 4. abrir PR com a mudança de conteúdo.
+
+## Compatibilidade técnica
+
+- `composer.json` exige PHP `^8.4`.
+- CI de PHP roda em `8.4` nos workflows.
+- análise estática está em `phpstan` nível `6`.
 
 ### Checklist rápido antes de publicar
 
