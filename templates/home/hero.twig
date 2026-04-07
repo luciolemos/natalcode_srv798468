@@ -80,6 +80,33 @@
     </div>
     <div class="nc-home-hero-overlay" aria-hidden="true"></div>
   {% endif %}
+  {% if hero_media|length > 1 %}
+    <div class="nc-home-hero-controls" data-hero-controls role="group" aria-label="Controles do carrossel da hero">
+      <button type="button" class="nc-home-hero-control-btn" data-hero-prev aria-label="Imagem anterior">Anterior</button>
+      <div class="nc-home-hero-dots" data-hero-dots role="group" aria-label="Selecionar imagem da hero">
+        {% for media in hero_media %}
+          <button
+            type="button"
+            class="nc-home-hero-dot{% if loop.first %} is-active{% endif %}"
+            data-hero-dot
+            data-hero-index="{{ loop.index0 }}"
+            aria-label="Ir para imagem {{ loop.index }} de {{ hero_media|length }}"
+            {% if loop.first %}aria-current="true"{% endif %}
+          ></button>
+        {% endfor %}
+      </div>
+      <button
+        type="button"
+        class="nc-home-hero-control-btn"
+        data-hero-toggle
+        aria-pressed="false"
+        data-label-play="Reproduzir"
+        data-label-pause="Pausar"
+      >Pausar</button>
+      <button type="button" class="nc-home-hero-control-btn" data-hero-next aria-label="Proxima imagem">Proxima</button>
+      <p class="nc-sr-only" data-hero-status aria-live="off" aria-atomic="true"></p>
+    </div>
+  {% endif %}
 
   <div class="nc-hero-grid{% if not show_hero_panel %} is-single-column{% endif %}">
     <div data-aos="fade-up" data-aos-delay="80">

@@ -146,6 +146,12 @@
       const avifSource = hero.querySelector('[data-hero-source-avif]');
       const webpSource = hero.querySelector('[data-hero-source-webp]');
       const imageElement = hero.querySelector('[data-hero-image]');
+      const controls = hero.querySelector('[data-hero-controls]');
+      const previousButton = hero.querySelector('[data-hero-prev]');
+      const nextButton = hero.querySelector('[data-hero-next]');
+      const toggleButton = hero.querySelector('[data-hero-toggle]');
+      const statusElement = hero.querySelector('[data-hero-status]');
+      const dotButtons = Array.from(hero.querySelectorAll('[data-hero-dot]'));
 
       if (!picture || !imageElement) {
         return;
@@ -161,6 +167,7 @@
       let renderRequestId = 0;
       let isInViewport = true;
       let isUserInteracting = false;
+      let isUserPaused = false;
       let prefersReducedMotion = reducedMotionQuery ? reducedMotionQuery.matches : false;
 
       const setOrRemoveAttr = (element, attributeName, value) => {
@@ -188,7 +195,48 @@
         imageElement.src = media.src;
       };
 
-      const applyImage = async () => {
+      const updateDots = () => {
+        if (!dotButtons.length) {
+          return;
+        }
+
+        dotButtons.forEach((dotButton, index) => {
+          const isActive = index === currentIndex;
+          dotButton.classList.toggle('is-active', isActive);
+
+          if (isActive) {
+            dotButton.setAttribute('aria-current', 'true');
+            return;
+          }
+
+          dotButton.removeAttribute('aria-current');
+        });
+      };
+
+      const updateStatus = (isUserInitiated) => {
+        if (!statusElement) {
+          return;
+        }
+
+        statusElement.setAttribute('aria-live', isUserInitiated ? 'polite' : 'off');
+        statusElement.textContent = 'Imagem ' + (currentIndex + 1) + ' de ' + mediaItems.length;
+      };
+
+      const updateToggleButton = () => {
+        if (!toggleButton) {
+          return;
+        }
+
+        const playLabel = toggleButton.getAttribute('data-label-play') || 'Reproduzir';
+        const pauseLabel = toggleButton.getAttribute('data-label-pause') || 'Pausar';
+        const isAutoplayDisabled = prefersReducedMotion || isUserPaused;
+
+        toggleButton.textContent = isAutoplayDisabled ? playLabel : pauseLabel;
+        toggleButton.setAttribute('aria-pressed', isAutoplayDisabled ? 'true' : 'false');
+        toggleButton.disabled = !!prefersReducedMotion;
+      };
+
+      const applyImage = async (options = {}) => {
         const media = mediaItems[currentIndex];
         if (!media || !media.src) {
           return;
@@ -203,6 +251,8 @@
         }
 
         applyMediaMarkup(media);
+        updateDots();
+        updateStatus(!!options.userInitiated);
       };
 
       const preloadNext = () => {
@@ -218,7 +268,7 @@
       };
 
       const shouldAutoplay = () =>
-        !prefersReducedMotion && !document.hidden && isInViewport && !isUserInteracting;
+        !prefersReducedMotion && !isUserPaused && !document.hidden && isInViewport && !isUserInteracting;
 
       const startAutoplay = () => {
         if (autoplayTimer !== null || !shouldAutoplay()) {
@@ -227,9 +277,25 @@
 
         autoplayTimer = window.setInterval(() => {
           currentIndex = (currentIndex + 1) % mediaItems.length;
-          void applyImage();
+          void applyImage({ userInitiated: false });
           preloadNext();
         }, intervalMs);
+      };
+
+      const goToSlide = (targetIndex, isUserInitiated) => {
+        const wrappedIndex = ((targetIndex % mediaItems.length) + mediaItems.length) % mediaItems.length;
+        currentIndex = wrappedIndex;
+        void applyImage({ userInitiated: !!isUserInitiated });
+        preloadNext();
+        syncAutoplay();
+      };
+
+      const goToNext = (isUserInitiated) => {
+        goToSlide(currentIndex + 1, isUserInitiated);
+      };
+
+      const goToPrevious = (isUserInitiated) => {
+        goToSlide(currentIndex - 1, isUserInitiated);
       };
 
       const syncAutoplay = () => {
@@ -241,7 +307,10 @@
         stopAutoplay();
       };
 
-      void applyImage();
+      updateDots();
+      updateStatus(false);
+      updateToggleButton();
+      void applyImage({ userInitiated: false });
       preloadNext();
       syncAutoplay();
 
@@ -268,6 +337,54 @@
         syncAutoplay();
       });
 
+      if (previousButton) {
+        previousButton.addEventListener('click', () => {
+          goToPrevious(true);
+        });
+      }
+
+      if (nextButton) {
+        nextButton.addEventListener('click', () => {
+          goToNext(true);
+        });
+      }
+
+      if (toggleButton) {
+        toggleButton.addEventListener('click', () => {
+          if (prefersReducedMotion) {
+            return;
+          }
+
+          isUserPaused = !isUserPaused;
+          updateToggleButton();
+          syncAutoplay();
+          updateStatus(true);
+        });
+      }
+
+      if (dotButtons.length) {
+        dotButtons.forEach((dotButton, index) => {
+          dotButton.addEventListener('click', () => {
+            goToSlide(index, true);
+          });
+        });
+      }
+
+      if (controls) {
+        controls.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            goToPrevious(true);
+            return;
+          }
+
+          if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            goToNext(true);
+          }
+        });
+      }
+
       document.addEventListener('visibilitychange', () => {
         syncAutoplay();
       });
@@ -275,6 +392,7 @@
       if (reducedMotionQuery) {
         const onReducedMotionChange = (event) => {
           prefersReducedMotion = event.matches;
+          updateToggleButton();
           syncAutoplay();
         };
 
