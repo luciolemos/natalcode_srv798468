@@ -229,6 +229,7 @@ class RecaptchaVerifier
     }
 
     /**
+     * @param list<string> $errorCodes
      * @return array{ok: bool, message: string, score: float|null, error_codes: list<string>}
      */
     private function buildFailure(string $message, ?float $score = null, array $errorCodes = []): array

@@ -565,6 +565,9 @@ abstract class AbstractAdminBookshopAction extends AbstractPageAction
         return $croppedImage !== false ? $croppedImage : $image;
     }
 
+    /**
+     * @param array{r: int, g: int, b: int} $backgroundColor
+     */
     private function scanBookshopCoverVerticalMargin(
         mixed $image,
         int $startX,
@@ -600,6 +603,9 @@ abstract class AbstractAdminBookshopAction extends AbstractPageAction
         return $trim;
     }
 
+    /**
+     * @param array{r: int, g: int, b: int} $backgroundColor
+     */
     private function scanBookshopCoverHorizontalMargin(
         mixed $image,
         int $startY,
@@ -669,6 +675,9 @@ abstract class AbstractAdminBookshopAction extends AbstractPageAction
         ];
     }
 
+    /**
+     * @param array{r: int, g: int, b: int} $backgroundColor
+     */
     private function isBookshopCoverPixelNearBackground(
         mixed $image,
         int $x,

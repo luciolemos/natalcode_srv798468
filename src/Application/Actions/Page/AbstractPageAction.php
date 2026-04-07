@@ -24,6 +24,9 @@ abstract class AbstractPageAction
 
     abstract public function __invoke(Request $request, Response $response): Response;
 
+    /**
+     * @param array<string, mixed> $data
+     */
     protected function renderPage(Response $response, string $template, array $data = []): Response
     {
         $baseUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'), '/');
