@@ -1,14 +1,14 @@
-<section class="nc-section" aria-label="Solicitar orcamento" data-aos="fade-up" data-aos-delay="20">
+<section class="nc-section" aria-label="Solicitar orçamento" data-aos="fade-up" data-aos-delay="20">
   {% set donation_section = homeContent.sections.donation|default({}) %}
   {% set donation_options = homeContent.donationOptions|default([]) %}
 
-  <p class="nc-section-kicker" data-aos="fade-up" data-aos-delay="20">{{ donation_section.kicker|default('Orcamento rapido') }}</p>
+  <p class="nc-section-kicker" data-aos="fade-up" data-aos-delay="20">{{ donation_section.kicker|default('Orçamento rapido') }}</p>
 
   <div class="nc-donation-layout">
     <div class="nc-donation-copy" data-aos="fade-up" data-aos-delay="20">
       <h2 class="nc-section-title">{{ donation_section.title|default('Inicie seu projeto') }}</h2>
       <p class="nc-section-lead">
-        {{ donation_section.lead|default('Envie seu briefing para receber escopo inicial e direcionamento tecnico para o seu momento de negocio.') }}
+        {{ donation_section.lead|default('Envie seu briefing para receber escopo inicial e direcionamento técnico para o seu momento de negócio.') }}
       </p>
       <p class="nc-section-lead">
         {{ donation_section.leadSecondary|default('Escolha o canal de contato mais conveniente para falar com nosso time.') }}
@@ -26,7 +26,7 @@
               <img class="nc-donation-qr" src="{{ option.qrImage }}" alt="{{ option.qrAlt|default('Imagem de apoio do contato') }}">
             {% else %}
               <div class="nc-donation-qr-placeholder" aria-hidden="true">QR Code</div>
-              <p class="nc-donation-helper">{{ option.hint|default('Configure esta opcao no conteudo da home.') }}</p>
+              <p class="nc-donation-helper">{{ option.hint|default('Configure esta opção no conteúdo da home.') }}</p>
             {% endif %}
 
             {% if option.pixKey|default('') %}

@@ -8,34 +8,34 @@ return [
 DIRETRIZES INSTITUCIONAIS - NATALCODE
 Vigencia: 06 de abril de 2026
 
-1. DENOMINACAO E OBJETIVO
-A NatalCode Agencia Digital atua na concepcao, implementacao e evolucao de produtos digitais, incluindo sites, landing pages, sistemas web e consultoria tecnica.
+1. DENOMINACAO E Objetivo
+A NatalCode Agência Digital atua na concepção, implementação e evolução de produtos digitais, incluindo sites, landing pages, sistemas web e consultoria técnica.
 
-2. PRINCIPIOS DE ATUACAO
-A NatalCode orienta sua operacao pelos seguintes principios:
-- clareza de escopo e comunicacao;
-- responsabilidade tecnica na entrega;
-- foco em resultado de negocio;
+2. PRINCIPIOS DE Atuação
+A NatalCode orienta sua operação pelos seguintes principios:
+- clareza de escopo e comunicação;
+- responsabilidade técnica na entrega;
+- foco em resultado de negócio;
 - melhoria continua de produto e processo;
-- respeito a privacidade e seguranca da informacao.
+- respeito a privacidade e segurança da informação.
 
 3. MODELO DE PRESTACAO
-Os servicos sao contratados por proposta comercial, com escopo definido por etapa, validacoes intermediarias e aceite final das entregas.
+Os serviços são contratados por proposta comercial, com escopo definido por etapa, validações intermediárias e aceite final das entregas.
 
 4. PROPRIEDADE INTELECTUAL
 Ativos, layouts, componentes e materiais produzidos no projeto seguem as condicoes de uso e cessao previstas no contrato firmado com cada cliente.
 
 5. CONFIDENCIALIDADE
-Informacoes sensiveis de clientes e parceiros devem ser tratadas com sigilo e utilizadas apenas para execucao das atividades contratadas.
+Informações sensiveis de clientes e parceiros devem ser tratadas com sigilo e utilizadas apenas para execução das atividades contratadas.
 
 6. GOVERNANCA DE DADOS
-O tratamento de dados pessoais observa a legislacao aplicavel e a Politica de Privacidade publicada neste site.
+O tratamento de dados pessoais observa a legislação aplicável e a Política de Privacidade publicada neste site.
 
 7. CANAIS OFICIAIS
 Site: https://natalcode.com.br/
 E-mail: contato@natalcode.com.br
 
-8. ATUALIZACOES
+8. Atualizações
 Estas diretrizes podem ser revisadas periodicamente para refletir ajustes operacionais, legais e estrategicos.
 STATUTE,
 ];

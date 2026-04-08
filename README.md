@@ -134,7 +134,8 @@ Guia detalhado de edição:
 
 ## Compatibilidade técnica
 
-- `composer.json` exige PHP `^8.4`.
+- `composer.json` aceita PHP `^8.3 || ^8.4`.
+- `composer.json` define `config.platform.php = 8.3.0` para compatibilidade de resolução do `composer.lock` em hospedagem compartilhada.
 - CI de PHP roda em `8.4` nos workflows.
 - análise estática está em `phpstan` nível `6`.
 
@@ -343,6 +344,31 @@ Use esta lista como critério de publicação para evitar regressão em produç�
 
 8. **Deploy determinístico**
 	- Confirmar que o provedor publicou exatamente o commit esperado (sem artefato antigo em cache).
+
+## Incidente conhecido: Composer CLI 8.3 em deploy (Hostinger)
+
+### Sintomas
+
+- `update: Your requirements could not be resolved to an installable set of packages.`
+- `Application dependencies are missing. Run composer install --no-dev.`
+
+### Causa raiz
+
+Em hospedagem compartilhada, o PHP do site (Apache/FPM) pode estar em `8.4`, mas o Composer do deploy pode rodar no CLI em `8.3`.
+Com isso, uma dependência de `require-dev` travada para `^8.4` no `composer.lock` pode quebrar a resolução, mesmo com deploy usando `--no-dev`.
+
+### Solução aplicada neste projeto
+
+- `composer.json`: `php` em `^8.3 || ^8.4`.
+- `composer.json`: `config.platform.php` fixado em `8.3.0`.
+- `composer.lock`: `doctrine/instantiator` em `2.0.0` (`php ^8.1`), evitando bloqueio em CLI `8.3`.
+
+### Verificação rápida antes do deploy
+
+```bash
+composer validate --no-check-publish
+composer install --no-dev --dry-run --no-interaction
+```
 
 ### Fluxo recomendado de implantação
 
