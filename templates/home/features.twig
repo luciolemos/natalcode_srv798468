@@ -1,10 +1,10 @@
-<section id="estudos" class="nc-section nc-studies-overview" aria-label="Servicos principais">
+<section id="estudos" class="nc-section nc-studies-overview" aria-label="Serviços principais">
   {% set features_section = homeContent.sections.features|default({}) %}
   {% set features_items = homeContent.featuresItems|default([]) %}
 
   {% include 'components/section-header.twig' with {
-    kicker: features_section.kicker|default('Servicos'),
-    title: features_section.title|default('Solucoes digitais para crescimento do negocio'),
+    kicker: features_section.kicker|default('Serviços'),
+    title: features_section.title|default('Solucoes digitais para crescimento do negócio'),
     lead: features_section.lead|default('Desenvolvimento web, landing pages e suporte continuo para aumentar resultado.')
   } %}
   <div class="nc-feature-grid nc-tonal-feature-grid">

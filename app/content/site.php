@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 return [
     'name' => 'NatalCode',
-    'legalName' => 'NatalCode Agencia Digital',
-    'tagline' => 'Estrategia, design e tecnologia para negocios digitais.',
+    'legalName' => 'NatalCode Agência Digital',
+    'tagline' => 'Estratégia, design e tecnologia para negócios digitais.',
     'brand' => [
         'homeHref' => '/',
         'logoSrc' => '/assets/img/brand/natalcode_logo_horizontal_black_1158x314.png',
         'logoLightSrc' => '/assets/img/brand/natalcode_logo_horizontal_black_1158x314.png',
         'logoDarkSrc' => '/assets/img/brand/natalcode_logo_horizontal_white_1158x314.png',
         'logoAlt' => 'NatalCode',
-        'motto' => 'Codigo com proposito, design com resultado.',
+        'motto' => 'Código com proposito, design com resultado.',
     ],
     'contact' => [
         'email' => 'contato@natalcode.com.br',
@@ -26,13 +26,13 @@ return [
         ],
     ],
     'institutional' => [
-        'statuteExcerpt' => 'A NatalCode e uma agencia digital focada em estrategia, design e desenvolvimento web, com atuacao orientada a resultado e experiencia do usuario.',
-        'contactSummary' => 'Atendemos empresas, profissionais e projetos que precisam de presenca digital clara, rapida e confiavel.',
-        'footerSummary' => 'Agencia digital • Desenvolvimento web • SEO • Performance',
+        'statuteExcerpt' => 'A NatalCode e uma agência digital focada em estratégia, design e desenvolvimento web, com atuação orientada a resultado e experiência do usuário.',
+        'contactSummary' => 'Atendemos empresas, profissionais e projetos que precisam de presença digital clara, rápida e confiável.',
+        'footerSummary' => 'Agência digital • Desenvolvimento web • SEO • Performance',
     ],
     'footer' => [
-        'kicker' => 'Presenca digital orientada a resultado',
-        'description' => 'Da landing page ao sistema sob medida, estruturamos projetos digitais com visao de produto, performance e evolucao continua.',
+        'kicker' => 'Presença digital orientada a resultado',
+        'description' => 'Da landing page ao sistema sob medida, estruturamos projetos digitais com visão de produto, performance e evolução continua.',
         'navGroups' => [
             [
                 'title' => 'Institucional',
@@ -61,7 +61,7 @@ return [
         ],
         'contactKicker' => 'Vamos conversar',
         'contactTitle' => 'Fale com a NatalCode',
-        'contactLead' => 'Envie sua ideia e retornamos com proximo passo, escopo inicial e estimativa.',
+        'contactLead' => 'Envie sua ideia e retornamos com próximo passo, escopo inicial e estimativa.',
         'bottomNote' => 'Atendimento nacional',
         'cnpj' => '04.242.556/0001-45',
     ],
