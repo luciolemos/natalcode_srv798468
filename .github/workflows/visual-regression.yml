@@ -34,6 +34,12 @@ jobs:
           php-version: '8.4'
           tools: composer:v2
 
+      - name: Create test env file
+        run: |
+          cat <<'EOF' > .env
+          APP_ENV=test
+          EOF
+
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist
 
