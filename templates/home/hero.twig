@@ -4,6 +4,12 @@
 {% set hero_qr_url = hero.qrUrl|default('') %}
 {% set hero_qr_image = hero.qrImage|default('') %}
 {% set hero_image_src = hero.imageSrc|default('') %}
+{% set hero_default_kicker = hero.kicker|default('Início') %}
+{% set hero_default_title = hero.title|default('NatalCode Agência Digital') %}
+{% set hero_default_tagline = hero.tagline|default('') %}
+{% set hero_default_lead = hero.lead|default('Desenvolvemos sistemas sob medida para melhorar operação, produtividade e resultado. Unimos tecnologia, usabilidade e estratégia para entregar valor de forma prática e contínua.') %}
+{% set hero_default_badge = hero.badge|default('') %}
+{% set hero_image_alt = hero.imageAlt|default(hero_default_title) %}
 {% set hero_media = [] %}
 {% for image in hero.images|default([]) %}
   {% if image.src is defined %}
@@ -14,7 +20,13 @@
         srcset: image.srcset|default(''),
         webpSrcset: image.webpSrcset|default(''),
         avifSrcset: image.avifSrcset|default(''),
-        sizes: image.sizes|default('100vw')
+        sizes: image.sizes|default('100vw'),
+        kicker: image.kicker|default(hero_default_kicker),
+        badge: image.badge|default(hero_default_badge),
+        title: image.title|default(hero_default_title),
+        tagline: image.tagline|default(hero_default_tagline),
+        lead: image.lead|default(hero_default_lead),
+        imageAlt: image.imageAlt|default(hero_image_alt)
       }]) %}
     {% endif %}
   {% else %}
@@ -25,7 +37,13 @@
         srcset: '',
         webpSrcset: '',
         avifSrcset: '',
-        sizes: '100vw'
+        sizes: '100vw',
+        kicker: hero_default_kicker,
+        badge: hero_default_badge,
+        title: hero_default_title,
+        tagline: hero_default_tagline,
+        lead: hero_default_lead,
+        imageAlt: hero_image_alt
       }]) %}
     {% endif %}
   {% endif %}
@@ -43,12 +61,24 @@
       srcset: '',
       webpSrcset: '',
       avifSrcset: '',
-      sizes: '100vw'
+      sizes: '100vw',
+      kicker: hero_default_kicker,
+      badge: hero_default_badge,
+      title: hero_default_title,
+      tagline: hero_default_tagline,
+      lead: hero_default_lead,
+      imageAlt: hero_image_alt
     }]|merge(hero_media) %}
   {% endif %}
 {% endif %}
 {% set hero_primary_media = hero_media|length > 0 ? hero_media[0] : null %}
-{% set hero_image_alt = hero.imageAlt|default(hero.title|default('NatalCode')) %}
+{% set hero_primary_kicker = hero_primary_media and hero_primary_media.kicker is defined ? hero_primary_media.kicker : hero_default_kicker %}
+{% set hero_primary_badge = hero_primary_media and hero_primary_media.badge is defined ? hero_primary_media.badge : hero_default_badge %}
+{% set hero_primary_title = hero_primary_media and hero_primary_media.title is defined ? hero_primary_media.title : hero_default_title %}
+{% set hero_primary_tagline = hero_primary_media and hero_primary_media.tagline is defined ? hero_primary_media.tagline : hero_default_tagline %}
+{% set hero_primary_lead = hero_primary_media and hero_primary_media.lead is defined ? hero_primary_media.lead : hero_default_lead %}
+{% set hero_primary_image_alt = hero_primary_media and hero_primary_media.imageAlt is defined ? hero_primary_media.imageAlt : hero_image_alt %}
+{% set hero_primary_has_tagline = hero_primary_tagline is not null and hero_primary_tagline|trim != '' %}
 {% set hero_panel_enabled = hero.showPanel is defined ? hero.showPanel : true %}
 {% set hero_panel_has_content = hero_metrics|length > 0 or (hero_qr_url and hero_qr_image) %}
 {% set show_hero_panel = hero_panel_enabled and hero_panel_has_content %}
@@ -117,21 +147,14 @@
   {% endif %}
 
   <div class="nc-hero-grid{% if not show_hero_panel %} is-single-column{% endif %}">
-    <div data-aos="fade-up" data-aos-delay="80">
+    <div class="nc-hero-copy-stack" data-hero-copy-stack data-aos="fade-up" data-aos-delay="80">
       {% if hero_primary_media %}
-        <span class="nc-sr-only">{{ hero_image_alt }}</span>
+        <span class="nc-sr-only" data-hero-copy-image-alt>{{ hero_primary_image_alt }}</span>
       {% endif %}
-      <p class="nc-section-kicker">{{ hero.kicker|default('Início') }}</p>
-      {% if hero.badge|default('') %}
-        <span class="nc-badge">{{ hero.badge }}</span>
-      {% endif %}
-      <h1 class="nc-title">{{ hero.title|default('NatalCode Agência Digital') }}</h1>
-      {% if hero.tagline|default('') %}
-        <p class="nc-hero-tagline">{{ hero.tagline }}</p>
-      {% endif %}
-      <p class="nc-lead">
-        {{ hero.lead|default('Desenvolvemos sistemas sob medida para melhorar operação, produtividade e resultado. Unimos tecnologia, usabilidade e estratégia para entregar valor de forma prática e contínua.') }}
-      </p>
+      <p class="nc-section-kicker" data-hero-copy-kicker>{{ hero_primary_kicker }}</p>
+      <h1 class="nc-title" data-hero-copy-title>{{ hero_primary_title }}</h1>
+      <p class="nc-hero-tagline" data-hero-copy-tagline{% if not hero_primary_has_tagline %} hidden{% endif %}>{{ hero_primary_tagline }}</p>
+      <p class="nc-lead" data-hero-copy-lead>{{ hero_primary_lead }}</p>
       <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="{{ hero.actionsDelay|default(140) }}">
         {% for action in hero_actions %}
           <a

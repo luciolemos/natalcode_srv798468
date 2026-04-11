@@ -12,6 +12,12 @@
         avifSrcset: '',
         webpSrcset: '',
         sizes: '100vw',
+        kicker: '',
+        badge: '',
+        title: '',
+        tagline: '',
+        lead: '',
+        imageAlt: '',
       };
     }
 
@@ -30,6 +36,12 @@
       avifSrcset: typeof item.avifSrcset === 'string' ? item.avifSrcset.trim() : '',
       webpSrcset: typeof item.webpSrcset === 'string' ? item.webpSrcset.trim() : '',
       sizes: typeof item.sizes === 'string' && item.sizes.trim() ? item.sizes.trim() : '100vw',
+      kicker: typeof item.kicker === 'string' ? item.kicker.trim() : '',
+      badge: typeof item.badge === 'string' ? item.badge.trim() : '',
+      title: typeof item.title === 'string' ? item.title.trim() : '',
+      tagline: typeof item.tagline === 'string' ? item.tagline.trim() : '',
+      lead: typeof item.lead === 'string' ? item.lead.trim() : '',
+      imageAlt: typeof item.imageAlt === 'string' ? item.imageAlt.trim() : '',
     };
   };
 
@@ -152,6 +164,13 @@
       const toggleButton = hero.querySelector('[data-hero-toggle]');
       const statusElement = hero.querySelector('[data-hero-status]');
       const dotButtons = Array.from(hero.querySelectorAll('[data-hero-dot]'));
+      const copyStackElement = hero.querySelector('[data-hero-copy-stack]');
+      const kickerElement = hero.querySelector('[data-hero-copy-kicker]');
+      const badgeElement = hero.querySelector('[data-hero-copy-badge]');
+      const titleElement = hero.querySelector('[data-hero-copy-title]');
+      const taglineElement = hero.querySelector('[data-hero-copy-tagline]');
+      const leadElement = hero.querySelector('[data-hero-copy-lead]');
+      const imageAltElement = hero.querySelector('[data-hero-copy-image-alt]');
 
       if (!picture || !imageElement) {
         return;
@@ -169,6 +188,52 @@
       let isUserInteracting = false;
       let isUserPaused = false;
       let prefersReducedMotion = reducedMotionQuery ? reducedMotionQuery.matches : false;
+      let copyTransitionTimer = null;
+
+      const readTextContent = (element) => {
+        if (!element || typeof element.textContent !== 'string') {
+          return '';
+        }
+
+        return element.textContent.trim();
+      };
+
+      const fallbackCopy = {
+        kicker: readTextContent(kickerElement),
+        badge: readTextContent(badgeElement),
+        title: readTextContent(titleElement),
+        tagline: readTextContent(taglineElement),
+        lead: readTextContent(leadElement),
+        imageAlt: readTextContent(imageAltElement),
+      };
+
+      const resolveCopyValue = (value, fallbackValue = '') => {
+        if (typeof value === 'string' && value.trim()) {
+          return value.trim();
+        }
+
+        return fallbackValue;
+      };
+
+      const setCopyText = (element, value, hideWhenEmpty = false) => {
+        if (!element) {
+          return;
+        }
+
+        const hasValue = typeof value === 'string' && value.trim() !== '';
+        element.textContent = hasValue ? value : '';
+
+        if (!hideWhenEmpty) {
+          return;
+        }
+
+        if (hasValue) {
+          element.removeAttribute('hidden');
+          return;
+        }
+
+        element.setAttribute('hidden', '');
+      };
 
       const setOrRemoveAttr = (element, attributeName, value) => {
         if (!element) {
@@ -195,6 +260,49 @@
         imageElement.src = media.src;
       };
 
+      const animateCopySwap = () => {
+        if (!copyStackElement || prefersReducedMotion) {
+          return;
+        }
+
+        copyStackElement.classList.remove('is-transitioning');
+        void copyStackElement.offsetWidth;
+        copyStackElement.classList.add('is-transitioning');
+
+        if (copyTransitionTimer !== null) {
+          window.clearTimeout(copyTransitionTimer);
+        }
+
+        copyTransitionTimer = window.setTimeout(() => {
+          copyStackElement.classList.remove('is-transitioning');
+          copyTransitionTimer = null;
+        }, 320);
+      };
+
+      const applyCopyMarkup = (media, options = {}) => {
+        if (!media) {
+          return;
+        }
+
+        const kicker = resolveCopyValue(media.kicker, fallbackCopy.kicker);
+        const badge = resolveCopyValue(media.badge, fallbackCopy.badge);
+        const title = resolveCopyValue(media.title, fallbackCopy.title);
+        const tagline = resolveCopyValue(media.tagline, fallbackCopy.tagline);
+        const lead = resolveCopyValue(media.lead, fallbackCopy.lead);
+        const imageAlt = resolveCopyValue(media.imageAlt, fallbackCopy.imageAlt);
+
+        setCopyText(kickerElement, kicker);
+        setCopyText(badgeElement, badge, true);
+        setCopyText(titleElement, title);
+        setCopyText(taglineElement, tagline, true);
+        setCopyText(leadElement, lead);
+        setCopyText(imageAltElement, imageAlt);
+
+        if (options.animate !== false) {
+          animateCopySwap();
+        }
+      };
+
       const updateDots = () => {
         if (!dotButtons.length) {
           return;
@@ -218,8 +326,14 @@
           return;
         }
 
+        const activeMedia = mediaItems[currentIndex];
+        const activeTitle =
+          activeMedia && typeof activeMedia.title === 'string' && activeMedia.title.trim()
+            ? ': ' + activeMedia.title.trim()
+            : '';
+
         statusElement.setAttribute('aria-live', isUserInitiated ? 'polite' : 'off');
-        statusElement.textContent = 'Imagem ' + (currentIndex + 1) + ' de ' + mediaItems.length;
+        statusElement.textContent = 'Imagem ' + (currentIndex + 1) + ' de ' + mediaItems.length + activeTitle;
       };
 
       const updateToggleButton = () => {
@@ -251,6 +365,7 @@
         }
 
         applyMediaMarkup(media);
+        applyCopyMarkup(media, { animate: options.animateCopy !== false });
         updateDots();
         updateStatus(!!options.userInitiated);
       };
@@ -310,7 +425,7 @@
       updateDots();
       updateStatus(false);
       updateToggleButton();
-      void applyImage({ userInitiated: false });
+      void applyImage({ userInitiated: false, animateCopy: false });
       preloadNext();
       syncAutoplay();
 
