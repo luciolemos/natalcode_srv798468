@@ -3,13 +3,35 @@
 {% block content %}
   <main class="nc-main nc-container nc-home-flow">
     {% set site_contact = site.contact|default({}) %}
+    {% set contact_meta = site.footer|default({}) %}
 
     <section class="nc-section nc-contact-overview" aria-label="Contato" data-aos="fade-up" data-aos-delay="0">
       {% include 'components/section-header.twig' with {
-        kicker: 'Contato',
-        title: 'Fale com o NatalCode',
-        lead: 'Estamos de portas abertas para acolhimento, estudos e participação nas atividades da casa.'
+        kicker: contact_meta.contactKicker|default('Contato'),
+        title: contact_meta.contactTitle|default('Fale com a NatalCode'),
+        lead: contact_meta.contactLead|default('Envie sua ideia e retornamos com próximo passo, escopo inicial e estimativa.')
       } %}
+
+      <ul class="nc-checklist">
+        {% include 'components/check-item.twig' with {
+          step: '01',
+          title: 'Envie o contexto',
+          description: 'Conte objetivo, público e prazo desejado. Quanto mais claro, mais rápido o retorno.',
+          delay: 120
+        } %}
+        {% include 'components/check-item.twig' with {
+          step: '02',
+          title: 'Receba diagnóstico inicial',
+          description: 'Avaliamos requisitos, viabilidade e sugerimos a melhor linha de entrega.',
+          delay: 160
+        } %}
+        {% include 'components/check-item.twig' with {
+          step: '03',
+          title: 'Proposta e próximos passos',
+          description: 'Enviamos escopo, prazos e investimento para seguir com o projeto.',
+          delay: 200
+        } %}
+      </ul>
 
       <article class="nc-card nc-admin-login-card">
         {% if contact_form_status == 'sent' %}
@@ -29,22 +51,22 @@
         <form class="nc-admin-login-form" method="post" action="/contato"{% if app_recaptcha_enabled %} data-recaptcha-action="contact_submit" data-recaptcha-site-key="{{ app_recaptcha_site_key }}"{% endif %}>
           <div class="nc-admin-login-field">
             <label class="nc-admin-login-label" for="name">Nome</label>
-            <input class="nc-admin-login-input" id="name" name="name" type="text" value="{{ contact_form.name|default('') }}" placeholder="Ex: Maria da Silva" autocomplete="name" required>
+            <input class="nc-admin-login-input" id="name" name="name" type="text" value="{{ contact_form.name|default('') }}" placeholder="Ex: Maria Souza" autocomplete="name" required>
           </div>
 
           <div class="nc-admin-login-field">
             <label class="nc-admin-login-label" for="email">E-mail</label>
-            <input class="nc-admin-login-input" id="email" name="email" type="email" value="{{ contact_form.email|default('') }}" placeholder="Ex: maria@email.com" autocomplete="email" required>
+            <input class="nc-admin-login-input" id="email" name="email" type="email" value="{{ contact_form.email|default('') }}" placeholder="Ex: maria@empresa.com" autocomplete="email" required>
           </div>
 
           <div class="nc-admin-login-field">
-            <label class="nc-admin-login-label" for="subject">Assunto</label>
-            <input class="nc-admin-login-input" id="subject" name="subject" type="text" value="{{ contact_form.subject|default('') }}" placeholder="Ex: Dúvida sobre atividades">
+            <label class="nc-admin-login-label" for="subject">Objetivo principal</label>
+            <input class="nc-admin-login-input" id="subject" name="subject" type="text" value="{{ contact_form.subject|default('') }}" placeholder="Ex: Landing page para campanha ou novo site institucional">
           </div>
 
           <div class="nc-admin-login-field">
-            <label class="nc-admin-login-label" for="message">Mensagem</label>
-            <textarea class="nc-admin-login-input" id="message" name="message" rows="5" placeholder="Escreva aqui sua mensagem, dúvida ou solicitação." required>{{ contact_form.message|default('') }}</textarea>
+            <label class="nc-admin-login-label" for="message">Detalhes do projeto</label>
+            <textarea class="nc-admin-login-input" id="message" name="message" rows="5" placeholder="Conte contexto, público, prazo desejado e qualquer referência útil." required>{{ contact_form.message|default('') }}</textarea>
           </div>
 
           <div class="nc-admin-login-field" style="display:none;" aria-hidden="true">

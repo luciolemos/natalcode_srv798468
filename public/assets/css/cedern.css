@@ -469,6 +469,9 @@
   --check-item-bg: color-mix(in srgb, var(--theme-soft-1) 12%, #161a20);
   --check-item-border: color-mix(in srgb, var(--theme-soft-2) 28%, var(--surface-border));
 
+  --trust-card-bg: color-mix(in srgb, var(--theme-soft-1) 12%, #161a20);
+  --trust-card-border: color-mix(in srgb, var(--theme-soft-2) 28%, var(--surface-border));
+
   --section-divider: color-mix(in srgb, var(--theme-soft-2) 22%, var(--surface-border));
   --section-surface-bg: color-mix(in srgb, var(--theme-soft-1) 10%, #161a20);
   --section-surface-border: color-mix(in srgb, var(--theme-soft-2) 24%, var(--surface-border));
@@ -490,6 +493,9 @@
 
   --check-item-bg: color-mix(in srgb, var(--theme-soft-1) 32%, #161a20);
   --check-item-border: color-mix(in srgb, var(--theme-soft-2) 60%, var(--surface-border));
+
+  --trust-card-bg: color-mix(in srgb, var(--theme-soft-1) 34%, #161a20);
+  --trust-card-border: color-mix(in srgb, var(--theme-soft-2) 64%, var(--surface-border));
 
   --section-divider: color-mix(in srgb, var(--theme-soft-2) 56%, var(--surface-border));
   --section-surface-bg: color-mix(in srgb, var(--theme-soft-1) 30%, #161a20);
@@ -540,6 +546,20 @@ h3 {
   border-bottom: 1px solid var(--surface-border);
   background: var(--surface-muted);
   backdrop-filter: blur(6px);
+}
+
+.nc-header .nc-link:hover,
+.nc-header .nc-link:focus-visible,
+.nc-header .nc-nav-group-toggle:hover,
+.nc-header .nc-nav-group-toggle:focus-visible {
+  background: transparent;
+}
+
+.nc-header .nc-nav {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .nc-footer {
@@ -1135,16 +1155,29 @@ h3 {
   background-image:
     linear-gradient(
       90deg,
-      rgb(228 232 238 / 0.82) 0%,
-      rgb(220 225 232 / 0.74) 34%,
-      rgb(199 206 216 / 0.52) 52%,
-      rgb(145 154 167 / 0.24) 72%,
-      rgb(74 85 101 / 0.08) 100%
+      rgb(228 232 238 / 0.74) 0%,
+      rgb(220 225 232 / 0.6) 34%,
+      rgb(199 206 216 / 0.29) 52%,
+      rgb(145 154 167 / 0.1) 72%,
+      rgb(74 85 101 / 0.03) 100%
     ),
-    linear-gradient(180deg, rgb(15 23 42 / 0.14), rgb(15 23 42 / 0.08));
+    linear-gradient(180deg, rgb(15 23 42 / 0.08), rgb(15 23 42 / 0.03));
   background-repeat: no-repeat;
   background-position: center center, center center;
   background-size: auto, auto;
+}
+
+.nc-home-hero.has-background-image .nc-section-kicker,
+.nc-home-hero.has-background-image .nc-title,
+.nc-home-hero.has-background-image .nc-hero-tagline,
+.nc-home-hero.has-background-image .nc-lead {
+  text-shadow:
+    0 1px 2px rgb(255 255 255 / 0.48),
+    0 10px 22px rgb(15 23 42 / 0.18);
+}
+
+.nc-home-hero.has-background-image .nc-lead {
+  color: color-mix(in srgb, var(--text-main) 78%, var(--text-muted));
 }
 
 [data-mode="dark"] .nc-home-hero.has-background-image {
@@ -1343,6 +1376,37 @@ h3 {
 [data-mode="dark"] .nc-home-hero-dot.is-active {
   background: color-mix(in srgb, var(--theme-accent-1) 70%, #111827);
   border-color: color-mix(in srgb, var(--theme-accent-1) 62%, var(--surface-border));
+}
+
+.nc-hero-copy-stack {
+  position: relative;
+  will-change: opacity, transform;
+}
+
+.nc-hero-copy-stack.is-transitioning {
+  animation: nc-hero-copy-swap 320ms ease;
+}
+
+@keyframes nc-hero-copy-swap {
+  0% {
+    opacity: 0.48;
+    transform: translateY(8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nc-hero-copy-stack {
+    will-change: auto;
+  }
+
+  .nc-hero-copy-stack.is-transitioning {
+    animation: none;
+  }
 }
 
 .nc-card {
@@ -3341,13 +3405,13 @@ body.is-library-cover-dialog-open {
     background-image:
       radial-gradient(
         circle at 50% 40%,
-        rgb(228 232 238 / 0.84) 0%,
-        rgb(214 220 228 / 0.68) 18%,
-        rgb(184 193 204 / 0.46) 36%,
-        rgb(120 130 144 / 0.18) 58%,
+        rgb(228 232 238 / 0.68) 0%,
+        rgb(214 220 228 / 0.48) 18%,
+        rgb(184 193 204 / 0.26) 36%,
+        rgb(120 130 144 / 0.09) 58%,
         transparent 78%
       ),
-      linear-gradient(180deg, rgb(15 23 42 / 0.16), rgb(15 23 42 / 0.08));
+      linear-gradient(180deg, rgb(15 23 42 / 0.09), rgb(15 23 42 / 0.04));
   }
 
   .nc-home-hero.has-background-image .nc-home-hero-media-image {
@@ -3483,15 +3547,15 @@ body.is-library-cover-dialog-open {
     background-image:
       linear-gradient(
         180deg,
-        rgb(226 230 236 / 0.76) 0%,
-        rgb(210 216 224 / 0.62) 46%,
-        rgb(188 197 208 / 0.48) 100%
+        rgb(226 230 236 / 0.6) 0%,
+        rgb(210 216 224 / 0.42) 46%,
+        rgb(188 197 208 / 0.3) 100%
       ),
       linear-gradient(
         90deg,
-        rgb(219 224 231 / 0.64) 0%,
-        rgb(169 178 190 / 0.3) 44%,
-        rgb(74 85 101 / 0.08) 100%
+        rgb(219 224 231 / 0.46) 0%,
+        rgb(169 178 190 / 0.19) 44%,
+        rgb(74 85 101 / 0.04) 100%
       );
   }
 
@@ -3938,8 +4002,8 @@ body.is-library-cover-dialog-open {
 }
 
 .nc-trust-card {
-  border: 1px solid color-mix(in srgb, var(--theme-soft-2) 50%, var(--surface-border));
-  background: color-mix(in srgb, var(--theme-soft-1) 20%, var(--surface-main));
+  border: 1px solid var(--trust-card-border, color-mix(in srgb, var(--theme-soft-2) 50%, var(--surface-border)));
+  background: var(--trust-card-bg, color-mix(in srgb, var(--theme-soft-1) 20%, var(--surface-main)));
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
@@ -4718,7 +4782,8 @@ code {
 
   .nc-nav-group {
     position: relative;
-    display: block;
+    display: flex;
+    align-items: center;
   }
 
   .nc-nav-group-toggle {
@@ -4726,6 +4791,14 @@ code {
     padding: 0;
     font-weight: var(--font-weight-medium);
     position: relative;
+  }
+
+  .nc-nav > .nc-link,
+  .nc-nav-group-toggle {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.1;
+    transform: none;
   }
 
   .nc-nav-group-toggle::after {
