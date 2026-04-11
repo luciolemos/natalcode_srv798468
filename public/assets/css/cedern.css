@@ -4782,7 +4782,8 @@ code {
 
   .nc-nav-group {
     position: relative;
-    display: block;
+    display: flex;
+    align-items: center;
   }
 
   .nc-nav-group-toggle {
@@ -4790,6 +4791,14 @@ code {
     padding: 0;
     font-weight: var(--font-weight-medium);
     position: relative;
+  }
+
+  .nc-nav > .nc-link,
+  .nc-nav-group-toggle {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.1;
+    transform: none;
   }
 
   .nc-nav-group-toggle::after {
