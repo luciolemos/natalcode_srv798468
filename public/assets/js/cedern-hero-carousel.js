@@ -12,6 +12,10 @@
         avifSrcset: '',
         webpSrcset: '',
         sizes: '100vw',
+        mobileSrcset: '',
+        mobileWebpSrcset: '',
+        mobileAvifSrcset: '',
+        mobileSizes: '',
         kicker: '',
         badge: '',
         title: '',
@@ -36,6 +40,10 @@
       avifSrcset: typeof item.avifSrcset === 'string' ? item.avifSrcset.trim() : '',
       webpSrcset: typeof item.webpSrcset === 'string' ? item.webpSrcset.trim() : '',
       sizes: typeof item.sizes === 'string' && item.sizes.trim() ? item.sizes.trim() : '100vw',
+      mobileSrcset: typeof item.mobileSrcset === 'string' ? item.mobileSrcset.trim() : '',
+      mobileWebpSrcset: typeof item.mobileWebpSrcset === 'string' ? item.mobileWebpSrcset.trim() : '',
+      mobileAvifSrcset: typeof item.mobileAvifSrcset === 'string' ? item.mobileAvifSrcset.trim() : '',
+      mobileSizes: typeof item.mobileSizes === 'string' ? item.mobileSizes.trim() : '',
       kicker: typeof item.kicker === 'string' ? item.kicker.trim() : '',
       badge: typeof item.badge === 'string' ? item.badge.trim() : '',
       title: typeof item.title === 'string' ? item.title.trim() : '',
@@ -157,6 +165,9 @@
       const picture = hero.querySelector('[data-hero-picture]');
       const avifSource = hero.querySelector('[data-hero-source-avif]');
       const webpSource = hero.querySelector('[data-hero-source-webp]');
+      const mobileAvifSource = hero.querySelector('[data-hero-source-avif-mobile]');
+      const mobileWebpSource = hero.querySelector('[data-hero-source-webp-mobile]');
+      const mobileJpgSource = hero.querySelector('[data-hero-source-jpg-mobile]');
       const imageElement = hero.querySelector('[data-hero-image]');
       const controls = hero.querySelector('[data-hero-controls]');
       const previousButton = hero.querySelector('[data-hero-prev]');
@@ -253,6 +264,12 @@
           return;
         }
 
+        setOrRemoveAttr(mobileAvifSource, 'srcset', media.mobileAvifSrcset);
+        setOrRemoveAttr(mobileWebpSource, 'srcset', media.mobileWebpSrcset);
+        setOrRemoveAttr(mobileJpgSource, 'srcset', media.mobileSrcset);
+        setOrRemoveAttr(mobileAvifSource, 'sizes', media.mobileSizes || '100vw');
+        setOrRemoveAttr(mobileWebpSource, 'sizes', media.mobileSizes || '100vw');
+        setOrRemoveAttr(mobileJpgSource, 'sizes', media.mobileSizes || '100vw');
         setOrRemoveAttr(avifSource, 'srcset', media.avifSrcset);
         setOrRemoveAttr(webpSource, 'srcset', media.webpSrcset);
         setOrRemoveAttr(imageElement, 'srcset', media.srcset);

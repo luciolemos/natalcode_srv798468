@@ -21,6 +21,10 @@
         webpSrcset: image.webpSrcset|default(''),
         avifSrcset: image.avifSrcset|default(''),
         sizes: image.sizes|default('100vw'),
+        mobileSrcset: image.mobileSrcset|default(''),
+        mobileWebpSrcset: image.mobileWebpSrcset|default(''),
+        mobileAvifSrcset: image.mobileAvifSrcset|default(''),
+        mobileSizes: image.mobileSizes|default(''),
         kicker: image.kicker|default(hero_default_kicker),
         badge: image.badge|default(hero_default_badge),
         title: image.title|default(hero_default_title),
@@ -38,6 +42,10 @@
         webpSrcset: '',
         avifSrcset: '',
         sizes: '100vw',
+        mobileSrcset: '',
+        mobileWebpSrcset: '',
+        mobileAvifSrcset: '',
+        mobileSizes: '',
         kicker: hero_default_kicker,
         badge: hero_default_badge,
         title: hero_default_title,
@@ -62,6 +70,10 @@
       webpSrcset: '',
       avifSrcset: '',
       sizes: '100vw',
+      mobileSrcset: '',
+      mobileWebpSrcset: '',
+      mobileAvifSrcset: '',
+      mobileSizes: '',
       kicker: hero_default_kicker,
       badge: hero_default_badge,
       title: hero_default_title,
@@ -93,6 +105,9 @@
   {% if hero_primary_media %}
     <div class="nc-home-hero-media" aria-hidden="true">
       <picture data-hero-picture>
+        <source data-hero-source-avif-mobile type="image/avif" media="(max-width: 700px)"{% if hero_primary_media.mobileAvifSrcset|default('') %} srcset="{{ hero_primary_media.mobileAvifSrcset|e('html_attr') }}"{% endif %}{% if hero_primary_media.mobileSizes|default('') %} sizes="{{ hero_primary_media.mobileSizes|e('html_attr') }}"{% endif %}>
+        <source data-hero-source-webp-mobile type="image/webp" media="(max-width: 700px)"{% if hero_primary_media.mobileWebpSrcset|default('') %} srcset="{{ hero_primary_media.mobileWebpSrcset|e('html_attr') }}"{% endif %}{% if hero_primary_media.mobileSizes|default('') %} sizes="{{ hero_primary_media.mobileSizes|e('html_attr') }}"{% endif %}>
+        <source data-hero-source-jpg-mobile type="image/jpeg" media="(max-width: 700px)"{% if hero_primary_media.mobileSrcset|default('') %} srcset="{{ hero_primary_media.mobileSrcset|e('html_attr') }}"{% endif %}{% if hero_primary_media.mobileSizes|default('') %} sizes="{{ hero_primary_media.mobileSizes|e('html_attr') }}"{% endif %}>
         <source data-hero-source-avif type="image/avif"{% if hero_primary_media.avifSrcset|default('') %} srcset="{{ hero_primary_media.avifSrcset|e('html_attr') }}"{% endif %}>
         <source data-hero-source-webp type="image/webp"{% if hero_primary_media.webpSrcset|default('') %} srcset="{{ hero_primary_media.webpSrcset|e('html_attr') }}"{% endif %}>
         <img
