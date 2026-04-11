@@ -3,13 +3,15 @@ const { test, expect } = require('@playwright/test');
 async function stabilizeForScreenshot(page)
 {
     await page.waitForLoadState('networkidle');
+    await page.waitForFunction(() => document.fonts && document.fonts.status === 'loaded');
     await page.addStyleTag({
         content: `
             * { caret-color: transparent !important; }
+            *, *::before, *::after { transition: none !important; }
             html { -webkit-font-smoothing: antialiased; }
         `,
     });
-    await page.waitForFunction(() => document.fonts && document.fonts.status === 'loaded');
+    await page.waitForTimeout(100);
 }
 
 async function openAboutReady(page)
