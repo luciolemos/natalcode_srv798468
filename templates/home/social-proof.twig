@@ -1,5 +1,6 @@
 <section id="quem-somos" class="nc-section" aria-label="Quem Somos" data-aos="fade-up" data-aos-delay="0">
   {% set social_proof = homeContent.sections.socialProof|default({}) %}
+  {% set trust_cards = homeContent.socialProofTrustCards|default([]) %}
 
   <div class="nc-about-header">
     {% include 'components/section-header.twig' with {
@@ -9,4 +10,38 @@
       lead_secondary: social_proof.leadSecondary|default('')
     } %}
   </div>
+
+  {% if trust_cards|length > 0 %}
+    <p class="nc-section-kicker">{{ social_proof.trustGridLabel|default('Frentes de atuação') }}</p>
+    <div class="nc-trust-grid" aria-label="Frentes de atuação">
+      {% for card in trust_cards %}
+        <article class="nc-trust-card" data-aos="fade-up" data-aos-delay="{{ 120 + (loop.index0 * 60) }}">
+          {% set trust_sizes = card.sizes|default('(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 360px') %}
+          {% if card.avifSrcset or card.webpSrcset or card.srcset %}
+            <picture>
+              {% if card.avifSrcset %}
+                <source type="image/avif" srcset="{{ card.avifSrcset }}" sizes="{{ trust_sizes }}">
+              {% endif %}
+              {% if card.webpSrcset %}
+                <source type="image/webp" srcset="{{ card.webpSrcset }}" sizes="{{ trust_sizes }}">
+              {% endif %}
+              <img class="nc-trust-media"
+                src="{{ card.image }}"
+                {% if card.srcset %}srcset="{{ card.srcset }}"{% endif %}
+                sizes="{{ trust_sizes }}"
+                alt="{{ card.alt|default(card.title) }}"
+                loading="lazy"
+                decoding="async">
+            </picture>
+          {% else %}
+            <img class="nc-trust-media" src="{{ card.image }}" alt="{{ card.alt|default(card.title) }}" loading="lazy" decoding="async">
+          {% endif %}
+          <div class="nc-trust-body">
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.text }}</p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% endif %}
 </section>

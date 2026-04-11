@@ -469,6 +469,9 @@
   --check-item-bg: color-mix(in srgb, var(--theme-soft-1) 12%, #161a20);
   --check-item-border: color-mix(in srgb, var(--theme-soft-2) 28%, var(--surface-border));
 
+  --trust-card-bg: color-mix(in srgb, var(--theme-soft-1) 12%, #161a20);
+  --trust-card-border: color-mix(in srgb, var(--theme-soft-2) 28%, var(--surface-border));
+
   --section-divider: color-mix(in srgb, var(--theme-soft-2) 22%, var(--surface-border));
   --section-surface-bg: color-mix(in srgb, var(--theme-soft-1) 10%, #161a20);
   --section-surface-border: color-mix(in srgb, var(--theme-soft-2) 24%, var(--surface-border));
@@ -490,6 +493,9 @@
 
   --check-item-bg: color-mix(in srgb, var(--theme-soft-1) 32%, #161a20);
   --check-item-border: color-mix(in srgb, var(--theme-soft-2) 60%, var(--surface-border));
+
+  --trust-card-bg: color-mix(in srgb, var(--theme-soft-1) 34%, #161a20);
+  --trust-card-border: color-mix(in srgb, var(--theme-soft-2) 64%, var(--surface-border));
 
   --section-divider: color-mix(in srgb, var(--theme-soft-2) 56%, var(--surface-border));
   --section-surface-bg: color-mix(in srgb, var(--theme-soft-1) 30%, #161a20);
@@ -540,6 +546,20 @@ h3 {
   border-bottom: 1px solid var(--surface-border);
   background: var(--surface-muted);
   backdrop-filter: blur(6px);
+}
+
+.nc-header .nc-link:hover,
+.nc-header .nc-link:focus-visible,
+.nc-header .nc-nav-group-toggle:hover,
+.nc-header .nc-nav-group-toggle:focus-visible {
+  background: transparent;
+}
+
+.nc-header .nc-nav {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .nc-footer {
@@ -3982,8 +4002,8 @@ body.is-library-cover-dialog-open {
 }
 
 .nc-trust-card {
-  border: 1px solid color-mix(in srgb, var(--theme-soft-2) 50%, var(--surface-border));
-  background: color-mix(in srgb, var(--theme-soft-1) 20%, var(--surface-main));
+  border: 1px solid var(--trust-card-border, color-mix(in srgb, var(--theme-soft-2) 50%, var(--surface-border)));
+  background: var(--trust-card-bg, color-mix(in srgb, var(--theme-soft-1) 20%, var(--surface-main)));
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
