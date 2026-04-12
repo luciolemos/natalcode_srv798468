@@ -29,6 +29,11 @@ if (is_file($projectRoot . '/.env')) {
     Dotenv::createImmutable($projectRoot)->safeLoad();
 }
 
+if (!empty($_ENV['APP_ERROR_LOG'])) {
+    ini_set('log_errors', '1');
+    ini_set('error_log', (string) $_ENV['APP_ERROR_LOG']);
+}
+
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
 
