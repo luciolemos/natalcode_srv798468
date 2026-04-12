@@ -26,7 +26,7 @@ return [
         ],
     ],
     'institutional' => [
-        'statuteExcerpt' => 'A NatalCode e uma agência digital focada em estratégia, design e desenvolvimento web, com atuação orientada a resultado e experiência do usuário.',
+        'statuteExcerpt' => 'A NatalCode é uma agência digital focada em estratégia, design e desenvolvimento web, com atuação orientada a resultado e experiência do usuário.',
         'contactSummary' => 'Atendemos empresas, profissionais e projetos que precisam de presença digital clara, rápida e confiável.',
         'footerSummary' => 'Agência digital • Desenvolvimento web • SEO • Performance',
     ],
