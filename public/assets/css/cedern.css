@@ -3491,6 +3491,10 @@ body.is-library-cover-dialog-open {
     text-align: center;
   }
 
+  .nc-home-hero .nc-section-kicker {
+    display: none;
+  }
+
   .nc-home-hero .nc-title,
   .nc-home-hero .nc-hero-tagline,
   .nc-home-hero .nc-lead {
