@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Application\Settings\SettingsInterface;
 use App\Application\Security\RecaptchaVerifier;
 use DI\ContainerBuilder;
+use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
@@ -24,6 +25,7 @@ return function (ContainerBuilder $containerBuilder) {
             $logger->pushProcessor($processor);
 
             $handler = new StreamHandler($loggerSettings['path'], $loggerSettings['level']);
+            $handler->setFormatter(new JsonFormatter(JsonFormatter::BATCH_MODE_JSON, true));
             $logger->pushHandler($handler);
 
             return $logger;

@@ -753,6 +753,59 @@ return function (App $app) {
         }
     });
 
+    $app->post('/events', function (Request $request, Response $response): Response {
+        $rawBody = (string) $request->getBody();
+        $payload = json_decode($rawBody, true);
+
+        if (!is_array($payload)) {
+            $response->getBody()->write('Invalid payload');
+
+            return $response->withStatus(400)->withHeader('Content-Type', 'text/plain');
+        }
+
+        $projectRoot = dirname(__DIR__);
+        $eventLogPath = trim((string) ($_ENV['APP_EVENT_LOG'] ?? 'logs/events.log'));
+
+        if ($eventLogPath === '') {
+            $eventLogPath = 'logs/events.log';
+        }
+
+        if ($eventLogPath[0] !== '/') {
+            $eventLogPath = $projectRoot . '/' . ltrim($eventLogPath, '/');
+        }
+
+        $eventLogDir = dirname($eventLogPath);
+        if (!is_dir($eventLogDir)) {
+            @mkdir($eventLogDir, 0775, true);
+        }
+
+        if (!is_dir($eventLogDir) || !is_writable($eventLogDir)) {
+            $response->getBody()->write('Event log not writable');
+
+            return $response->withStatus(500)->withHeader('Content-Type', 'text/plain');
+        }
+
+        $ip = trim((string) $request->getHeaderLine('X-Forwarded-For'));
+        $ip = $ip !== '' ? explode(',', $ip)[0] : $request->getServerParams()['REMOTE_ADDR'] ?? '';
+
+        $eventRecord = [
+            'timestamp' => gmdate('c'),
+            'type' => (string) ($payload['type'] ?? 'event'),
+            'payload' => $payload,
+            'path' => (string) $request->getHeaderLine('Referer'),
+            'ip' => trim((string) $ip),
+            'ua' => (string) $request->getHeaderLine('User-Agent'),
+        ];
+
+        file_put_contents(
+            $eventLogPath,
+            json_encode($eventRecord, JSON_UNESCAPED_SLASHES) . PHP_EOL,
+            FILE_APPEND | LOCK_EX
+        );
+
+        return $response->withStatus(204);
+    });
+
     $app->group('/api/users', function (Group $group) {
         $group->get('', ListUsersAction::class);
         $group->get('/{id}', ViewUserAction::class);

@@ -8,6 +8,7 @@ use App\Domain\Member\MemberAuthRepository;
 use App\Application\Middleware\SessionMiddleware;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Views\Twig;
 
@@ -326,6 +327,41 @@ return function (App $app) {
         }
 
         return $handler->handle($request);
+    });
+
+    $app->add(function (
+        Request $request,
+        RequestHandler $handler
+    ) use (
+        $app
+    ) {
+        $start = microtime(true);
+        $response = $handler->handle($request);
+
+        $path = $request->getUri()->getPath();
+        if (preg_match('#^/(assets|favicon|robots|sitemap)(/|$)#', $path) === 1) {
+            return $response;
+        }
+
+        try {
+            $logger = $app->getContainer()->get(LoggerInterface::class);
+            $durationMs = (int) round((microtime(true) - $start) * 1000);
+            $ip = trim((string) $request->getHeaderLine('X-Forwarded-For'));
+            $ip = $ip !== '' ? explode(',', $ip)[0] : $request->getServerParams()['REMOTE_ADDR'] ?? '';
+
+            $logger->info('http_request', [
+                'method' => $request->getMethod(),
+                'path' => $path,
+                'status' => $response->getStatusCode(),
+                'duration_ms' => $durationMs,
+                'query' => (string) $request->getUri()->getQuery(),
+                'ip' => trim((string) $ip),
+                'ua' => (string) $request->getHeaderLine('User-Agent'),
+            ]);
+        } catch (\Throwable $exception) {
+        }
+
+        return $response;
     });
 
     $app->add(function (
