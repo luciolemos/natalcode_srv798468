@@ -76,7 +76,7 @@ return function (ContainerBuilder $containerBuilder) {
                 ],
             ];
 
-            $resolveEnvChoice = static function (string $key) use ($uiDefaults): string {
+            $resolveEnvChoice = static function (string $key, array $uiDefaults): string {
                 $config = $uiDefaults[$key];
                 $value = strtolower(trim((string) ($_ENV[$key] ?? $config['default'])));
 
@@ -134,84 +134,80 @@ return function (ContainerBuilder $containerBuilder) {
                 $appGa4Id = '';
             }
 
-            $defaultTheme = $resolveEnvChoice('APP_DEFAULT_THEME');
-            $defaultMode = $resolveEnvChoice('APP_DEFAULT_MODE');
-            $defaultDarkIntensity = $resolveEnvChoice('APP_DEFAULT_DARK_INTENSITY');
+            $defaultTheme = $resolveEnvChoice('APP_DEFAULT_THEME', $uiDefaults);
+            $defaultMode = $resolveEnvChoice('APP_DEFAULT_MODE', $uiDefaults);
+            $defaultDarkIntensity = $resolveEnvChoice('APP_DEFAULT_DARK_INTENSITY', $uiDefaults);
             $homeContent = require __DIR__ . '/content/home.php';
             $navigationContent = require __DIR__ . '/content/navigation.php';
             $siteContent = require __DIR__ . '/content/site.php';
 
-            $assertNavigationConfig = static function (array $config): void {
-                if (!isset($config['labels']) || !is_array($config['labels'])) {
-                    throw new \InvalidArgumentException('Navigation config inválida: `labels` deve ser um array.');
-                }
+            if (!isset($navigationContent['labels']) || !is_array($navigationContent['labels'])) {
+                throw new \InvalidArgumentException('Navigation config inválida: `labels` deve ser um array.');
+            }
 
-                if (!isset($config['menu']) || !is_array($config['menu'])) {
-                    throw new \InvalidArgumentException('Navigation config inválida: `menu` deve ser um array.');
-                }
+            if (!isset($navigationContent['menu']) || !is_array($navigationContent['menu'])) {
+                throw new \InvalidArgumentException('Navigation config inválida: `menu` deve ser um array.');
+            }
 
-                $validateStandaloneLinks = static function (array $links, string $sectionName): void {
-                    foreach ($links as $index => $link) {
-                        if (!is_array($link) || !isset($link['path']) || !is_string($link['path']) || $link['path'] === '') {
-                            throw new \InvalidArgumentException(sprintf('Navigation config inválida: `%s[%d].path` é obrigatório.', $sectionName, $index));
-                        }
-
-                        $hasLabel = isset($link['label']) && is_string($link['label']) && $link['label'] !== '';
-                        $hasKey = isset($link['key']) && is_string($link['key']) && $link['key'] !== '';
-
-                        if (!$hasLabel && !$hasKey) {
-                            throw new \InvalidArgumentException(sprintf('Navigation config inválida: `%s[%d]` precisa de `key` ou `label`.', $sectionName, $index));
-                        }
-                    }
-                };
-
-                foreach ($config['menu'] as $groupIndex => $group) {
-                    if (!is_array($group)) {
-                        throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d]` deve ser um array.', $groupIndex));
+            $validateStandaloneLinks = static function (array $links, string $sectionName): void {
+                foreach ($links as $index => $link) {
+                    if (!is_array($link) || !isset($link['path']) || !is_string($link['path']) || $link['path'] === '') {
+                        throw new \InvalidArgumentException(sprintf('Navigation config inválida: `%s[%d].path` é obrigatório.', $sectionName, $index));
                     }
 
-                    if (!isset($group['key']) || !is_string($group['key']) || $group['key'] === '') {
-                        throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d].key` é obrigatório.', $groupIndex));
-                    }
+                    $hasLabel = isset($link['label']) && is_string($link['label']) && $link['label'] !== '';
+                    $hasKey = isset($link['key']) && is_string($link['key']) && $link['key'] !== '';
 
-                    if (!isset($group['base']) || !is_string($group['base']) || $group['base'] === '') {
-                        throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d].base` é obrigatório.', $groupIndex));
-                    }
-
-                    if (!isset($group['items']) || !is_array($group['items'])) {
-                        throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d].items` deve ser um array.', $groupIndex));
-                    }
-
-                    foreach ($group['items'] as $itemIndex => $item) {
-                        if (!is_array($item)) {
-                            throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d].items[%d]` deve ser um array.', $groupIndex, $itemIndex));
-                        }
-
-                        if (!isset($item['path']) || !is_string($item['path']) || $item['path'] === '') {
-                            throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d].items[%d].path` é obrigatório.', $groupIndex, $itemIndex));
-                        }
-
-                        $hasLabel = isset($item['label']) && is_string($item['label']) && $item['label'] !== '';
-                        $hasKey = isset($item['key']) && is_string($item['key']) && $item['key'] !== '';
-
-                        if (!$hasLabel && !$hasKey) {
-                            throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d].items[%d]` precisa de `key` ou `label`.', $groupIndex, $itemIndex));
-                        }
+                    if (!$hasLabel && !$hasKey) {
+                        throw new \InvalidArgumentException(sprintf('Navigation config inválida: `%s[%d]` precisa de `key` ou `label`.', $sectionName, $index));
                     }
                 }
-
-                $before = $config['links_before_groups'] ?? [];
-                $after = $config['links_after_groups'] ?? [];
-
-                if (!is_array($before) || !is_array($after)) {
-                    throw new \InvalidArgumentException('Navigation config inválida: `links_before_groups` e `links_after_groups` devem ser arrays.');
-                }
-
-                $validateStandaloneLinks($before, 'links_before_groups');
-                $validateStandaloneLinks($after, 'links_after_groups');
             };
 
-            $assertNavigationConfig($navigationContent);
+            foreach ($navigationContent['menu'] as $groupIndex => $group) {
+                if (!is_array($group)) {
+                    throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d]` deve ser um array.', $groupIndex));
+                }
+
+                if (!isset($group['key']) || !is_string($group['key']) || $group['key'] === '') {
+                    throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d].key` é obrigatório.', $groupIndex));
+                }
+
+                if (!isset($group['base']) || !is_string($group['base']) || $group['base'] === '') {
+                    throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d].base` é obrigatório.', $groupIndex));
+                }
+
+                if (!isset($group['items']) || !is_array($group['items'])) {
+                    throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d].items` deve ser um array.', $groupIndex));
+                }
+
+                foreach ($group['items'] as $itemIndex => $item) {
+                    if (!is_array($item)) {
+                        throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d].items[%d]` deve ser um array.', $groupIndex, $itemIndex));
+                    }
+
+                    if (!isset($item['path']) || !is_string($item['path']) || $item['path'] === '') {
+                        throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d].items[%d].path` é obrigatório.', $groupIndex, $itemIndex));
+                    }
+
+                    $hasLabel = isset($item['label']) && is_string($item['label']) && $item['label'] !== '';
+                    $hasKey = isset($item['key']) && is_string($item['key']) && $item['key'] !== '';
+
+                    if (!$hasLabel && !$hasKey) {
+                        throw new \InvalidArgumentException(sprintf('Navigation config inválida: `menu[%d].items[%d]` precisa de `key` ou `label`.', $groupIndex, $itemIndex));
+                    }
+                }
+            }
+
+            $before = $navigationContent['links_before_groups'] ?? [];
+            $after = $navigationContent['links_after_groups'] ?? [];
+
+            if (!is_array($before) || !is_array($after)) {
+                throw new \InvalidArgumentException('Navigation config inválida: `links_before_groups` e `links_after_groups` devem ser arrays.');
+            }
+
+            $validateStandaloneLinks($before, 'links_before_groups');
+            $validateStandaloneLinks($after, 'links_after_groups');
 
             $navigationLabels = (array) ($navigationContent['labels'] ?? []);
             $navigationMenu = (array) ($navigationContent['menu'] ?? []);
@@ -220,30 +216,26 @@ return function (ContainerBuilder $containerBuilder) {
             $siteFooter = (array) ($siteContent['footer'] ?? []);
             $siteFooterNavGroups = (array) ($siteFooter['navGroups'] ?? []);
 
-            $siteFooter['navGroups'] = array_map(
-                static function (array $group) use ($navigationLabels): array {
-                    $groupLinks = array_map(
-                        static function (array $link) use ($navigationLabels): array {
-                            $label = trim((string) ($link['label'] ?? ''));
-                            $key = trim((string) ($link['key'] ?? ''));
+            foreach ($siteFooterNavGroups as $groupIndex => $group) {
+                $groupLinks = [];
 
-                            if ($label === '' && $key !== '') {
-                                $label = (string) ($navigationLabels[$key] ?? $key);
-                            }
+                foreach ((array) ($group['links'] ?? []) as $link) {
+                    $label = trim((string) ($link['label'] ?? ''));
+                    $key = trim((string) ($link['key'] ?? ''));
 
-                            $link['label'] = $label !== '' ? $label : (string) ($link['path'] ?? '');
+                    if ($label === '' && $key !== '') {
+                        $label = (string) ($navigationLabels[$key] ?? $key);
+                    }
 
-                            return $link;
-                        },
-                        (array) ($group['links'] ?? [])
-                    );
+                    $link['label'] = $label !== '' ? $label : (string) ($link['path'] ?? '');
+                    $groupLinks[] = $link;
+                }
 
-                    $group['links'] = $groupLinks;
+                $group['links'] = $groupLinks;
+                $siteFooterNavGroups[$groupIndex] = $group;
+            }
 
-                    return $group;
-                },
-                $siteFooterNavGroups
-            );
+            $siteFooter['navGroups'] = $siteFooterNavGroups;
 
             $siteContent['footer'] = $siteFooter;
 
