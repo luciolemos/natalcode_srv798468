@@ -76,7 +76,7 @@ return [
                     'badge' => 'Operação sustentável',
                     'title' => 'PHP moderno, Twig e governança de conteúdo',
                     'tagline' => 'Estrutura modular para evoluir com segurança, sem retrabalho a cada nova campanha',
-                    'lead' => 'Entregamos um stack enxuto para seu time publicar, testar e iterar com autonomia, mantendo consistência visual, velocidade e manutenção simples.',
+                    'lead' => 'Entregamos uma stack enxuta para seu time publicar, testar e iterar com autonomia, mantendo consistência visual, velocidade e manutenção simples.',
                     'imageAlt' => 'Interface de plataforma escalável com arquitetura modular em destaque',
                 ],
             ],
