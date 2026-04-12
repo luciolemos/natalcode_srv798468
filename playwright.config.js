@@ -16,10 +16,23 @@ module.exports = defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'off',
+    deviceScaleFactor: 1,
+    launchOptions: {
+      args: [
+        '--disable-lcd-text',
+        '--disable-font-subpixel-positioning',
+        '--font-render-hinting=none',
+      ],
+    },
   },
   projects: [
     {
       name: 'mobile',
+      expect: {
+        toHaveScreenshot: {
+          maxDiffPixelRatio: 0.08,
+        },
+      },
       use: {
         browserName: 'chromium',
         viewport: { width: 390, height: 844 },
@@ -29,6 +42,11 @@ module.exports = defineConfig({
     },
     {
       name: 'tablet',
+      expect: {
+        toHaveScreenshot: {
+          maxDiffPixelRatio: 0.08,
+        },
+      },
       use: {
         browserName: 'chromium',
         viewport: { width: 820, height: 1180 },

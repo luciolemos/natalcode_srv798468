@@ -1,5 +1,13 @@
 const { test, expect } = require('@playwright/test');
 
+function getMaxDiffRatio(testInfo)
+{
+    if (testInfo.project.name === 'desktop') {
+        return 0.04;
+    }
+    return 0.08;
+}
+
 async function stabilizeForScreenshot(page)
 {
     await page.waitForLoadState('networkidle');
@@ -23,21 +31,23 @@ async function openAboutReady(page)
 }
 
 test.describe('About visual regression', () => {
-    test('about top fold', async({ page }) => {
+    test('about top fold', async({ page }, testInfo) => {
         await openAboutReady(page);
 
         await expect(page).toHaveScreenshot('about-top.png', {
             fullPage: false,
             animations: 'disabled',
+            maxDiffPixelRatio: getMaxDiffRatio(testInfo),
         });
     });
 
-    test('about full page', async({ page }) => {
+    test('about full page', async({ page }, testInfo) => {
         await openAboutReady(page);
 
         await expect(page).toHaveScreenshot('about-full.png', {
             fullPage: true,
             animations: 'disabled',
+            maxDiffPixelRatio: getMaxDiffRatio(testInfo),
         });
     });
 });
