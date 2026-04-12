@@ -30,8 +30,28 @@ if (is_file($projectRoot . '/.env')) {
 }
 
 if (!empty($_ENV['APP_ERROR_LOG'])) {
-    ini_set('log_errors', '1');
-    ini_set('error_log', (string) $_ENV['APP_ERROR_LOG']);
+    $errorLogPath = (string) $_ENV['APP_ERROR_LOG'];
+    if ($errorLogPath[0] !== '/') {
+        $errorLogPath = $projectRoot . '/' . ltrim($errorLogPath, '/');
+    }
+
+    $errorLogDir = dirname($errorLogPath);
+    if (!is_dir($errorLogDir)) {
+        @mkdir($errorLogDir, 0775, true);
+    }
+
+    if (is_dir($errorLogDir) && is_writable($errorLogDir)) {
+        ini_set('log_errors', '1');
+        ini_set('error_log', $errorLogPath);
+    } else {
+        error_log('[natalcode bootstrap] APP_ERROR_LOG directory not writable: ' . $errorLogDir);
+    }
+}
+
+if (is_file($projectRoot . '/.env')) {
+    error_log('[natalcode bootstrap] .env loaded from ' . $projectRoot);
+} else {
+    error_log('[natalcode bootstrap] .env not found at ' . $projectRoot);
 }
 
 // Instantiate PHP-DI ContainerBuilder
