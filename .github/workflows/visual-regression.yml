@@ -46,18 +46,21 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
 
-      - name: Install Playwright browser
+      - name: Install Playwright + OS deps
         timeout-minutes: 8
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          npx playwright install chromium || {
+          npx playwright install --with-deps chromium || {
             echo "First Playwright install attempt failed; retrying in 15 seconds..."
             sleep 15
-            npx playwright install chromium
+            npx playwright install --with-deps chromium
           }
 
       - name: Run visual regression tests
+        env:
+          PW_TEST_SCREENSHOT_NO_FONTS_READY: "1"
+          FONTCONFIG_PATH: /etc/fonts
         run: npm run test:visual
 
       - name: Upload Playwright report (always)
