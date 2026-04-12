@@ -12,6 +12,7 @@ async function stabilizeForScreenshot(page)
 {
     await page.waitForLoadState('networkidle');
     await page.waitForFunction(() => document.fonts && document.fonts.status === 'loaded');
+    await page.waitForFunction(() => Array.from(document.images).every((img) => img.complete && img.naturalWidth > 0));
     await page.addStyleTag({
         content: `
             * { caret-color: transparent !important; }
@@ -19,6 +20,9 @@ async function stabilizeForScreenshot(page)
             html { -webkit-font-smoothing: antialiased; }
         `,
     });
+    await page.evaluate(() => new Promise((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(resolve));
+    }));
     await page.waitForTimeout(100);
 }
 
