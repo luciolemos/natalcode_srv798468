@@ -293,6 +293,16 @@ Executa em `push` e `pull_request`:
 
 Em caso de falha, publica artefatos com relatório e resultados dos testes.
 
+## Testes automatizados (PHPUnit)
+
+Executar suite de testes PHP:
+
+```bash
+composer test
+```
+
+Testes iniciais incluem smoke tests de boot e rotas de saúde.
+
 ## Smoke check de deploy
 
 Para validar rapidamente se a página publicada não está truncada e se os scripts críticos foram carregados:
