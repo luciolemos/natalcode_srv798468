@@ -1386,8 +1386,8 @@ h3 {
 }
 
 [data-mode="dark"] .nc-home-hero-arrow-btn {
-  color: color-mix(in srgb, var(--white) 95%, #dbeafe);
-  text-shadow: 0 2px 14px rgb(2 6 23 / 0.75);
+  color: color-mix(in srgb, var(--theme-accent-2) 72%, var(--white));
+  text-shadow: 0 2px 14px rgb(2 6 23 / 0.68);
 }
 
 [data-mode="dark"] .nc-home-hero-dot {
