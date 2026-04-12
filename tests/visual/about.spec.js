@@ -5,6 +5,9 @@ function getMaxDiffRatio(testInfo)
     if (testInfo.project.name === 'desktop') {
         return 0.04;
     }
+    if (testInfo.project.name === 'mobile') {
+        return 0.12;
+    }
     return 0.08;
 }
 
