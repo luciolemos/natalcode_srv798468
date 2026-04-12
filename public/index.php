@@ -48,11 +48,6 @@ if (!empty($_ENV['APP_ERROR_LOG'])) {
     }
 }
 
-if (is_file($projectRoot . '/.env')) {
-    error_log('[natalcode bootstrap] .env loaded from ' . $projectRoot);
-} else {
-    error_log('[natalcode bootstrap] .env not found at ' . $projectRoot);
-}
 
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
