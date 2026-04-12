@@ -101,8 +101,8 @@ return [
         'socialProof' => [
             'kicker' => 'Quem Somos',
             'title' => 'NatalCode Agência Digital',
-            'lead' => 'A NatalCode e uma agência digital especializada em desenvolvimento web e projetos de produto. Atuamos do planejamento a publicação, com acompanhamento continuo de performance.',
-            'leadSecondary' => 'Nosso objetivo e claro: transformar metas de negócio em páginas e sistemas que vendem melhor, comunicam com clareza e evoluem junto com a operação.',
+            'lead' => 'A NatalCode é uma agência digital especializada em desenvolvimento web e projetos de produto. Atuamos do planejamento à publicação, com acompanhamento contínuo de performance.',
+            'leadSecondary' => 'Nosso objetivo é claro: transformar metas de negócio em páginas e sistemas que vendem melhor, comunicam com clareza e evoluem junto com a operação.',
             'trustGridLabel' => 'Frentes de atuação',
         ],
         'testimonials' => [
