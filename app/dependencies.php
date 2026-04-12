@@ -91,7 +91,12 @@ return function (ContainerBuilder $containerBuilder) {
             $appDefaultPageImage = trim((string) ($_ENV['APP_DEFAULT_PAGE_IMAGE'] ?? 'https://natalcode.com.br/assets/img/brand/natalcode1.png'));
             $appDefaultSiteName = trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'NatalCode'));
             $appDefaultTwitterSite = trim((string) ($_ENV['APP_DEFAULT_TWITTER_SITE'] ?? '@natalcode'));
-            $appAssetVersion = trim((string) ($_ENV['APP_ASSET_VERSION'] ?? '1'));
+            $appEnv = strtolower((string) ($_ENV['APP_ENV'] ?? 'production'));
+            $appAssetVersion = trim((string) ($_ENV['APP_ASSET_VERSION'] ?? ''));
+
+            if ($appAssetVersion === '') {
+                $appAssetVersion = $appEnv === 'production' ? '2' : '1';
+            }
             $appGtmId = strtoupper(trim((string) ($_ENV['APP_GTM_ID'] ?? '')));
             $appGa4Id = strtoupper(trim((string) ($_ENV['APP_GA4_ID'] ?? '')));
             $recaptchaVerifier = new RecaptchaVerifier();
