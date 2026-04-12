@@ -5,7 +5,7 @@
 [![PHPStan](https://github.com/luciolemos/natalcode_srv798468/actions/workflows/phpstan.yml/badge.svg)](https://github.com/luciolemos/natalcode_srv798468/actions/workflows/phpstan.yml)
 [![PHPCS](https://github.com/luciolemos/natalcode_srv798468/actions/workflows/phpcs.yml/badge.svg)](https://github.com/luciolemos/natalcode_srv798468/actions/workflows/phpcs.yml)
 
-Landing page institucional em **Slim 4 + Twig**, com foco em base reutilizável para evolução de produto (site, área administrativa e conteúdo), com sistema de tema visual dinâmico.
+Site institucional da agência em **Slim 4 + Twig**, com base reutilizável para evolução de produto (site, área administrativa e conteúdo) e sistema de tema visual dinâmico.
 
 ## Estado atual
 
@@ -15,7 +15,7 @@ O projeto está rodando em servidor Linux com Apache, publicado no domínio:
 
 Atualmente, a aplicação entrega:
 
-- landing page em Twig com seções modulares;
+- site institucional em Twig com seções modulares;
 - paleta de cores dinâmica (blue/red/green/violet/amber);
 - modo `light` / `dark`;
 - intensidade do dark (`neutral` / `vivid`);
@@ -96,7 +96,7 @@ Atualmente, a aplicação entrega:
 └── README.md
 ```
 
-## Estrutura da landing
+## Estrutura da home
 
 A home é composta por partials Twig:
 
