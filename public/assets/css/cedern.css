@@ -5,11 +5,6 @@
   margin-top: var(--space-3);
 }
 
-@media (max-width: 768px) {
-  .grecaptcha-badge {
-    visibility: hidden;
-  }
-}
 
 
 .nc-btn-copy-pix {
