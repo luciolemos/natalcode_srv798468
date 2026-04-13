@@ -3,38 +3,6 @@
     document.querySelectorAll("form[data-recaptcha-action][data-recaptcha-site-key]")
   );
 
-  const enableMobileBadgeAutoCollapse = () => {
-    const badge = document.querySelector(".grecaptcha-badge");
-    if (!badge) {
-      return;
-    }
-
-    if (!window.matchMedia("(max-width: 768px)").matches) {
-      return;
-    }
-
-    let collapseTimer = null;
-
-    const collapseBadge = () => {
-      badge.classList.remove("is-expanded");
-      collapseTimer = null;
-    };
-
-    badge.addEventListener(
-      "touchstart",
-      () => {
-        badge.classList.add("is-expanded");
-        if (collapseTimer) {
-          clearTimeout(collapseTimer);
-        }
-        collapseTimer = setTimeout(collapseBadge, 2500);
-      },
-      { passive: true }
-    );
-  };
-
-  enableMobileBadgeAutoCollapse();
-
   if (!forms.length) {
     return;
   }

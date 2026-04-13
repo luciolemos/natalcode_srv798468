@@ -6,8 +6,8 @@
 }
 
 @media (max-width: 768px) {
-  .grecaptcha-badge.is-expanded {
-    transform: translateY(0);
+  .grecaptcha-badge {
+    visibility: hidden;
   }
 }
 
