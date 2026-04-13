@@ -61,13 +61,13 @@
 
           <div class="nc-admin-login-field">
             <label class="nc-admin-login-label" for="subject">Objetivo principal</label>
-            <input class="nc-admin-login-input" id="subject" name="subject" type="text" value="{{ contact_form.subject|default('') }}" placeholder="Ex: Landing page para campanha ou novo site institucional">
+            <input class="nc-admin-login-input" id="subject" name="subject" type="text" value="{{ contact_form.subject|default('') }}" placeholder="Ex: Landing page para campanha ou novo site institucional" required>
           </div>
 
-          <div class="nc-admin-login-field">
-            <label class="nc-admin-login-label" for="message">Detalhes do projeto</label>
-            <textarea class="nc-admin-login-input" id="message" name="message" rows="5" placeholder="Conte contexto, público, prazo desejado e qualquer referência útil." required>{{ contact_form.message|default('') }}</textarea>
-          </div>
+          <details class="nc-admin-login-field">
+            <summary class="nc-admin-login-label">Adicionar detalhes (opcional)</summary>
+            <textarea class="nc-admin-login-input" id="message" name="message" rows="5" placeholder="Conte contexto, público, prazo desejado e qualquer referência útil.">{{ contact_form.message|default('') }}</textarea>
+          </details>
 
           <div class="nc-admin-login-field" style="display:none;" aria-hidden="true">
             <label class="nc-admin-login-label" for="company">Empresa</label>
@@ -78,6 +78,14 @@
 
           <div class="nc-actions nc-admin-login-actions nc-contact-form-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="120">
             <button class="nc-btn nc-btn-primary" type="submit">Enviar mensagem</button>
+            {% if app_whatsapp_number|default('') %}
+              <a
+                class="nc-btn nc-btn-primary"
+                href="https://wa.me/{{ app_whatsapp_number }}?text={{ app_whatsapp_message|default('')|url_encode }}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Falar no WhatsApp</a>
+            {% endif %}
             {% if site_contact.mapUrl|default('') %}
               <a class="nc-btn nc-btn-secondary" href="{{ site_contact.mapUrl }}" target="_blank" rel="noopener noreferrer">Ver no mapa</a>
             {% endif %}
