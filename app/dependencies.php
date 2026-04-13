@@ -101,6 +101,8 @@ return function (ContainerBuilder $containerBuilder) {
             }
             $appGtmId = strtoupper(trim((string) ($_ENV['APP_GTM_ID'] ?? '')));
             $appGa4Id = strtoupper(trim((string) ($_ENV['APP_GA4_ID'] ?? '')));
+            $appWhatsappNumber = preg_replace('/\D+/', '', (string) ($_ENV['APP_WHATSAPP_NUMBER'] ?? ''));
+            $appWhatsappMessage = trim((string) ($_ENV['APP_WHATSAPP_MESSAGE'] ?? ''));
             $recaptchaVerifier = new RecaptchaVerifier();
             $appRecaptchaEnabled = $recaptchaVerifier->isReady();
             $appRecaptchaSiteKey = $recaptchaVerifier->getSiteKey();
@@ -139,6 +141,10 @@ return function (ContainerBuilder $containerBuilder) {
 
             if (!preg_match('/^G-[A-Z0-9]+$/', $appGa4Id)) {
                 $appGa4Id = '';
+            }
+
+            if ($appWhatsappMessage === '') {
+                $appWhatsappMessage = 'Oi! Quero conversar sobre um projeto com a NatalCode.';
             }
 
             $defaultTheme = $resolveEnvChoice('APP_DEFAULT_THEME', $uiDefaults);
@@ -259,6 +265,8 @@ return function (ContainerBuilder $containerBuilder) {
             $twig->getEnvironment()->addGlobal('app_asset_version', $appAssetVersion);
             $twig->getEnvironment()->addGlobal('app_gtm_id', $appGtmId);
             $twig->getEnvironment()->addGlobal('app_ga4_id', $appGa4Id);
+            $twig->getEnvironment()->addGlobal('app_whatsapp_number', $appWhatsappNumber);
+            $twig->getEnvironment()->addGlobal('app_whatsapp_message', $appWhatsappMessage);
             $twig->getEnvironment()->addGlobal('app_recaptcha_enabled', $appRecaptchaEnabled);
             $twig->getEnvironment()->addGlobal('app_recaptcha_site_key', $appRecaptchaSiteKey);
             $twig->getEnvironment()->addGlobal('default_theme', $defaultTheme);

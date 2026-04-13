@@ -86,12 +86,12 @@ class ContactPageAction extends AbstractPageAction
                     $errors[] = 'Informe um e-mail válido.';
                 }
 
-                if ($form['message'] === '' || mb_strlen($form['message']) < 10) {
-                    $errors[] = 'Escreva uma mensagem com pelo menos 10 caracteres.';
+                if ($form['subject'] === '') {
+                    $errors[] = 'Informe o objetivo principal.';
                 }
 
-                if ($form['subject'] === '') {
-                    $form['subject'] = 'Contato pelo formulário do site';
+                if ($form['message'] === '') {
+                    $form['message'] = 'Nao informou detalhes adicionais.';
                 }
 
                 if (empty($errors)) {

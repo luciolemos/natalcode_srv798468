@@ -1184,6 +1184,11 @@ h3 {
   color: color-mix(in srgb, var(--text-main) 78%, var(--text-muted));
 }
 
+.nc-home-hero .nc-actions .nc-btn {
+  white-space: nowrap;
+  min-height: 48px;
+}
+
 .nc-home-hero.has-background-image .nc-section-kicker,
 .nc-home-hero.has-background-image .nc-title {
   color: #0b0f14;
@@ -3421,6 +3426,10 @@ body.is-library-cover-dialog-open {
   .nc-home-hero .nc-actions {
     width: min(100%, 24rem);
     justify-content: center;
+  }
+
+  .nc-home-hero .nc-actions .nc-btn {
+    white-space: nowrap;
   }
 }
 

@@ -5,10 +5,10 @@ declare(strict_types=1);
 return [
     'sections' => [
         'hero' => [
-            'kicker' => 'Arquitetura enxuta, visual premium e foco em conversão',
-            'title' => 'NatalCode',
-            'tagline' => 'Sua plataforma pronta para escalar com alta performance e linguagem de produto',
-            'lead' => 'Interface com identidade SaaS, stack moderna (PHP 8.4+, Twig e Bootstrap) e blocos prontos para proposta de valor, prova social e CTA. Casos recentes incluem +38% na taxa de contato em 45 dias e lançamentos em até 21 dias.',
+            'kicker' => 'Sites e sistemas para negócios',
+            'title' => 'Software, sites e produtos digitais que convertem',
+            'tagline' => 'Para empresas que precisam lançar rápido e evoluir com segurança',
+            'lead' => 'Unimos UX, engenharia e conteúdo para aumentar demanda e reduzir retrabalho. Projetos recentes incluem +38% na taxa de contato em 45 dias e lançamentos em até 21 dias.',
             'imageSrc' => '/assets/img/hero/home/natalcode1-1920.jpg',
             'images' => [
                 [
@@ -21,11 +21,11 @@ return [
                     'mobileWebpSrcset' => '/assets/img/hero/home/natalcode1-mobile-480.webp 480w, /assets/img/hero/home/natalcode1-mobile-768.webp 768w, /assets/img/hero/home/natalcode1-mobile-1024.webp 1024w',
                     'mobileAvifSrcset' => '/assets/img/hero/home/natalcode1-mobile-480.avif 480w, /assets/img/hero/home/natalcode1-mobile-768.avif 768w, /assets/img/hero/home/natalcode1-mobile-1024.avif 1024w',
                     'mobileSizes' => '100vw',
-                    'kicker' => 'Arquitetura enxuta, visual premium e foco em conversão',
-                    'badge' => 'Posicionamento premium',
-                    'title' => 'NatalCode',
-                    'tagline' => 'Sua plataforma pronta para escalar com alta performance e linguagem de produto',
-                    'lead' => 'Interface com identidade SaaS, stack moderna (PHP 8.4+, Twig e Bootstrap) e blocos prontos para proposta de valor, prova social e CTA. Casos recentes incluem +38% na taxa de contato em 45 dias e lançamentos em até 21 dias.',
+                    'kicker' => 'Sites e sistemas para negócios',
+                    'badge' => 'Foco em conversão',
+                    'title' => 'Software, sites e produtos digitais que convertem',
+                    'tagline' => 'Para empresas que precisam lançar rápido e evoluir com segurança',
+                    'lead' => 'Unimos UX, engenharia e conteúdo para aumentar demanda e reduzir retrabalho. Projetos recentes incluem +38% na taxa de contato em 45 dias e lançamentos em até 21 dias.',
                     'imageAlt' => 'Interface da NatalCode com visual SaaS e proposta de valor em destaque',
                 ],
                 [
@@ -135,7 +135,7 @@ return [
     ],
     'heroActions' => [
         [
-            'label' => 'Solicitar proposta',
+            'label' => 'Agendar conversa',
             'href' => '/contato',
             'class' => 'nc-btn nc-btn-primary',
             'loadingOnClick' => false,
@@ -143,7 +143,7 @@ return [
         [
             'label' => 'Ver serviços',
             'href' => '/estudos',
-            'class' => 'nc-btn nc-btn-secondary',
+            'class' => 'nc-btn nc-btn-primary',
             'loadingOnClick' => false,
         ],
     ],
