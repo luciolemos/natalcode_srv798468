@@ -5,21 +5,6 @@
   margin-top: var(--space-3);
 }
 
-@media (max-width: 768px) {
-  .grecaptcha-badge {
-    transform: translateY(50px);
-    transition: transform 0.2s ease;
-  }
-
-  .grecaptcha-badge.is-expanded {
-    transform: translateY(0);
-  }
-
-  .grecaptcha-badge:active,
-  .grecaptcha-badge:focus-within {
-    transform: translateY(0);
-  }
-}
 
 .nc-btn-copy-pix {
   font-size: var(--font-size-caption);
