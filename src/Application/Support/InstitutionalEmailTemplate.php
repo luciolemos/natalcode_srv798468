@@ -8,10 +8,11 @@ final class InstitutionalEmailTemplate
 {
     public static function buildInstitutionHeaderMeta(
         ?string $institutionName = null,
-        ?string $cnpj = null
+        ?string $cnpj = null,
+        ?string $brandImageSrc = null
     ): string {
         $baseUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'), '/');
-        $brandImagePath = trim((string) ($_ENV['APP_EMAIL_BRAND_IMAGE'] ?? '/assets/img/brand/nc.png'));
+        $brandImagePath = trim((string) ($brandImageSrc ?? ($_ENV['APP_EMAIL_BRAND_IMAGE'] ?? '/assets/img/brand/nc.png')));
         $brandImageUrl = $brandImagePath !== '' && str_starts_with($brandImagePath, 'http')
             ? $brandImagePath
             : $baseUrl . '/' . ltrim($brandImagePath, '/');

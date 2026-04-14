@@ -260,7 +260,19 @@ class ContactPageAction extends AbstractPageAction
             $logoSrc = 'cid:' . $logoCid;
         }
 
-        $headerMetaHtml = InstitutionalEmailTemplate::buildInstitutionHeaderMeta();
+        $brandMetaCid = 'natalcode-brand-meta';
+        $brandMetaPath = dirname(__DIR__, 4) . '/public/assets/img/brand/nc.png';
+        $brandMetaSrc = null;
+        if (is_file($brandMetaPath)) {
+            $mailer->addEmbeddedImage($brandMetaPath, $brandMetaCid, 'nc.png', 'base64', 'image/png');
+            $brandMetaSrc = 'cid:' . $brandMetaCid;
+        }
+
+        $headerMetaHtml = InstitutionalEmailTemplate::buildInstitutionHeaderMeta(
+            null,
+            null,
+            $brandMetaSrc
+        );
 
         $htmlBody = InstitutionalEmailTemplate::buildLayout(
             'Novo contato pelo site',
