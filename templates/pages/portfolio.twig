@@ -46,6 +46,10 @@
                     href="{{ item.url }}"
                     {% if is_external %}target="_blank" rel="noopener noreferrer"{% endif %}
                   >{{ item.urlLabel|default('Ver detalhes') }}</a>
+                  <a
+                    class="nc-btn nc-btn-primary"
+                    href="/contato?segmento={{ item.segmentKey|default(item.segment|default('site'))|url_encode }}"
+                  >Quero um igual</a>
                 </div>
               {% endif %}
             </div>

@@ -60,6 +60,17 @@
           </div>
 
           <div class="nc-admin-login-field">
+            <label class="nc-admin-login-label" for="segment">Tipo de projeto</label>
+            <select class="nc-admin-login-input" id="segment" name="segment">
+              <option value="">Selecione um segmento (opcional)</option>
+              {% for option in contact_segment_options|default([]) %}
+                <option value="{{ option.key }}" {% if contact_segment_selected == option.key %}selected{% endif %}>{{ option.label }}</option>
+              {% endfor %}
+            </select>
+            <p class="nc-form-help">Selecionar o segmento ajuda a acelerar o orçamento e deixa nossa resposta mais precisa.</p>
+          </div>
+
+          <div class="nc-admin-login-field">
             <label class="nc-admin-login-label" for="subject">Objetivo principal *</label>
             <input class="nc-admin-login-input" id="subject" name="subject" type="text" value="{{ contact_form.subject|default('') }}" placeholder="Ex: Landing page para campanha ou novo site institucional" required>
           </div>
