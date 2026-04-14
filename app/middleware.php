@@ -13,6 +13,14 @@ use Slim\App;
 use Slim\Views\Twig;
 
 return function (App $app) {
+    $app->add(function (Request $request, RequestHandler $handler) use ($app) {
+        if (strtoupper($request->getMethod()) === 'OPTIONS') {
+            return $app->getResponseFactory()->createResponse(204);
+        }
+
+        return $handler->handle($request);
+    });
+
     $normalizeTrackedPageKey = static function (string $path): string {
         $normalizedPath = rtrim(trim($path), '/');
 
