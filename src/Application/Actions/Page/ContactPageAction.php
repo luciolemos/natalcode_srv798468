@@ -198,8 +198,7 @@ class ContactPageAction extends AbstractPageAction
         string $subject,
         string $message,
         string $segment = ''
-    ): void
-    {
+    ): void {
         $smtpHost = trim((string) ($_ENV['MAIL_HOST'] ?? 'smtp.hostinger.com'));
         $smtpPort = (int) ($_ENV['MAIL_PORT'] ?? 465);
         $smtpUser = trim((string) ($_ENV['MAIL_USERNAME'] ?? ''));
