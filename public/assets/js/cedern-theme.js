@@ -472,13 +472,13 @@ if (document.readyState === 'loading') {
     try {
       initCedernTheme();
     } catch (error) {
-      console.error('[CEDE] Falha ao iniciar seletor de tema:', error);
+      console.error('[NATALCODE] Falha ao iniciar seletor de tema:', error);
     }
   });
 } else {
   try {
     initCedernTheme();
   } catch (error) {
-    console.error('[CEDE] Falha ao iniciar seletor de tema:', error);
+    console.error('[NATALCODE] Falha ao iniciar seletor de tema:', error);
   }
 }
