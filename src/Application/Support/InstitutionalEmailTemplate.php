@@ -10,9 +10,14 @@ final class InstitutionalEmailTemplate
         ?string $institutionName = null,
         ?string $cnpj = null
     ): string {
-        $resolvedBrandName = trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'NatalCode'));
-        if ($resolvedBrandName === '') {
-            $resolvedBrandName = 'NatalCode';
+        $baseUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'), '/');
+        $brandImagePath = trim((string) ($_ENV['APP_EMAIL_BRAND_IMAGE'] ?? '/assets/img/brand/nc.png'));
+        $brandImageUrl = $brandImagePath !== '' && str_starts_with($brandImagePath, 'http')
+            ? $brandImagePath
+            : $baseUrl . '/' . ltrim($brandImagePath, '/');
+        $brandImageAlt = trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'NatalCode'));
+        if ($brandImageAlt === '') {
+            $brandImageAlt = 'NatalCode';
         }
 
         $resolvedInstitutionName = trim((string) $institutionName);
@@ -28,13 +33,15 @@ final class InstitutionalEmailTemplate
             $resolvedCnpj = 'Nao informado';
         }
 
-        $safeBrandName = htmlspecialchars($resolvedBrandName, ENT_QUOTES, 'UTF-8');
+        $safeBrandImageUrl = htmlspecialchars($brandImageUrl, ENT_QUOTES, 'UTF-8');
+        $safeBrandImageAlt = htmlspecialchars($brandImageAlt, ENT_QUOTES, 'UTF-8');
         $safeInstitutionName = htmlspecialchars($resolvedInstitutionName, ENT_QUOTES, 'UTF-8');
         $safeCnpj = htmlspecialchars($resolvedCnpj, ENT_QUOTES, 'UTF-8');
 
-        return '<p style="margin:0 0 6px;font-size:15px;line-height:1.2;'
-            . 'letter-spacing:0.02em;color:#0f172a;font-weight:700;">'
-            . $safeBrandName . '</p>'
+        return '<div style="margin:0 0 8px;">'
+            . '<img src="' . $safeBrandImageUrl . '" alt="' . $safeBrandImageAlt . '" '
+            . 'style="display:block;max-width:120px;height:auto;margin:0 auto;">'
+            . '</div>'
             . '<p style="margin:0 0 4px;font-size:12px;line-height:1.35;'
             . 'letter-spacing:0.03em;color:#1e293b;font-weight:700;white-space:nowrap;">'
             . $safeInstitutionName . '</p>'
