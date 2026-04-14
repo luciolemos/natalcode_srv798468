@@ -1,0 +1,68 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <main class="nc-main nc-container nc-home-flow">
+    {% set portfolio = site.portfolio|default({}) %}
+    {% set portfolio_items = portfolio.items|default([]) %}
+
+    <section class="nc-section nc-about-detail-copy" aria-label="Portfolio de projetos digitais">
+      {% include 'components/section-header.twig' with {
+        kicker: portfolio.kicker|default('Portfolio'),
+        title: portfolio.title|default('Catalogo de projetos'),
+        lead: portfolio.lead|default('Veja exemplos de landing pages e sites desenvolvidos pela NatalCode.')
+      } %}
+      {% if portfolio.note is not empty %}
+        <p class="nc-lead">{{ portfolio.note }}</p>
+      {% endif %}
+
+      <div class="nc-trust-grid" data-aos="fade-up" data-aos-delay="80">
+        {% for item in portfolio_items %}
+          <article class="nc-trust-card">
+            {% if item.image is not empty %}
+              <img
+                class="nc-trust-media"
+                src="{{ item.image }}"
+                alt="{{ item.alt|default(item.title|default('Projeto')) }}"
+                loading="lazy"
+                decoding="async"
+              >
+            {% endif %}
+
+            <div class="nc-trust-body">
+              <h3>{{ item.title|default('Projeto') }}</h3>
+              <p>
+                <strong>{{ item.segment|default('Site Web') }}</strong>
+                {% if item.category is not empty %}
+                  • {{ item.category }}
+                {% endif %}
+              </p>
+              <p>{{ item.summary|default('Projeto sem descricao cadastrada.') }}</p>
+
+              {% if item.url is not empty %}
+                {% set is_external = item.url starts with 'http' %}
+                <div class="nc-actions">
+                  <a
+                    class="nc-btn nc-btn-secondary"
+                    href="{{ item.url }}"
+                    {% if is_external %}target="_blank" rel="noopener noreferrer"{% endif %}
+                  >{{ item.urlLabel|default('Ver detalhes') }}</a>
+                </div>
+              {% endif %}
+            </div>
+          </article>
+        {% else %}
+          <article class="nc-trust-card">
+            <div class="nc-trust-body">
+            <h3>Portfolio em atualizacao</h3>
+            <p>Os estudos de caso serao publicados em breve.</p>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+
+      <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="120">
+        <a class="nc-btn nc-btn-primary" href="/contato">Quero um projeto para meu negocio</a>
+      </div>
+    </section>
+  </main>
+{% endblock %}

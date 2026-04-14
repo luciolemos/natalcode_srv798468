@@ -37,6 +37,7 @@ return [
         'dados-de-acesso' => 'Dados de acesso',
         'termos-de-uso' => 'Termos de Uso',
         'contato' => 'Contato',
+        'portfolio' => 'Portfolio',
     ],
     'menu' => [
         [
@@ -92,6 +93,10 @@ return [
         ],
     ],
     'links_after_groups' => [
+        [
+            'path' => '/portfolio',
+            'key' => 'portfolio',
+        ],
         [
             'path' => '/contato',
             'key' => 'contato',
