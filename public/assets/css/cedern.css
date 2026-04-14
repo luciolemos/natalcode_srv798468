@@ -6901,6 +6901,12 @@ input[type='file'].nc-admin-form-input:focus-visible::file-selector-button {
   font-size: 0.79rem;
 }
 
+.nc-form-help {
+  margin: 0.38rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.79rem;
+}
+
 .nc-member-profile-tag {
   display: inline-flex;
   align-items: center;

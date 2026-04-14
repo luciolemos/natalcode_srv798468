@@ -16,6 +16,33 @@ use Slim\Views\Twig;
 class ContactPageAction extends AbstractPageAction
 {
     private const RECAPTCHA_ACTION = 'contact_submit';
+    /** @var array<string, array{label: string, subject: string}> */
+    private const SEGMENT_DEFINITIONS = [
+        'landing-pages' => [
+            'label' => 'Landing Pages',
+            'subject' => 'Quero uma landing page para captação de leads',
+        ],
+        'supermercado' => [
+            'label' => 'Supermercados',
+            'subject' => 'Quero um site para meu supermercado',
+        ],
+        'padaria' => [
+            'label' => 'Padarias',
+            'subject' => 'Quero um site para minha padaria',
+        ],
+        'dentista' => [
+            'label' => 'Dentistas',
+            'subject' => 'Quero um site para minha clínica odontológica',
+        ],
+        'medico' => [
+            'label' => 'Médicos',
+            'subject' => 'Quero um site para meu consultório médico',
+        ],
+        'psicologo' => [
+            'label' => 'Psicólogos',
+            'subject' => 'Quero um site para consultório de psicologia',
+        ],
+    ];
 
     private RecaptchaVerifier $recaptchaVerifier;
 
@@ -44,10 +71,19 @@ class ContactPageAction extends AbstractPageAction
             $form = array_merge($form, [
                 'name' => trim((string) ($flashForm['name'] ?? '')),
                 'email' => strtolower(trim((string) ($flashForm['email'] ?? ''))),
+                'segment' => $this->normalizeSegmentKey((string) ($flashForm['segment'] ?? '')),
                 'subject' => trim((string) ($flashForm['subject'] ?? '')),
                 'message' => trim((string) ($flashForm['message'] ?? '')),
                 'company' => '',
             ]);
+
+            if ($form['segment'] === '') {
+                $form['segment'] = $this->normalizeSegmentKey((string) ($request->getQueryParams()['segmento'] ?? ''));
+            }
+
+            if ($form['subject'] === '') {
+                $form['subject'] = $this->resolveSubjectFromSegmentKey($form['segment']);
+            }
         }
 
         if ($method === 'POST') {
@@ -55,9 +91,14 @@ class ContactPageAction extends AbstractPageAction
 
             $form['name'] = trim((string) ($body['name'] ?? ''));
             $form['email'] = strtolower(trim((string) ($body['email'] ?? '')));
+            $form['segment'] = $this->normalizeSegmentKey((string) ($body['segment'] ?? ''));
             $form['subject'] = trim((string) ($body['subject'] ?? ''));
             $form['message'] = trim((string) ($body['message'] ?? ''));
             $form['company'] = trim((string) ($body['company'] ?? ''));
+
+            if ($form['subject'] === '' && $form['segment'] !== '') {
+                $form['subject'] = $this->resolveSubjectFromSegmentKey($form['segment']);
+            }
 
             if ($form['company'] !== '') {
                 $this->storeContactFlash([
@@ -96,7 +137,13 @@ class ContactPageAction extends AbstractPageAction
 
                 if (empty($errors)) {
                     try {
-                        $this->sendContactEmail($form['name'], $form['email'], $form['subject'], $form['message']);
+                        $this->sendContactEmail(
+                            $form['name'],
+                            $form['email'],
+                            $form['subject'],
+                            $form['message'],
+                            $this->resolveSegmentLabelFromKey($form['segment'])
+                        );
                         $this->storeContactFlash([
                             'status' => 'sent',
                             'errors' => [],
@@ -120,6 +167,7 @@ class ContactPageAction extends AbstractPageAction
                 'form' => [
                     'name' => $form['name'],
                     'email' => $form['email'],
+                    'segment' => $form['segment'],
                     'subject' => $form['subject'],
                     'message' => $form['message'],
                     'company' => '',
@@ -133,6 +181,8 @@ class ContactPageAction extends AbstractPageAction
             'contact_form' => $form,
             'contact_form_errors' => $errors,
             'contact_form_status' => $status,
+            'contact_segment_options' => $this->buildSegmentOptions(),
+            'contact_segment_selected' => $form['segment'],
             'page_title' => 'Contato | NatalCode',
             'page_url' => 'https://natalcode.com.br/contato',
             'page_description' => 'Veja o endereço, mapa e canais de contato do NatalCode.',
@@ -142,8 +192,13 @@ class ContactPageAction extends AbstractPageAction
     /**
      * @throws Exception
      */
-    private function sendContactEmail(string $name, string $email, string $subject, string $message): void
-    {
+    private function sendContactEmail(
+        string $name,
+        string $email,
+        string $subject,
+        string $message,
+        string $segment = ''
+    ): void {
         $smtpHost = trim((string) ($_ENV['MAIL_HOST'] ?? 'smtp.hostinger.com'));
         $smtpPort = (int) ($_ENV['MAIL_PORT'] ?? 465);
         $smtpUser = trim((string) ($_ENV['MAIL_USERNAME'] ?? ''));
@@ -182,11 +237,13 @@ class ContactPageAction extends AbstractPageAction
 
         $normalizedName = $this->normalizeSingleLineValue($name, 'Visitante');
         $normalizedEmail = strtolower(trim($email));
+        $normalizedSegment = $this->normalizeSingleLineValue($segment);
         $normalizedSubject = $this->normalizeSingleLineValue($subject, 'Contato pelo formulário do site');
         $normalizedMessage = $this->normalizeMultilineValue($message);
 
         $safeName = htmlspecialchars($normalizedName, ENT_QUOTES, 'UTF-8');
         $safeEmail = htmlspecialchars($normalizedEmail, ENT_QUOTES, 'UTF-8');
+        $safeSegment = htmlspecialchars($normalizedSegment, ENT_QUOTES, 'UTF-8');
         $safeSubject = htmlspecialchars($normalizedSubject, ENT_QUOTES, 'UTF-8');
         $safeMessage = nl2br(htmlspecialchars($normalizedMessage, ENT_QUOTES, 'UTF-8'));
         $replyMailTo = htmlspecialchars(
@@ -213,6 +270,7 @@ class ContactPageAction extends AbstractPageAction
             . '<p style="margin:0 0 8px;"><strong>Nome:</strong> ' . $safeName . '</p>'
             . '<p style="margin:0 0 8px;"><strong>E-mail:</strong> '
             . '<a href="mailto:' . $safeEmail . '" style="color:#1d4ed8;text-decoration:none;">' . $safeEmail . '</a></p>'
+            . ($safeSegment !== '' ? '<p style="margin:0 0 8px;"><strong>Segmento:</strong> ' . $safeSegment . '</p>' : '')
             . '<p style="margin:0;"><strong>Assunto informado:</strong> ' . $safeSubject . '</p>'
             . '</div>'
             . '<div style="margin:0 0 16px;padding:16px;border-left:4px solid #2563eb;'
@@ -238,6 +296,7 @@ class ContactPageAction extends AbstractPageAction
             . "Mensagem recebida pelo formulario institucional.\n\n"
             . "Nome: {$normalizedName}\n"
             . "E-mail: {$normalizedEmail}\n"
+            . ($normalizedSegment !== '' ? "Segmento: {$normalizedSegment}\n" : '')
             . "Assunto informado: {$normalizedSubject}\n\n"
             . "Responder: {$this->buildReplyMailToLink($normalizedEmail, $normalizedSubject)}\n\n"
             . $normalizedMessage;
@@ -277,13 +336,14 @@ class ContactPageAction extends AbstractPageAction
     }
 
     /**
-     * @return array{name:string,email:string,subject:string,message:string,company:string}
+     * @return array{name:string,email:string,segment:string,subject:string,message:string,company:string}
      */
     private function getEmptyForm(): array
     {
         return [
             'name' => '',
             'email' => '',
+            'segment' => '',
             'subject' => '',
             'message' => '',
             'company' => '',
@@ -307,5 +367,51 @@ class ContactPageAction extends AbstractPageAction
         unset($_SESSION['contact_form_flash']);
 
         return $flash;
+    }
+
+    private function resolveSubjectFromSegmentKey(string $segment): string
+    {
+        $normalizedSegment = $this->normalizeSegmentKey($segment);
+        if ($normalizedSegment === '') {
+            return '';
+        }
+
+        return (string) (self::SEGMENT_DEFINITIONS[$normalizedSegment]['subject'] ?? '');
+    }
+
+    private function resolveSegmentLabelFromKey(string $segment): string
+    {
+        $normalizedSegment = $this->normalizeSegmentKey($segment);
+        if ($normalizedSegment === '') {
+            return '';
+        }
+
+        return (string) (self::SEGMENT_DEFINITIONS[$normalizedSegment]['label'] ?? '');
+    }
+
+    private function normalizeSegmentKey(string $segment): string
+    {
+        $normalizedSegment = preg_replace('/[^a-z0-9\-]/', '', strtolower(trim($segment))) ?? '';
+        if ($normalizedSegment === 'landing' || $normalizedSegment === 'landing-page') {
+            $normalizedSegment = 'landing-pages';
+        }
+
+        return array_key_exists($normalizedSegment, self::SEGMENT_DEFINITIONS) ? $normalizedSegment : '';
+    }
+
+    /**
+     * @return list<array{key: string, label: string}>
+     */
+    private function buildSegmentOptions(): array
+    {
+        $options = [];
+        foreach (self::SEGMENT_DEFINITIONS as $key => $definition) {
+            $options[] = [
+                'key' => $key,
+                'label' => $definition['label'],
+            ];
+        }
+
+        return $options;
     }
 }
