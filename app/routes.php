@@ -220,11 +220,6 @@ return function (App $app) {
         );
     };
 
-    $app->options('/{routes:.*}', function (Request $request, Response $response) {
-        // CORS Pre-Flight OPTIONS Request Handler
-        return $response;
-    });
-
     $app->get('/', HomePageAction::class);
     $app->get('/quem-somos', AboutPageAction::class);
     $app->get('/quem-somos/missao', AboutMissionPageAction::class);
