@@ -158,7 +158,89 @@
       const mediaItems = parseMediaItems(
         hero.getAttribute('data-hero-media') || hero.getAttribute('data-hero-images')
       );
+      const titleElement = hero.querySelector('[data-hero-copy-title]');
+      const reducedMotionQuery =
+        typeof window.matchMedia === 'function'
+          ? window.matchMedia('(prefers-reduced-motion: reduce)')
+          : null;
+      let prefersReducedMotion = reducedMotionQuery ? reducedMotionQuery.matches : false;
+      let titleTypingTimer = null;
+      let titleCaretTimer = null;
+      let titleAnimationToken = 0;
+
+      const readTextContent = (element) => {
+        if (!element || typeof element.textContent !== 'string') {
+          return '';
+        }
+
+        return element.textContent.trim();
+      };
+
+      const setTypewriterTitle = (rawTitle, options = {}) => {
+        if (!titleElement) {
+          return;
+        }
+
+        const title = typeof rawTitle === 'string' ? rawTitle.trim() : '';
+        const isMobileViewport =
+          typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 700px)').matches;
+        const allowTypingEffect = !isMobileViewport;
+
+        if (titleTypingTimer !== null) {
+          window.clearInterval(titleTypingTimer);
+          titleTypingTimer = null;
+        }
+
+        if (titleCaretTimer !== null) {
+          window.clearTimeout(titleCaretTimer);
+          titleCaretTimer = null;
+        }
+
+        titleAnimationToken += 1;
+        const currentToken = titleAnimationToken;
+        titleElement.classList.remove('nc-is-typewriting-live');
+        titleElement.textContent = title;
+
+        if (!title) {
+          titleElement.classList.remove('nc-is-typewriting');
+          titleElement.style.removeProperty('--nc-typewriter-steps');
+          return;
+        }
+
+        const shouldAnimate = options.animate !== false && !prefersReducedMotion && allowTypingEffect;
+        if (!shouldAnimate) {
+          titleElement.classList.remove('nc-is-typewriting');
+          titleElement.classList.remove('nc-is-typewriting-live');
+          titleElement.style.removeProperty('--nc-typewriter-steps');
+          return;
+        }
+
+        const titleLength = Array.from(title).length;
+        const typewriterSteps = Math.min(90, Math.max(22, titleLength));
+        titleElement.style.setProperty('--nc-typewriter-steps', String(typewriterSteps));
+        titleElement.classList.remove('nc-is-typewriting');
+        void titleElement.offsetWidth;
+        titleElement.classList.add('nc-is-typewriting');
+      };
+
+      setTypewriterTitle(readTextContent(titleElement), { animate: true });
+
       if (mediaItems.length < 2) {
+        if (reducedMotionQuery) {
+          const onReducedMotionChange = (event) => {
+            prefersReducedMotion = event.matches;
+            setTypewriterTitle(readTextContent(titleElement), {
+              animate: !prefersReducedMotion,
+            });
+          };
+
+          if (typeof reducedMotionQuery.addEventListener === 'function') {
+            reducedMotionQuery.addEventListener('change', onReducedMotionChange);
+          } else if (typeof reducedMotionQuery.addListener === 'function') {
+            reducedMotionQuery.addListener(onReducedMotionChange);
+          }
+        }
+
         return;
       }
 
@@ -178,7 +260,6 @@
       const copyStackElement = hero.querySelector('[data-hero-copy-stack]');
       const kickerElement = hero.querySelector('[data-hero-copy-kicker]');
       const badgeElement = hero.querySelector('[data-hero-copy-badge]');
-      const titleElement = hero.querySelector('[data-hero-copy-title]');
       const taglineElement = hero.querySelector('[data-hero-copy-tagline]');
       const leadElement = hero.querySelector('[data-hero-copy-lead]');
       const imageAltElement = hero.querySelector('[data-hero-copy-image-alt]');
@@ -188,26 +269,13 @@
       }
 
       const intervalMs = normalizeInterval(hero.getAttribute('data-hero-interval'));
-      const reducedMotionQuery =
-        typeof window.matchMedia === 'function'
-          ? window.matchMedia('(prefers-reduced-motion: reduce)')
-          : null;
       let currentIndex = 0;
       let autoplayTimer = null;
       let renderRequestId = 0;
       let isInViewport = true;
       let isUserInteracting = false;
       let isUserPaused = false;
-      let prefersReducedMotion = reducedMotionQuery ? reducedMotionQuery.matches : false;
       let copyTransitionTimer = null;
-
-      const readTextContent = (element) => {
-        if (!element || typeof element.textContent !== 'string') {
-          return '';
-        }
-
-        return element.textContent.trim();
-      };
 
       const fallbackCopy = {
         kicker: readTextContent(kickerElement),
@@ -293,7 +361,7 @@
         copyTransitionTimer = window.setTimeout(() => {
           copyStackElement.classList.remove('is-transitioning');
           copyTransitionTimer = null;
-        }, 320);
+        }, 480);
       };
 
       const applyCopyMarkup = (media, options = {}) => {
@@ -310,7 +378,9 @@
 
         setCopyText(kickerElement, kicker);
         setCopyText(badgeElement, badge, true);
-        setCopyText(titleElement, title);
+        setTypewriterTitle(title, {
+          animate: options.animateTitle !== false,
+        });
         setCopyText(taglineElement, tagline, true);
         setCopyText(leadElement, lead);
         setCopyText(imageAltElement, imageAlt);
@@ -524,6 +594,9 @@
       if (reducedMotionQuery) {
         const onReducedMotionChange = (event) => {
           prefersReducedMotion = event.matches;
+          setTypewriterTitle(readTextContent(titleElement), {
+            animate: !prefersReducedMotion,
+          });
           updateToggleButton();
           syncAutoplay();
         };
