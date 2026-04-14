@@ -267,6 +267,9 @@ class ContactPageAction extends AbstractPageAction
             $mailer->addEmbeddedImage($brandMetaPath, $brandMetaCid, 'nc.png', 'base64', 'image/png');
             $brandMetaSrc = 'cid:' . $brandMetaCid;
         }
+        if ($brandMetaSrc === null && $logoSrc !== null) {
+            $brandMetaSrc = $logoSrc;
+        }
 
         $headerMetaHtml = InstitutionalEmailTemplate::buildInstitutionHeaderMeta(
             null,

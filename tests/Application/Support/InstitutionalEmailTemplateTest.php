@@ -55,7 +55,7 @@ class InstitutionalEmailTemplateTest extends TestCase
         $html = InstitutionalEmailTemplate::buildLayout(
             'Aviso <Importante>',
             '<p>Conteudo</p>',
-            null,
+            'https://example.org/assets/img/brand/natalcode1.png',
             '<p>Cabecalho</p>'
         );
 
