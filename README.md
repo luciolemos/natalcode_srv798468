@@ -388,6 +388,31 @@ composer install --no-dev --dry-run --no-interaction
 4. Executar smoke check pós-deploy.
 5. Validar interações críticas (menu mobile, seletor de tema, rota API principal).
 
+### Fluxo de release entre branches (recomendado)
+
+- Desenvolvimento: `natalcode`
+- Produção: `main`
+- Publicação: sempre via merge `natalcode -> main`
+
+Script de apoio para padronizar esse processo:
+
+```bash
+chmod +x scripts/release-main.sh
+scripts/release-main.sh
+```
+
+Modo padrão (`dry-run`):
+
+- sincroniza `natalcode` com remoto;
+- roda `phpunit`, `phpstan`, `phpcs` e visual;
+- mostra os comandos de merge/push sem executar.
+
+Para aplicar o release de fato:
+
+```bash
+scripts/release-main.sh --apply
+```
+
 ### Quando a mudança visual for intencional
 
 Atualize snapshots localmente e versione os arquivos gerados:

@@ -94,6 +94,7 @@ use App\Application\Actions\Page\MemberLogoutAction;
 use App\Application\Actions\Page\MemberRegisterPageAction;
 use App\Application\Actions\Page\MemberResetPasswordPageAction;
 use App\Application\Actions\Page\PrivacyPolicyPageAction;
+use App\Application\Actions\Page\PortfolioPageAction;
 use App\Application\Actions\Page\PublicLecturesPageAction;
 use App\Application\Actions\Page\StudiesPageAction;
 use App\Application\Actions\Page\TermsOfUsePageAction;
@@ -234,6 +235,7 @@ return function (App $app) {
     $app->get('/estudos/esde', EsdePageAction::class);
     $app->get('/estudos/palestras', PublicLecturesPageAction::class);
     $app->get('/estudos/atendimento-fraterno', FraternalServicePageAction::class);
+    $app->get('/portfolio', PortfolioPageAction::class);
     $app->get('/agenda', AgendaPageAction::class);
     $app->get('/agenda/{slug}', AgendaDetailPageAction::class);
     $app->get('/agenda/{slug}/ics', AgendaEventIcsDownloadAction::class);
