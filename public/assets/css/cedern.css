@@ -3635,7 +3635,7 @@ body.is-library-cover-dialog-open {
     width: min(100%, 24rem);
     justify-content: center;
     margin-top: auto;
-    padding-top: clamp(2.1rem, 5.2vh, 3rem);
+    padding-top: clamp(3rem, 7vh, 4rem);
   }
 
   .nc-home-hero-controls {
