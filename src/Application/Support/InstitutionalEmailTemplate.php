@@ -11,15 +11,9 @@ final class InstitutionalEmailTemplate
         ?string $cnpj = null,
         ?string $brandImageSrc = null
     ): string {
-        $baseUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'), '/');
-        $brandImagePath = trim((string) ($brandImageSrc ?? ($_ENV['APP_EMAIL_BRAND_IMAGE'] ?? '/assets/img/brand/nc.png')));
-        $brandImageUrl = $brandImagePath !== '' && str_starts_with($brandImagePath, 'http')
-            ? $brandImagePath
-            : $baseUrl . '/' . ltrim($brandImagePath, '/');
+        $brandImageUrl = trim((string) $brandImageSrc);
         $brandImageAlt = trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'NatalCode'));
-        if ($brandImageAlt === '') {
-            $brandImageAlt = 'NatalCode';
-        }
+        $brandName = $brandImageAlt !== '' ? $brandImageAlt : 'NatalCode';
 
         $resolvedInstitutionName = trim((string) $institutionName);
         if ($resolvedInstitutionName === '') {
@@ -35,14 +29,21 @@ final class InstitutionalEmailTemplate
         }
 
         $safeBrandImageUrl = htmlspecialchars($brandImageUrl, ENT_QUOTES, 'UTF-8');
-        $safeBrandImageAlt = htmlspecialchars($brandImageAlt, ENT_QUOTES, 'UTF-8');
+        $safeBrandImageAlt = htmlspecialchars($brandName, ENT_QUOTES, 'UTF-8');
+        $safeBrandName = htmlspecialchars($brandName, ENT_QUOTES, 'UTF-8');
         $safeInstitutionName = htmlspecialchars($resolvedInstitutionName, ENT_QUOTES, 'UTF-8');
         $safeCnpj = htmlspecialchars($resolvedCnpj, ENT_QUOTES, 'UTF-8');
 
-        return '<div style="margin:0 0 8px;">'
-            . '<img src="' . $safeBrandImageUrl . '" alt="' . $safeBrandImageAlt . '" '
-            . 'style="display:block;max-width:120px;height:auto;margin:0 auto;">'
-            . '</div>'
+        $brandBlock = $brandImageUrl !== ''
+            ? '<div style="margin:0 0 8px;">'
+                . '<img src="' . $safeBrandImageUrl . '" alt="' . $safeBrandImageAlt . '" '
+                . 'style="display:block;max-width:120px;height:auto;margin:0 auto;">'
+                . '</div>'
+            : '<p style="margin:0 0 8px;font-size:15px;line-height:1.2;color:#0f172a;font-weight:700;">'
+                . $safeBrandName
+                . '</p>';
+
+        return $brandBlock
             . '<p style="margin:0 0 4px;font-size:12px;line-height:1.35;'
             . 'letter-spacing:0.03em;color:#1e293b;font-weight:700;white-space:nowrap;">'
             . $safeInstitutionName . '</p>'
@@ -60,8 +61,15 @@ final class InstitutionalEmailTemplate
         $siteName = htmlspecialchars((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'NatalCode'), ENT_QUOTES, 'UTF-8');
         $baseUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'), '/');
         $siteUrl = htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8');
-        $resolvedLogoSrc = $logoSrc ?: ($baseUrl . '/assets/img/brand/natalcode1.png');
-        $logoUrl = htmlspecialchars($resolvedLogoSrc, ENT_QUOTES, 'UTF-8');
+        $resolvedLogoSrc = trim((string) $logoSrc);
+        $logoBlock = '';
+        if ($resolvedLogoSrc !== '') {
+            $logoUrl = htmlspecialchars($resolvedLogoSrc, ENT_QUOTES, 'UTF-8');
+            $logoBlock = '<div style="margin:0 auto 12px;max-width:220px;">'
+                . '<img src="' . $logoUrl . '" alt="' . $siteName . '" '
+                . 'style="display:block;max-width:220px;width:100%;height:auto;margin:0 auto;">'
+                . '</div>';
+        }
         $resolvedHeaderMetaHtml = trim((string) $headerMetaHtml);
 
         $institutionalEmail = trim((string) (
@@ -85,13 +93,7 @@ final class InstitutionalEmailTemplate
                   style="padding:20px 20px 16px;background:#ffffff;color:#0f172a;
                   border-bottom:1px solid #e2e8f0;text-align:center;"
                 >
-                  <div style="margin:0 auto 12px;max-width:220px;">
-                    <img
-                      src="{$logoUrl}"
-                      alt="{$siteName}"
-                      style="display:block;max-width:220px;width:100%;height:auto;margin:0 auto;"
-                    >
-                  </div>
+                  {$logoBlock}
                   {$resolvedHeaderMetaHtml}
                   <h1 style="margin:8px 0 0;font-size:20px;line-height:1.25;color:#1e293b;">
                     {$titleSafe}
