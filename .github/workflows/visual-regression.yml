@@ -18,6 +18,7 @@ jobs:
     env:
       APP_ENV: test
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+      XDEBUG_MODE: off
 
     steps:
       - name: Checkout
@@ -62,7 +63,7 @@ jobs:
         env:
           PW_TEST_SCREENSHOT_NO_FONTS_READY: "1"
           FONTCONFIG_PATH: /etc/fonts
-        run: npm run test:visual
+        run: env -u NO_COLOR npm run test:visual
 
       - name: Upload Playwright report (always)
         if: always()
