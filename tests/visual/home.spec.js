@@ -13,6 +13,34 @@ async function stabilizeForScreenshot(page)
     await page.waitForLoadState('networkidle');
     await page.waitForFunction(() => document.fonts && document.fonts.status === 'loaded');
     await page.waitForFunction(() => Array.from(document.images).every((img) => img.complete && img.naturalWidth > 0));
+    await page.evaluate(() => {
+        document.querySelectorAll('.nc-home-hero[data-hero-media], .nc-home-hero[data-hero-images]').forEach((hero) => {
+            const titleElement = hero.querySelector('[data-hero-copy-title]');
+            if (!titleElement) {
+                return;
+            }
+
+            const rawMedia = hero.getAttribute('data-hero-media') || hero.getAttribute('data-hero-images');
+            if (!rawMedia) {
+                titleElement.classList.remove('nc-is-typewriting', 'nc-is-typewriting-live');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(rawMedia);
+                const first = Array.isArray(parsed) ? parsed[0] : null;
+                const finalTitle =
+                    first && typeof first.title === 'string' && first.title.trim()
+                        ? first.title.trim()
+                        : titleElement.textContent;
+
+                titleElement.textContent = finalTitle || '';
+                titleElement.classList.remove('nc-is-typewriting', 'nc-is-typewriting-live');
+            } catch (_error) {
+                titleElement.classList.remove('nc-is-typewriting', 'nc-is-typewriting-live');
+            }
+        });
+    });
     await page.addStyleTag({
         content: `
             * { caret-color: transparent !important; }
