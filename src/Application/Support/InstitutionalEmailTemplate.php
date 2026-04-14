@@ -35,9 +35,9 @@ final class InstitutionalEmailTemplate
         $safeCnpj = htmlspecialchars($resolvedCnpj, ENT_QUOTES, 'UTF-8');
 
         $brandBlock = $brandImageUrl !== ''
-            ? '<div style="margin:0 0 8px;">'
+            ? '<div style="margin:0 0 6px;text-align:left;">'
                 . '<img src="' . $safeBrandImageUrl . '" alt="' . $safeBrandImageAlt . '" '
-                . 'style="display:block;max-width:120px;height:auto;margin:0 auto;">'
+                . 'style="display:block;max-width:120px;height:auto;margin:0;">'
                 . '</div>'
             : '<p style="margin:0 0 8px;font-size:15px;line-height:1.2;color:#0f172a;font-weight:700;">'
                 . $safeBrandName
@@ -65,9 +65,9 @@ final class InstitutionalEmailTemplate
         $logoBlock = '';
         if ($resolvedLogoSrc !== '') {
             $logoUrl = htmlspecialchars($resolvedLogoSrc, ENT_QUOTES, 'UTF-8');
-            $logoBlock = '<div style="margin:0 auto 12px;max-width:220px;">'
+            $logoBlock = '<div style="margin:0 0 10px;max-width:220px;text-align:left;">'
                 . '<img src="' . $logoUrl . '" alt="' . $siteName . '" '
-                . 'style="display:block;max-width:220px;width:100%;height:auto;margin:0 auto;">'
+                . 'style="display:block;max-width:220px;width:100%;height:auto;margin:0;">'
                 . '</div>';
         }
         $resolvedHeaderMetaHtml = trim((string) $headerMetaHtml);
@@ -90,8 +90,8 @@ final class InstitutionalEmailTemplate
                 border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;"
               >
                 <div
-                  style="padding:20px 20px 16px;background:#ffffff;color:#0f172a;
-                  border-bottom:1px solid #e2e8f0;text-align:center;"
+                  style="padding:14px 20px 16px;background:#ffffff;color:#0f172a;
+                  border-bottom:1px solid #e2e8f0;text-align:left;"
                 >
                   {$logoBlock}
                   {$resolvedHeaderMetaHtml}
