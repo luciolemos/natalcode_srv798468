@@ -61,7 +61,7 @@
         }
     },
     "scripts": {
-        "test": "phpunit",
+        "test": "XDEBUG_MODE=off phpunit",
         "import:bookshop:csv": "php scripts/import_bookshop_csv.php",
         "migrate:bookshop:covers": "php scripts/migrate_bookshop_cover_paths.php",
         "renumber:bookshop:skus": "php scripts/renumber_bookshop_skus.php",
