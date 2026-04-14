@@ -10,6 +10,11 @@ final class InstitutionalEmailTemplate
         ?string $institutionName = null,
         ?string $cnpj = null
     ): string {
+        $resolvedBrandName = trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'NatalCode'));
+        if ($resolvedBrandName === '') {
+            $resolvedBrandName = 'NatalCode';
+        }
+
         $resolvedInstitutionName = trim((string) $institutionName);
         if ($resolvedInstitutionName === '') {
             $resolvedInstitutionName = 'NATALCODE AGENCIA DIGITAL';
@@ -23,10 +28,14 @@ final class InstitutionalEmailTemplate
             $resolvedCnpj = 'Nao informado';
         }
 
+        $safeBrandName = htmlspecialchars($resolvedBrandName, ENT_QUOTES, 'UTF-8');
         $safeInstitutionName = htmlspecialchars($resolvedInstitutionName, ENT_QUOTES, 'UTF-8');
         $safeCnpj = htmlspecialchars($resolvedCnpj, ENT_QUOTES, 'UTF-8');
 
-        return '<p style="margin:0 0 4px;font-size:12px;line-height:1.35;'
+        return '<p style="margin:0 0 6px;font-size:15px;line-height:1.2;'
+            . 'letter-spacing:0.02em;color:#0f172a;font-weight:700;">'
+            . $safeBrandName . '</p>'
+            . '<p style="margin:0 0 4px;font-size:12px;line-height:1.35;'
             . 'letter-spacing:0.03em;color:#1e293b;font-weight:700;white-space:nowrap;">'
             . $safeInstitutionName . '</p>'
             . '<p style="margin:0 0 10px;font-size:11px;line-height:1.3;color:#64748b;">'
