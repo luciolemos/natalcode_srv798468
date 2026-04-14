@@ -252,23 +252,12 @@ class ContactPageAction extends AbstractPageAction
             'UTF-8'
         );
 
-        $logoCid = 'natalcode-logo';
-        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brand/natalcode1.png';
-        $logoSrc = null;
-        if (is_file($logoPath)) {
-            $mailer->addEmbeddedImage($logoPath, $logoCid, 'natalcode1.png', 'base64', 'image/png');
-            $logoSrc = 'cid:' . $logoCid;
-        }
-
         $brandMetaCid = 'natalcode-brand-meta';
         $brandMetaPath = dirname(__DIR__, 4) . '/public/assets/img/brand/nc.png';
         $brandMetaSrc = null;
         if (is_file($brandMetaPath)) {
             $mailer->addEmbeddedImage($brandMetaPath, $brandMetaCid, 'nc.png', 'base64', 'image/png');
             $brandMetaSrc = 'cid:' . $brandMetaCid;
-        }
-        if ($brandMetaSrc === null && $logoSrc !== null) {
-            $brandMetaSrc = $logoSrc;
         }
 
         $headerMetaHtml = InstitutionalEmailTemplate::buildInstitutionHeaderMeta(
@@ -284,13 +273,17 @@ class ContactPageAction extends AbstractPageAction
             . 'border-radius:12px;background:#f8fafc;">'
             . '<p style="margin:0 0 8px;"><strong>Nome:</strong> ' . $safeName . '</p>'
             . '<p style="margin:0 0 8px;"><strong>E-mail:</strong> '
-            . '<a href="mailto:' . $safeEmail . '" style="color:#1d4ed8;text-decoration:none;">' . $safeEmail . '</a></p>'
-            . ($safeSegment !== '' ? '<p style="margin:0 0 8px;"><strong>Segmento:</strong> ' . $safeSegment . '</p>' : '')
+            . '<a href="mailto:' . $safeEmail . '" style="color:#1d4ed8;text-decoration:none;">'
+            . $safeEmail . '</a></p>'
+            . ($safeSegment !== ''
+                ? '<p style="margin:0 0 8px;"><strong>Segmento:</strong> ' . $safeSegment . '</p>'
+                : '')
             . '<p style="margin:0;"><strong>Assunto informado:</strong> ' . $safeSubject . '</p>'
             . '</div>'
             . '<div style="margin:0 0 16px;padding:16px;border-left:4px solid #2563eb;'
             . 'border-radius:10px;background:#f8fafc;">'
-            . '<p style="margin:0 0 8px;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;color:#64748b;">Mensagem</p>'
+            . '<p style="margin:0 0 8px;font-size:12px;letter-spacing:0.04em;'
+            . 'text-transform:uppercase;color:#64748b;">Mensagem</p>'
             . '<p style="margin:0;">' . $safeMessage . '</p>'
             . '</div>'
             . '<p style="margin:0 0 10px;">'
@@ -300,7 +293,7 @@ class ContactPageAction extends AbstractPageAction
             . 'Responder por e-mail</a></p>'
             . '<p style="margin:0;font-size:12px;color:#64748b;">'
             . 'Se preferir, use o botao de resposta do seu webmail ou escreva para ' . $safeEmail . '.</p>',
-            $logoSrc,
+            null,
             $headerMetaHtml
         );
 
