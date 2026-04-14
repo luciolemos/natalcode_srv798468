@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" role="img" aria-labelledby="title desc">
-  <title id="title">Capa padrão da Biblioteca do CEDE</title>
+  <title id="title">Capa padrão da Biblioteca da NatalCode</title>
   <desc id="desc">Capa institucional usada quando um livro da biblioteca não possui imagem própria.</desc>
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">

@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 use Slim\Views\Twig;
 use Throwable;
 
-class AdminCedeManagementPageAction extends AbstractPageAction
+class AdminTeamManagementPageAction extends AbstractPageAction
 {
     private const DEFAULT_PAGE_SIZE = 10;
 
@@ -175,7 +175,7 @@ class AdminCedeManagementPageAction extends AbstractPageAction
         $endItem = $totalItems > 0 ? min($offset + count($users), $totalItems) : 0;
 
         $pageSizeQueryValue = $showAllItems ? self::ALL_PAGE_SIZE : (string) $pageSize;
-        $basePath = '/painel/gestao-cede';
+        $basePath = '/painel/gestao-equipe';
         $baseQuery = [
             'per_page' => $pageSizeQueryValue,
             'sort' => $sortBy,
@@ -243,16 +243,16 @@ class AdminCedeManagementPageAction extends AbstractPageAction
             'selected' => $showAllItems,
         ];
 
-        return $this->renderPage($response, 'pages/admin-cede-management.twig', [
-            'cede_management_users' => $users,
-            'cede_management_status' => $status,
-            'cede_management_error_message' => $loadError,
-            'cede_management_search' => $searchTerm,
-            'cede_management_institutional_role' => $selectedInstitutionalRole,
-            'cede_management_institutional_role_options' => $institutionalRoleOptions,
-            'cede_management_status_filter' => $selectedStatus,
-            'cede_management_sort_links' => $sortLinks,
-            'cede_management_pagination' => [
+        return $this->renderPage($response, 'pages/admin-team-management.twig', [
+            'team_management_users' => $users,
+            'team_management_status' => $status,
+            'team_management_error_message' => $loadError,
+            'team_management_search' => $searchTerm,
+            'team_management_institutional_role' => $selectedInstitutionalRole,
+            'team_management_institutional_role_options' => $institutionalRoleOptions,
+            'team_management_status_filter' => $selectedStatus,
+            'team_management_sort_links' => $sortLinks,
+            'team_management_pagination' => [
                 'current_page' => $currentPage,
                 'total_pages' => $totalPages,
                 'total_items' => $totalItems,
@@ -270,7 +270,7 @@ class AdminCedeManagementPageAction extends AbstractPageAction
             'dashboard_page_title' => 'Gestão NatalCode',
             'dashboard_page_lead' => 'Usuários com função institucional ativa no NatalCode.',
             'page_title' => 'Gestão NatalCode | Dashboard Agenda',
-            'page_url' => 'https://natalcode.com.br/painel/gestao-cede',
+            'page_url' => 'https://natalcode.com.br/painel/gestao-equipe',
             'page_description' => 'Lista administrativa de funções institucionais do NatalCode.',
         ]);
     }

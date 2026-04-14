@@ -272,13 +272,13 @@ if (document.readyState === "loading") {
     try {
       initCedernNav();
     } catch (error) {
-      console.error("[CEDE] Falha ao iniciar menu:", error);
+      console.error("[NATALCODE] Falha ao iniciar menu:", error);
     }
   });
 } else {
   try {
     initCedernNav();
   } catch (error) {
-    console.error("[CEDE] Falha ao iniciar menu:", error);
+    console.error("[NATALCODE] Falha ao iniciar menu:", error);
   }
 }

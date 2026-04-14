@@ -94,7 +94,7 @@ class AboutManagementPageAction extends AbstractPageAction
         return $this->renderPage($response, 'pages/about-management.twig', [
             'public_cede_management' => $managementMembers,
             'page_title' => 'Gestão NatalCode | Quem Somos | NatalCode',
-            'page_url' => 'https://natalcode.com.br/quem-somos/gestao-cede',
+            'page_url' => 'https://natalcode.com.br/quem-somos/equipe',
             'page_description' =>
                 'Conheça a composição da gestão atual do NatalCode '
                 . 'e as atribuições institucionais de cada função.',

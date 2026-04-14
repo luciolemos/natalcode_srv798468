@@ -34,12 +34,14 @@ class PrivacyPolicyPageAction extends AbstractPageAction
             $storedContent = $this->institutionalContentRepository->findBySlug(self::DOCUMENT_SLUG);
 
             if ($storedContent !== null && trim((string) ($storedContent['body'] ?? '')) !== '') {
-                $document['title'] = trim((string) ($storedContent['title'] ?? $document['title']));
-                $document['body'] = str_replace(
+                $document['title'] = $this->normalizeLegacyReferences(
+                    trim((string) ($storedContent['title'] ?? $document['title']))
+                );
+                $document['body'] = $this->normalizeLegacyReferences(str_replace(
                     ["\r\n", "\r"],
                     "\n",
                     (string) ($storedContent['body'] ?? $document['body'])
-                );
+                ));
 
                 $updatedAt = trim((string) ($storedContent['updated_at'] ?? ''));
                 $document['updated_at_label'] = $this->formatDateTimeLabel($updatedAt);
@@ -76,11 +78,53 @@ class PrivacyPolicyPageAction extends AbstractPageAction
 
         return [
             'kicker' => 'Institucional',
-            'title' => trim((string) ($defaults['title'] ?? 'Política de Privacidade')),
+            'title' => $this->normalizeLegacyReferences(trim((string) ($defaults['title'] ?? 'Política de Privacidade'))),
             'lead' => 'Transparência sobre como tratamos dados pessoais no site do NatalCode.',
-            'body' => str_replace(["\r\n", "\r"], "\n", (string) ($defaults['body'] ?? '')),
+            'body' => $this->normalizeLegacyReferences(str_replace(["\r\n", "\r"], "\n", (string) ($defaults['body'] ?? ''))),
             'updated_at_label' => '',
         ];
+    }
+
+    private function normalizeLegacyReferences(string $content): string
+    {
+        if ($content === '') {
+            return $content;
+        }
+
+        $search = [
+            'Centro de Estudos da Doutrina Espírita – NatalCode',
+            'Centro de Estudos da Doutrina Espírita - NatalCode',
+            'Centro de Estudos da Doutrina Espírita –',
+            'Centro de Estudos da Doutrina Espírita -',
+            'Centro de Estudos da Doutrina Espírita',
+            'Centro Espírita de Doutrina Espírita',
+            'Centro Espirita de Doutrina Espirita',
+            'Centro Espírita',
+            'Centro Espirita',
+            'organizar participação em atividades do NatalCode;',
+            'E-mail: cede@cedern.org',
+            'cede@cedern.org',
+            'CEDE',
+            'Cede',
+        ];
+        $replace = [
+            'NatalCode Agência Digital',
+            'NatalCode Agência Digital',
+            'NatalCode Agência Digital',
+            'NatalCode Agência Digital',
+            'NatalCode Agência Digital',
+            'NatalCode Agência Digital',
+            'NatalCode Agência Digital',
+            'NatalCode Agência Digital',
+            'NatalCode Agência Digital',
+            'organizar solicitações e relacionamento comercial da NatalCode;',
+            'E-mail: contato@natalcode.com.br',
+            'contato@natalcode.com.br',
+            'NatalCode',
+            'NatalCode',
+        ];
+
+        return str_replace($search, $replace, $content);
     }
 
     private function formatDateTimeLabel(string $value): string

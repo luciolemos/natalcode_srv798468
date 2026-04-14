@@ -192,6 +192,7 @@ class AdminDashboardPageAction extends AbstractPageAction
             'estatuto' => 'Estatuto',
             'estudos' => 'Estudos',
             'gestao-cede' => 'Gestão NatalCode',
+            'gestao-equipe' => 'Gestão NatalCode',
             'historia' => 'História',
             'missao' => 'Missão',
             'nossa-marca' => 'Nossa Marca',

@@ -1,6 +1,5 @@
 {% set footer = site.footer|default({}) %}
 {% set footer_nav_groups = footer.navGroups|default([]) %}
-{% set hidden_footer_group_titles = ['Institucional'] %}
 {% set brand = site.brand|default({}) %}
 {% set brand_logo_default = '/assets/img/brand/natalcode_logo_horizontal_black_1158x314.png' %}
 {% set brand_logo_src = brand.logoSrc|default(brand_logo_default) %}
@@ -33,24 +32,22 @@
       <div class="nc-footer-nav-grid">
         {% for group in footer_nav_groups %}
           {% set group_title = group.title|default('Links') %}
-          {% if group_title not in hidden_footer_group_titles %}
-            {% set group_modifier = '' %}
-            {% if group_title == 'Institucional' %}
-              {% set group_modifier = ' is-institutional' %}
-            {% elseif group_title == 'Loja' or group_title == 'Recursos' %}
-              {% set group_modifier = ' is-store' %}
-            {% endif %}
-            <nav class="nc-footer-block nc-footer-nav-column{{ group_modifier }}" aria-label="{{ group_title|default('Navegação do rodapé') }}">
-              <h3 class="nc-footer-title">{{ group_title|default('Links') }}</h3>
-              {% if group.links|default([]) %}
-                <ul class="nc-footer-links">
-                  {% for link in group.links %}
-                    <li><a class="nc-footer-link" href="{{ link.path }}">{{ link.label|default(link.path) }}</a></li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </nav>
+          {% set group_modifier = '' %}
+          {% if group_title == 'Institucional' %}
+            {% set group_modifier = ' is-institutional' %}
+          {% elseif group_title == 'Loja' or group_title == 'Recursos' %}
+            {% set group_modifier = ' is-store' %}
           {% endif %}
+          <nav class="nc-footer-block nc-footer-nav-column{{ group_modifier }}" aria-label="{{ group_title|default('Navegação do rodapé') }}">
+            <h3 class="nc-footer-title">{{ group_title|default('Links') }}</h3>
+            {% if group.links|default([]) %}
+              <ul class="nc-footer-links">
+                {% for link in group.links %}
+                  <li><a class="nc-footer-link" href="{{ link.path }}">{{ link.label|default(link.path) }}</a></li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </nav>
         {% endfor %}
       </div>
 

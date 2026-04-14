@@ -37,15 +37,6 @@ return [
             [
                 'title' => 'Institucional',
                 'links' => [
-                    ['path' => '/', 'key' => 'inicio'],
-                    ['path' => '/quem-somos', 'key' => 'quem-somos'],
-                    ['path' => '/quem-somos/historia', 'key' => 'historia'],
-                    ['path' => '/quem-somos/fundador', 'key' => 'fundador'],
-                    ['path' => '/quem-somos/nossa-marca', 'key' => 'nossa-marca'],
-                    ['path' => '/quem-somos/estatuto', 'key' => 'estatuto'],
-                    ['path' => '/quem-somos/gestao-cede', 'key' => 'gestao-cede'],
-                    ['path' => '/quem-somos/base-de-conhecimento', 'key' => 'biblioteca'],
-                    ['path' => '/contato', 'key' => 'contato'],
                     ['path' => '/politica-de-privacidade', 'key' => 'politica-de-privacidade'],
                     ['path' => '/termos-de-uso', 'key' => 'termos-de-uso'],
                 ],

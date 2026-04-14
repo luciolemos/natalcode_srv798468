@@ -9,7 +9,7 @@
   {% set panel_can_library_categories = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
   {% set panel_can_bookshop = panel_is_superuser or panel_role_key in ['bookshop_operator', 'admin'] %}
   {% set panel_can_users = panel_is_superuser or panel_role_key == 'admin' %}
-  {% set panel_can_cede_management = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
+  {% set panel_can_team_management = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
 
   <main class="nc-dashboard-shell" aria-label="Dashboard administrativo">
     <header class="nc-dashboard-topbar">
@@ -344,7 +344,7 @@
                 </a>
               </details>
 
-              <details class="nc-dashboard-user-menu-group" {% if current_path starts with '/painel/usuarios' or current_path starts with '/painel/gestao-cede' %}open{% endif %}>
+              <details class="nc-dashboard-user-menu-group" {% if current_path starts with '/painel/usuarios' or current_path starts with '/painel/gestao-equipe' %}open{% endif %}>
                 <summary class="nc-dashboard-user-menu-group-title">PESSOAL</summary>
                 <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/usuarios">
                   <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
@@ -358,8 +358,8 @@
                   <span>Gestão de Pessoal</span>
                 </a>
 
-                {% if panel_can_cede_management %}
-                  <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/gestao-cede">
+                {% if panel_can_team_management %}
+                  <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/gestao-equipe">
                     <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
                       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/>
@@ -385,8 +385,8 @@
                 <span>Guia Prático</span>
               </a>
             {% endif %}
-            {% if panel_can_cede_management and not panel_can_users %}
-              <a class="nc-link nc-dashboard-user-menu-link" href="/painel/gestao-cede">
+            {% if panel_can_team_management and not panel_can_users %}
+              <a class="nc-link nc-dashboard-user-menu-link" href="/painel/gestao-equipe">
                 <span class="nc-dashboard-user-menu-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/>
@@ -596,7 +596,7 @@
           {% endif %}
 
           {% if panel_can_users %}
-            <details class="nc-admin-nav-group" aria-label="Seção pessoal" {% if current_path starts with '/painel/usuarios' or current_path starts with '/painel/gestao-cede' %}open{% endif %}>
+            <details class="nc-admin-nav-group" aria-label="Seção pessoal" {% if current_path starts with '/painel/usuarios' or current_path starts with '/painel/gestao-equipe' %}open{% endif %}>
               <summary class="nc-admin-nav-group-title">PESSOAL</summary>
               <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/usuarios' ? ' is-active' : '' }}" href="/painel/usuarios">
                 <span class="nc-admin-link-icon" aria-hidden="true">
@@ -609,8 +609,8 @@
                 </span>
                 <span class="nc-admin-link-label">Gestão de Pessoal</span>
               </a>
-              {% if panel_can_cede_management %}
-                <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/gestao-cede' ? ' is-active' : '' }}" href="/painel/gestao-cede">
+              {% if panel_can_team_management %}
+                <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/gestao-equipe' ? ' is-active' : '' }}" href="/painel/gestao-equipe">
                   <span class="nc-admin-link-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/>
@@ -623,8 +623,8 @@
                 </a>
               {% endif %}
             </details>
-          {% elseif panel_can_cede_management %}
-            <a class="nc-link{{ current_path starts with '/painel/gestao-cede' ? ' is-active' : '' }}" href="/painel/gestao-cede">
+          {% elseif panel_can_team_management %}
+            <a class="nc-link{{ current_path starts with '/painel/gestao-equipe' ? ' is-active' : '' }}" href="/painel/gestao-equipe">
               <span class="nc-admin-link-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/>
