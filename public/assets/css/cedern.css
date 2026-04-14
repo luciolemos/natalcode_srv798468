@@ -3603,6 +3603,10 @@ body.is-library-cover-dialog-open {
     text-align: center;
   }
 
+  .nc-home-hero .nc-hero-copy-stack {
+    padding-top: clamp(4.8rem, 16svh, 7.5rem);
+  }
+
   .nc-home-hero .nc-section-kicker {
     display: none;
   }
@@ -3631,7 +3635,7 @@ body.is-library-cover-dialog-open {
     width: min(100%, 24rem);
     justify-content: center;
     margin-top: auto;
-    padding-top: clamp(0.9rem, 2.6vh, 1.5rem);
+    padding-top: clamp(2.1rem, 5.2vh, 3rem);
   }
 
   .nc-home-hero-controls {
