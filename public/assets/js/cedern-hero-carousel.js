@@ -164,9 +164,6 @@
           ? window.matchMedia('(prefers-reduced-motion: reduce)')
           : null;
       let prefersReducedMotion = reducedMotionQuery ? reducedMotionQuery.matches : false;
-      let titleTypingTimer = null;
-      let titleCaretTimer = null;
-      let titleAnimationToken = 0;
 
       const readTextContent = (element) => {
         if (!element || typeof element.textContent !== 'string') {
@@ -176,62 +173,25 @@
         return element.textContent.trim();
       };
 
-      const setTypewriterTitle = (rawTitle, options = {}) => {
+      const setHeroTitle = (rawTitle) => {
         if (!titleElement) {
           return;
         }
 
         const title = typeof rawTitle === 'string' ? rawTitle.trim() : '';
-        const isMobileViewport =
-          typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 700px)').matches;
-        const allowTypingEffect = !isMobileViewport;
-
-        if (titleTypingTimer !== null) {
-          window.clearInterval(titleTypingTimer);
-          titleTypingTimer = null;
-        }
-
-        if (titleCaretTimer !== null) {
-          window.clearTimeout(titleCaretTimer);
-          titleCaretTimer = null;
-        }
-
-        titleAnimationToken += 1;
-        const currentToken = titleAnimationToken;
-        titleElement.classList.remove('nc-is-typewriting-live');
         titleElement.textContent = title;
-
-        if (!title) {
-          titleElement.classList.remove('nc-is-typewriting');
-          titleElement.style.removeProperty('--nc-typewriter-steps');
-          return;
-        }
-
-        const shouldAnimate = options.animate !== false && !prefersReducedMotion && allowTypingEffect;
-        if (!shouldAnimate) {
-          titleElement.classList.remove('nc-is-typewriting');
-          titleElement.classList.remove('nc-is-typewriting-live');
-          titleElement.style.removeProperty('--nc-typewriter-steps');
-          return;
-        }
-
-        const titleLength = Array.from(title).length;
-        const typewriterSteps = Math.min(90, Math.max(22, titleLength));
-        titleElement.style.setProperty('--nc-typewriter-steps', String(typewriterSteps));
         titleElement.classList.remove('nc-is-typewriting');
-        void titleElement.offsetWidth;
-        titleElement.classList.add('nc-is-typewriting');
+        titleElement.classList.remove('nc-is-typewriting-live');
+        titleElement.style.removeProperty('--nc-typewriter-steps');
       };
 
-      setTypewriterTitle(readTextContent(titleElement), { animate: true });
+      setHeroTitle(readTextContent(titleElement));
 
       if (mediaItems.length < 2) {
         if (reducedMotionQuery) {
           const onReducedMotionChange = (event) => {
             prefersReducedMotion = event.matches;
-            setTypewriterTitle(readTextContent(titleElement), {
-              animate: !prefersReducedMotion,
-            });
+            setHeroTitle(readTextContent(titleElement));
           };
 
           if (typeof reducedMotionQuery.addEventListener === 'function') {
@@ -345,6 +305,20 @@
         imageElement.src = media.src;
       };
 
+      const triggerImageZoom = () => {
+        if (!imageElement) {
+          return;
+        }
+
+        imageElement.classList.remove('is-hero-zooming');
+        if (prefersReducedMotion) {
+          return;
+        }
+
+        void imageElement.offsetWidth;
+        imageElement.classList.add('is-hero-zooming');
+      };
+
       const animateCopySwap = () => {
         if (!copyStackElement || prefersReducedMotion) {
           return;
@@ -378,9 +352,7 @@
 
         setCopyText(kickerElement, kicker);
         setCopyText(badgeElement, badge, true);
-        setTypewriterTitle(title, {
-          animate: options.animateTitle !== false,
-        });
+        setHeroTitle(title);
         setCopyText(taglineElement, tagline, true);
         setCopyText(leadElement, lead);
         setCopyText(imageAltElement, imageAlt);
@@ -452,6 +424,7 @@
         }
 
         applyMediaMarkup(media);
+        triggerImageZoom();
         applyCopyMarkup(media, { animate: options.animateCopy !== false });
         updateDots();
         updateStatus(!!options.userInitiated);
@@ -594,9 +567,8 @@
       if (reducedMotionQuery) {
         const onReducedMotionChange = (event) => {
           prefersReducedMotion = event.matches;
-          setTypewriterTitle(readTextContent(titleElement), {
-            animate: !prefersReducedMotion,
-          });
+          setHeroTitle(readTextContent(titleElement));
+          triggerImageZoom();
           updateToggleButton();
           syncAutoplay();
         };

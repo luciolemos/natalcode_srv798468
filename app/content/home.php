@@ -135,7 +135,7 @@ return [
     ],
     'heroActions' => [
         [
-            'label' => 'Agendar conversa',
+            'label' => 'Solicitar orçamento',
             'href' => '/contato',
             'class' => 'nc-btn nc-btn-primary',
             'loadingOnClick' => false,
@@ -372,18 +372,18 @@ return [
         ],
         'fundador' => [
             'kicker' => 'Quem Somos',
-            'title' => 'Liderança',
-            'lead' => 'Conheca a visão que guia a NatalCode: unir estratégia, execução técnica e crescimento sustentável.',
+            'title' => 'Governança',
+            'lead' => 'Conheca a governança que guia a NatalCode: alinhar estratégia e execução técnica para crescimento consistente dos projetos e impacto real no negócio dos clientes.',
             'name' => '',
             'role' => 'Direção NatalCode',
-            'photo' => '/assets/img/face3_620_620.png',
-            'photo_alt' => 'Retrato da liderança da NatalCode',
+            'photo' => '/assets/img/techlead.png',
+            'photo_alt' => 'Retrato da governança da NatalCode',
             'intro' => [
-                'A NatalCode foi estruturada para resolver problemas reais de comunicação digital e performance de negócio.',
-                'Nosso trabalho combina planejamento claro, implementação robusta e melhoria continua baseada em dados.',
+                'A NatalCode foi estruturada para resolver desafios concretos de posicionamento digital, geração de demanda e eficiência comercial em negócios que precisam crescer com previsibilidade.',
+                'Nossa atuação conecta estratégia, design e engenharia em um processo disciplinado: começamos com diagnóstico e definição de metas, avançamos para implementação técnica com padrão de qualidade e sustentamos a evolução com leitura de dados, testes e ciclos contínuos de melhoria.',
             ],
             'quote' => 'Um bom projeto digital nasce de contexto claro, execução disciplinada e melhoria constante.',
-            'quote_attribution' => 'Visão de liderança NatalCode',
+            'quote_attribution' => 'Visão de governança NatalCode',
             'topics' => [
                 [
                     'step' => '01',

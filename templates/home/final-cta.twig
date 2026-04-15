@@ -16,5 +16,13 @@
         {% if action.ariaDisabled|default(false) %}aria-disabled="true" tabindex="-1"{% endif %}
       >{{ action.ariaDisabled|default(false) ? action.disabledLabel|default('Em breve') : action.label }}</a>
     {% endfor %}
+    {% if app_whatsapp_number|default('') %}
+      <a
+        class="nc-btn nc-btn-secondary"
+        href="https://wa.me/{{ app_whatsapp_number }}?text={{ app_whatsapp_message|default('')|url_encode }}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Falar no WhatsApp</a>
+    {% endif %}
   </div>
 </section>

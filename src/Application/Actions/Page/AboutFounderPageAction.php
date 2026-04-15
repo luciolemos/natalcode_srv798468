@@ -30,7 +30,7 @@ class AboutFounderPageAction extends AbstractPageAction
             'page_url' => 'https://natalcode.com.br/quem-somos/fundador',
             'page_description' => $pageDescription !== ''
                 ? $pageDescription
-                : 'Conheca a lideranca e a visao que inspiraram a origem da NatalCode.',
+                : 'Conheca a governanca e a visao que inspiraram a origem da NatalCode.',
         ]);
     }
 }

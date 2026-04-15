@@ -1,0 +1,156 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "NatalCode - Início" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "NatalCode (tema claro)" [ref=e6]
+      - button "Abrir menu" [ref=e7] [cursor=pointer]
+      - text: ▾
+  - main [ref=e11]:
+    - region "Hero principal" [ref=e12]:
+      - group "Controles do carrossel da hero":
+        - button "Imagem anterior" [ref=e13] [cursor=pointer]:
+          - generic [ref=e14]: ‹
+          - generic [ref=e15]: Imagem anterior
+        - button "Proxima imagem" [ref=e16] [cursor=pointer]:
+          - generic [ref=e17]: ›
+          - generic [ref=e18]: Proxima imagem
+        - generic [ref=e19]:
+          - group "Selecionar imagem da hero" [ref=e20]:
+            - button "Ir para imagem 1 de 4" [ref=e21] [cursor=pointer]
+            - button "Ir para imagem 2 de 4" [ref=e22] [cursor=pointer]
+            - button "Ir para imagem 3 de 4" [ref=e23] [cursor=pointer]
+            - button "Ir para imagem 4 de 4" [ref=e24] [cursor=pointer]
+          - button "Pausar" [ref=e25] [cursor=pointer]
+        - paragraph: "Imagem 1 de 4: Software, sites e produtos digitais que convertem"
+      - generic [ref=e27]:
+        - generic [ref=e28]: Interface da NatalCode com visual SaaS e proposta de valor em destaque
+        - heading "Software, sites e produtos digitais que convertem" [level=1] [ref=e29]
+        - generic [ref=e30]:
+          - link "Solicitar orçamento" [ref=e31] [cursor=pointer]:
+            - /url: /contato
+          - link "Ver serviços" [ref=e32] [cursor=pointer]:
+            - /url: /estudos
+    - region "Quem Somos" [ref=e33]:
+      - generic [ref=e34]:
+        - paragraph [ref=e35]: Quem Somos
+        - heading "NatalCode Agência Digital" [level=2] [ref=e36]
+        - paragraph [ref=e37]: Desenvolvemos sites, sistemas e produtos digitais para negócios. Atuamos do planejamento à publicação, com acompanhamento contínuo de performance.
+        - paragraph [ref=e38]: "Nosso objetivo é claro: transformar metas de negócio em páginas e sistemas que vendem melhor, comunicam com clareza e evoluem junto com a operação."
+      - paragraph [ref=e39]: Frentes de atuação
+      - generic "Frentes de atuação" [ref=e40]:
+        - article [ref=e41]:
+          - img "Projeto web com identidade de produto" [ref=e43]
+          - generic [ref=e44]:
+            - heading "Landing Pages" [level=3] [ref=e45]
+            - paragraph [ref=e46]: Estrutura comercial para campanhas e captação.
+        - article [ref=e47]:
+          - img "Projeto institucional com arquitetura clara" [ref=e49]
+          - generic [ref=e50]:
+            - heading "Sites Institucionais" [level=3] [ref=e51]
+            - paragraph [ref=e52]: Conteúdo organizado para posicionamento de marca.
+        - article [ref=e53]:
+          - img "Análise de desempenho e crescimento" [ref=e55]
+          - generic [ref=e56]:
+            - heading "SEO e Performance" [level=3] [ref=e57]
+            - paragraph [ref=e58]: Otimização continua orientada por dados.
+    - region "Testemunhos" [ref=e59]:
+      - paragraph [ref=e60]: Clientes
+      - heading "Resultados de quem escolheu a NatalCode" [level=2] [ref=e61]
+      - paragraph [ref=e62]: Depoimentos com indicadores reais de conversão, prazo e retorno em projetos de site e landing page.
+      - generic [ref=e63]:
+        - article [ref=e64]:
+          - generic [ref=e65]:
+            - img "Marina Lima" [ref=e66]
+            - generic [ref=e67]:
+              - strong [ref=e68]: Marina Lima
+              - generic [ref=e69]: Gestora comercial
+          - paragraph [ref=e70]: "\"A taxa de contato subiu de 2,1% para 4,8% em 45 dias, mantendo o mesmo investimento em mídia. A página ficou clara e objetiva para o nosso público.\""
+        - article [ref=e71]:
+          - generic [ref=e72]:
+            - img "Joao Costa" [ref=e73]
+            - generic [ref=e74]:
+              - strong [ref=e75]: Joao Costa
+              - generic [ref=e76]: Empreendedor
+          - paragraph [ref=e77]: "\"Fechamos o novo site em 24 dias, antes do prazo de 30, e o tempo médio de permanencia passou de 1m12 para 2m49 no primeiro mês.\""
+        - article [ref=e78]:
+          - generic [ref=e79]:
+            - img "Ana Bezerra" [ref=e80]
+            - generic [ref=e81]:
+              - strong [ref=e82]: Ana Bezerra
+              - generic [ref=e83]: Coordenadora de marketing
+          - paragraph [ref=e84]: "\"Em 90 dias saimos de 18 para 47 palavras-chave no top 10 e aumentamos em 62% o tráfego organico qualificado, com base técnica pronta para escalar.\""
+      - button "Ver mais depoimentos" [ref=e86] [cursor=pointer]
+    - region "Acesso rápido" [ref=e87]:
+      - paragraph [ref=e88]: Caminhos
+      - heading "Encontre o que você precisa na NatalCode" [level=2] [ref=e89]
+      - paragraph [ref=e90]: Reunimos aqui os principais caminhos para estratégia, execução, suporte e contato comercial.
+      - generic [ref=e91]:
+        - article [ref=e92]:
+          - heading "Quem Somos" [level=3] [ref=e93]
+          - paragraph [ref=e94]: Conheca nossa identidade, missao, valores, historia e direção de marca.
+          - link "Conhecer a NatalCode" [ref=e96] [cursor=pointer]:
+            - /url: /quem-somos
+        - article [ref=e97]:
+          - heading "Serviços" [level=3] [ref=e98]
+          - paragraph [ref=e99]: Veja como estruturamos sites, landing pages, SEO e manutenção para gerar resultado.
+          - link "Ver serviços" [ref=e101] [cursor=pointer]:
+            - /url: /estudos
+        - article [ref=e102]:
+          - heading "Contato" [level=3] [ref=e103]
+          - paragraph [ref=e104]: Envie seu briefing e fale com nosso time para iniciar seu projeto.
+          - link "Falar com a NatalCode" [ref=e106] [cursor=pointer]:
+            - /url: /contato
+        - article [ref=e107]:
+          - heading "FAQ" [level=3] [ref=e108]
+          - paragraph [ref=e109]: Tire dúvidas sobre prazo, escopo, investimento e acompanhamento pos-entrega.
+          - link "Ler FAQ" [ref=e111] [cursor=pointer]:
+            - /url: /faq
+        - article [ref=e112]:
+          - heading "Base de Conteúdo" [level=3] [ref=e113]
+          - paragraph [ref=e114]: Acesse materiais, referências e guias práticos para evolução digital.
+          - link "Ver conteúdos" [ref=e116] [cursor=pointer]:
+            - /url: /quem-somos/base-de-conhecimento
+    - region "Gestão NatalCode" [ref=e117]:
+      - paragraph [ref=e118]: Time
+      - heading "Gestão NatalCode" [level=2] [ref=e119]
+      - paragraph [ref=e120]: Consulte os perfis institucionais e funções de operação na página Quem Somos.
+      - link "Ver time completo" [ref=e122] [cursor=pointer]:
+        - /url: /quem-somos/equipe
+    - region "Chamada final" [ref=e123]:
+      - paragraph [ref=e124]: Próximo passo
+      - heading "Vamos construir sua presença digital" [level=2] [ref=e125]
+      - paragraph [ref=e126]: Se você precisa lançar, melhorar conversão ou organizar sua operação online, a NatalCode estrutura o projeto com método e execução previsivel.
+      - link "Solicitar proposta" [ref=e128] [cursor=pointer]:
+        - /url: /contato
+  - complementary "Ferramentas de interface":
+    - region "Paleta de cores do site" [ref=e129]:
+      - button "Cores ▾" [ref=e130]:
+        - generic [ref=e131]: Cores
+        - text: ▾
+  - contentinfo [ref=e132]:
+    - generic [ref=e133]:
+      - generic [ref=e134]:
+        - region "Identidade institucional" [ref=e135]:
+          - link "NatalCode - Início" [ref=e136] [cursor=pointer]:
+            - /url: /
+            - img "NatalCode (tema claro)" [ref=e137]
+          - paragraph [ref=e138]: Presença digital orientada a resultado
+          - paragraph [ref=e139]: NatalCode Agência Digital
+          - paragraph [ref=e140]: Da landing page ao sistema sob medida, estruturamos projetos digitais com visão de produto, performance e evolução continua.
+        - navigation "Institucional" [ref=e142]:
+          - heading "Institucional" [level=3] [ref=e143]
+          - list [ref=e144]:
+            - listitem [ref=e145]:
+              - link "Política de Privacidade" [ref=e146] [cursor=pointer]:
+                - /url: /politica-de-privacidade
+            - listitem [ref=e147]:
+              - link "Termos de Uso" [ref=e148] [cursor=pointer]:
+                - /url: /termos-de-uso
+      - generic [ref=e149]:
+        - paragraph [ref=e150]: © 2026 NatalCode. Todos os direitos reservados.
+        - paragraph [ref=e151]: Atendimento nacional
+```
