@@ -373,7 +373,7 @@ return [
         'fundador' => [
             'kicker' => 'Quem Somos',
             'title' => 'Governança',
-            'lead' => 'Do conceito à implementação, orquestramos todo o ciclo de vida do seu projeto, com expertise técnica e visão estratégica. Resultado? Sistemas que não apenas funcionam, mas performam e evoluem.',
+            'lead' => 'Do conceito à implementação, a NatalCode orquestra todo o ciclo de vida do seu projeto, com expertise técnica e visão estratégica. Resultado? Sistemas que não apenas funcionam, mas performam e evoluem.',
             'name' => '',
             'role' => 'Direção NatalCode',
             'photo' => '/assets/img/techlead.png',
