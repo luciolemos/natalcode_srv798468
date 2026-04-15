@@ -16,6 +16,21 @@ async function stabilizeForScreenshot(page)
     await page.waitForLoadState('networkidle');
     await page.waitForFunction(() => document.fonts && document.fonts.status === 'loaded');
     await page.waitForFunction(() => Array.from(document.images).every((img) => img.complete && img.naturalWidth > 0));
+    let stableSamples = 0;
+    let lastHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+    for (let index = 0; index < 12; index += 1) {
+        await page.waitForTimeout(100);
+        const currentHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+        if (Math.abs(currentHeight - lastHeight) <= 2) {
+            stableSamples += 1;
+            if (stableSamples >= 3) {
+                break;
+            }
+        } else {
+            stableSamples = 0;
+        }
+        lastHeight = currentHeight;
+    }
     await page.addStyleTag({
         content: `
             * { caret-color: transparent !important; }
