@@ -3604,7 +3604,7 @@ body.is-library-cover-dialog-open {
   }
 
   .nc-home-hero .nc-hero-copy-stack {
-    padding-top: clamp(6rem, 20svh, 9rem);
+    padding-top: clamp(7.5rem, 24svh, 11rem);
   }
 
   .nc-home-hero .nc-section-kicker {
