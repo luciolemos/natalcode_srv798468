@@ -373,7 +373,7 @@ return [
         'fundador' => [
             'kicker' => 'Quem Somos',
             'title' => 'Governança',
-            'lead' => 'Conheca a governança que guia a NatalCode: alinhar estratégia e execução técnica para crescimento consistente dos projetos e impacto real no negócio dos clientes.',
+            'lead' => 'Do conceito à implementação, orquestramos todo o ciclo de vida do seu projeto, com expertise técnica e visão estratégica. Resultado? Sistemas que não apenas funcionam, mas performam e evoluem.',
             'name' => '',
             'role' => 'Direção NatalCode',
             'photo' => '/assets/img/techlead.png',
