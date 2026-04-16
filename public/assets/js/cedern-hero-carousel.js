@@ -79,6 +79,16 @@
 
     return Math.min(15000, Math.max(2500, parsed));
   };
+  const MOBILE_BREAKPOINT = 700;
+  const buildTerminalBadgeText = (rawBadge) => {
+    const badge = typeof rawBadge === 'string' ? rawBadge.trim() : '';
+    if (!badge) {
+      return '';
+    }
+
+    const escapedBadge = badge.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    return `<?php echo '${escapedBadge}'; ?>`;
+  };
 
   const preloadImage = (() => {
     const cache = new Map();
@@ -159,14 +169,12 @@
         hero.getAttribute('data-hero-media') || hero.getAttribute('data-hero-images')
       );
       const titleElement = hero.querySelector('[data-hero-copy-title]');
+      const badgeElement = hero.querySelector('[data-hero-copy-badge]');
       const reducedMotionQuery =
         typeof window.matchMedia === 'function'
           ? window.matchMedia('(prefers-reduced-motion: reduce)')
           : null;
       let prefersReducedMotion = reducedMotionQuery ? reducedMotionQuery.matches : false;
-      let titleTypingTimer = null;
-      let titleCaretTimer = null;
-      let titleAnimationToken = 0;
 
       const readTextContent = (element) => {
         if (!element || typeof element.textContent !== 'string') {
@@ -176,62 +184,67 @@
         return element.textContent.trim();
       };
 
-      const setTypewriterTitle = (rawTitle, options = {}) => {
+      const setHeroTitle = (rawTitle) => {
         if (!titleElement) {
           return;
         }
 
         const title = typeof rawTitle === 'string' ? rawTitle.trim() : '';
-        const isMobileViewport =
-          typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 700px)').matches;
-        const allowTypingEffect = !isMobileViewport;
-
-        if (titleTypingTimer !== null) {
-          window.clearInterval(titleTypingTimer);
-          titleTypingTimer = null;
-        }
-
-        if (titleCaretTimer !== null) {
-          window.clearTimeout(titleCaretTimer);
-          titleCaretTimer = null;
-        }
-
-        titleAnimationToken += 1;
-        const currentToken = titleAnimationToken;
-        titleElement.classList.remove('nc-is-typewriting-live');
         titleElement.textContent = title;
-
-        if (!title) {
-          titleElement.classList.remove('nc-is-typewriting');
-          titleElement.style.removeProperty('--nc-typewriter-steps');
-          return;
-        }
-
-        const shouldAnimate = options.animate !== false && !prefersReducedMotion && allowTypingEffect;
-        if (!shouldAnimate) {
-          titleElement.classList.remove('nc-is-typewriting');
-          titleElement.classList.remove('nc-is-typewriting-live');
-          titleElement.style.removeProperty('--nc-typewriter-steps');
-          return;
-        }
-
-        const titleLength = Array.from(title).length;
-        const typewriterSteps = Math.min(90, Math.max(22, titleLength));
-        titleElement.style.setProperty('--nc-typewriter-steps', String(typewriterSteps));
         titleElement.classList.remove('nc-is-typewriting');
-        void titleElement.offsetWidth;
-        titleElement.classList.add('nc-is-typewriting');
+        titleElement.classList.remove('nc-is-typewriting-live');
+        titleElement.style.removeProperty('--nc-typewriter-steps');
       };
 
-      setTypewriterTitle(readTextContent(titleElement), { animate: true });
+      const setHeroBadge = (rawBadge) => {
+        if (!badgeElement) {
+          return;
+        }
+
+        const badge = typeof rawBadge === 'string' ? rawBadge.trim() : '';
+        const terminalBadge = buildTerminalBadgeText(badge);
+        badgeElement.classList.remove('nc-is-typewriting');
+        badgeElement.style.removeProperty('--nc-badge-typewriter-steps');
+
+        if (window.innerWidth > MOBILE_BREAKPOINT) {
+          if (!terminalBadge) {
+            badgeElement.textContent = '';
+            badgeElement.setAttribute('hidden', '');
+            return;
+          }
+
+          badgeElement.textContent = terminalBadge;
+          badgeElement.removeAttribute('hidden');
+
+          if (!prefersReducedMotion) {
+            void badgeElement.offsetWidth;
+            badgeElement.classList.add('nc-is-typewriting');
+            badgeElement.style.setProperty(
+              '--nc-badge-typewriter-steps',
+              String(terminalBadge.length)
+            );
+          }
+
+          return;
+        }
+
+        badgeElement.textContent = badge;
+        if (badge) {
+          badgeElement.removeAttribute('hidden');
+        } else {
+          badgeElement.setAttribute('hidden', '');
+        }
+      };
+
+      setHeroTitle(readTextContent(titleElement));
+      setHeroBadge(readTextContent(badgeElement));
 
       if (mediaItems.length < 2) {
         if (reducedMotionQuery) {
           const onReducedMotionChange = (event) => {
             prefersReducedMotion = event.matches;
-            setTypewriterTitle(readTextContent(titleElement), {
-              animate: !prefersReducedMotion,
-            });
+            setHeroTitle(readTextContent(titleElement));
+            setHeroBadge(readTextContent(badgeElement));
           };
 
           if (typeof reducedMotionQuery.addEventListener === 'function') {
@@ -259,7 +272,6 @@
       const dotButtons = Array.from(hero.querySelectorAll('[data-hero-dot]'));
       const copyStackElement = hero.querySelector('[data-hero-copy-stack]');
       const kickerElement = hero.querySelector('[data-hero-copy-kicker]');
-      const badgeElement = hero.querySelector('[data-hero-copy-badge]');
       const taglineElement = hero.querySelector('[data-hero-copy-tagline]');
       const leadElement = hero.querySelector('[data-hero-copy-lead]');
       const imageAltElement = hero.querySelector('[data-hero-copy-image-alt]');
@@ -345,6 +357,20 @@
         imageElement.src = media.src;
       };
 
+      const triggerImageZoom = () => {
+        if (!imageElement) {
+          return;
+        }
+
+        imageElement.classList.remove('is-hero-zooming');
+        if (prefersReducedMotion) {
+          return;
+        }
+
+        void imageElement.offsetWidth;
+        imageElement.classList.add('is-hero-zooming');
+      };
+
       const animateCopySwap = () => {
         if (!copyStackElement || prefersReducedMotion) {
           return;
@@ -377,10 +403,8 @@
         const imageAlt = resolveCopyValue(media.imageAlt, fallbackCopy.imageAlt);
 
         setCopyText(kickerElement, kicker);
-        setCopyText(badgeElement, badge, true);
-        setTypewriterTitle(title, {
-          animate: options.animateTitle !== false,
-        });
+        setHeroBadge(badge);
+        setHeroTitle(title);
         setCopyText(taglineElement, tagline, true);
         setCopyText(leadElement, lead);
         setCopyText(imageAltElement, imageAlt);
@@ -452,6 +476,7 @@
         }
 
         applyMediaMarkup(media);
+        triggerImageZoom();
         applyCopyMarkup(media, { animate: options.animateCopy !== false });
         updateDots();
         updateStatus(!!options.userInitiated);
@@ -591,12 +616,30 @@
         syncAutoplay();
       });
 
+      let isDesktopTabletViewport = window.innerWidth > MOBILE_BREAKPOINT;
+      window.addEventListener(
+        'resize',
+        () => {
+          const nextDesktopTabletViewport = window.innerWidth > MOBILE_BREAKPOINT;
+          if (nextDesktopTabletViewport === isDesktopTabletViewport) {
+            return;
+          }
+
+          isDesktopTabletViewport = nextDesktopTabletViewport;
+          const activeMedia = mediaItems[currentIndex];
+          const activeBadge = activeMedia
+            ? resolveCopyValue(activeMedia.badge, fallbackCopy.badge)
+            : fallbackCopy.badge;
+          setHeroBadge(activeBadge);
+        },
+        { passive: true }
+      );
+
       if (reducedMotionQuery) {
         const onReducedMotionChange = (event) => {
           prefersReducedMotion = event.matches;
-          setTypewriterTitle(readTextContent(titleElement), {
-            animate: !prefersReducedMotion,
-          });
+          applyCopyMarkup(mediaItems[currentIndex], { animate: false });
+          triggerImageZoom();
           updateToggleButton();
           syncAutoplay();
         };

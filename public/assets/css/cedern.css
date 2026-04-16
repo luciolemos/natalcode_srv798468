@@ -1149,6 +1149,22 @@ h3 {
 .nc-home-hero-media-image {
   object-fit: cover;
   object-position: 78% center;
+  transform: scale(1);
+  will-change: transform;
+}
+
+.nc-home-hero-media-image.is-hero-zooming {
+  animation: nc-hero-image-zoom 5.4s ease-out forwards;
+}
+
+@keyframes nc-hero-image-zoom {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.055);
+  }
 }
 
 .nc-home-hero-overlay {
@@ -1429,6 +1445,15 @@ h3 {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .nc-home-hero-media-image {
+    will-change: auto;
+    transform: none;
+  }
+
+  .nc-home-hero-media-image.is-hero-zooming {
+    animation: none;
+  }
+
   .nc-hero-copy-stack {
     will-change: auto;
   }
@@ -1560,6 +1585,70 @@ h3 {
   font-family: var(--font-mono);
   font-weight: var(--font-weight-semibold);
   font-size: 0.85rem;
+}
+
+.nc-home-hero .nc-hero-terminal-badge {
+  max-width: min(100%, 72ch);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 701px) {
+  .nc-home-hero .nc-hero-terminal-badge {
+    border-radius: 0.7rem;
+    padding: 0.52rem 0.82rem;
+    border: 1px solid color-mix(in srgb, #111820 60%, #2d465d);
+    background: linear-gradient(180deg, rgb(12 16 20 / 0.95), rgb(18 24 31 / 0.94));
+    color: #d8f5e1;
+    box-shadow:
+      0 0.55rem 1.4rem rgb(4 7 10 / 0.32),
+      inset 0 1px 0 rgb(255 255 255 / 0.08);
+    text-shadow: 0 0 0.55rem rgb(145 235 174 / 0.22);
+  }
+
+  .nc-home-hero .nc-hero-terminal-badge.nc-is-typewriting {
+    width: fit-content;
+    max-width: 100%;
+    clip-path: inset(0 100% 0 0);
+    border-right: 0.08em solid currentColor;
+    border-right-color: transparent;
+    animation:
+      nc-hero-badge-typewriter 3.2s steps(var(--nc-badge-typewriter-steps, 66), end) forwards,
+      nc-hero-badge-caret-blink 1s step-end 3.2s 5,
+      nc-hero-badge-caret-hide 0.01s linear 8.2s forwards;
+  }
+}
+
+@keyframes nc-hero-badge-typewriter {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes nc-hero-badge-caret-blink {
+  0%,
+  49% {
+    border-right-color: currentColor;
+  }
+
+  50% {
+    border-right-color: transparent;
+  }
+
+  100% {
+    border-right-color: transparent;
+  }
+}
+
+@keyframes nc-hero-badge-caret-hide {
+  to {
+    border-right-color: transparent;
+  }
 }
 
 .nc-actions {

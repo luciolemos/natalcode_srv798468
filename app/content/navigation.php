@@ -9,7 +9,7 @@ return [
         'missao' => 'Missao',
         'valores' => 'Valores',
         'historia' => 'Historia',
-        'fundador' => 'Liderança',
+        'fundador' => 'Governança',
         'estatuto' => 'Diretrizes',
         'nossa-marca' => 'Nossa Marca',
         'equipe' => 'Gestão',

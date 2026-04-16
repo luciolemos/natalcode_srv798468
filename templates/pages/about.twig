@@ -2,65 +2,94 @@
 
 {% block content %}
   <main class="nc-main nc-container nc-home-flow">
-    {% set institutional = site.institutional|default({}) %}
     {% set founder = homeContent.aboutPages.fundador|default({}) %}
 
-    <section class="nc-section nc-about-overview" aria-label="Detalhes institucionais">
+    <section class="nc-section" aria-label="Posicionamento da NatalCode" data-aos="fade-up" data-aos-delay="20">
       {% include 'components/section-header.twig' with {
         kicker: 'Quem Somos',
-        title: 'Conheça nossa identidade',
-        lead: 'Acesse conteúdos especificos sobre historia, missao, valores, liderança, marca, gestão, diretrizes e base de conhecimento da NatalCode.'
+        title: 'Agência digital orientada a resultado',
+        lead: 'A NatalCode combina estratégia, design e engenharia para construir sites, landing pages e produtos digitais com foco em conversão, performance e evolução contínua.',
+        lead_secondary: 'Atuamos do briefing à publicação, com método claro, entregas previsíveis e acompanhamento pós-lançamento.'
       } %}
-      <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="120">
-        <a class="nc-btn nc-btn-secondary" href="/quem-somos/historia">História</a>
-        <a class="nc-btn nc-btn-secondary" href="/quem-somos/missao">Missao</a>
-        <a class="nc-btn nc-btn-secondary" href="/quem-somos/valores">Valores</a>
-        <a class="nc-btn nc-btn-secondary" href="/quem-somos/fundador">Liderança</a>
-        <a class="nc-btn nc-btn-secondary" href="/quem-somos/nossa-marca">Nossa Marca</a>
-        <a class="nc-btn nc-btn-secondary" href="/quem-somos/equipe">Gestão NatalCode</a>
-        <a class="nc-btn nc-btn-secondary" href="/quem-somos/estatuto">Diretrizes</a>
+
+      <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="140">
+        <a class="nc-btn nc-btn-primary" href="/portfolio">Ver portfólio</a>
+        <a class="nc-btn nc-btn-secondary" href="/contato">Solicitar orçamento</a>
+      </div>
+    </section>
+
+    <section class="nc-section" aria-label="Soluções da NatalCode" data-aos="fade-up" data-aos-delay="30">
+      {% include 'components/section-header.twig' with {
+        kicker: 'Soluções',
+        title: 'O que entregamos para o seu negócio',
+        lead: 'Estruturamos presença digital profissional para gerar mais contatos qualificados e melhorar a operação comercial.'
+      } %}
+
+      <div class="nc-feature-grid nc-tonal-feature-grid">
+        {% include 'components/feature-card.twig' with {
+          title: 'Landing Pages',
+          description: 'Páginas de campanha com foco em conversão, copy estratégica e CTA claro.',
+          href: '/estudos/esde',
+          link_label: 'Ver serviço',
+          delay: 120
+        } %}
+
+        {% include 'components/feature-card.twig' with {
+          title: 'Sites Institucionais',
+          description: 'Sites completos para posicionamento, autoridade da marca e geração de demanda.',
+          href: '/estudos/eade',
+          link_label: 'Ver serviço',
+          delay: 170
+        } %}
+
+        {% include 'components/feature-card.twig' with {
+          title: 'SEO e Evolução',
+          description: 'Ajustes técnicos e de conteúdo para melhorar visibilidade orgânica e performance.',
+          href: '/estudos/palestras',
+          link_label: 'Ver serviço',
+          delay: 220
+        } %}
+      </div>
+    </section>
+
+    <section class="nc-section" aria-label="Método de trabalho da NatalCode" data-aos="fade-up" data-aos-delay="40">
+      {% include 'components/section-header.twig' with {
+        kicker: 'Método',
+        title: 'Como trabalhamos em cada projeto',
+        lead: 'Processo objetivo para reduzir retrabalho e acelerar a entrega com qualidade.'
+      } %}
+
+      <div class="nc-feature-grid nc-tonal-feature-grid">
+        {% include 'components/feature-card.twig' with {
+          title: '1. Diagnóstico e briefing',
+          description: 'Entendimento de público, oferta e objetivos comerciais para definir escopo certo.',
+          delay: 120
+        } %}
+
+        {% include 'components/feature-card.twig' with {
+          title: '2. Execução e validação',
+          description: 'Sprints curtas com checkpoints, revisão de conteúdo e aprovação das entregas.',
+          delay: 170
+        } %}
+
+        {% include 'components/feature-card.twig' with {
+          title: '3. Publicação e evolução',
+          description: 'Go-live assistido, mensuração inicial e plano de melhorias contínuas.',
+          delay: 220
+        } %}
+      </div>
+    </section>
+
+    <section class="nc-section nc-about-founder-overview" aria-label="Governança da NatalCode" data-aos="fade-up" data-aos-delay="50">
+      {% include 'components/section-header.twig' with {
+        kicker: founder.kicker|default('Governança'),
+        title: founder.title|default('Direção da NatalCode'),
+        lead: founder.lead|default('Conheça a visão que orienta nosso posicionamento e a execução dos projetos digitais.')
+      } %}
+
+      <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="140">
+        <a class="nc-btn nc-btn-secondary" href="/quem-somos/fundador">Conhecer governança</a>
         <a class="nc-btn nc-btn-secondary" href="/quem-somos/base-de-conhecimento">Base de conhecimento</a>
-      </div>
-    </section>
-
-    <section class="nc-section nc-about-founder-overview" aria-label="Fundador do NatalCode" data-aos="fade-up" data-aos-delay="30">
-      {% include 'components/section-header.twig' with {
-        kicker: founder.kicker|default('Quem Somos'),
-        title: founder.title|default('Liderança NatalCode'),
-        lead: founder.lead|default('Conheca a visão que sustenta o posicionamento e a operação da NatalCode.')
-      } %}
-
-      <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="140">
-        <a class="nc-btn nc-btn-primary" href="/quem-somos/fundador">Abrir página do fundador</a>
-      </div>
-    </section>
-
-    <section class="nc-section" aria-label="Natureza jurídica e sede" data-aos="fade-up" data-aos-delay="20">
-      {% include 'components/section-header.twig' with {
-        kicker: 'Institucional',
-        title: 'Diretrizes e estrutura',
-        lead: 'Base institucional e diretrizes de atuação da NatalCode.'
-      } %}
-
-      <div class="nc-about-legal-copy" data-aos="fade-up" data-aos-delay="120">
-        <h3>Estrutura institucional NatalCode</h3>
-        <p>{{ institutional.statuteExcerpt|default('A NatalCode é uma agência digital focada em estratégia, design e desenvolvimento web, com atuação orientada a resultado e experiência do usuário.') }}</p>
-      </div>
-
-      <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="160">
-        <a class="nc-btn nc-btn-primary" href="/quem-somos/estatuto">Ler diretrizes completas</a>
-      </div>
-    </section>
-
-    <section class="nc-section nc-about-management-preview" aria-label="Gestão NatalCode" data-aos="fade-up" data-aos-delay="40">
-      {% include 'components/section-header.twig' with {
-        kicker: 'Gestão NatalCode',
-        title: 'Diretoria e funções institucionais',
-        lead: 'Conheca a gestão atual da NatalCode: acesse a página dedicada e veja as atribuições que sustentam a operação.'
-      } %}
-
-      <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="140">
-        <a class="nc-btn nc-btn-primary" href="/quem-somos/equipe">Abrir Gestão NatalCode</a>
       </div>
     </section>
 
