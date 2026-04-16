@@ -79,6 +79,16 @@
 
     return Math.min(15000, Math.max(2500, parsed));
   };
+  const MOBILE_BREAKPOINT = 700;
+  const buildTerminalBadgeText = (rawBadge) => {
+    const badge = typeof rawBadge === 'string' ? rawBadge.trim() : '';
+    if (!badge) {
+      return '';
+    }
+
+    const escapedBadge = badge.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    return `<?php echo '${escapedBadge}'; ?>`;
+  };
 
   const preloadImage = (() => {
     const cache = new Map();
@@ -159,6 +169,7 @@
         hero.getAttribute('data-hero-media') || hero.getAttribute('data-hero-images')
       );
       const titleElement = hero.querySelector('[data-hero-copy-title]');
+      const badgeElement = hero.querySelector('[data-hero-copy-badge]');
       const reducedMotionQuery =
         typeof window.matchMedia === 'function'
           ? window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -185,13 +196,55 @@
         titleElement.style.removeProperty('--nc-typewriter-steps');
       };
 
+      const setHeroBadge = (rawBadge) => {
+        if (!badgeElement) {
+          return;
+        }
+
+        const badge = typeof rawBadge === 'string' ? rawBadge.trim() : '';
+        const terminalBadge = buildTerminalBadgeText(badge);
+        badgeElement.classList.remove('nc-is-typewriting');
+        badgeElement.style.removeProperty('--nc-badge-typewriter-steps');
+
+        if (window.innerWidth > MOBILE_BREAKPOINT) {
+          if (!terminalBadge) {
+            badgeElement.textContent = '';
+            badgeElement.setAttribute('hidden', '');
+            return;
+          }
+
+          badgeElement.textContent = terminalBadge;
+          badgeElement.removeAttribute('hidden');
+
+          if (!prefersReducedMotion) {
+            void badgeElement.offsetWidth;
+            badgeElement.classList.add('nc-is-typewriting');
+            badgeElement.style.setProperty(
+              '--nc-badge-typewriter-steps',
+              String(terminalBadge.length)
+            );
+          }
+
+          return;
+        }
+
+        badgeElement.textContent = badge;
+        if (badge) {
+          badgeElement.removeAttribute('hidden');
+        } else {
+          badgeElement.setAttribute('hidden', '');
+        }
+      };
+
       setHeroTitle(readTextContent(titleElement));
+      setHeroBadge(readTextContent(badgeElement));
 
       if (mediaItems.length < 2) {
         if (reducedMotionQuery) {
           const onReducedMotionChange = (event) => {
             prefersReducedMotion = event.matches;
             setHeroTitle(readTextContent(titleElement));
+            setHeroBadge(readTextContent(badgeElement));
           };
 
           if (typeof reducedMotionQuery.addEventListener === 'function') {
@@ -219,7 +272,6 @@
       const dotButtons = Array.from(hero.querySelectorAll('[data-hero-dot]'));
       const copyStackElement = hero.querySelector('[data-hero-copy-stack]');
       const kickerElement = hero.querySelector('[data-hero-copy-kicker]');
-      const badgeElement = hero.querySelector('[data-hero-copy-badge]');
       const taglineElement = hero.querySelector('[data-hero-copy-tagline]');
       const leadElement = hero.querySelector('[data-hero-copy-lead]');
       const imageAltElement = hero.querySelector('[data-hero-copy-image-alt]');
@@ -351,7 +403,7 @@
         const imageAlt = resolveCopyValue(media.imageAlt, fallbackCopy.imageAlt);
 
         setCopyText(kickerElement, kicker);
-        setCopyText(badgeElement, badge, true);
+        setHeroBadge(badge);
         setHeroTitle(title);
         setCopyText(taglineElement, tagline, true);
         setCopyText(leadElement, lead);
@@ -564,10 +616,29 @@
         syncAutoplay();
       });
 
+      let isDesktopTabletViewport = window.innerWidth > MOBILE_BREAKPOINT;
+      window.addEventListener(
+        'resize',
+        () => {
+          const nextDesktopTabletViewport = window.innerWidth > MOBILE_BREAKPOINT;
+          if (nextDesktopTabletViewport === isDesktopTabletViewport) {
+            return;
+          }
+
+          isDesktopTabletViewport = nextDesktopTabletViewport;
+          const activeMedia = mediaItems[currentIndex];
+          const activeBadge = activeMedia
+            ? resolveCopyValue(activeMedia.badge, fallbackCopy.badge)
+            : fallbackCopy.badge;
+          setHeroBadge(activeBadge);
+        },
+        { passive: true }
+      );
+
       if (reducedMotionQuery) {
         const onReducedMotionChange = (event) => {
           prefersReducedMotion = event.matches;
-          setHeroTitle(readTextContent(titleElement));
+          applyCopyMarkup(mediaItems[currentIndex], { animate: false });
           triggerImageZoom();
           updateToggleButton();
           syncAutoplay();
