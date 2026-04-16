@@ -228,12 +228,8 @@
           return;
         }
 
-        badgeElement.textContent = badge;
-        if (badge) {
-          badgeElement.removeAttribute('hidden');
-        } else {
-          badgeElement.setAttribute('hidden', '');
-        }
+        badgeElement.textContent = '';
+        badgeElement.setAttribute('hidden', '');
       };
 
       setHeroTitle(readTextContent(titleElement));

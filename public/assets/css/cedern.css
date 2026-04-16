@@ -1470,6 +1470,10 @@ h3 {
 }
 
 @media (max-width: 700px) {
+  .nc-home-hero [data-hero-copy-badge] {
+    display: none !important;
+  }
+
   .nc-home-hero .nc-title[data-hero-copy-title].nc-is-typewriting {
     clip-path: inset(0 0 0 0);
     animation: none;
