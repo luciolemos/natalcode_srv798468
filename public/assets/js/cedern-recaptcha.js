@@ -16,45 +16,16 @@
       badge.dataset.ncBadgeToggleReady = "true";
       badge.classList.remove("is-expanded");
 
-      const collapseBadge = () => badge.classList.remove("is-expanded");
-      const expandBadge = () => badge.classList.add("is-expanded");
-      const bindExpandEvents = (element) => {
-        element.addEventListener("pointerdown", expandBadge, true);
-        element.addEventListener("mousedown", expandBadge, true);
-        element.addEventListener("click", expandBadge, true);
-        element.addEventListener("touchstart", expandBadge, {
-          passive: true,
-          capture: true,
-        });
+      const setExpanded = (isExpanded) => {
+        badge.classList.toggle("is-expanded", Boolean(isExpanded));
       };
 
       const isInsideBadge = (event) =>
         event.target instanceof Node && badge.contains(event.target);
 
       const onGlobalPress = (event) => {
-        if (isInsideBadge(event)) {
-          expandBadge();
-          return;
-        }
-
-        collapseBadge();
+        setExpanded(isInsideBadge(event));
       };
-
-      bindExpandEvents(badge);
-      badge.querySelectorAll("iframe").forEach((iframe) => {
-        bindExpandEvents(iframe);
-      });
-
-      const iframeObserver = new MutationObserver(() => {
-        badge.querySelectorAll("iframe").forEach((iframe) => {
-          if (iframe.dataset.ncBadgeExpandBound === "true") {
-            return;
-          }
-          iframe.dataset.ncBadgeExpandBound = "true";
-          bindExpandEvents(iframe);
-        });
-      });
-      iframeObserver.observe(badge, { childList: true, subtree: true });
 
       if (window.PointerEvent) {
         document.addEventListener("pointerdown", onGlobalPress, true);
@@ -66,10 +37,10 @@
         document.addEventListener("mousedown", onGlobalPress, true);
       }
 
-      badge.addEventListener("focusin", expandBadge);
+      badge.addEventListener("focusin", () => setExpanded(true));
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
-          collapseBadge();
+          setExpanded(false);
         }
       });
     };
