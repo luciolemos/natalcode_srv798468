@@ -20,7 +20,7 @@
   .grecaptcha-badge.is-expanded,
   .grecaptcha-badge:active,
   .grecaptcha-badge:focus-within {
-    right: calc(8px + env(safe-area-inset-right, 0px)) !important;
+    right: env(safe-area-inset-right, 0px) !important;
   }
 
   .grecaptcha-badge.is-expanded iframe {
