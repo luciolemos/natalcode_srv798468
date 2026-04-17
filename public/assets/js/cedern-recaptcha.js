@@ -18,6 +18,15 @@
 
       const collapseBadge = () => badge.classList.remove("is-expanded");
       const expandBadge = () => badge.classList.add("is-expanded");
+      const bindExpandEvents = (element) => {
+        element.addEventListener("pointerdown", expandBadge, true);
+        element.addEventListener("mousedown", expandBadge, true);
+        element.addEventListener("click", expandBadge, true);
+        element.addEventListener("touchstart", expandBadge, {
+          passive: true,
+          capture: true,
+        });
+      };
 
       const isInsideBadge = (event) =>
         event.target instanceof Node && badge.contains(event.target);
@@ -30,6 +39,22 @@
 
         collapseBadge();
       };
+
+      bindExpandEvents(badge);
+      badge.querySelectorAll("iframe").forEach((iframe) => {
+        bindExpandEvents(iframe);
+      });
+
+      const iframeObserver = new MutationObserver(() => {
+        badge.querySelectorAll("iframe").forEach((iframe) => {
+          if (iframe.dataset.ncBadgeExpandBound === "true") {
+            return;
+          }
+          iframe.dataset.ncBadgeExpandBound = "true";
+          bindExpandEvents(iframe);
+        });
+      });
+      iframeObserver.observe(badge, { childList: true, subtree: true });
 
       if (window.PointerEvent) {
         document.addEventListener("pointerdown", onGlobalPress, true);
