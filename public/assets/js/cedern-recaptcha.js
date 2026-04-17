@@ -3,6 +3,70 @@
     document.querySelectorAll("form[data-recaptcha-action][data-recaptcha-site-key]")
   );
 
+  const enableMobileBadgeToggle = () => {
+    if (!window.matchMedia("(max-width: 768px)").matches) {
+      return;
+    }
+
+    const attach = (badge) => {
+      const expandBadge = () => {
+        badge.classList.add("is-expanded");
+      };
+
+      const collapseBadge = () => {
+        badge.classList.remove("is-expanded");
+      };
+
+      badge.addEventListener("touchstart", expandBadge, { passive: true });
+      badge.addEventListener("pointerdown", expandBadge);
+
+      document.addEventListener("pointerdown", (event) => {
+        if (badge.contains(event.target)) {
+          return;
+        }
+        collapseBadge();
+      });
+
+      document.addEventListener("touchstart", (event) => {
+        if (badge.contains(event.target)) {
+          return;
+        }
+        collapseBadge();
+      }, { passive: true });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          collapseBadge();
+        }
+      });
+    };
+
+    const existingBadge = document.querySelector(".grecaptcha-badge");
+    if (existingBadge) {
+      attach(existingBadge);
+      return;
+    }
+
+    if (!document.body) {
+      return;
+    }
+
+    const observer = new MutationObserver(() => {
+      const badge = document.querySelector(".grecaptcha-badge");
+      if (!badge) {
+        return;
+      }
+
+      observer.disconnect();
+      attach(badge);
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+    window.setTimeout(() => observer.disconnect(), 10000);
+  };
+
+  enableMobileBadgeToggle();
+
   if (!forms.length) {
     return;
   }
