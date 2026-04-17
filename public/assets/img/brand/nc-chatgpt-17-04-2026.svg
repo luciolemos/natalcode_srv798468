@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1254" height="1254" viewBox="0 0 1254 1254" role="img" aria-label="NC symbol on technical grid">
+  <defs>
+    <pattern id="minor-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0H0V20" fill="none" stroke="#27303A" stroke-width="1"/>
+    </pattern>
+
+    <pattern id="major-grid" width="160" height="160" patternUnits="userSpaceOnUse">
+      <rect width="160" height="160" fill="url(#minor-grid)"/>
+      <path d="M160 0H0V160" fill="none" stroke="#8B96A3" stroke-opacity="0.45" stroke-width="1.5"/>
+    </pattern>
+
+    <style>
+      .axis{stroke:#A6B0BC;stroke-width:3;stroke-opacity:.6}
+      .diag{stroke:#A6B0BC;stroke-width:2;stroke-opacity:.6}
+      .label{fill:#F1F5F9;font-family:Arial,sans-serif;font-weight:700;font-size:56px;letter-spacing:1px}
+      .cmark{fill:#F5F7FA}
+      .inner{fill:none;stroke:#F5F7FA;stroke-width:14}
+      .nmark{fill:#020304;stroke:#F5F7FA;stroke-width:12;fill-rule:evenodd;stroke-linejoin:miter}
+    </style>
+  </defs>
+
+  <rect width="1254" height="1254" fill="#020304"/>
+  <rect x="24" y="24" width="1206" height="1206" fill="url(#major-grid)" stroke="#AAB3BF" stroke-width="2"/>
+
+  <line class="axis" x1="627" y1="24" x2="627" y2="1230"/>
+  <line class="axis" x1="24" y1="627" x2="1230" y2="627"/>
+
+  <line class="diag" x1="24" y1="24" x2="388" y2="388"/>
+  <line class="diag" x1="1230" y1="24" x2="866" y2="388"/>
+  <line class="diag" x1="24" y1="1230" x2="388" y2="866"/>
+  <line class="diag" x1="1230" y1="1230" x2="866" y2="866"/>
+
+  <text class="label" x="627" y="112" text-anchor="middle">2x</text>
+  <text class="label" x="84" y="642" text-anchor="start">2x</text>
+  <text class="label" x="1170" y="642" text-anchor="end">2x</text>
+  <text class="label" x="627" y="1150" text-anchor="middle">2x</text>
+
+  <!-- Uniform C (closed shape with constant thickness) -->
+  <path class="cmark" d="
+    M1020 452
+    A430 430 0 1 0 1020 802
+    L1005 795
+    A414 414 0 1 1 1005 459
+    Z"/>
+
+  <!-- Inner construction circle -->
+  <circle class="inner" cx="627" cy="627" r="318"/>
+
+  <!-- Stylized N -->
+  <path class="nmark" d="
+    M332 250
+    L860 660
+    L860 1018
+    L760 936
+    L760 718
+    L432 460
+    L432 906
+    L332 826
+    Z
+    M470 514
+    L712 704
+    L712 844
+    L470 656
+    Z"/>
+</svg>
