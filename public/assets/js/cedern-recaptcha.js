@@ -9,31 +9,39 @@
     }
 
     const attach = (badge) => {
-      const expandBadge = () => {
-        badge.classList.add("is-expanded");
-      };
+      if (badge.dataset.ncBadgeToggleReady === "true") {
+        return;
+      }
 
-      const collapseBadge = () => {
-        badge.classList.remove("is-expanded");
-      };
+      badge.dataset.ncBadgeToggleReady = "true";
+      badge.classList.remove("is-expanded");
 
-      badge.addEventListener("touchstart", expandBadge, { passive: true });
-      badge.addEventListener("pointerdown", expandBadge);
+      const collapseBadge = () => badge.classList.remove("is-expanded");
+      const expandBadge = () => badge.classList.add("is-expanded");
 
-      document.addEventListener("pointerdown", (event) => {
-        if (badge.contains(event.target)) {
+      const isInsideBadge = (event) =>
+        event.target instanceof Node && badge.contains(event.target);
+
+      const onGlobalPress = (event) => {
+        if (isInsideBadge(event)) {
+          expandBadge();
           return;
         }
-        collapseBadge();
-      });
 
-      document.addEventListener("touchstart", (event) => {
-        if (badge.contains(event.target)) {
-          return;
-        }
         collapseBadge();
-      }, { passive: true });
+      };
 
+      if (window.PointerEvent) {
+        document.addEventListener("pointerdown", onGlobalPress, true);
+      } else {
+        document.addEventListener("touchstart", onGlobalPress, {
+          passive: true,
+          capture: true,
+        });
+        document.addEventListener("mousedown", onGlobalPress, true);
+      }
+
+      badge.addEventListener("focusin", expandBadge);
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
           collapseBadge();
@@ -62,7 +70,6 @@
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
-    window.setTimeout(() => observer.disconnect(), 10000);
   };
 
   enableMobileBadgeToggle();

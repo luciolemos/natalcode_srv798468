@@ -7,14 +7,16 @@
 
 @media (max-width: 768px) {
   .grecaptcha-badge {
-    transform: translateY(50px);
-    transition: transform 0.2s ease;
+    right: calc(-186px + env(safe-area-inset-right, 0px)) !important;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+    transform: none !important;
+    transition: right 0.2s ease !important;
   }
 
   .grecaptcha-badge.is-expanded,
   .grecaptcha-badge:active,
   .grecaptcha-badge:focus-within {
-    transform: translateY(0);
+    right: calc(8px + env(safe-area-inset-right, 0px)) !important;
   }
 }
 
