@@ -2,14 +2,21 @@
 
 {% set dashboard_page_kicker = 'Dashboard' %}
 {% set dashboard_page_title = 'Solicitações de contato' %}
-{% set dashboard_page_lead = 'Acompanhe protocolos, IDs e dados dos contatos recebidos pelo site.' %}
+{% set dashboard_page_lead = 'Acompanhe protocolos, IDs, status de atendimento e histórico dos contatos recebidos pelo site.' %}
 
 {% block admin_content %}
   <section class="nc-section" aria-label="Solicitações de contato" data-aos="fade-up" data-aos-delay="0">
     {% set toast_message = '' %}
     {% set toast_tone = 'error' %}
-    {% if admin_contact_requests_status|default('') == 'load-error' %}
+    {% if admin_contact_requests_status|default('') == 'status-updated' %}
+      {% set toast_message = admin_contact_requests_error|default('Status da solicitação atualizado com sucesso.') %}
+      {% set toast_tone = 'success' %}
+    {% elseif admin_contact_requests_status|default('') == 'update-error' %}
+      {% set toast_message = admin_contact_requests_error|default('Não foi possível atualizar o status da solicitação.') %}
+      {% set toast_tone = 'error' %}
+    {% elseif admin_contact_requests_status|default('') == 'load-error' %}
       {% set toast_message = admin_contact_requests_error|default('Não foi possível carregar as solicitações de contato no momento.') %}
+      {% set toast_tone = 'error' %}
     {% endif %}
 
     {% include 'components/admin-toast.twig' with {
@@ -24,12 +31,20 @@
     {% set pagination = admin_contact_requests_pagination|default({}) %}
     {% set sort_links = admin_contact_requests_sort_links|default({}) %}
     {% set search_term = admin_contact_requests_search|default('') %}
-    {% set has_active_filters = search_term != '' %}
+    {% set status_filter = admin_contact_requests_filter_status|default('all') %}
+    {% set status_options = admin_contact_requests_status_options|default([]) %}
+    {% set current_url = admin_contact_requests_current_url|default('/painel/institucional/solicitacoes-contato') %}
+    {% set has_active_filters = search_term != '' or status_filter != 'all' %}
 
     <form class="nc-admin-table-search" method="get" action="/painel/institucional/solicitacoes-contato" data-aos="fade-up" data-aos-delay="80">
       <label for="nc-contact-requests-search">Buscar solicitações</label>
       <div class="nc-admin-table-search-controls">
         <input id="nc-contact-requests-search" name="q" type="search" value="{{ search_term }}" placeholder="Protocolo, ID, nome, e-mail, assunto, mensagem...">
+        <select name="status" aria-label="Filtrar por status de atendimento">
+          {% for option in status_options %}
+            <option value="{{ option.value }}"{% if option.selected %} selected{% endif %}>{{ option.label }}</option>
+          {% endfor %}
+        </select>
         <input type="hidden" name="sort" value="{{ pagination.sort|default('submitted_at') }}">
         <input type="hidden" name="dir" value="{{ pagination.dir|default('desc') }}">
         <input type="hidden" name="per_page" value="{{ pagination.page_size|default(20) }}">
@@ -57,6 +72,7 @@
           </select>
           <input type="hidden" name="sort" value="{{ pagination.sort|default('submitted_at') }}">
           <input type="hidden" name="dir" value="{{ pagination.dir|default('desc') }}">
+          <input type="hidden" name="status" value="{{ status_filter }}">
           <input type="hidden" name="q" value="{{ search_term }}">
           <noscript>
             <button class="nc-btn nc-btn-secondary" type="submit">Aplicar</button>
@@ -84,6 +100,9 @@
               <th>
                 <a class="nc-admin-sort-link{% if sort_links.subject.active %} is-active{% endif %}" href="{{ sort_links.subject.url|default('#') }}">Assunto <span aria-hidden="true">{{ sort_links.subject.indicator|default('↕') }}</span></a>
               </th>
+              <th>
+                <a class="nc-admin-sort-link{% if sort_links.status.active %} is-active{% endif %}" href="{{ sort_links.status.url|default('#') }}">Status <span aria-hidden="true">{{ sort_links.status.indicator|default('↕') }}</span></a>
+              </th>
               <th>Origem</th>
               <th>Mensagem</th>
             </tr>
@@ -108,6 +127,49 @@
                 </td>
                 <td data-label="Segmento">{{ request.segment|default('-') != '' ? request.segment : '-' }}</td>
                 <td data-label="Assunto">{{ request.subject|default('-') }}</td>
+                <td data-label="Status" class="nc-admin-contact-status-cell">
+                  <span class="nc-admin-featured-flag {{ request.status_badge_modifier|default('is-off') }}">{{ request.status_label|default('Novo') }}</span>
+                  <small class="nc-admin-user-email-inline nc-admin-contact-status-meta">
+                    Atualizado: {{ request.status_updated_at_label|default('-') }}{% if request.status_updated_by_label|default('-') != '-' %} • {{ request.status_updated_by_label }}{% endif %}
+                  </small>
+
+                  <form class="nc-admin-inline-form nc-admin-contact-status-form" method="post" action="/painel/institucional/solicitacoes-contato">
+                    <input type="hidden" name="request_id" value="{{ request.id }}">
+                    <input type="hidden" name="return_to" value="{{ current_url }}">
+                    <select class="nc-admin-inline-select" name="status" aria-label="Atualizar status da solicitação {{ request.request_protocol|default(request.id) }}">
+                      {% for option in status_options %}
+                        {% if option.value != 'all' %}
+                          <option value="{{ option.value }}"{% if request.status|default('novo') == option.value %} selected{% endif %}>{{ option.label }}</option>
+                        {% endif %}
+                      {% endfor %}
+                    </select>
+                    <input class="nc-admin-contact-note-input" type="text" name="note" maxlength="200" placeholder="Observação opcional">
+                    <button class="nc-btn nc-admin-action-create" type="submit">Salvar</button>
+                  </form>
+
+                  {% if request.events|default([])|length > 0 %}
+                    <details class="nc-admin-contact-history">
+                      <summary>Histórico ({{ request.events|length }})</summary>
+                      <ul class="nc-admin-contact-history-list">
+                        {% for event in request.events %}
+                          <li>
+                            <strong>{{ event.next_status_label|default('-') }}</strong>
+                            {% if event.previous_status_label|default('') != '' and event.previous_status_label != '-' and event.previous_status_label != event.next_status_label %}
+                              <span> (de {{ event.previous_status_label }})</span>
+                            {% endif %}
+                            <span> • {{ event.created_at_label|default('-') }}</span>
+                            {% if event.actor_label|default('-') != '-' %}
+                              <span> • {{ event.actor_label }}</span>
+                            {% endif %}
+                            {% if event.note|default('') != '' %}
+                              <p>{{ event.note }}</p>
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </details>
+                  {% endif %}
+                </td>
                 <td data-label="Origem">
                   {% if request.origin_url|default('') != '' %}
                     <span>{{ request.origin_url }}</span>
@@ -140,4 +202,3 @@
     {% endif %}
   </section>
 {% endblock %}
-

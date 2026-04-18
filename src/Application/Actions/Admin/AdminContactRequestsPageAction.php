@@ -19,9 +19,24 @@ class AdminContactRequestsPageAction extends AbstractPageAction
 
     private const ALL_PAGE_SIZE = 'all';
 
-    private const SORT_FIELDS = ['submitted_at', 'request_protocol', 'name', 'email', 'subject'];
+    private const SORT_FIELDS = ['submitted_at', 'request_protocol', 'name', 'email', 'subject', 'status'];
 
     private const BASE_PATH = '/painel/institucional/solicitacoes-contato';
+
+    private const FLASH_KEY = 'admin_contact_requests';
+
+    private const STATUS_FILTER_ALL = 'all';
+
+    /** @var array<string, string> */
+    private const STATUS_LABELS = [
+        'novo' => 'Novo',
+        'lido' => 'Lido',
+        'em_analise' => 'Em análise',
+        'contatado' => 'Contatado',
+        'pendente_retorno' => 'Pendente de retorno',
+        'aguardando_cliente' => 'Aguardando cliente',
+        'concluido' => 'Concluído',
+    ];
 
     private ContactRequestRepository $contactRequestRepository;
 
@@ -36,17 +51,28 @@ class AdminContactRequestsPageAction extends AbstractPageAction
 
     public function __invoke(Request $request, Response $response): Response
     {
+        $method = strtoupper($request->getMethod());
+        if ($method === 'POST') {
+            return $this->handleStatusUpdate($request, $response);
+        }
+
+        $flash = $this->consumeSessionFlash(self::FLASH_KEY);
+        $status = trim((string) ($flash['status'] ?? ''));
+        $feedbackMessage = trim((string) ($flash['message'] ?? ''));
+
         $queryParams = $request->getQueryParams();
         $searchTerm = trim((string) ($queryParams['q'] ?? ''));
-        $status = '';
-        $errorMessage = '';
+        $statusFilter = $this->normalizeStatusFilter((string) ($queryParams['status'] ?? self::STATUS_FILTER_ALL));
+        $errorMessage = $feedbackMessage;
         $contactRequests = [];
 
         try {
             $contactRequests = $this->contactRequestRepository->findAllForAdmin();
         } catch (\Throwable $exception) {
             $status = 'load-error';
-            $errorMessage = 'Não foi possível carregar as solicitações de contato no momento.';
+            if ($errorMessage === '') {
+                $errorMessage = 'Não foi possível carregar as solicitações de contato no momento.';
+            }
 
             $this->logger->error('Falha ao carregar solicitações de contato no painel.', [
                 'exception' => $exception,
@@ -60,8 +86,32 @@ class AdminContactRequestsPageAction extends AbstractPageAction
             $message = trim((string) $requestRow['message']);
             $requestRow['message_preview'] = $this->buildMessagePreview($message);
 
+            $requestRow['status'] = $this->normalizeStatusValue((string) $requestRow['status']);
+            $requestRow['status_label'] = $this->resolveStatusLabel($requestRow['status']);
+            $requestRow['status_badge_modifier'] = $this->resolveStatusBadgeModifier($requestRow['status']);
+
+            $statusUpdatedAt = trim((string) $requestRow['status_updated_at']);
+            $requestRow['status_updated_at_label'] = $this->formatDateTimeLabel($statusUpdatedAt);
+            $requestRow['status_updated_by_member_id'] = isset($requestRow['status_updated_by_member_id'])
+                && $requestRow['status_updated_by_member_id'] !== null
+                ? (int) $requestRow['status_updated_by_member_id']
+                : null;
+            $requestRow['status_updated_by_name'] = trim((string) $requestRow['status_updated_by_name']);
+            $requestRow['status_updated_by_label'] = $this->resolveActorLabel(
+                $requestRow['status_updated_by_name'],
+                $requestRow['status_updated_by_member_id']
+            );
+            $requestRow['events'] = [];
+
             return $requestRow;
         }, $contactRequests);
+
+        if ($statusFilter !== self::STATUS_FILTER_ALL) {
+            $contactRequests = array_values(array_filter(
+                $contactRequests,
+                static fn (array $requestRow): bool => (string) $requestRow['status'] === $statusFilter
+            ));
+        }
 
         if ($searchTerm !== '') {
             $normalizedSearch = strtolower($searchTerm);
@@ -78,6 +128,7 @@ class AdminContactRequestsPageAction extends AbstractPageAction
                         (string) $requestRow['subject'],
                         (string) $requestRow['message'],
                         (string) $requestRow['origin_url'],
+                        (string) $requestRow['status_label'],
                     ]);
 
                     return stripos(strtolower($haystack), $normalizedSearch) !== false;
@@ -128,6 +179,44 @@ class AdminContactRequestsPageAction extends AbstractPageAction
         $offset = ($currentPage - 1) * $pageSize;
         $contactRequests = array_slice($contactRequests, $offset, $pageSize);
 
+        $requestIdsOnCurrentPage = array_values(array_filter(
+            array_map(static fn (array $requestRow): int => (int) $requestRow['id'], $contactRequests),
+            static fn (int $requestId): bool => $requestId > 0
+        ));
+
+        $eventsByRequest = [];
+        if ($requestIdsOnCurrentPage !== []) {
+            try {
+                $eventsByRequest = $this->contactRequestRepository->findEventsForAdmin($requestIdsOnCurrentPage);
+            } catch (\Throwable $exception) {
+                $this->logger->warning('Falha ao carregar histórico de solicitações de contato.', [
+                    'exception' => $exception,
+                ]);
+            }
+        }
+
+        $contactRequests = array_map(function (array $requestRow) use ($eventsByRequest): array {
+            $requestId = (int) $requestRow['id'];
+            $events = $eventsByRequest[$requestId] ?? [];
+
+            $requestRow['events'] = array_map(function (array $event): array {
+                $event['created_at_label'] = $this->formatDateTimeLabel((string) $event['created_at']);
+                $event['previous_status_label'] = $this->resolveStatusLabel((string) $event['previous_status']);
+                $event['next_status_label'] = $this->resolveStatusLabel((string) $event['next_status']);
+                $event['actor_label'] = $this->resolveActorLabel(
+                    trim((string) $event['actor_name']),
+                    isset($event['actor_member_id']) && $event['actor_member_id'] !== null
+                        ? (int) $event['actor_member_id']
+                        : null
+                );
+                $event['note'] = trim((string) $event['note']);
+
+                return $event;
+            }, $events);
+
+            return $requestRow;
+        }, $contactRequests);
+
         $startItem = $totalItems > 0 ? $offset + 1 : 0;
         $endItem = $totalItems > 0 ? min($offset + count($contactRequests), $totalItems) : 0;
 
@@ -136,6 +225,7 @@ class AdminContactRequestsPageAction extends AbstractPageAction
             'per_page' => $pageSizeQueryValue,
             'sort' => $sortBy,
             'dir' => $sortDirection,
+            'status' => $statusFilter,
         ];
         if ($searchTerm !== '') {
             $baseQuery['q'] = $searchTerm;
@@ -156,6 +246,7 @@ class AdminContactRequestsPageAction extends AbstractPageAction
                     'per_page' => $pageSizeQueryValue,
                     'sort' => $field,
                     'dir' => $nextDirection,
+                    'status' => $statusFilter,
                     'q' => $searchTerm,
                 ]),
                 'indicator' => $indicator,
@@ -188,6 +279,7 @@ class AdminContactRequestsPageAction extends AbstractPageAction
                 'per_page' => $option,
                 'sort' => $sortBy,
                 'dir' => $sortDirection,
+                'status' => $statusFilter,
                 'q' => $searchTerm,
             ]),
         ], self::PAGE_SIZE_OPTIONS);
@@ -200,14 +292,24 @@ class AdminContactRequestsPageAction extends AbstractPageAction
                 'per_page' => self::ALL_PAGE_SIZE,
                 'sort' => $sortBy,
                 'dir' => $sortDirection,
+                'status' => $statusFilter,
                 'q' => $searchTerm,
             ]),
         ];
+
+        $currentUrl = self::BASE_PATH;
+        $currentQuery = trim((string) $request->getUri()->getQuery());
+        if ($currentQuery !== '') {
+            $currentUrl .= '?' . $currentQuery;
+        }
 
         return $this->renderPage($response, 'pages/admin-contact-requests.twig', [
             'admin_contact_requests' => $contactRequests,
             'admin_contact_requests_status' => $status,
             'admin_contact_requests_error' => $errorMessage,
+            'admin_contact_requests_filter_status' => $statusFilter,
+            'admin_contact_requests_status_options' => $this->buildStatusFilterOptions($statusFilter),
+            'admin_contact_requests_current_url' => $currentUrl,
             'admin_contact_requests_search' => $searchTerm,
             'admin_contact_requests_sort_links' => $sortLinks,
             'admin_contact_requests_pagination' => [
@@ -219,6 +321,7 @@ class AdminContactRequestsPageAction extends AbstractPageAction
                 'page_size' => $pageSize,
                 'sort' => $sortBy,
                 'dir' => $sortDirection,
+                'status' => $statusFilter,
                 'links' => $paginationLinks,
                 'previous_url' => $previousPageUrl,
                 'next_url' => $nextPageUrl,
@@ -228,6 +331,62 @@ class AdminContactRequestsPageAction extends AbstractPageAction
             'page_url' => 'https://natalcode.com.br' . self::BASE_PATH,
             'page_description' => 'Controle das solicitações recebidas no formulário de contato.',
         ]);
+    }
+
+    private function handleStatusUpdate(Request $request, Response $response): Response
+    {
+        $body = (array) ($request->getParsedBody() ?? []);
+        $requestId = (int) ($body['request_id'] ?? 0);
+        $newStatus = $this->sanitizeStatusFromInput((string) ($body['status'] ?? ''));
+        $note = trim((string) ($body['note'] ?? ''));
+        $redirectTarget = $this->sanitizeReturnTo((string) ($body['return_to'] ?? ''));
+
+        if ($requestId <= 0 || $newStatus === '') {
+            $this->storeSessionFlash(self::FLASH_KEY, [
+                'status' => 'update-error',
+                'message' => 'Solicitação inválida para atualização de status.',
+            ]);
+
+            return $response->withHeader('Location', $redirectTarget)->withStatus(303);
+        }
+
+        $actorMemberId = (int) ($_SESSION['member_user_id'] ?? 0);
+        $actorName = trim((string) ($_SESSION['member_name'] ?? ''));
+
+        try {
+            $updated = $this->contactRequestRepository->updateStatusForAdmin(
+                $requestId,
+                $newStatus,
+                $actorMemberId > 0 ? $actorMemberId : null,
+                $actorName,
+                $note
+            );
+
+            if ($updated) {
+                $this->storeSessionFlash(self::FLASH_KEY, [
+                    'status' => 'status-updated',
+                    'message' => 'Status da solicitação atualizado com sucesso.',
+                ]);
+            } else {
+                $this->storeSessionFlash(self::FLASH_KEY, [
+                    'status' => 'update-error',
+                    'message' => 'Não foi possível atualizar o status da solicitação.',
+                ]);
+            }
+        } catch (\Throwable $exception) {
+            $this->logger->error('Falha ao atualizar status da solicitação de contato.', [
+                'request_id' => $requestId,
+                'status' => $newStatus,
+                'exception' => $exception,
+            ]);
+
+            $this->storeSessionFlash(self::FLASH_KEY, [
+                'status' => 'update-error',
+                'message' => 'Erro ao atualizar o status da solicitação. Tente novamente.',
+            ]);
+        }
+
+        return $response->withHeader('Location', $redirectTarget)->withStatus(303);
     }
 
     private function formatDateTimeLabel(string $dateTime): string
@@ -260,5 +419,105 @@ class AdminContactRequestsPageAction extends AbstractPageAction
         }
 
         return mb_substr($normalized, 0, 117) . '...';
+    }
+
+    private function sanitizeReturnTo(string $returnTo): string
+    {
+        $returnTo = trim($returnTo);
+        if ($returnTo === '') {
+            return self::BASE_PATH;
+        }
+
+        $parts = parse_url($returnTo);
+        $path = trim((string) ($parts['path'] ?? ''));
+        if ($path === '' || !str_starts_with($path, self::BASE_PATH)) {
+            return self::BASE_PATH;
+        }
+
+        $query = trim((string) ($parts['query'] ?? ''));
+
+        return $query !== '' ? $path . '?' . $query : $path;
+    }
+
+    private function normalizeStatusFilter(string $status): string
+    {
+        $normalized = strtolower(trim($status));
+        if ($normalized === '' || $normalized === self::STATUS_FILTER_ALL) {
+            return self::STATUS_FILTER_ALL;
+        }
+
+        return array_key_exists($normalized, self::STATUS_LABELS)
+            ? $normalized
+            : self::STATUS_FILTER_ALL;
+    }
+
+    private function normalizeStatusValue(string $status): string
+    {
+        $normalized = strtolower(trim($status));
+
+        return array_key_exists($normalized, self::STATUS_LABELS)
+            ? $normalized
+            : 'novo';
+    }
+
+    private function sanitizeStatusFromInput(string $status): string
+    {
+        $normalized = strtolower(trim($status));
+
+        return array_key_exists($normalized, self::STATUS_LABELS)
+            ? $normalized
+            : '';
+    }
+
+    /**
+     * @return array<int, array{value: string, label: string, selected: bool}>
+     */
+    private function buildStatusFilterOptions(string $currentStatus): array
+    {
+        $options = [[
+            'value' => self::STATUS_FILTER_ALL,
+            'label' => 'Todos os status',
+            'selected' => $currentStatus === self::STATUS_FILTER_ALL,
+        ]];
+
+        foreach (self::STATUS_LABELS as $statusKey => $statusLabel) {
+            $options[] = [
+                'value' => $statusKey,
+                'label' => $statusLabel,
+                'selected' => $currentStatus === $statusKey,
+            ];
+        }
+
+        return $options;
+    }
+
+    private function resolveStatusLabel(string $status): string
+    {
+        $normalized = strtolower(trim($status));
+
+        return self::STATUS_LABELS[$normalized] ?? self::STATUS_LABELS['novo'];
+    }
+
+    private function resolveStatusBadgeModifier(string $status): string
+    {
+        return match ($status) {
+            'concluido' => 'is-on',
+            'contatado' => 'is-progress',
+            'pendente_retorno', 'aguardando_cliente' => 'is-warn',
+            default => 'is-off',
+        };
+    }
+
+    private function resolveActorLabel(string $actorName, ?int $actorMemberId): string
+    {
+        if ($actorName !== '') {
+            return $actorName;
+        }
+
+        if ($actorMemberId !== null && $actorMemberId > 0) {
+            return 'Membro #' . $actorMemberId;
+        }
+
+        return '-';
     }
 }

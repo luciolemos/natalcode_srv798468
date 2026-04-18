@@ -397,7 +397,7 @@ return function (App $app) {
         $group->map(['GET', 'POST'], '/institucional/governanca-de-dados', AdminDataGovernancePageAction::class)->add($panelRoleMiddlewareFactory('admin'));
         $group->map(['GET', 'POST'], '/institucional/politica-de-privacidade', AdminPrivacyPolicyPageAction::class)->add($panelRoleMiddlewareFactory('admin'));
         $group->map(['GET', 'POST'], '/institucional/termos-de-uso', AdminTermsOfUsePageAction::class)->add($panelRoleMiddlewareFactory('admin'));
-        $group->get('/institucional/solicitacoes-contato', AdminContactRequestsPageAction::class)->add($panelRoleMiddlewareFactory('admin'));
+        $group->map(['GET', 'POST'], '/institucional/solicitacoes-contato', AdminContactRequestsPageAction::class)->add($panelRoleMiddlewareFactory('admin'));
     })->add($adminSessionAuthMiddleware);
 
     $app->get('/admin', function (Request $request, Response $response) {
