@@ -170,6 +170,9 @@
       );
       const titleElement = hero.querySelector('[data-hero-copy-title]');
       const badgeElement = hero.querySelector('[data-hero-copy-badge]');
+      const badgeCodeElement = badgeElement
+        ? badgeElement.querySelector('[data-hero-copy-badge-code]')
+        : null;
       const reducedMotionQuery =
         typeof window.matchMedia === 'function'
           ? window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -201,25 +204,27 @@
           return;
         }
 
+        const badgeTextElement = badgeCodeElement || badgeElement;
         const badge = typeof rawBadge === 'string' ? rawBadge.trim() : '';
         const terminalBadge = buildTerminalBadgeText(badge);
         badgeElement.classList.remove('nc-is-typewriting');
-        badgeElement.style.removeProperty('--nc-badge-typewriter-steps');
+        badgeTextElement.classList.remove('nc-is-typewriting');
+        badgeTextElement.style.removeProperty('--nc-badge-typewriter-steps');
 
         if (window.innerWidth > MOBILE_BREAKPOINT) {
           if (!terminalBadge) {
-            badgeElement.textContent = '';
+            badgeTextElement.textContent = '';
             badgeElement.setAttribute('hidden', '');
             return;
           }
 
-          badgeElement.textContent = terminalBadge;
+          badgeTextElement.textContent = terminalBadge;
           badgeElement.removeAttribute('hidden');
 
           if (!prefersReducedMotion) {
-            void badgeElement.offsetWidth;
-            badgeElement.classList.add('nc-is-typewriting');
-            badgeElement.style.setProperty(
+            void badgeTextElement.offsetWidth;
+            badgeTextElement.classList.add('nc-is-typewriting');
+            badgeTextElement.style.setProperty(
               '--nc-badge-typewriter-steps',
               String(terminalBadge.length)
             );
@@ -228,7 +233,7 @@
           return;
         }
 
-        badgeElement.textContent = '';
+        badgeTextElement.textContent = '';
         badgeElement.setAttribute('hidden', '');
       };
 

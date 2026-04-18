@@ -1621,8 +1621,14 @@ h3 {
   text-overflow: ellipsis;
 }
 
+.nc-home-hero .nc-hero-terminal-badge [data-hero-copy-badge-code] {
+  display: inline-block;
+  max-width: 100%;
+}
+
 @media (min-width: 701px) {
   .nc-home-hero .nc-hero-terminal-badge {
+    width: fit-content;
     border-radius: 0.7rem;
     padding: 0.52rem 0.82rem;
     border: 1px solid color-mix(in srgb, #111820 60%, #2d465d);
@@ -1634,9 +1640,7 @@ h3 {
     text-shadow: 0 0 0.55rem rgb(145 235 174 / 0.22);
   }
 
-  .nc-home-hero .nc-hero-terminal-badge.nc-is-typewriting {
-    width: fit-content;
-    max-width: 100%;
+  .nc-home-hero .nc-hero-terminal-badge [data-hero-copy-badge-code].nc-is-typewriting {
     clip-path: inset(0 100% 0 0);
     border-right: 0.08em solid currentColor;
     border-right-color: transparent;
