@@ -166,7 +166,9 @@
       {% if hero_primary_media %}
         <span class="nc-sr-only" data-hero-copy-image-alt>{{ hero_primary_image_alt }}</span>
       {% endif %}
-      <p class="nc-badge nc-hero-terminal-badge" data-hero-copy-badge{% if hero_primary_badge is null or hero_primary_badge|trim == '' %} hidden{% endif %}>{{ hero_primary_badge }}</p>
+      <p class="nc-badge nc-hero-terminal-badge" data-hero-copy-badge{% if hero_primary_badge is null or hero_primary_badge|trim == '' %} hidden{% endif %}>
+        <span data-hero-copy-badge-code>{{ hero_primary_badge }}</span>
+      </p>
       <h1 class="nc-title" data-hero-copy-title>{{ hero_primary_title }}</h1>
       <p class="nc-hero-tagline" data-hero-copy-tagline{% if not hero_primary_has_tagline %} hidden{% endif %}>{{ hero_primary_tagline }}</p>
       <p class="nc-lead" data-hero-copy-lead>{{ hero_primary_lead }}</p>
