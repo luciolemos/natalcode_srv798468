@@ -6,6 +6,7 @@ namespace App\Application\Actions\Page;
 
 use App\Application\Security\RecaptchaVerifier;
 use App\Application\Support\InstitutionalEmailTemplate;
+use App\Domain\Contact\ContactRequestRepository;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -46,10 +47,17 @@ class ContactPageAction extends AbstractPageAction
 
     private RecaptchaVerifier $recaptchaVerifier;
 
-    public function __construct(LoggerInterface $logger, Twig $twig, RecaptchaVerifier $recaptchaVerifier)
-    {
+    private ContactRequestRepository $contactRequestRepository;
+
+    public function __construct(
+        LoggerInterface $logger,
+        Twig $twig,
+        RecaptchaVerifier $recaptchaVerifier,
+        ContactRequestRepository $contactRequestRepository
+    ) {
         parent::__construct($logger, $twig);
         $this->recaptchaVerifier = $recaptchaVerifier;
+        $this->contactRequestRepository = $contactRequestRepository;
     }
 
     public function __invoke(Request $request, Response $response): Response
@@ -136,13 +144,50 @@ class ContactPageAction extends AbstractPageAction
                 }
 
                 if (empty($errors)) {
+                    $emailTrackingMeta = $this->buildEmailTrackingMeta();
+                    $requestOriginUrl = $this->resolveRequestOriginUrl($request);
+                    $requestIp = trim((string) ($this->resolveClientIp($request) ?? ''));
+                    $requestUserAgent = $this->truncateLine(
+                        trim((string) $request->getHeaderLine('User-Agent')),
+                        255
+                    );
+                    $segmentLabel = $this->resolveSegmentLabelFromKey($form['segment']);
+
+                    $normalizedName = $this->normalizeSingleLineValue($form['name'], 'Visitante');
+                    $normalizedEmail = strtolower(trim($form['email']));
+                    $normalizedSubject = $this->normalizeSingleLineValue($form['subject'], 'Contato pelo formulário do site');
+                    $normalizedMessage = $this->normalizeMultilineValue($form['message']);
+                    $normalizedSegment = $this->normalizeSingleLineValue($segmentLabel);
+
+                    try {
+                        $this->contactRequestRepository->create([
+                            'request_protocol' => $emailTrackingMeta['protocol'],
+                            'request_id' => $emailTrackingMeta['request_id'],
+                            'submitted_at' => $emailTrackingMeta['submitted_at'],
+                            'name' => $normalizedName,
+                            'email' => $normalizedEmail,
+                            'segment' => $normalizedSegment,
+                            'subject' => $normalizedSubject,
+                            'message' => $normalizedMessage,
+                            'origin_url' => $requestOriginUrl,
+                            'ip_address' => $requestIp,
+                            'user_agent' => $requestUserAgent,
+                        ]);
+                    } catch (\Throwable $exception) {
+                        $this->logger->warning('Falha ao registrar solicitação de contato no banco.', [
+                            'error' => $exception->getMessage(),
+                        ]);
+                    }
+
                     try {
                         $this->sendContactEmail(
-                            $form['name'],
-                            $form['email'],
-                            $form['subject'],
-                            $form['message'],
-                            $this->resolveSegmentLabelFromKey($form['segment'])
+                            $normalizedName,
+                            $normalizedEmail,
+                            $normalizedSubject,
+                            $normalizedMessage,
+                            $normalizedSegment,
+                            $emailTrackingMeta,
+                            $requestOriginUrl
                         );
                         $this->storeContactFlash([
                             'status' => 'sent',
@@ -197,14 +242,19 @@ class ContactPageAction extends AbstractPageAction
         string $email,
         string $subject,
         string $message,
-        string $segment = ''
+        string $segment = '',
+        ?array $emailTrackingMeta = null,
+        string $originUrl = ''
     ): void {
         $smtpHost = trim((string) ($_ENV['MAIL_HOST'] ?? 'smtp.hostinger.com'));
         $smtpPort = (int) ($_ENV['MAIL_PORT'] ?? 465);
         $smtpUser = trim((string) ($_ENV['MAIL_USERNAME'] ?? ''));
         $smtpPass = (string) ($_ENV['MAIL_PASSWORD'] ?? '');
-        $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? $smtpUser));
-        $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'NatalCode - Site'));
+        $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? 'contato@natalcode.com.br'));
+        if ($fromEmail === '') {
+            $fromEmail = 'contato@natalcode.com.br';
+        }
+        $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'NatalCode - Contato'));
         $toEmail = trim((string) ($_ENV['MAIL_TO_ADDRESS'] ?? $fromEmail));
 
         if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '' || $fromEmail === '' || $toEmail === '') {
@@ -247,25 +297,23 @@ class ContactPageAction extends AbstractPageAction
         $safeSubject = htmlspecialchars($normalizedSubject, ENT_QUOTES, 'UTF-8');
         $safeMessage = nl2br(htmlspecialchars($normalizedMessage, ENT_QUOTES, 'UTF-8'));
 
-        $emailTimestamp = new \DateTimeImmutable(
-            'now',
-            new \DateTimeZone((string) ($_ENV['APP_TIMEZONE'] ?? 'America/Fortaleza'))
-        );
-        $emailProtocol = sprintf(
-            'NAT-%s-%s',
-            $emailTimestamp->format('Ymd'),
-            strtoupper(substr(bin2hex(random_bytes(2)), 0, 4))
-        );
-        $emailRequestId = sprintf(
-            'natalcode_%s_%s',
-            $emailTimestamp->format('YmdHis'),
-            bin2hex(random_bytes(6))
-        );
-        $emailSentAtLabel = $emailTimestamp->format('d/m/Y H:i:s');
+        $emailTrackingMeta = $emailTrackingMeta ?? $this->buildEmailTrackingMeta();
+        $emailProtocol = (string) ($emailTrackingMeta['protocol'] ?? '');
+        $emailRequestId = (string) ($emailTrackingMeta['request_id'] ?? '');
+        $emailSentAtLabel = (string) ($emailTrackingMeta['sent_at'] ?? '');
+
+        if ($emailProtocol === '' || $emailRequestId === '' || $emailSentAtLabel === '') {
+            $emailTrackingMeta = $this->buildEmailTrackingMeta();
+            $emailProtocol = $emailTrackingMeta['protocol'];
+            $emailRequestId = $emailTrackingMeta['request_id'];
+            $emailSentAtLabel = $emailTrackingMeta['sent_at'];
+        }
 
         $safeEmailProtocol = htmlspecialchars($emailProtocol, ENT_QUOTES, 'UTF-8');
         $safeEmailRequestId = htmlspecialchars($emailRequestId, ENT_QUOTES, 'UTF-8');
         $safeEmailSentAtLabel = htmlspecialchars($emailSentAtLabel, ENT_QUOTES, 'UTF-8');
+        $normalizedOriginUrl = $this->truncateLine($originUrl, 255);
+        $safeOriginUrl = htmlspecialchars($normalizedOriginUrl, ENT_QUOTES, 'UTF-8');
 
         $replyMailTo = htmlspecialchars(
             $this->buildReplyMailToLink($normalizedEmail, $normalizedSubject),
@@ -294,7 +342,10 @@ class ContactPageAction extends AbstractPageAction
             . 'border-radius:12px;background:#f8fafc;">'
             . '<p style="margin:0 0 8px;"><strong>Protocolo:</strong> ' . $safeEmailProtocol . '</p>'
             . '<p style="margin:0 0 8px;"><strong>ID:</strong> ' . $safeEmailRequestId . '</p>'
-            . '<p style="margin:0;"><strong>Data/Hora:</strong> ' . $safeEmailSentAtLabel . '</p>'
+            . '<p style="margin:0 0 8px;"><strong>Data/Hora:</strong> ' . $safeEmailSentAtLabel . '</p>'
+            . ($safeOriginUrl !== ''
+                ? '<p style="margin:0;"><strong>Origem:</strong> ' . $safeOriginUrl . '</p>'
+                : '')
             . '</div>'
             . '<div style="margin:0 0 16px;padding:14px 16px;border:1px solid #dbe4ee;'
             . 'border-radius:12px;background:#f8fafc;">'
@@ -331,7 +382,9 @@ class ContactPageAction extends AbstractPageAction
             . "Mensagem recebida pelo formulario institucional.\n\n"
             . "Protocolo: {$emailProtocol}\n"
             . "ID: {$emailRequestId}\n"
-            . "Data/Hora: {$emailSentAtLabel}\n\n"
+            . "Data/Hora: {$emailSentAtLabel}\n"
+            . ($normalizedOriginUrl !== '' ? "Origem: {$normalizedOriginUrl}\n" : '')
+            . "\n"
             . "Nome: {$normalizedName}\n"
             . "E-mail: {$normalizedEmail}\n"
             . ($normalizedSegment !== '' ? "Segmento: {$normalizedSegment}\n" : '')
@@ -349,6 +402,86 @@ class ContactPageAction extends AbstractPageAction
         return 'mailto:' . $email . '?' . http_build_query([
             'subject' => $replySubject,
         ], '', '&', PHP_QUERY_RFC3986);
+    }
+
+    /**
+     * @return array{
+     *   protocol: string,
+     *   request_id: string,
+     *   sent_at: string,
+     *   submitted_at: string,
+     *   safe_protocol: string,
+     *   safe_request_id: string,
+     *   safe_sent_at: string
+     * }
+     */
+    private function buildEmailTrackingMeta(): array
+    {
+        $timestamp = new \DateTimeImmutable(
+            'now',
+            new \DateTimeZone((string) ($_ENV['APP_TIMEZONE'] ?? 'America/Fortaleza'))
+        );
+
+        $protocol = sprintf(
+            'NAT-%s-%s',
+            $timestamp->format('Ymd'),
+            strtoupper(substr(bin2hex(random_bytes(2)), 0, 4))
+        );
+        $requestId = sprintf(
+            'natalcode_%s_%s',
+            $timestamp->format('YmdHis'),
+            bin2hex(random_bytes(6))
+        );
+        $sentAt = $timestamp->format('d/m/Y H:i:s');
+        $submittedAt = $timestamp->format('Y-m-d H:i:s');
+
+        return [
+            'protocol' => $protocol,
+            'request_id' => $requestId,
+            'sent_at' => $sentAt,
+            'submitted_at' => $submittedAt,
+            'safe_protocol' => htmlspecialchars($protocol, ENT_QUOTES, 'UTF-8'),
+            'safe_request_id' => htmlspecialchars($requestId, ENT_QUOTES, 'UTF-8'),
+            'safe_sent_at' => htmlspecialchars($sentAt, ENT_QUOTES, 'UTF-8'),
+        ];
+    }
+
+    private function resolveRequestOriginUrl(Request $request): string
+    {
+        $referer = trim((string) $request->getHeaderLine('Referer'));
+        if ($referer !== '') {
+            return $this->truncateLine($referer, 255);
+        }
+
+        $uri = $request->getUri();
+        $uriString = trim((string) $uri);
+        if ($uriString !== '') {
+            return $this->truncateLine($uriString, 255);
+        }
+
+        $baseUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'), '/');
+        $path = trim((string) $uri->getPath());
+        if ($path === '') {
+            $path = '/contato';
+        }
+
+        $query = trim((string) $uri->getQuery());
+        $fallbackUrl = $baseUrl . $path . ($query !== '' ? '?' . $query : '');
+
+        return $this->truncateLine($fallbackUrl, 255);
+    }
+
+    private function truncateLine(string $value, int $maxLength): string
+    {
+        $normalized = preg_replace('/[\r\n\t]+/', ' ', $value) ?? '';
+        $normalized = preg_replace('/\s{2,}/', ' ', $normalized) ?? $normalized;
+        $normalized = trim($normalized);
+
+        if ($normalized === '') {
+            return '';
+        }
+
+        return mb_substr($normalized, 0, $maxLength);
     }
 
     private function normalizeSingleLineValue(string $value, string $fallback = ''): string
