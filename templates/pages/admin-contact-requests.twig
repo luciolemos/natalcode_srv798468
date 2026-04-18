@@ -93,9 +93,6 @@
               <th>
                 <a class="nc-admin-sort-link{% if sort_links.name.active %} is-active{% endif %}" href="{{ sort_links.name.url|default('#') }}">Nome <span aria-hidden="true">{{ sort_links.name.indicator|default('↕') }}</span></a>
               </th>
-              <th>
-                <a class="nc-admin-sort-link{% if sort_links.email.active %} is-active{% endif %}" href="{{ sort_links.email.url|default('#') }}">E-mail <span aria-hidden="true">{{ sort_links.email.indicator|default('↕') }}</span></a>
-              </th>
               <th>Segmento</th>
               <th>
                 <a class="nc-admin-sort-link{% if sort_links.subject.active %} is-active{% endif %}" href="{{ sort_links.subject.url|default('#') }}">Assunto <span aria-hidden="true">{{ sort_links.subject.indicator|default('↕') }}</span></a>
@@ -103,8 +100,7 @@
               <th>
                 <a class="nc-admin-sort-link{% if sort_links.status.active %} is-active{% endif %}" href="{{ sort_links.status.url|default('#') }}">Status <span aria-hidden="true">{{ sort_links.status.indicator|default('↕') }}</span></a>
               </th>
-              <th>Origem</th>
-              <th>Mensagem</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -113,16 +109,15 @@
                 <td data-label="Data/Hora">{{ request.submitted_at_label|default('-') }}</td>
                 <td data-label="Protocolo">
                   <strong>{{ request.request_protocol|default('-') }}</strong>
-                  <small class="nc-admin-user-email-inline nc-admin-email-inline">
-                    <span>ID: {{ request.request_id|default('-') }}</span>
-                  </small>
                 </td>
-                <td data-label="Nome">{{ request.name|default('-') }}</td>
-                <td data-label="E-mail">
+                <td data-label="Nome e E-mail">
+                  <div>{{ request.name|default('-') }}</div>
                   {% if request.email|default('') != '' %}
-                    <a class="nc-link" href="mailto:{{ request.email }}">{{ request.email }}</a>
+                    <small class="nc-admin-user-email-inline nc-admin-email-inline">
+                      <a class="nc-link" href="mailto:{{ request.email }}">{{ request.email }}</a>
+                    </small>
                   {% else %}
-                    <span>-</span>
+                    <small class="nc-admin-user-email-inline nc-admin-email-inline">-</small>
                   {% endif %}
                 </td>
                 <td data-label="Segmento">{{ request.segment|default('-') != '' ? request.segment : '-' }}</td>
@@ -170,14 +165,77 @@
                     </details>
                   {% endif %}
                 </td>
-                <td data-label="Origem">
-                  {% if request.origin_url|default('') != '' %}
-                    <span>{{ request.origin_url }}</span>
-                  {% else %}
-                    <span>-</span>
-                  {% endif %}
+                <td class="nc-admin-table-actions" data-label="Ações">
+                  <button
+                    class="nc-btn nc-btn-secondary nc-admin-action-open nc-admin-contact-view-toggle"
+                    type="button"
+                    data-contact-target="nc-contact-summary-{{ request.id }}"
+                    aria-expanded="false"
+                    aria-controls="nc-contact-summary-{{ request.id }}">
+                    Visualizar
+                  </button>
                 </td>
-                <td data-label="Mensagem">{{ request.message_preview|default('-') }}</td>
+              </tr>
+              <tr id="nc-contact-summary-{{ request.id }}" class="nc-admin-contact-summary-row" hidden>
+                <td data-label="Resumo" colspan="7">
+                  <article class="nc-admin-contact-summary-card">
+                    <h4 class="nc-admin-contact-summary-title">Resumo da solicitação</h4>
+                    <dl class="nc-admin-contact-summary-grid">
+                      <div class="nc-admin-contact-summary-item">
+                        <dt>Protocolo</dt>
+                        <dd>{{ request.request_protocol|default('-') }}</dd>
+                      </div>
+                      <div class="nc-admin-contact-summary-item">
+                        <dt>ID interno</dt>
+                        <dd>{{ request.request_id|default('-') }}</dd>
+                      </div>
+                      <div class="nc-admin-contact-summary-item">
+                        <dt>Data/Hora</dt>
+                        <dd>{{ request.submitted_at_label|default('-') }}</dd>
+                      </div>
+                      <div class="nc-admin-contact-summary-item">
+                        <dt>Status</dt>
+                        <dd>{{ request.status_label|default('Novo') }}</dd>
+                      </div>
+                      <div class="nc-admin-contact-summary-item">
+                        <dt>Nome</dt>
+                        <dd>{{ request.name|default('-') }}</dd>
+                      </div>
+                      <div class="nc-admin-contact-summary-item">
+                        <dt>E-mail</dt>
+                        <dd>
+                          {% if request.email|default('') != '' %}
+                            <a class="nc-link" href="mailto:{{ request.email }}">{{ request.email }}</a>
+                          {% else %}
+                            -
+                          {% endif %}
+                        </dd>
+                      </div>
+                      <div class="nc-admin-contact-summary-item">
+                        <dt>Segmento</dt>
+                        <dd>{{ request.segment|default('-') != '' ? request.segment : '-' }}</dd>
+                      </div>
+                      <div class="nc-admin-contact-summary-item">
+                        <dt>Assunto</dt>
+                        <dd>{{ request.subject|default('-') }}</dd>
+                      </div>
+                      <div class="nc-admin-contact-summary-item nc-admin-contact-summary-message">
+                        <dt>Mensagem</dt>
+                        <dd>{{ request.message|default('-')|nl2br }}</dd>
+                      </div>
+                      <div class="nc-admin-contact-summary-item nc-admin-contact-summary-origin">
+                        <dt>Origem</dt>
+                        <dd>
+                          {% if request.origin_url|default('') != '' %}
+                            <a class="nc-link" href="{{ request.origin_url }}" target="_blank" rel="noopener">{{ request.origin_url }}</a>
+                          {% else %}
+                            -
+                          {% endif %}
+                        </dd>
+                      </div>
+                    </dl>
+                  </article>
+                </td>
               </tr>
             {% endfor %}
           </tbody>
@@ -201,4 +259,53 @@
       {% endif %}
     {% endif %}
   </section>
+
+  <script>
+    (function () {
+      var toggleButtons = document.querySelectorAll('.nc-admin-contact-view-toggle');
+      if (!toggleButtons.length) {
+        return;
+      }
+
+      function getTargetRow(button) {
+        var targetId = button.getAttribute('data-contact-target');
+        if (!targetId) {
+          return null;
+        }
+
+        return document.getElementById(targetId);
+      }
+
+      function setExpanded(button, expanded) {
+        var targetRow = getTargetRow(button);
+        if (!targetRow) {
+          return;
+        }
+
+        targetRow.hidden = !expanded;
+        button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        button.classList.toggle('is-open', expanded);
+        button.textContent = expanded ? 'Fechar' : 'Visualizar';
+      }
+
+      function closeOtherRows(activeButton) {
+        toggleButtons.forEach(function (button) {
+          if (button !== activeButton) {
+            setExpanded(button, false);
+          }
+        });
+      }
+
+      toggleButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+          var isExpanded = button.getAttribute('aria-expanded') === 'true';
+          if (!isExpanded) {
+            closeOtherRows(button);
+          }
+
+          setExpanded(button, !isExpanded);
+        });
+      });
+    })();
+  </script>
 {% endblock %}

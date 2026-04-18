@@ -8386,6 +8386,16 @@ textarea.nc-admin-form-input {
   min-width: 21rem;
 }
 
+.nc-admin-contact-view-toggle {
+  min-width: 6.8rem;
+}
+
+.nc-admin-contact-view-toggle.is-open {
+  border-color: color-mix(in srgb, var(--theme-accent-1) 52%, var(--surface-border));
+  background: color-mix(in srgb, var(--theme-accent-1) 18%, var(--surface-main));
+  color: var(--theme-accent-1);
+}
+
 .nc-admin-contact-status-meta {
   margin-top: 0.2rem;
 }
@@ -8439,6 +8449,57 @@ textarea.nc-admin-form-input {
   color: var(--text-subtle);
 }
 
+.nc-admin-contact-summary-row > td {
+  padding: 0.5rem 0.62rem 0.72rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.nc-admin-contact-summary-card {
+  border: 1px dashed color-mix(in srgb, var(--surface-border) 72%, transparent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--theme-soft-1) 10%, var(--surface-main));
+  padding: 0.68rem 0.74rem;
+}
+
+.nc-admin-contact-summary-title {
+  margin: 0 0 0.52rem;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.nc-admin-contact-summary-grid {
+  margin: 0;
+  display: grid;
+  gap: 0.48rem 0.72rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.nc-admin-contact-summary-item {
+  margin: 0;
+}
+
+.nc-admin-contact-summary-item dt {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+}
+
+.nc-admin-contact-summary-item dd {
+  margin: 0.1rem 0 0;
+  color: var(--text-main);
+  font-size: 0.84rem;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.nc-admin-contact-summary-message,
+.nc-admin-contact-summary-origin {
+  grid-column: 1 / -1;
+}
+
 @media (max-width: 980px) {
   .nc-admin-contact-status-cell {
     min-width: 0;
@@ -8452,6 +8513,10 @@ textarea.nc-admin-form-input {
   .nc-admin-contact-note-input {
     min-width: 0;
     width: 100%;
+  }
+
+  .nc-admin-contact-summary-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -8973,6 +9038,19 @@ textarea.nc-admin-form-input {
   }
 
   .nc-admin-table tbody td.nc-admin-table-actions::before {
+    display: none;
+  }
+
+  .nc-admin-table tbody tr.nc-admin-contact-summary-row {
+    padding: 0.3rem;
+  }
+
+  .nc-admin-table tbody tr.nc-admin-contact-summary-row > td {
+    display: block;
+    padding: 0;
+  }
+
+  .nc-admin-table tbody tr.nc-admin-contact-summary-row > td::before {
     display: none;
   }
 
