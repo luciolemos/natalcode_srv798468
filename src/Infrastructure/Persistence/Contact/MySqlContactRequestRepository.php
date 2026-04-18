@@ -366,7 +366,7 @@ class MySqlContactRequestRepository implements ContactRequestRepository
                     ? (int) $row['actor_member_id']
                     : null,
                 'actor_name' => (string) ($row['actor_name'] ?? ''),
-                'created_at' => (string) ($row['created_at'] ?? ''),
+                'created_at' => $this->normalizeDateTimeFromDatabaseToApplication((string) ($row['created_at'] ?? '')),
             ];
         }
 
@@ -567,6 +567,25 @@ class MySqlContactRequestRepository implements ContactRequestRepository
         return (new \DateTimeImmutable('now', $this->resolveApplicationTimeZone()))->format('Y-m-d H:i:s');
     }
 
+    private function normalizeDateTimeFromDatabaseToApplication(string $value): string
+    {
+        $normalized = trim($value);
+        if ($normalized === '') {
+            return '';
+        }
+
+        $parsed = \DateTimeImmutable::createFromFormat(
+            'Y-m-d H:i:s',
+            $normalized,
+            $this->resolveDatabaseTimeZone()
+        );
+        if (!$parsed instanceof \DateTimeImmutable) {
+            return $normalized;
+        }
+
+        return $parsed->setTimezone($this->resolveApplicationTimeZone())->format('Y-m-d H:i:s');
+    }
+
     private function resolveApplicationTimeZone(): \DateTimeZone
     {
         $timezoneName = trim((string) ($_ENV['APP_TIMEZONE'] ?? 'America/Fortaleza'));
@@ -578,6 +597,20 @@ class MySqlContactRequestRepository implements ContactRequestRepository
             return new \DateTimeZone($timezoneName);
         } catch (\Throwable $exception) {
             return new \DateTimeZone('America/Fortaleza');
+        }
+    }
+
+    private function resolveDatabaseTimeZone(): \DateTimeZone
+    {
+        $timezoneName = trim((string) ($_ENV['DB_TIMEZONE'] ?? '+00:00'));
+        if ($timezoneName === '' || strtoupper($timezoneName) === 'SYSTEM') {
+            $timezoneName = '+00:00';
+        }
+
+        try {
+            return new \DateTimeZone($timezoneName);
+        } catch (\Throwable $exception) {
+            return new \DateTimeZone('+00:00');
         }
     }
 }
