@@ -10,6 +10,8 @@
   {% set panel_can_bookshop = panel_is_superuser or panel_role_key in ['bookshop_operator', 'admin'] %}
   {% set panel_can_users = panel_is_superuser or panel_role_key == 'admin' %}
   {% set panel_can_team_management = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
+  {% set sidebar_brand_logo_light_src = site.brand.logoPanelLightSrc|default('/assets/img/brand/natalcode2_logo_horizontal_black_1158x314.png') %}
+  {% set sidebar_brand_logo_dark_src = site.brand.logoPanelDarkSrc|default('/assets/img/brand/natalcode1_logo_horizontal_white_1158x314.png') %}
 
   <main class="nc-dashboard-shell" aria-label="Dashboard administrativo">
     <header class="nc-dashboard-topbar">
@@ -446,8 +448,16 @@
     <div class="nc-dashboard-layout">
       <aside id="nc-dashboard-sidebar" class="nc-admin-sidebar" aria-label="Menu do dashboard">
         <a class="nc-dashboard-brand nc-dashboard-sidebar-brand" href="/painel" aria-label="Painel NatalCode">
-          <img src="{{ base_url ?? '' }}/assets/img/brand/natalcode1.png" alt="NatalCode" class="nc-dashboard-brand-logo">
-          <span class="nc-dashboard-sidebar-brand-note">Agência DIGITAL</span>
+          <img
+            src="{{ (base_url ?? '') ~ sidebar_brand_logo_dark_src }}"
+            alt="{{ site.brand.logoAlt|default(site.name|default('NatalCode')) }} (tema escuro)"
+            class="nc-dashboard-brand-logo logo-dark"
+          >
+          <img
+            src="{{ (base_url ?? '') ~ sidebar_brand_logo_light_src }}"
+            alt="{{ site.brand.logoAlt|default(site.name|default('NatalCode')) }} (tema claro)"
+            class="nc-dashboard-brand-logo logo-light"
+          >
         </a>
         <nav class="nc-admin-nav">
           <a class="nc-link{{ current_path == '/painel' ? ' is-active' : '' }}" href="/painel">
