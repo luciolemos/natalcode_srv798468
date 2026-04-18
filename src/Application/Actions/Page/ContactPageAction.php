@@ -246,6 +246,27 @@ class ContactPageAction extends AbstractPageAction
         $safeSegment = htmlspecialchars($normalizedSegment, ENT_QUOTES, 'UTF-8');
         $safeSubject = htmlspecialchars($normalizedSubject, ENT_QUOTES, 'UTF-8');
         $safeMessage = nl2br(htmlspecialchars($normalizedMessage, ENT_QUOTES, 'UTF-8'));
+
+        $emailTimestamp = new \DateTimeImmutable(
+            'now',
+            new \DateTimeZone((string) ($_ENV['APP_TIMEZONE'] ?? 'America/Fortaleza'))
+        );
+        $emailProtocol = sprintf(
+            'NAT-%s-%s',
+            $emailTimestamp->format('Ymd'),
+            strtoupper(substr(bin2hex(random_bytes(2)), 0, 4))
+        );
+        $emailRequestId = sprintf(
+            'natalcode_%s_%s',
+            $emailTimestamp->format('YmdHis'),
+            bin2hex(random_bytes(6))
+        );
+        $emailSentAtLabel = $emailTimestamp->format('d/m/Y H:i:s');
+
+        $safeEmailProtocol = htmlspecialchars($emailProtocol, ENT_QUOTES, 'UTF-8');
+        $safeEmailRequestId = htmlspecialchars($emailRequestId, ENT_QUOTES, 'UTF-8');
+        $safeEmailSentAtLabel = htmlspecialchars($emailSentAtLabel, ENT_QUOTES, 'UTF-8');
+
         $replyMailTo = htmlspecialchars(
             $this->buildReplyMailToLink($normalizedEmail, $normalizedSubject),
             ENT_QUOTES,
@@ -269,6 +290,12 @@ class ContactPageAction extends AbstractPageAction
         $htmlBody = InstitutionalEmailTemplate::buildLayout(
             'Novo contato pelo site',
             '<p style="margin:0 0 14px;">Mensagem recebida pelo formulario institucional do site do NatalCode.</p>'
+            . '<div style="margin:0 0 16px;padding:14px 16px;border:1px solid #dbe4ee;'
+            . 'border-radius:12px;background:#f8fafc;">'
+            . '<p style="margin:0 0 8px;"><strong>Protocolo:</strong> ' . $safeEmailProtocol . '</p>'
+            . '<p style="margin:0 0 8px;"><strong>ID:</strong> ' . $safeEmailRequestId . '</p>'
+            . '<p style="margin:0;"><strong>Data/Hora:</strong> ' . $safeEmailSentAtLabel . '</p>'
+            . '</div>'
             . '<div style="margin:0 0 16px;padding:14px 16px;border:1px solid #dbe4ee;'
             . 'border-radius:12px;background:#f8fafc;">'
             . '<p style="margin:0 0 8px;"><strong>Nome:</strong> ' . $safeName . '</p>'
@@ -302,6 +329,9 @@ class ContactPageAction extends AbstractPageAction
         $mailer->Body = $htmlBody;
         $mailer->AltBody = "Novo contato pelo site\n"
             . "Mensagem recebida pelo formulario institucional.\n\n"
+            . "Protocolo: {$emailProtocol}\n"
+            . "ID: {$emailRequestId}\n"
+            . "Data/Hora: {$emailSentAtLabel}\n\n"
             . "Nome: {$normalizedName}\n"
             . "E-mail: {$normalizedEmail}\n"
             . ($normalizedSegment !== '' ? "Segmento: {$normalizedSegment}\n" : '')

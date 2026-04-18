@@ -315,7 +315,7 @@ return [
                 [
                     'step' => '03',
                     'title' => 'Relacao de longo prazo',
-                    'description' => 'Acompanhamos a evolução do projeto com melhorias e suporte continuo.',
+                    'description' => 'Acompanhamos a evolução do projeto com melhorias e suporte contínuo.',
                     'delay' => 240,
                 ],
             ],
@@ -520,14 +520,14 @@ return [
             'alt' => 'Ana Bezerra',
             'name' => 'Ana Bezerra',
             'role' => 'Coordenadora de marketing',
-            'quote' => 'Em 90 dias saimos de 18 para 47 palavras-chave no top 10 e aumentamos em 62% o tráfego organico qualificado, com base técnica pronta para escalar.',
+            'quote' => 'Em 90 dias saimos de 18 para 47 palavras-chave no top 10 e aumentamos em 62% o tráfego orgânico qualificado, com base técnica pronta para escalar.',
         ],
         [
             'avatar' => 'https://randomuser.me/api/portraits/women/90.jpg',
             'alt' => 'Solange Rocha',
             'name' => 'Solange Rocha',
             'role' => 'Consultora',
-            'quote' => 'Com ajustes quinzenais no pos-entrega, o CAC caiu 23% e o ROI das campanhas saiu de 1,9x para 3,4x em tres meses.',
+            'quote' => 'Com ajustes quinzenais no pós-entrega, o CAC caiu 23% e o ROI das campanhas saiu de 1,9x para 3,4x em tres meses.',
         ],
     ],
     'donationOptions' => [
