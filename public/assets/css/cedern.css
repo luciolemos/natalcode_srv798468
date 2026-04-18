@@ -9010,6 +9010,10 @@ textarea.nc-admin-form-input {
     padding: 0.45rem 0.6rem;
   }
 
+  .nc-admin-table tbody tr[hidden] {
+    display: none !important;
+  }
+
   .nc-admin-table tbody td {
     display: grid;
     grid-template-columns: minmax(6.8rem, 7.8rem) minmax(0, 1fr);

@@ -283,6 +283,7 @@
         }
 
         targetRow.hidden = !expanded;
+        targetRow.style.display = expanded ? '' : 'none';
         button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
         button.classList.toggle('is-open', expanded);
         button.textContent = expanded ? 'Fechar' : 'Visualizar';
