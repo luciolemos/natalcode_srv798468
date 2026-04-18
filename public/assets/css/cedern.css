@@ -8158,6 +8158,18 @@ textarea.nc-admin-form-input {
   color: var(--text-muted);
 }
 
+.nc-admin-featured-flag.is-progress {
+  border-color: color-mix(in srgb, var(--swatch-blue-1) 46%, var(--surface-border));
+  background: color-mix(in srgb, var(--swatch-blue-1) 14%, var(--surface-main));
+  color: color-mix(in srgb, var(--swatch-blue-1) 78%, var(--text-main));
+}
+
+.nc-admin-featured-flag.is-warn {
+  border-color: color-mix(in srgb, #b7791f 46%, var(--surface-border));
+  background: color-mix(in srgb, #d69e2e 16%, var(--surface-main));
+  color: color-mix(in srgb, #744210 76%, var(--text-main));
+}
+
 .nc-admin-user-photo-cell {
   width: 62px;
 }
@@ -8368,6 +8380,79 @@ textarea.nc-admin-form-input {
   outline: none;
   border-color: color-mix(in srgb, var(--theme-accent-1) 58%, var(--surface-border));
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-accent-1) 18%, transparent);
+}
+
+.nc-admin-contact-status-cell {
+  min-width: 21rem;
+}
+
+.nc-admin-contact-status-meta {
+  margin-top: 0.2rem;
+}
+
+.nc-admin-contact-status-form {
+  margin-top: 0.45rem;
+}
+
+.nc-admin-contact-note-input {
+  min-width: 11rem;
+  height: 2.2rem;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-main);
+  color: var(--text-main);
+  padding: 0.34rem 0.58rem;
+  line-height: 1.15;
+  font: inherit;
+}
+
+.nc-admin-contact-note-input:focus-visible {
+  outline: none;
+  border-color: color-mix(in srgb, var(--theme-accent-1) 58%, var(--surface-border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-accent-1) 18%, transparent);
+}
+
+.nc-admin-contact-history {
+  margin-top: 0.52rem;
+}
+
+.nc-admin-contact-history summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.nc-admin-contact-history-list {
+  margin: 0.34rem 0 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.28rem;
+}
+
+.nc-admin-contact-history-list li {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.nc-admin-contact-history-list li p {
+  margin: 0.2rem 0 0;
+  color: var(--text-subtle);
+}
+
+@media (max-width: 980px) {
+  .nc-admin-contact-status-cell {
+    min-width: 0;
+  }
+
+  .nc-admin-contact-status-form {
+    width: 100%;
+  }
+
+  .nc-admin-contact-status-form .nc-admin-inline-select,
+  .nc-admin-contact-note-input {
+    min-width: 0;
+    width: 100%;
+  }
 }
 
 .nc-admin-action-edit {
