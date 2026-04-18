@@ -179,14 +179,14 @@ class AdminMemberAssignRoleAction extends AbstractPageAction
         $smtpPort = (int) ($_ENV['MAIL_PORT'] ?? 465);
         $smtpUser = trim((string) ($_ENV['MAIL_USERNAME'] ?? ''));
         $smtpPass = (string) ($_ENV['MAIL_PASSWORD'] ?? '');
-        $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? 'contato@natalcode.com.br'));
+        $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? ''));
         if ($fromEmail === '') {
             $fromEmail = 'contato@natalcode.com.br';
         }
         $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'NatalCode - Contato'));
         $siteUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br'), '/');
 
-        if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '' || $fromEmail === '') {
+        if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '') {
             throw new \RuntimeException('Configuração SMTP incompleta para envio do e-mail de aprovação.');
         }
 

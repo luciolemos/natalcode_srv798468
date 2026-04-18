@@ -84,14 +84,14 @@ class MySqlContactRequestRepository implements ContactRequestRepository
         SQL);
 
         $statement->execute([
-            'request_protocol' => $this->normalizeLine((string) ($data['request_protocol'] ?? ''), 32),
-            'request_id' => $this->normalizeLine((string) ($data['request_id'] ?? ''), 80),
-            'submitted_at' => $this->normalizeDateTime((string) ($data['submitted_at'] ?? '')),
-            'name' => $this->normalizeLine((string) ($data['name'] ?? ''), 160),
-            'email' => strtolower($this->normalizeLine((string) ($data['email'] ?? ''), 190)),
-            'segment' => $this->nullableLine((string) ($data['segment'] ?? ''), 120),
-            'subject' => $this->normalizeLine((string) ($data['subject'] ?? ''), 190),
-            'message' => $this->normalizeText((string) ($data['message'] ?? '')),
+            'request_protocol' => $this->normalizeLine((string) $data['request_protocol'], 32),
+            'request_id' => $this->normalizeLine((string) $data['request_id'], 80),
+            'submitted_at' => $this->normalizeDateTime((string) $data['submitted_at']),
+            'name' => $this->normalizeLine((string) $data['name'], 160),
+            'email' => strtolower($this->normalizeLine((string) $data['email'], 190)),
+            'segment' => $this->nullableLine((string) $data['segment'], 120),
+            'subject' => $this->normalizeLine((string) $data['subject'], 190),
+            'message' => $this->normalizeText((string) $data['message']),
             'origin_url' => $this->nullableLine((string) ($data['origin_url'] ?? ''), 255),
             'ip_address' => $this->nullableLine((string) ($data['ip_address'] ?? ''), 64),
             'user_agent' => $this->nullableLine((string) ($data['user_agent'] ?? ''), 255),
@@ -222,4 +222,3 @@ class MySqlContactRequestRepository implements ContactRequestRepository
         return (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s');
     }
 }
-

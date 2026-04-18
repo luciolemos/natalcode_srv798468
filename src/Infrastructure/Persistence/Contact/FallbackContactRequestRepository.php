@@ -33,14 +33,14 @@ class FallbackContactRequestRepository implements ContactRequestRepository
         $id = $this->nextId++;
         $this->items[] = [
             'id' => $id,
-            'request_protocol' => trim((string) ($data['request_protocol'] ?? '')),
-            'request_id' => trim((string) ($data['request_id'] ?? '')),
-            'submitted_at' => trim((string) ($data['submitted_at'] ?? (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s'))),
-            'name' => trim((string) ($data['name'] ?? '')),
-            'email' => strtolower(trim((string) ($data['email'] ?? ''))),
-            'segment' => trim((string) ($data['segment'] ?? '')),
-            'subject' => trim((string) ($data['subject'] ?? '')),
-            'message' => trim((string) ($data['message'] ?? '')),
+            'request_protocol' => trim((string) $data['request_protocol']),
+            'request_id' => trim((string) $data['request_id']),
+            'submitted_at' => trim((string) $data['submitted_at']),
+            'name' => trim((string) $data['name']),
+            'email' => strtolower(trim((string) $data['email'])),
+            'segment' => trim((string) $data['segment']),
+            'subject' => trim((string) $data['subject']),
+            'message' => trim((string) $data['message']),
             'origin_url' => trim((string) ($data['origin_url'] ?? '')),
             'ip_address' => trim((string) ($data['ip_address'] ?? '')),
             'user_agent' => trim((string) ($data['user_agent'] ?? '')),
@@ -54,15 +54,14 @@ class FallbackContactRequestRepository implements ContactRequestRepository
         $items = $this->items;
 
         usort($items, static function (array $left, array $right): int {
-            $dateComparison = strcmp((string) ($right['submitted_at'] ?? ''), (string) ($left['submitted_at'] ?? ''));
+            $dateComparison = strcmp((string) $right['submitted_at'], (string) $left['submitted_at']);
             if ($dateComparison !== 0) {
                 return $dateComparison;
             }
 
-            return ((int) ($right['id'] ?? 0)) <=> ((int) ($left['id'] ?? 0));
+            return ((int) $right['id']) <=> ((int) $left['id']);
         });
 
         return $items;
     }
 }
-

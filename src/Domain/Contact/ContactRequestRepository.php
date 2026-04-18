@@ -41,4 +41,3 @@ interface ContactRequestRepository
      */
     public function findAllForAdmin(): array;
 }
-

@@ -172,7 +172,7 @@ class MemberRegisterPageAction extends AbstractPageAction
         $smtpPort = (int) ($_ENV['MAIL_PORT'] ?? 465);
         $smtpUser = trim((string) ($_ENV['MAIL_USERNAME'] ?? ''));
         $smtpPass = (string) ($_ENV['MAIL_PASSWORD'] ?? '');
-        $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? 'contato@natalcode.com.br'));
+        $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? ''));
         if ($fromEmail === '') {
             $fromEmail = 'contato@natalcode.com.br';
         }
@@ -180,7 +180,7 @@ class MemberRegisterPageAction extends AbstractPageAction
         $notifyEmail = trim((string) ($_ENV['MAIL_TO_ADDRESS'] ?? $fromEmail));
         $siteUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br'), '/');
 
-        if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '' || $fromEmail === '') {
+        if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '') {
             throw new \RuntimeException('Configuração SMTP incompleta para envio de e-mails de cadastro.');
         }
 

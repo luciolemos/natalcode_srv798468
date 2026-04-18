@@ -42,11 +42,7 @@ async function stabilizeForScreenshot(page)
         });
     });
     await page.addStyleTag({
-        content: `
-            html, body {
-                transition: none !important;
-            }
-        `,
+        content: 'html, body { transition: none !important; }',
     });
     await page.evaluate(() => new Promise((resolve) => {
         requestAnimationFrame(() => requestAnimationFrame(resolve));

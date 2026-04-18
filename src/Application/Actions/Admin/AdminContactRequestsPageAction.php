@@ -54,10 +54,10 @@ class AdminContactRequestsPageAction extends AbstractPageAction
         }
 
         $contactRequests = array_map(function (array $requestRow): array {
-            $submittedAt = trim((string) ($requestRow['submitted_at'] ?? ''));
+            $submittedAt = trim((string) $requestRow['submitted_at']);
             $requestRow['submitted_at_label'] = $this->formatDateTimeLabel($submittedAt);
 
-            $message = trim((string) ($requestRow['message'] ?? ''));
+            $message = trim((string) $requestRow['message']);
             $requestRow['message_preview'] = $this->buildMessagePreview($message);
 
             return $requestRow;
@@ -69,15 +69,15 @@ class AdminContactRequestsPageAction extends AbstractPageAction
                 $contactRequests,
                 static function (array $requestRow) use ($normalizedSearch): bool {
                     $haystack = implode(' ', [
-                        (string) ($requestRow['request_protocol'] ?? ''),
-                        (string) ($requestRow['request_id'] ?? ''),
-                        (string) ($requestRow['submitted_at_label'] ?? ''),
-                        (string) ($requestRow['name'] ?? ''),
-                        (string) ($requestRow['email'] ?? ''),
-                        (string) ($requestRow['segment'] ?? ''),
-                        (string) ($requestRow['subject'] ?? ''),
-                        (string) ($requestRow['message'] ?? ''),
-                        (string) ($requestRow['origin_url'] ?? ''),
+                        (string) $requestRow['request_protocol'],
+                        (string) $requestRow['request_id'],
+                        (string) $requestRow['submitted_at_label'],
+                        (string) $requestRow['name'],
+                        (string) $requestRow['email'],
+                        (string) $requestRow['segment'],
+                        (string) $requestRow['subject'],
+                        (string) $requestRow['message'],
+                        (string) $requestRow['origin_url'],
                     ]);
 
                     return stripos(strtolower($haystack), $normalizedSearch) !== false;
@@ -95,14 +95,14 @@ class AdminContactRequestsPageAction extends AbstractPageAction
 
         usort($contactRequests, static function (array $firstRow, array $secondRow) use ($sortBy, $sortMultiplier): int {
             if ($sortBy === 'submitted_at') {
-                $firstTimestamp = strtotime((string) ($firstRow['submitted_at'] ?? '')) ?: 0;
-                $secondTimestamp = strtotime((string) ($secondRow['submitted_at'] ?? '')) ?: 0;
+                $firstTimestamp = strtotime((string) $firstRow['submitted_at']) ?: 0;
+                $secondTimestamp = strtotime((string) $secondRow['submitted_at']) ?: 0;
 
                 return ($firstTimestamp <=> $secondTimestamp) * $sortMultiplier;
             }
 
-            $firstValue = (string) ($firstRow[$sortBy] ?? '');
-            $secondValue = (string) ($secondRow[$sortBy] ?? '');
+            $firstValue = (string) $firstRow[$sortBy];
+            $secondValue = (string) $secondRow[$sortBy];
 
             return strnatcasecmp($firstValue, $secondValue) * $sortMultiplier;
         });
@@ -262,4 +262,3 @@ class AdminContactRequestsPageAction extends AbstractPageAction
         return mb_substr($normalized, 0, 117) . '...';
     }
 }
-

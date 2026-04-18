@@ -235,6 +235,15 @@ class ContactPageAction extends AbstractPageAction
     }
 
     /**
+     * @param array{
+     *   protocol: string,
+     *   request_id: string,
+     *   sent_at: string,
+     *   submitted_at: string,
+     *   safe_protocol: string,
+     *   safe_request_id: string,
+     *   safe_sent_at: string
+     * }|null $emailTrackingMeta
      * @throws Exception
      */
     private function sendContactEmail(
@@ -250,14 +259,14 @@ class ContactPageAction extends AbstractPageAction
         $smtpPort = (int) ($_ENV['MAIL_PORT'] ?? 465);
         $smtpUser = trim((string) ($_ENV['MAIL_USERNAME'] ?? ''));
         $smtpPass = (string) ($_ENV['MAIL_PASSWORD'] ?? '');
-        $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? 'contato@natalcode.com.br'));
+        $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? ''));
         if ($fromEmail === '') {
             $fromEmail = 'contato@natalcode.com.br';
         }
         $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'NatalCode - Contato'));
         $toEmail = trim((string) ($_ENV['MAIL_TO_ADDRESS'] ?? $fromEmail));
 
-        if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '' || $fromEmail === '' || $toEmail === '') {
+        if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '' || $toEmail === '') {
             throw new \RuntimeException('Configuração de e-mail incompleta no .env.');
         }
 
@@ -298,9 +307,9 @@ class ContactPageAction extends AbstractPageAction
         $safeMessage = nl2br(htmlspecialchars($normalizedMessage, ENT_QUOTES, 'UTF-8'));
 
         $emailTrackingMeta = $emailTrackingMeta ?? $this->buildEmailTrackingMeta();
-        $emailProtocol = (string) ($emailTrackingMeta['protocol'] ?? '');
-        $emailRequestId = (string) ($emailTrackingMeta['request_id'] ?? '');
-        $emailSentAtLabel = (string) ($emailTrackingMeta['sent_at'] ?? '');
+        $emailProtocol = (string) $emailTrackingMeta['protocol'];
+        $emailRequestId = (string) $emailTrackingMeta['request_id'];
+        $emailSentAtLabel = (string) $emailTrackingMeta['sent_at'];
 
         if ($emailProtocol === '' || $emailRequestId === '' || $emailSentAtLabel === '') {
             $emailTrackingMeta = $this->buildEmailTrackingMeta();
