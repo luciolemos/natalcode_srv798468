@@ -398,7 +398,7 @@ class MySqlContactRequestRepository implements ContactRequestRepository
         $normalizedNote = $this->normalizeLine($note, 500);
         $normalizedActorName = $this->normalizeLine($actorName, 160);
         $actorId = $actorMemberId !== null && $actorMemberId > 0 ? $actorMemberId : null;
-        $now = (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s');
+        $now = $this->currentDateTimeForStorage();
 
         if ($normalizedCurrentStatus === $normalizedStatus && $normalizedNote === '') {
             return true;
@@ -551,7 +551,7 @@ class MySqlContactRequestRepository implements ContactRequestRepository
     {
         $normalized = trim($value);
         if ($normalized === '') {
-            return (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s');
+            return $this->currentDateTimeForStorage();
         }
 
         $parsed = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $normalized);
@@ -559,6 +559,25 @@ class MySqlContactRequestRepository implements ContactRequestRepository
             return $parsed->format('Y-m-d H:i:s');
         }
 
-        return (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s');
+        return $this->currentDateTimeForStorage();
+    }
+
+    private function currentDateTimeForStorage(): string
+    {
+        return (new \DateTimeImmutable('now', $this->resolveApplicationTimeZone()))->format('Y-m-d H:i:s');
+    }
+
+    private function resolveApplicationTimeZone(): \DateTimeZone
+    {
+        $timezoneName = trim((string) ($_ENV['APP_TIMEZONE'] ?? 'America/Fortaleza'));
+        if ($timezoneName === '') {
+            $timezoneName = 'America/Fortaleza';
+        }
+
+        try {
+            return new \DateTimeZone($timezoneName);
+        } catch (\Throwable $exception) {
+            return new \DateTimeZone('America/Fortaleza');
+        }
     }
 }

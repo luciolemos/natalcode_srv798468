@@ -144,7 +144,7 @@ class FallbackContactRequestRepository implements ContactRequestRepository
         $normalizedActorName = $this->normalizeLine($actorName, 160);
         $normalizedNote = $this->normalizeLine($note, 500);
         $actorId = $actorMemberId !== null && $actorMemberId > 0 ? $actorMemberId : null;
-        $now = (new \DateTimeImmutable('now'))->format('Y-m-d H:i:s');
+        $now = $this->currentDateTimeForStorage();
 
         foreach ($this->items as $index => $item) {
             if ((int) $item['id'] !== $requestId) {
@@ -236,5 +236,24 @@ class FallbackContactRequestRepository implements ContactRequestRepository
         }
 
         return mb_substr($normalized, 0, $maxLength);
+    }
+
+    private function currentDateTimeForStorage(): string
+    {
+        return (new \DateTimeImmutable('now', $this->resolveApplicationTimeZone()))->format('Y-m-d H:i:s');
+    }
+
+    private function resolveApplicationTimeZone(): \DateTimeZone
+    {
+        $timezoneName = trim((string) ($_ENV['APP_TIMEZONE'] ?? 'America/Fortaleza'));
+        if ($timezoneName === '') {
+            $timezoneName = 'America/Fortaleza';
+        }
+
+        try {
+            return new \DateTimeZone($timezoneName);
+        } catch (\Throwable $exception) {
+            return new \DateTimeZone('America/Fortaleza');
+        }
     }
 }
