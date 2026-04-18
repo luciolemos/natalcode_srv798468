@@ -172,12 +172,15 @@ class MemberRegisterPageAction extends AbstractPageAction
         $smtpPort = (int) ($_ENV['MAIL_PORT'] ?? 465);
         $smtpUser = trim((string) ($_ENV['MAIL_USERNAME'] ?? ''));
         $smtpPass = (string) ($_ENV['MAIL_PASSWORD'] ?? '');
-        $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? $smtpUser));
+        $fromEmail = trim((string) ($_ENV['MAIL_FROM_ADDRESS'] ?? ''));
+        if ($fromEmail === '') {
+            $fromEmail = 'contato@natalcode.com.br';
+        }
         $fromName = trim((string) ($_ENV['MAIL_FROM_NAME'] ?? 'NatalCode - Contato'));
         $notifyEmail = trim((string) ($_ENV['MAIL_TO_ADDRESS'] ?? $fromEmail));
         $siteUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br'), '/');
 
-        if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '' || $fromEmail === '') {
+        if ($smtpHost === '' || $smtpUser === '' || $smtpPass === '') {
             throw new \RuntimeException('Configuração SMTP incompleta para envio de e-mails de cadastro.');
         }
 
@@ -191,6 +194,7 @@ class MemberRegisterPageAction extends AbstractPageAction
         );
         $safeFullName = htmlspecialchars(trim($fullName), ENT_QUOTES, 'UTF-8');
         $safeEmail = htmlspecialchars(strtolower(trim($email)), ENT_QUOTES, 'UTF-8');
+        $emailTrackingMeta = $this->buildEmailTrackingMeta();
         $adminActionsHtml = InstitutionalEmailTemplate::buildActionGroup([
             [
                 'href' => $panelReviewUrl,
@@ -223,6 +227,12 @@ class MemberRegisterPageAction extends AbstractPageAction
             $adminBody = InstitutionalEmailTemplate::buildLayout(
                 'Nova solicitação de cadastro',
                 '<p style="margin:0 0 14px;">Uma nova solicitacao de cadastro foi enviada pela area publica do site.</p>'
+                . '<div style="margin:0 0 16px;padding:14px 16px;border:1px solid #dbe4ee;'
+                . 'border-radius:12px;background:#f8fafc;">'
+                . '<p style="margin:0 0 8px;"><strong>Protocolo:</strong> ' . $emailTrackingMeta['safe_protocol'] . '</p>'
+                . '<p style="margin:0 0 8px;"><strong>ID:</strong> ' . $emailTrackingMeta['safe_request_id'] . '</p>'
+                . '<p style="margin:0;"><strong>Data/Hora:</strong> ' . $emailTrackingMeta['safe_sent_at'] . '</p>'
+                . '</div>'
                 . '<div style="margin:0 0 16px;padding:14px 16px;border:1px solid #dbe4ee;'
                 . 'border-radius:12px;background:#f8fafc;">'
                 . '<p style="margin:0 0 8px;"><strong>Nome:</strong> ' . $safeFullName . '</p>'
@@ -273,6 +283,12 @@ class MemberRegisterPageAction extends AbstractPageAction
             '<p style="margin:0 0 14px;">Olá, <strong>' . $safeFullName . '</strong>.</p>'
             . '<p style="margin:0 0 14px;">Recebemos sua solicitacao de cadastro na area de membros do NatalCode. '
             . 'Seu pedido foi registrado com sucesso e agora aguarda validacao da equipe.</p>'
+            . '<div style="margin:0 0 16px;padding:14px 16px;border:1px solid #dbe4ee;'
+            . 'border-radius:12px;background:#f8fafc;">'
+            . '<p style="margin:0 0 8px;"><strong>Protocolo:</strong> ' . $emailTrackingMeta['safe_protocol'] . '</p>'
+            . '<p style="margin:0 0 8px;"><strong>ID:</strong> ' . $emailTrackingMeta['safe_request_id'] . '</p>'
+            . '<p style="margin:0;"><strong>Data/Hora:</strong> ' . $emailTrackingMeta['safe_sent_at'] . '</p>'
+            . '</div>'
             . '<div style="margin:0 0 16px;padding:14px 16px;border:1px solid #dbe4ee;'
             . 'border-radius:12px;background:#f8fafc;">'
             . '<p style="margin:0 0 8px;"><strong>Nome informado:</strong> ' . $safeFullName . '</p>'
@@ -356,9 +372,9 @@ class MemberRegisterPageAction extends AbstractPageAction
         $mailer->addAddress($toEmail, $toName);
         $mailer->addReplyTo($replyToEmail, $replyToName);
 
-        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brand/natalcode1.png';
+        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brand/nc.png';
         if (is_file($logoPath)) {
-            $mailer->addEmbeddedImage($logoPath, 'natalcode-logo', 'natalcode1.png', 'base64', 'image/png');
+            $mailer->addEmbeddedImage($logoPath, 'natalcode-logo', 'nc.png', 'base64', 'image/png');
         }
 
         $mailer->isHTML(true);
@@ -375,9 +391,41 @@ class MemberRegisterPageAction extends AbstractPageAction
 
     private function resolveEmbeddedLogoSrc(): ?string
     {
-        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brand/natalcode1.png';
+        $logoPath = dirname(__DIR__, 4) . '/public/assets/img/brand/nc.png';
 
         return is_file($logoPath) ? 'cid:natalcode-logo' : null;
+    }
+
+    /**
+     * @return array{protocol: string, request_id: string, sent_at: string, safe_protocol: string, safe_request_id: string, safe_sent_at: string}
+     */
+    private function buildEmailTrackingMeta(): array
+    {
+        $timestamp = new \DateTimeImmutable(
+            'now',
+            new \DateTimeZone((string) ($_ENV['APP_TIMEZONE'] ?? 'America/Fortaleza'))
+        );
+
+        $protocol = sprintf(
+            'NAT-%s-%s',
+            $timestamp->format('Ymd'),
+            strtoupper(substr(bin2hex(random_bytes(2)), 0, 4))
+        );
+        $requestId = sprintf(
+            'natalcode_%s_%s',
+            $timestamp->format('YmdHis'),
+            bin2hex(random_bytes(6))
+        );
+        $sentAt = $timestamp->format('d/m/Y H:i:s');
+
+        return [
+            'protocol' => $protocol,
+            'request_id' => $requestId,
+            'sent_at' => $sentAt,
+            'safe_protocol' => htmlspecialchars($protocol, ENT_QUOTES, 'UTF-8'),
+            'safe_request_id' => htmlspecialchars($requestId, ENT_QUOTES, 'UTF-8'),
+            'safe_sent_at' => htmlspecialchars($sentAt, ENT_QUOTES, 'UTF-8'),
+        ];
     }
 
     private function buildMailToLink(string $email, string $subject): string

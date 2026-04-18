@@ -16,6 +16,7 @@ use App\Application\Actions\Admin\AdminAgendaFormPageAction;
 use App\Application\Actions\Admin\AdminLoginPageAction;
 use App\Application\Actions\Admin\AdminAgendaListPageAction;
 use App\Application\Actions\Admin\AdminAccessDataPageAction;
+use App\Application\Actions\Admin\AdminContactRequestsPageAction;
 use App\Application\Actions\Admin\AdminDataGovernancePageAction;
 use App\Application\Actions\Admin\AdminBookshopBookDeleteAction;
 use App\Application\Actions\Admin\AdminBookshopBookExportCsvAction;
@@ -396,6 +397,7 @@ return function (App $app) {
         $group->map(['GET', 'POST'], '/institucional/governanca-de-dados', AdminDataGovernancePageAction::class)->add($panelRoleMiddlewareFactory('admin'));
         $group->map(['GET', 'POST'], '/institucional/politica-de-privacidade', AdminPrivacyPolicyPageAction::class)->add($panelRoleMiddlewareFactory('admin'));
         $group->map(['GET', 'POST'], '/institucional/termos-de-uso', AdminTermsOfUsePageAction::class)->add($panelRoleMiddlewareFactory('admin'));
+        $group->get('/institucional/solicitacoes-contato', AdminContactRequestsPageAction::class)->add($panelRoleMiddlewareFactory('admin'));
     })->add($adminSessionAuthMiddleware);
 
     $app->get('/admin', function (Request $request, Response $response) {
@@ -586,6 +588,9 @@ return function (App $app) {
         $statusCode = strtoupper($request->getMethod()) === 'POST' ? 307 : 302;
 
         return $response->withHeader('Location', '/painel/institucional/termos-de-uso')->withStatus($statusCode);
+    });
+    $app->get('/admin/institucional/solicitacoes-contato', function (Request $request, Response $response) {
+        return $response->withHeader('Location', '/painel/institucional/solicitacoes-contato')->withStatus(302);
     });
     $app->get('/faq', FaqPageAction::class);
     $app->get('/faq/doutrina', FaqDoctrinePageAction::class);

@@ -38,11 +38,7 @@ async function stabilizeForScreenshot(page)
         lastHeight = currentHeight;
     }
     await page.addStyleTag({
-        content: `
-            * { caret-color: transparent !important; }
-            *, *::before, *::after { transition: none !important; }
-            html { -webkit-font-smoothing: antialiased; }
-        `,
+        content: 'html, body { transition: none !important; }',
     });
     await page.evaluate(() => new Promise((resolve) => {
         requestAnimationFrame(() => requestAnimationFrame(resolve));

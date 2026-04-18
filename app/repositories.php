@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Domain\Agenda\AgendaRepository;
 use App\Domain\Analytics\SiteVisitRepository;
 use App\Domain\Bookshop\BookshopRepository;
+use App\Domain\Contact\ContactRequestRepository;
 use App\Domain\Institutional\InstitutionalContentRepository;
 use App\Domain\Library\LibraryRepository;
 use App\Domain\Member\MemberAuthRepository;
@@ -15,6 +16,8 @@ use App\Infrastructure\Persistence\Analytics\FallbackSiteVisitRepository;
 use App\Infrastructure\Persistence\Analytics\MySqlSiteVisitRepository;
 use App\Infrastructure\Persistence\Bookshop\FallbackBookshopRepository;
 use App\Infrastructure\Persistence\Bookshop\MySqlBookshopRepository;
+use App\Infrastructure\Persistence\Contact\FallbackContactRequestRepository;
+use App\Infrastructure\Persistence\Contact\MySqlContactRequestRepository;
 use App\Infrastructure\Persistence\Institutional\FallbackInstitutionalContentRepository;
 use App\Infrastructure\Persistence\Institutional\MySqlInstitutionalContentRepository;
 use App\Infrastructure\Persistence\Library\FallbackLibraryRepository;
@@ -68,6 +71,13 @@ return function (ContainerBuilder $containerBuilder) {
                 return new MySqlSiteVisitRepository($c->get(\PDO::class));
             } catch (\Throwable $exception) {
                 return new FallbackSiteVisitRepository();
+            }
+        },
+        ContactRequestRepository::class => function (ContainerInterface $c): ContactRequestRepository {
+            try {
+                return new MySqlContactRequestRepository($c->get(\PDO::class));
+            } catch (\Throwable $exception) {
+                return new FallbackContactRequestRepository();
             }
         },
         UserRepository::class => \DI\autowire(InMemoryUserRepository::class),
