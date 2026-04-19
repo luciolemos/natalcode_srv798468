@@ -44,6 +44,81 @@
       "url": "{{ app_default_page_url|default(page_url)|e('js') }}"
     }
   </script>
+  {% if structured_data is defined and structured_data %}
+    {% for schema in structured_data %}
+      {% if schema is iterable %}
+        <script type="application/ld+json">{{ schema|json_encode|raw }}</script>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  {% set breadcrumb_path = current_path|default('/') %}
+  {% set breadcrumb_trimmed_path = breadcrumb_path|trim('/') %}
+  {% set breadcrumb_segments = breadcrumb_trimmed_path == '' ? [] : breadcrumb_trimmed_path|split('/') %}
+  {% if breadcrumb_segments|length > 0 %}
+    {% set breadcrumb_fallback_labels = {
+      'quem-somos': 'Quem Somos',
+      'missao': 'Missao',
+      'valores': 'Valores',
+      'historia': 'Historia',
+      'fundador': 'Governanca',
+      'estatuto': 'Diretrizes',
+      'nossa-marca': 'Nossa Marca',
+      'gestao-cede': 'Gestao NatalCode',
+      'equipe': 'Gestao NatalCode',
+      'estudos': 'Servicos',
+      'eade': 'Sites Institucionais',
+      'esde': 'Landing Pages',
+      'palestras': 'SEO e Conteudo',
+      'atendimento-fraterno': 'Suporte e Manutencao',
+      'agenda': 'Processo',
+      'estudo-do-evangelho': 'Descoberta',
+      'palestra-publica': 'Implementacao',
+      'juventude-espirita': 'Otimizacao',
+      'loja': 'Recursos',
+      'bazar': 'Materiais',
+      'livraria': 'NatalCode Labs',
+      'livraria-ii': 'NatalCode Labs',
+      'livraria-auta-de-sousa': 'NatalCode Labs',
+      'faq': 'FAQ',
+      'biblioteca': 'Base de conhecimento',
+      'base-de-conhecimento': 'Base de conhecimento',
+      'doutrina': 'Estrategia',
+      'participacao': 'Contratacao',
+      'praticas': 'Entrega',
+      'dados-de-acesso': 'Dados de acesso',
+      'contato': 'Contato'
+    } %}
+    {% set breadcrumb_labels = navigation_labels|default(breadcrumb_fallback_labels) %}
+    {% set breadcrumb_base_url = app_default_page_url|default('https://natalcode.com.br/')|trim('/') %}
+    {% set breadcrumb_items = [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Inicio',
+        'item': breadcrumb_base_url ~ '/'
+      }
+    ] %}
+    {% set breadcrumb_path_accumulator = '' %}
+    {% for segment in breadcrumb_segments %}
+      {% set breadcrumb_path_accumulator = breadcrumb_path_accumulator ~ '/' ~ segment %}
+      {% set breadcrumb_label = breadcrumb_labels[segment]|default(segment|replace({'-': ' '})|capitalize) %}
+      {% set breadcrumb_items = breadcrumb_items|merge([
+        {
+          '@type': 'ListItem',
+          'position': loop.index + 1,
+          'name': breadcrumb_label,
+          'item': breadcrumb_base_url ~ breadcrumb_path_accumulator
+        }
+      ]) %}
+    {% endfor %}
+    <script type="application/ld+json">
+      {{ {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': breadcrumb_items
+      }|json_encode|raw }}
+    </script>
+  {% endif %}
   {% if app_gtm_id|default('') %}
     <script>
       (function (w, d, s, l, i) {
@@ -105,7 +180,7 @@
   <link rel="icon" href="/assets/img/brand/nc7.png?v={{ asset_version }}">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/brand/nc7.png?v={{ asset_version }}">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/brand/nc7.png?v={{ asset_version }}">
-  <link rel="apple-touch-icon" href="/assets/img/brand/nc7.png?v={{ asset_version }}">
+  <link rel="apple-touch-icon" href="/assets/img/brand/nc13.png?v={{ asset_version }}">
   {% if app_recaptcha_enabled and app_recaptcha_site_key|default('') %}
     <script src="https://www.google.com/recaptcha/api.js?render={{ app_recaptcha_site_key|url_encode }}" async defer></script>
     <script src="/assets/js/cedern-recaptcha.js?v={{ asset_version }}" defer></script>

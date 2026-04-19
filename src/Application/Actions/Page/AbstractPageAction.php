@@ -50,6 +50,146 @@ abstract class AbstractPageAction
     }
 
     /**
+     * @param array<int, array<string, mixed>> $faqItems
+     * @return array<string, mixed>|null
+     */
+    protected function buildFaqStructuredData(array $faqItems, string $pageUrl): ?array
+    {
+        $mainEntity = [];
+
+        foreach ($faqItems as $item) {
+            $question = trim((string) ($item['question'] ?? ''));
+            $answer = trim((string) ($item['answer'] ?? ''));
+
+            if ($question === '' || $answer === '') {
+                continue;
+            }
+
+            $mainEntity[] = [
+                '@type' => 'Question',
+                'name' => $question,
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => $answer,
+                ],
+            ];
+        }
+
+        if ($mainEntity === []) {
+            return null;
+        }
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'FAQPage',
+            'url' => $pageUrl,
+            'mainEntity' => $mainEntity,
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $event
+     * @return array<string, mixed>|null
+     */
+    protected function buildEventStructuredData(array $event, string $pageUrl): ?array
+    {
+        $title = trim((string) ($event['title'] ?? ''));
+        $startsAt = $this->normalizeDateTimeForSchema((string) ($event['starts_at'] ?? ''));
+
+        if ($title === '' || $startsAt === null) {
+            return null;
+        }
+
+        $description = trim((string) ($event['description'] ?? ''));
+        if ($description === '') {
+            $description = 'Detalhes da atividade na agenda da NatalCode.';
+        }
+
+        $endsAt = $this->normalizeDateTimeForSchema((string) ($event['ends_at'] ?? ''));
+        $mode = strtolower(trim((string) ($event['mode'] ?? 'presencial')));
+        $meetingUrl = trim((string) ($event['meeting_url'] ?? ''));
+        $locationName = trim((string) ($event['location_name'] ?? 'NatalCode'));
+        $locationAddress = trim((string) ($event['location_address'] ?? ''));
+        $baseUrl = rtrim((string) ($_ENV['APP_DEFAULT_PAGE_URL'] ?? 'https://natalcode.com.br/'), '/');
+
+        $attendanceMode = 'https://schema.org/OfflineEventAttendanceMode';
+        if ($mode === 'online') {
+            $attendanceMode = 'https://schema.org/OnlineEventAttendanceMode';
+        } elseif ($mode === 'hibrido') {
+            $attendanceMode = 'https://schema.org/MixedEventAttendanceMode';
+        }
+
+        $place = [
+            '@type' => 'Place',
+            'name' => $locationName,
+        ];
+        if ($locationAddress !== '') {
+            $place['address'] = $locationAddress;
+        }
+
+        $location = $place;
+        if ($mode === 'online' && $meetingUrl !== '') {
+            $location = [
+                '@type' => 'VirtualLocation',
+                'url' => $meetingUrl,
+            ];
+        } elseif ($mode === 'hibrido' && $meetingUrl !== '') {
+            $location = [
+                $place,
+                [
+                    '@type' => 'VirtualLocation',
+                    'url' => $meetingUrl,
+                ],
+            ];
+        }
+
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Event',
+            'name' => $title,
+            'description' => $description,
+            'startDate' => $startsAt,
+            'eventAttendanceMode' => $attendanceMode,
+            'eventStatus' => 'https://schema.org/EventScheduled',
+            'location' => $location,
+            'organizer' => [
+                '@type' => 'Organization',
+                'name' => trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'NatalCode')),
+                'url' => $baseUrl . '/',
+            ],
+            'url' => $pageUrl,
+        ];
+
+        if ($endsAt !== null) {
+            $schema['endDate'] = $endsAt;
+        }
+
+        if ($meetingUrl !== '') {
+            $schema['offers'] = [
+                '@type' => 'Offer',
+                'url' => $meetingUrl,
+                'availability' => 'https://schema.org/InStock',
+            ];
+        }
+
+        return $schema;
+    }
+
+    private function normalizeDateTimeForSchema(string $value): ?string
+    {
+        $normalizedValue = trim($value);
+        if ($normalizedValue === '') {
+            return null;
+        }
+
+        try {
+            return (new \DateTimeImmutable($normalizedValue))->format(\DateTimeInterface::ATOM);
+        } catch (\Throwable $exception) {
+            return null;
+        }
+    }
+
+    /**
      * @param array<string, mixed> $payload
      */
     protected function storeSessionFlash(string $key, array $payload): void

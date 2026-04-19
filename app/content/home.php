@@ -375,12 +375,13 @@ return [
             'title' => 'Governança',
             'lead' => 'Do conceito à implementação, a NatalCode orquestra todo o ciclo de vida do seu projeto, com expertise técnica e visão estratégica. Resultado? Sistemas que não apenas funcionam, mas performam e evoluem.',
             'name' => '',
-            'role' => 'Direção NatalCode',
+            'role' => 'Founder & CEO | Lead Developer at NatalCode',
             'photo' => '/assets/img/techlead.png',
             'photo_alt' => 'Retrato da governança da NatalCode',
             'intro' => [
-                'A NatalCode foi estruturada para resolver desafios concretos de posicionamento digital, geração de demanda e eficiência comercial em negócios que precisam crescer com previsibilidade.',
+                'A NatalCode é liderada por seu fundador, que atua diretamente na direção estratégica e na execução técnica dos projetos. Esse modelo garante alinhamento entre visão de negócio e excelência tecnológica, proporcionando soluções eficientes, bem estruturadas e orientadas a resultados. ',
                 'Nossa atuação conecta estratégia, design e engenharia em um processo disciplinado: começamos com diagnóstico e definição de metas, avançamos para implementação técnica com padrão de qualidade e sustentamos a evolução com leitura de dados, testes e ciclos contínuos de melhoria.',
+                'A NatalCode foi estruturada para resolver desafios concretos de posicionamento digital, geração de demanda e eficiência comercial em negócios que precisam crescer com previsibilidade.',
             ],
             'quote' => 'Um bom projeto digital nasce de contexto claro, execução disciplinada e melhoria constante.',
             'quote_attribution' => 'Visão de governança NatalCode',
@@ -413,7 +414,7 @@ return [
                 [
                     'step' => '01',
                     'title' => 'Atuação',
-                    'description' => 'Prestacao de serviços digitais para empresas, profissionais e projetos em fase de expansao.',
+                    'description' => 'Prestação de serviços digitais para empresas, profissionais e projetos em fase de expansão.',
                     'delay' => 120,
                 ],
                 [
@@ -435,7 +436,7 @@ return [
         'auta-de-sousa' => [
             'kicker' => 'Labs',
             'title' => 'NatalCode Labs',
-            'lead' => 'Espaco dedicado a experimentos, templates e aceleradores que usamos para acelerar entregas.',
+            'lead' => 'Espaço dedicado a experimentos, templates e aceleradores que usamos para acelerar entregas.',
             'name' => 'NatalCode Labs',
             'role' => 'Pesquisa e desenvolvimento',
             'photo' => '/assets/img/face1_620_620.png',
@@ -520,20 +521,20 @@ return [
             'alt' => 'Ana Bezerra',
             'name' => 'Ana Bezerra',
             'role' => 'Coordenadora de marketing',
-            'quote' => 'Em 90 dias saimos de 18 para 47 palavras-chave no top 10 e aumentamos em 62% o tráfego orgânico qualificado, com base técnica pronta para escalar.',
+            'quote' => 'Em 90 dias saímos de 18 para 47 palavras-chave no top 10 e aumentamos em 62% o tráfego orgânico qualificado, com base técnica pronta para escalar.',
         ],
         [
             'avatar' => 'https://randomuser.me/api/portraits/women/90.jpg',
             'alt' => 'Solange Rocha',
             'name' => 'Solange Rocha',
             'role' => 'Consultora',
-            'quote' => 'Com ajustes quinzenais no pós-entrega, o CAC caiu 23% e o ROI das campanhas saiu de 1,9x para 3,4x em tres meses.',
+            'quote' => 'Com ajustes quinzenais no pós-entrega, o CAC caiu 23% e o ROI das campanhas saiu de 1,9x para 3,4x em três meses.',
         ],
     ],
     'donationOptions' => [
         [
             'title' => 'Canal de Orçamento',
-            'description' => 'Fale com nosso time para receber escopo inicial e proposta alinhada ao seu objetivo.',
+            'description' => 'Fale com nosso time para receber escopo inicial e proposta alinhada ao seu objetivo de negócio.',
             'qrImage' => '/assets/img/brand/natalcode1.png',
             'qrAlt' => 'Identidade visual NatalCode',
             'hint' => 'Use o botão para abrir a página de contato.',
