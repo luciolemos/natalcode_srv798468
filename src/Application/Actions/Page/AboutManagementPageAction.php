@@ -41,6 +41,24 @@ class AboutManagementPageAction extends AbstractPageAction
         'Diretor de Comunicação' =>
             'Conduz a comunicação institucional e os canais oficiais, garantindo '
             . 'clareza, unidade e responsabilidade na divulgação.',
+        'Diretor de Governança e Compliance' =>
+            'Estrutura políticas e controles de governança, compliance e integridade, '
+            . 'monitorando conformidade com normas internas e externas.',
+        'Diretor Jurídico' =>
+            'Orienta juridicamente a instituição, revisa instrumentos formais e apoia '
+            . 'a gestão de riscos legais e regulatórios.',
+        'Diretor de Operações' =>
+            'Coordena processos operacionais, define padrões de execução e acompanha '
+            . 'indicadores para garantir eficiência e continuidade das atividades.',
+        'Ouvidor' =>
+            'Recebe manifestações institucionais, conduz tratativas e promove melhoria '
+            . 'contínua na experiência de membros, parceiros e público.',
+        'Conselheiro Fiscal' =>
+            'Acompanha demonstrações e práticas financeiras, reforçando transparência, '
+            . 'controle e responsabilidade na gestão de recursos.',
+        'Conselheiro Consultivo' =>
+            'Apoia decisões estratégicas com visão técnica e institucional, '
+            . 'fortalecendo planejamento e sustentabilidade do NatalCode.',
         'Coordenador' =>
             'Acompanha a operação de uma frente específica, organiza equipe '
             . 'e garante execução das atividades previstas.',
