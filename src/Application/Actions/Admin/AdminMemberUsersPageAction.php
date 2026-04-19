@@ -34,6 +34,12 @@ class AdminMemberUsersPageAction extends AbstractPageAction
         'Diretor de Estudos',
         'Diretor de Atendimento Fraterno',
         'Diretor de Comunicação',
+        'Diretor de Governança e Compliance',
+        'Diretor Jurídico',
+        'Diretor de Operações',
+        'Ouvidor',
+        'Conselheiro Fiscal',
+        'Conselheiro Consultivo',
         'Coordenador',
         'Conselheiro',
     ];
