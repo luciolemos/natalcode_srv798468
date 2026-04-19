@@ -1329,6 +1329,12 @@ h3 {
   border-radius: var(--radius-sm);
 }
 
+@supports selector(:focus-visible) {
+  .nc-home-hero-arrow-btn:focus {
+    outline: none;
+  }
+}
+
 .nc-home-hero-arrow-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
@@ -4391,6 +4397,12 @@ code {
 
 .nc-management-slideshow-controls[hidden] {
   display: none;
+}
+
+@supports selector(:focus-visible) {
+  .nc-management-slideshow-controls .nc-btn:focus {
+    outline: none;
+  }
 }
 
 .nc-checklist {
