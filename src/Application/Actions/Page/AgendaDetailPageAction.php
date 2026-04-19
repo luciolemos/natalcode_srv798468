@@ -86,13 +86,21 @@ class AgendaDetailPageAction extends AbstractPageAction
 
         $title = (string) ($agendaEvent['title'] ?? 'Atividade do NatalCode');
         $pageDescription = (string) ($agendaEvent['description'] ?? 'Detalhes da atividade da agenda do NatalCode.');
+        $pageUrl = 'https://natalcode.com.br/agenda/' . $slug;
+
+        $structuredData = [];
+        $eventSchema = $this->buildEventStructuredData($agendaEvent, $pageUrl);
+        if ($eventSchema !== null) {
+            $structuredData[] = $eventSchema;
+        }
 
         return $this->renderPage($response, 'pages/agenda-detail.twig', [
             'agenda_event' => $agendaEvent,
             'agenda_event_status' => $status,
             'page_title' => $title . ' | NatalCode',
-            'page_url' => 'https://natalcode.com.br/agenda/' . $slug,
+            'page_url' => $pageUrl,
             'page_description' => $pageDescription,
+            'structured_data' => $structuredData,
         ]);
     }
 
