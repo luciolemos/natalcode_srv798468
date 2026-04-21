@@ -7311,6 +7311,11 @@ input[type='file'].nc-admin-form-input:focus-visible::file-selector-button {
     grid-template-columns: 1fr;
   }
 
+  .nc-about-founder-intro p {
+    text-align: left !important;
+    text-align-last: auto !important;
+  }
+
   .nc-about-founder-portrait-wrap {
     display: flex;
     justify-content: center;
