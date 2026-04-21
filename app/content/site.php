@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     'name' => 'NatalCode',
-    'legalName' => 'NatalCode Agência Digital',
+    'legalName' => 'NatalCode Soluções Digitais',
     'tagline' => 'Estratégia, design e tecnologia para negócios digitais.',
     'brand' => [
         'homeHref' => '/',

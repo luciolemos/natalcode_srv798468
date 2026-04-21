@@ -5,7 +5,7 @@
     {% set portfolio = site.portfolio|default({}) %}
     {% set portfolio_items = portfolio.items|default([]) %}
 
-    <section class="nc-section nc-about-detail-copy" aria-label="Portfolio de projetos digitais">
+    <section class="nc-section nc-about-detail-copy nc-portfolio-showcase" aria-label="Portfolio de projetos digitais">
       {% include 'components/section-header.twig' with {
         kicker: portfolio.kicker|default('Portfolio'),
         title: portfolio.title|default('Catalogo de projetos'),
@@ -17,7 +17,7 @@
 
       <div class="nc-trust-grid" data-aos="fade-up" data-aos-delay="80">
         {% for item in portfolio_items %}
-          <article class="nc-trust-card">
+          <article class="nc-trust-card" style="--trust-enter-delay: {{ 80 + (loop.index0 * 90) }}ms;">
             {% if item.image is not empty %}
               <img
                 class="nc-trust-media"

@@ -12,9 +12,9 @@ class HomePageAction extends AbstractPageAction
     public function __invoke(Request $request, Response $response): Response
     {
         return $this->renderPage($response, 'home.twig', [
-            'page_title' => 'NatalCode | Agencia Digital',
-            'page_description' => 'Agencia digital especializada em sites, landing pages, SEO e sistemas web para '
-                . 'negocios que precisam gerar mais contatos e vendas.',
+            'page_title' => 'NatalCode | Soluções Digitais',
+            'page_description' => 'Agência digital especializada em sites, landing pages, SEO e sistemas web para '
+                . 'negócios que precisam gerar mais contatos e vendas.',
             'page_url' => 'https://natalcode.com.br/',
         ]);
     }

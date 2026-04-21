@@ -1,0 +1,49 @@
+<section class="nc-section nc-home-quick-access" aria-label="Acesso rápido" data-aos="fade-up" data-aos-delay="0">
+  {% include 'components/section-header.twig' with {
+    kicker: 'Caminhos',
+    title: 'Encontre o que você precisa na NatalCode',
+    lead: 'Reunimos aqui os principais caminhos para estratégia, execução, suporte e contato comercial.'
+  } %}
+
+  <div class="nc-feature-grid nc-tonal-feature-grid">
+    {% include 'components/feature-card.twig' with {
+      title: 'Quem Somos',
+      description: 'Conheca nossa identidade, missão, valores, história e direção de marca.',
+      href: '/quem-somos',
+      link_label: 'Conhecer a NatalCode',
+      delay: 120
+    } %}
+
+    {% include 'components/feature-card.twig' with {
+      title: 'Serviços',
+      description: 'Veja como estruturamos sites, landing pages, SEO e manutenção para gerar resultado.',
+      href: '/estudos',
+      link_label: 'Ver serviços',
+      delay: 160
+    } %}
+
+    {% include 'components/feature-card.twig' with {
+      title: 'Contato',
+      description: 'Envie seu briefing e fale com nosso time para iniciar seu projeto.',
+      href: '/contato',
+      link_label: 'Falar com a NatalCode',
+      delay: 280
+    } %}
+
+    {% include 'components/feature-card.twig' with {
+      title: 'FAQ',
+      description: 'Tire dúvidas sobre prazo, escopo, investimento e acompanhamento pos-entrega.',
+      href: '/faq',
+      link_label: 'Ler FAQ',
+      delay: 240
+    } %}
+
+    {% include 'components/feature-card.twig' with {
+      title: 'Base de Conteúdo',
+      description: 'Acesse materiais, referências e guias práticos para evolução digital.',
+      href: '/quem-somos/base-de-conhecimento',
+      link_label: 'Ver conteúdos',
+      delay: 320
+    } %}
+  </div>
+</section>
