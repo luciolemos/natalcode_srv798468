@@ -353,7 +353,7 @@ return [
                     'delay' => 180,
                 ],
                 [
-                    
+
                     'step' => '03',
                     'title' => 'Relacao de longo prazo',
                     'description' => 'Acompanhamos a evolução do projeto com melhorias e suporte contínuo.',
