@@ -2,8 +2,24 @@
 
 declare(strict_types=1);
 
+/*
+|--------------------------------------------------------------------------
+| Home Content Map
+|--------------------------------------------------------------------------
+| Este arquivo centraliza o conteúdo textual e estrutural usado pelas
+| páginas públicas (home e páginas derivadas).
+|
+| Convenções:
+| - `sections.*` define cabeçalhos e textos principais de cada bloco.
+| - Arrays de itens (`*Items`, `*Actions`, `*Cards`) alimentam grids, CTAs
+|   e listas renderizadas pelos templates Twig.
+| - Chaves como `delay`, `sizes`, `srcset` controlam animação e responsividade.
+|--------------------------------------------------------------------------
+*/
 return [
+    // Cabeçalhos e copy principal de cada seção da home.
     'sections' => [
+        // Hero principal (mensagem, mídia, QR e parâmetros do carrossel).
         'hero' => [
             'kicker' => 'Sites e sistemas para negócios',
             'title' => 'Software, sites e produtos digitais que convertem',
@@ -85,7 +101,7 @@ return [
             'imageDelay' => 180,
             'actionsDelay' => 140,
             'showPanel' => false,
-            'panelTitle' => 'Nossas Solucoes',
+            'panelTitle' => 'Nossas Soluções',
             'panelDelay' => 180,
             'qrTitle' => 'Acesse no celular',
             'qrLead' => 'Abra natalcode.com.br no seu dispositivo para enviar briefing e iniciar seu projeto.',
@@ -93,39 +109,58 @@ return [
             'qrImage' => '/assets/img/brand/natalcode1.png',
             'qrAlt' => 'Marca NatalCode',
         ],
+        // Cabeçalho da seção de serviços/estudos.
         'features' => [
             'kicker' => 'Serviços',
             'title' => 'Presença digital com padrão profissional',
             'lead' => 'Combinamos estratégia de conteúdo, UX e engenharia para acelerar a entrega e reduzir retrabalho.',
         ],
+        // Cabeçalho da seção "Quem Somos" na home (social proof).
         'socialProof' => [
-            'kicker' => 'Quem Somos',
-            'title' => 'NatalCode Agência Digital',
-            'lead' => 'Desenvolvemos sites, sistemas e produtos digitais para negócios. Atuamos do planejamento à publicação, com acompanhamento contínuo de performance.',
-            'leadSecondary' => 'Nosso objetivo é claro: transformar metas de negócio em páginas e sistemas que vendem melhor, comunicam com clareza e evoluem junto com a operação.',
-            'trustGridLabel' => 'Frentes de atuação',
+            //'kicker' => 'Quem Somos',
+            'title' => 'NatalCode - Soluções digitais',
+            //'lead' => 'A NatalCode desenvolve landing pages, sites, sistemas e produtos digitais para negócios. Atuamos do planejamento à publicação, com acompanhamento contínuo de performance.',
+            //'leadSecondary' => 'Nosso objetivo é claro: transformar metas de negócio em páginas e sistemas que vendem melhor, comunicam com clareza e evoluem junto com a operação.',
+            'trustGridLabel' => 'Soluções Orientadas a Resultado',
+            'trustGridDescription' => 'A NatalCode projeta e desenvolve landing pages, sites, sistemas e produtos digitais orientados a resultados. Atuamos de ponta a ponta — do planejamento estratégico à publicação — com monitoramento contínuo de performance. Nosso foco é transformar objetivos de negócio em soluções digitais que convertem mais, comunicam com clareza e evoluem de forma consistente junto à operação.',
         ],
+        // Cabeçalho da seção de depoimentos.
         'testimonials' => [
             'kicker' => 'Clientes',
             'title' => 'Resultados de quem escolheu a NatalCode',
             'lead' => 'Depoimentos com indicadores reais de conversão, prazo e retorno em projetos de site e landing page.',
         ],
+
+        // Cabeçalho da seção de processo/roadmap.
+        // Nao renderiza na Home atual; usado pelas páginas da agenda.
         'roadmap' => [
             'kicker' => 'Processo',
             'title' => 'Como trabalhamos em cada projeto',
             'lead' => 'Fluxo simples, objetivo e transparente: descobrimos contexto, executamos com qualidade e otimizamos com dados reais.',
         ],
+        // Cabeçalho da seção FAQ.
+        // Nao renderiza na Home atual; usado na página /faq.
         'faq' => [
             'kicker' => 'Dúvidas',
             'title' => 'Perguntas Frequentes',
             'lead' => 'Respostas diretas sobre prazo, investimento, manutenção e contratação dos serviços da NatalCode.',
         ],
-        'donation' => [
-            'kicker' => 'Orçamento rapido',
-            'title' => 'Inicie seu projeto',
-            'lead' => 'Envie seu briefing e receba direcionamento técnico com escopo inicial para o seu momento de negócio.',
-            'leadSecondary' => 'Escolha o canal mais conveniente para falar com nosso time.',
-        ],
+        /*
+        | Bloco orfao (desativado):
+        | - sections.donation era consumido por templates/home/donation.twig.
+        | - O template donation.twig nao esta incluido nas paginas atuais.
+        |
+        | 'donation' => [
+        |     'kicker' => 'Orçamento rapido',
+        |     'title' => 'Inicie seu projeto',
+        |     'lead' => 'Envie seu briefing e receba direcionamento técnico com escopo inicial para o seu momento de negócio.',
+        |     'leadSecondary' => 'Escolha o canal mais conveniente para falar com nosso time.',
+        | ],
+        */
+
+
+
+        // Cabeçalho da chamada final da home.
         'cta' => [
             'kicker' => 'Próximo passo',
             'title' => 'Vamos construir sua presença digital',
@@ -133,6 +168,7 @@ return [
             'actionsDelay' => 160,
         ],
     ],
+    // Botões de ação exibidos no hero.
     'heroActions' => [
         [
             'label' => 'Solicitar orçamento',
@@ -147,6 +183,7 @@ return [
             'loadingOnClick' => false,
         ],
     ],
+    // Indicadores exibidos no painel de métricas do hero.
     'heroMetrics' => [
         [
             'value' => '120+',
@@ -169,6 +206,7 @@ return [
             'delay' => 400,
         ],
     ],
+    // Cards da seção de serviços em destaque.
     'featuresItems' => [
         [
             'title' => 'Landing Pages de Conversão',
@@ -192,6 +230,7 @@ return [
             'delay' => 240,
         ],
     ],
+    // Conteúdo detalhado das páginas de serviços.
     'studiesPages' => [
         'eade' => [
             'kicker' => 'Serviços',
@@ -294,6 +333,7 @@ return [
             ],
         ],
     ],
+    // Conteúdo detalhado das páginas institucionais "Quem Somos".
     'aboutPages' => [
         'missao' => [
             'kicker' => 'Quem Somos',
@@ -313,6 +353,7 @@ return [
                     'delay' => 180,
                 ],
                 [
+
                     'step' => '03',
                     'title' => 'Relacao de longo prazo',
                     'description' => 'Acompanhamos a evolução do projeto com melhorias e suporte contínuo.',
@@ -359,12 +400,12 @@ return [
                 [
                     'step' => '02',
                     'title' => 'Evolução para produto digital',
-                    'description' => 'Expandimos para fluxos de conversão, automacao e paines de gestão.',
+                    'description' => 'Expandimos para fluxos de conversão, automação e painéis de gestão.',
                     'delay' => 180,
                 ],
                 [
                     'step' => '03',
-                    'title' => 'Operação continua',
+                    'title' => 'Operação contínua',
                     'description' => 'Hoje atuamos como parceiro técnico para evolução constante de presença digital.',
                     'delay' => 240,
                 ],
@@ -432,6 +473,7 @@ return [
             ],
         ],
     ],
+    // Conteúdo da área/labs (bookshop/laboratório).
     'bookshopPages' => [
         'auta-de-sousa' => [
             'kicker' => 'Labs',
@@ -469,6 +511,7 @@ return [
             ],
         ],
     ],
+    // Cards visuais de confiança da seção social proof.
     'socialProofTrustCards' => [
         [
             'image' => '/assets/img/trust/trust-landing-640.jpg',
@@ -478,7 +521,7 @@ return [
             'sizes' => '(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 360px',
             'alt' => 'Projeto web com identidade de produto',
             'title' => 'Landing Pages',
-            'text' => 'Estrutura comercial para campanhas e captação.',
+            'text' => 'Estruturas orientadas à conversão para campanhas e geração qualificada de leads.',
         ],
         [
             'image' => '/assets/img/trust/trust-site-640.jpg',
@@ -488,7 +531,7 @@ return [
             'sizes' => '(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 360px',
             'alt' => 'Projeto institucional com arquitetura clara',
             'title' => 'Sites Institucionais',
-            'text' => 'Conteúdo organizado para posicionamento de marca.',
+            'text' => 'Conteúdo pensado para comunicar valor, gerar autoridade e posicionar sua marca com clareza.',
         ],
         [
             'image' => '/assets/img/trust/trust-seo-640.jpg',
@@ -498,9 +541,10 @@ return [
             'sizes' => '(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 360px',
             'alt' => 'Análise de desempenho e crescimento',
             'title' => 'SEO e Performance',
-            'text' => 'Otimização continua orientada por dados.',
+            'text' => 'Ajustes constantes com base em dados para melhorar desempenho e conversão.',
         ],
     ],
+    // Depoimentos usados na seção de testemunhos.
     'socialProofTestimonials' => [
         [
             'avatar' => 'https://randomuser.me/api/portraits/women/44.jpg',
@@ -531,17 +575,24 @@ return [
             'quote' => 'Com ajustes quinzenais no pós-entrega, o CAC caiu 23% e o ROI das campanhas saiu de 1,9x para 3,4x em três meses.',
         ],
     ],
-    'donationOptions' => [
-        [
-            'title' => 'Canal de Orçamento',
-            'description' => 'Fale com nosso time para receber escopo inicial e proposta alinhada ao seu objetivo de negócio.',
-            'qrImage' => '/assets/img/brand/natalcode1.png',
-            'qrAlt' => 'Identidade visual NatalCode',
-            'hint' => 'Use o botão para abrir a página de contato.',
-            'href' => '/contato',
-            'linkLabel' => 'Enviar briefing',
-        ],
-    ],
+    /*
+    | Bloco orfao (desativado):
+    | - donationOptions era consumido por templates/home/donation.twig.
+    | - O template donation.twig nao esta incluido nas paginas atuais.
+    |
+    | 'donationOptions' => [
+    |     [
+    |         'title' => 'Canal de Orçamento',
+    |         'description' => 'Fale com nosso time para receber escopo inicial e proposta alinhada ao seu objetivo de negócio.',
+    |         'qrImage' => '/assets/img/brand/natalcode1.png',
+    |         'qrAlt' => 'Identidade visual NatalCode',
+    |         'hint' => 'Use o botão para abrir a página de contato.',
+    |         'href' => '/contato',
+    |         'linkLabel' => 'Enviar briefing',
+    |     ],
+    | ],
+    */
+    // Etapas macro do processo exibido na home.
     'roadmapItems' => [
         [
             'phase' => 'Etapa 1',
@@ -568,6 +619,7 @@ return [
             'status' => 'planned',
         ],
     ],
+    // Páginas detalhadas de cada etapa do processo.
     'agendaPages' => [
         'estudo-do-evangelho' => [
             'kicker' => 'Processo',
@@ -645,6 +697,7 @@ return [
             ],
         ],
     ],
+    // Categorias do FAQ.
     'faqCategories' => [
         [
             'slug' => 'doutrina',
@@ -662,6 +715,7 @@ return [
             'lead' => 'Publicação, manutenção e acompanhamento pos-lancamento.',
         ],
     ],
+    // Perguntas e respostas do FAQ.
     'faqItems' => [
         [
             'question' => 'Quais tipos de projeto a NatalCode atende?',
@@ -714,6 +768,7 @@ return [
             'category' => 'participacao',
         ],
     ],
+    // Botões da chamada final da home.
     'ctaActions' => [
         [
             'label' => 'Solicitar proposta',

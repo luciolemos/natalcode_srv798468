@@ -1,44 +1,41 @@
-<section id="quem-somos" class="nc-section" aria-label="Quem Somos" data-aos="fade-up" data-aos-delay="0">
+<section id="quem-somos" class="nc-section nc-home-social-proof" aria-label="Quem Somos" data-aos="fade-up" data-aos-delay="0">
   {% set social_proof = homeContent.sections.socialProof|default({}) %}
   {% set trust_cards = homeContent.socialProofTrustCards|default([]) %}
-
-  <div class="nc-about-header">
-    {% include 'components/section-header.twig' with {
-      kicker: social_proof.kicker|default('Quem Somos'),
-      title: social_proof.title|default('NatalCode Agência Digital'),
-      lead: social_proof.lead|default('A NatalCode atua com estratégia, design e desenvolvimento web para transformar metas de negócio em resultados digitais.'),
-      lead_secondary: social_proof.leadSecondary|default('')
-    } %}
-  </div>
-
   {% if trust_cards|length > 0 %}
-    <p class="nc-section-kicker">{{ social_proof.trustGridLabel|default('Frentes de atuação') }}</p>
+    {% include 'components/section-header.twig' with {
+      kicker: social_proof.trustGridLabel|default('Frentes de atuação'),
+      title: social_proof.title|default('NatalCode - Soluções digitais'),
+      lead: social_proof.trustGridDescription|default('A NatalCode desenvolve landing pages, sites, sistemas e produtos digitais para negócios. Atuamos do planejamento à publicação, com acompanhamento contínuo de performance.')
+    } %}
     <div class="nc-trust-grid" aria-label="Frentes de atuação">
       {% for card in trust_cards %}
-        <article class="nc-trust-card" data-aos="fade-up" data-aos-delay="{{ 120 + (loop.index0 * 60) }}">
+        <article class="nc-trust-card" data-aos="fade-up" data-aos-delay="{{ 120 + (loop.index0 * 60) }}" style="--trust-enter-delay: {{ 80 + (loop.index0 * 90) }}ms;">
           {% set trust_sizes = card.sizes|default('(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 360px') %}
-          {% if card.avifSrcset or card.webpSrcset or card.srcset %}
+          {% set trust_image = card.image|default('') %}
+          {% if trust_image and (card.avifSrcset|default('') or card.webpSrcset|default('') or card.srcset|default('')) %}
             <picture>
-              {% if card.avifSrcset %}
+              {% if card.avifSrcset|default('') %}
                 <source type="image/avif" srcset="{{ card.avifSrcset }}" sizes="{{ trust_sizes }}">
               {% endif %}
-              {% if card.webpSrcset %}
+              {% if card.webpSrcset|default('') %}
                 <source type="image/webp" srcset="{{ card.webpSrcset }}" sizes="{{ trust_sizes }}">
               {% endif %}
               <img class="nc-trust-media"
-                src="{{ card.image }}"
-                {% if card.srcset %}srcset="{{ card.srcset }}"{% endif %}
+                src="{{ trust_image }}"
+                {% if card.srcset|default('') %}srcset="{{ card.srcset }}"{% endif %}
                 sizes="{{ trust_sizes }}"
-                alt="{{ card.alt|default(card.title) }}"
+                alt="{{ card.alt|default(card.title|default('Frente de atuação')) }}"
                 loading="lazy"
                 decoding="async">
             </picture>
+          {% elseif trust_image %}
+            <img class="nc-trust-media" src="{{ trust_image }}" alt="{{ card.alt|default(card.title|default('Frente de atuação')) }}" loading="lazy" decoding="async">
           {% else %}
-            <img class="nc-trust-media" src="{{ card.image }}" alt="{{ card.alt|default(card.title) }}" loading="lazy" decoding="async">
+            <div class="nc-trust-media nc-trust-media-placeholder" aria-hidden="true"></div>
           {% endif %}
           <div class="nc-trust-body">
-            <h3>{{ card.title }}</h3>
-            <p>{{ card.text }}</p>
+            <h3>{{ card.title|default('Frente de atuação') }}</h3>
+            <p>{{ card.text|default('Conteúdo desta frente será atualizado em breve.') }}</p>
           </div>
         </article>
       {% endfor %}

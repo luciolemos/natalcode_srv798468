@@ -174,12 +174,13 @@
       <p class="nc-lead" data-hero-copy-lead>{{ hero_primary_lead }}</p>
       <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="{{ hero.actionsDelay|default(140) }}">
         {% for action in hero_actions %}
+          {% set action_href = action.href|default('#') %}
           <a
-            class="{{ action.class }}"
-            href="{{ action.href }}"
+            class="{{ action.class|default('nc-btn nc-btn-primary') }}"
+            href="{{ action_href }}"
             {% if action.loadingOnClick|default(false) %}data-loading-on-click{% endif %}
             {% if action.ariaDisabled|default(false) %}aria-disabled="true" tabindex="-1"{% endif %}
-          >{{ action.ariaDisabled|default(false) ? action.disabledLabel|default('Em breve') : action.label }}</a>
+          >{{ action.ariaDisabled|default(false) ? action.disabledLabel|default('Em breve') : action.label|default('Saiba mais') }}</a>
         {% endfor %}
       </div>
     </div>
@@ -188,9 +189,9 @@
         <h2 class="nc-hero-panel-title">{{ hero.panelTitle|default('Indicadores da plataforma') }}</h2>
         <ul class="nc-metric-list">
           {% for metric in hero_metrics %}
-            <li class="nc-metric-item" data-aos="fade-up" data-aos-delay="{{ metric.delay }}">
-              <span class="nc-metric-value">{{ metric.value }}</span>
-              <span class="nc-metric-label">{{ metric.label }}</span>
+            <li class="nc-metric-item" data-aos="fade-up" data-aos-delay="{{ metric.delay|default(220 + (loop.index0 * 60)) }}">
+              <span class="nc-metric-value">{{ metric.value|default('—') }}</span>
+              <span class="nc-metric-label">{{ metric.label|default('Indicador') }}</span>
             </li>
           {% endfor %}
         </ul>
