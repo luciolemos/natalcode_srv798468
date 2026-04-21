@@ -1973,8 +1973,7 @@ h3 {
   margin: 0;
   color: var(--text-muted);
   max-width: none;
-  text-align: justify;
-  text-align-last: left;
+  text-align: left;
 }
 
 .nc-about-founder-quote {
