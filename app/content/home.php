@@ -122,7 +122,7 @@ return [
             //'lead' => 'A NatalCode desenvolve landing pages, sites, sistemas e produtos digitais para negócios. Atuamos do planejamento à publicação, com acompanhamento contínuo de performance.',
             //'leadSecondary' => 'Nosso objetivo é claro: transformar metas de negócio em páginas e sistemas que vendem melhor, comunicam com clareza e evoluem junto com a operação.',
             'trustGridLabel' => 'Soluções Orientadas a Resultado',
-            'trustGridDescription' => 'A NatalCode projeta e desenvolve landing pages, sites, sistemas e produtos digitais orientados a resultados. Atuamos de ponta a ponta — do planejamento estratégico à publicação — com monitoramento contínuo de performance. Nosso foco é transformar objetivos de negócio em soluções digitais que convertem mais, comunicam com clareza e evoluem de forma consistente junto à operação.',
+            'trustGridDescription' => 'A NatalCode projeta e desenvolve landing pages, sites, sistemas e produtos digitais orientados a resultado. Atuamos de ponta a ponta — do planejamento estratégico à publicação — com monitoramento contínuo de performance. Nosso foco é transformar objetivos de negócio em soluções digitais que convertem mais, comunicam com clareza e evoluem de forma consistente e com previsibilidade.',
         ],
         // Cabeçalho da seção de depoimentos.
         'testimonials' => [
@@ -420,7 +420,7 @@ return [
             'photo' => '/assets/img/techlead.png',
             'photo_alt' => 'Retrato da governança da NatalCode',
             'intro' => [
-                'A NatalCode é liderada por seu fundador, que atua diretamente na direção estratégica e na execução técnica dos projetos. Esse modelo garante alinhamento entre visão de negócio e excelência tecnológica, proporcionando soluções eficientes, bem estruturadas e orientadas a resultados. ',
+                'A NatalCode é liderada por seu fundador, que atua diretamente na direção estratégica e na execução técnica dos projetos. Esse modelo garante alinhamento entre visão de negócio e excelência tecnológica, proporcionando soluções eficientes, bem estruturadas e orientadas a resultado. ',
                 'Nossa atuação conecta estratégia, design e engenharia em um processo disciplinado: começamos com diagnóstico e definição de metas, avançamos para implementação técnica com padrão de qualidade e sustentamos a evolução com leitura de dados, testes e ciclos contínuos de melhoria.',
                 'A NatalCode foi estruturada para resolver desafios concretos de posicionamento digital, geração de demanda e eficiência comercial em negócios que precisam crescer com previsibilidade.',
             ],
