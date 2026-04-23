@@ -4,12 +4,11 @@
   <main class="nc-main nc-container nc-home-flow">
     {% set founder = homeContent.aboutPages.fundador|default({}) %}
 
-    <section class="nc-section" aria-label="Posicionamento da NatalCode" data-aos="fade-up" data-aos-delay="20">
+    <section class="nc-section nc-about-overview" aria-label="Posicionamento da NatalCode" data-aos="fade-up" data-aos-delay="20">
       {% include 'components/section-header.twig' with {
         kicker: 'Quem Somos',
         title: 'Agência digital orientada a resultado',
-        lead: 'A NatalCode combina estratégia, design e engenharia para construir sites, landing pages e produtos digitais com foco em conversão, performance e evolução contínua.',
-        lead_secondary: 'Atuamos do briefing à publicação, com método claro, entregas previsíveis e acompanhamento pós-lançamento.'
+        lead: 'A NatalCode combina estratégia, design e engenharia para construir sites, landing pages e produtos digitais com foco em conversão, performance e evolução contínua. Atuamos do briefing à publicação, com método claro, entregas previsíveis e acompanhamento pós-lançamento.'
       } %}
 
       <div class="nc-actions nc-tonal-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="140">
@@ -18,7 +17,7 @@
       </div>
     </section>
 
-    <section class="nc-section" aria-label="Soluções da NatalCode" data-aos="fade-up" data-aos-delay="30">
+    <section class="nc-section nc-about-overview" aria-label="Soluções da NatalCode" data-aos="fade-up" data-aos-delay="30">
       {% include 'components/section-header.twig' with {
         kicker: 'Soluções',
         title: 'O que entregamos para o seu negócio',
