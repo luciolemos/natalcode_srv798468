@@ -689,6 +689,36 @@ h3 {
   font-weight: var(--font-weight-semibold);
 }
 
+.nc-footer-social-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.nc-footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm, 0.875rem);
+  transition: color 0.15s ease;
+}
+
+.nc-footer-social-link:hover,
+.nc-footer-social-link:focus-visible {
+  color: var(--theme-ink);
+}
+
+.nc-footer-social-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  flex-shrink: 0;
+}
+
 .nc-footer-bottom {
   margin-top: var(--space-4);
   padding-top: var(--space-3);
