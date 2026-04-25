@@ -9,11 +9,11 @@
       {% include 'components/section-header.twig' with {
         kicker: portfolio.kicker|default('Portfolio'),
         title: portfolio.title|default('Catalogo de projetos'),
-        lead: portfolio.lead|default('Veja exemplos de landing pages e sites desenvolvidos pela NatalCode.')
+        lead: (
+          (portfolio.lead|default('Veja exemplos de landing pages e sites desenvolvidos pela NatalCode.')) ~
+          (portfolio.note is not empty ? ' ' ~ portfolio.note : '')
+        )
       } %}
-      {% if portfolio.note is not empty %}
-        <p class="nc-lead">{{ portfolio.note }}</p>
-      {% endif %}
 
       <div class="nc-trust-grid" data-aos="fade-up" data-aos-delay="80">
         {% for item in portfolio_items %}

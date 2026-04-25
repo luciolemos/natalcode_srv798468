@@ -9,6 +9,13 @@
   {% set page_image = page_image|default(app_default_page_image|default('https://natalcode.com.br/assets/img/brand/natalcode1.png')) %}
   {% set site_name = site_name|default(app_default_site_name|default('NatalCode')) %}
   {% set twitter_site = twitter_site|default(app_default_twitter_site|default('@natalcode')) %}
+  {% set organization_same_as = [] %}
+  {% if site.social.instagram.url|default('') %}
+    {% set organization_same_as = organization_same_as|merge([site.social.instagram.url]) %}
+  {% endif %}
+  {% if site.social.facebook.url|default('') %}
+    {% set organization_same_as = organization_same_as|merge([site.social.facebook.url]) %}
+  {% endif %}
   <title>{% block title %}{{ page_title }}{% endblock %}</title>
   <meta name="description" content="{{ page_description }}">
   <meta property="og:title" content="{{ page_title }}">
@@ -32,8 +39,8 @@
       "legalName": "{{ site.legalName|default(site.name|default(site_name))|e('js') }}",
       "url": "{{ app_default_page_url|default(page_url)|e('js') }}",
       "logo": "{{ page_image|e('js') }}"{% if site.contact.email|default('') %},
-      "email": "{{ site.contact.email|e('js') }}"{% endif %}{% if site.social.instagram.url|default('') %},
-      "sameAs": ["{{ site.social.instagram.url|e('js') }}"]{% endif %}
+      "email": "{{ site.contact.email|e('js') }}"{% endif %}{% if organization_same_as|length > 0 %},
+      "sameAs": [{% for social_url in organization_same_as %}"{{ social_url|e('js') }}"{% if not loop.last %}, {% endif %}{% endfor %}]{% endif %}
     }
   </script>
   <script type="application/ld+json">

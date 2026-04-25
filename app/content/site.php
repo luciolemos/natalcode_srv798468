@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+$instagramUrl = trim((string) ($_ENV['APP_SOCIAL_INSTAGRAM_URL'] ?? 'https://www.instagram.com/natalcode/'));
+$instagramLabel = trim((string) ($_ENV['APP_SOCIAL_INSTAGRAM_LABEL'] ?? 'Instagram oficial: @natalcode'));
+$facebookUrl = trim((string) ($_ENV['APP_SOCIAL_FACEBOOK_URL'] ?? 'https://www.facebook.com/natalcode/'));
+$facebookLabel = trim((string) ($_ENV['APP_SOCIAL_FACEBOOK_LABEL'] ?? 'Facebook oficial: NatalCode'));
+
 return [
     'name' => 'NatalCode',
     'legalName' => 'NatalCode Soluções Digitais',
@@ -21,8 +26,12 @@ return [
     ],
     'social' => [
         'instagram' => [
-            'url' => 'https://www.instagram.com/natalcode/',
-            'label' => 'Instagram oficial: @natalcode',
+            'url' => $instagramUrl,
+            'label' => $instagramLabel,
+        ],
+        'facebook' => [
+            'url' => $facebookUrl,
+            'label' => $facebookLabel,
         ],
     ],
     'institutional' => [

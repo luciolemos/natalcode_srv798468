@@ -5,6 +5,22 @@
 {% set brand_logo_src = brand.logoSrc|default(brand_logo_default) %}
 {% set brand_logo_dark_src = brand.logoDarkSrc|default(brand_logo_src) %}
 {% set brand_logo_light_src = brand.logoLightSrc|default(brand_logo_src) %}
+{% set social = site.social|default({}) %}
+{% set social_links = [] %}
+{% if social.instagram.url|default('') %}
+  {% set social_links = social_links|merge([{
+    platform: 'instagram',
+    href: social.instagram.url,
+    label: social.instagram.label|default('Instagram oficial')
+  }]) %}
+{% endif %}
+{% if social.facebook.url|default('') %}
+  {% set social_links = social_links|merge([{
+    platform: 'facebook',
+    href: social.facebook.url,
+    label: social.facebook.label|default('Facebook oficial')
+  }]) %}
+{% endif %}
 
 <footer id="contato" class="nc-footer">
   <div class="nc-container">
@@ -49,6 +65,35 @@
             {% endif %}
           </nav>
         {% endfor %}
+
+        {% if social_links|length > 0 %}
+          <nav class="nc-footer-block nc-footer-social-block" aria-label="Redes sociais institucionais">
+            <h3 class="nc-footer-title">Redes sociais</h3>
+            <ul class="nc-footer-social-links">
+              {% for social_link in social_links %}
+                <li>
+                  <a class="nc-footer-social-link" href="{{ social_link.href }}" target="_blank" rel="noopener noreferrer" aria-label="{{ social_link.label }}">
+                    {% if social_link.platform == 'instagram' %}
+                      <svg class="nc-footer-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="4" y="4" width="16" height="16" rx="4.5" stroke="currentColor" stroke-width="1.8"/>
+                        <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8"/>
+                        <circle cx="16.5" cy="7.5" r="0.9" fill="currentColor"/>
+                      </svg>
+                    {% elseif social_link.platform == 'facebook' %}
+                      <svg class="nc-footer-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+                        <path d="M13.5 8H12C11.4477 8 11 8.44772 11 9V11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9.5 11H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M11 11V19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      </svg>
+                    {% endif %}
+                    <span>{{ social_link.label }}</span>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </nav>
+        {% endif %}
       </div>
 
     </div>
