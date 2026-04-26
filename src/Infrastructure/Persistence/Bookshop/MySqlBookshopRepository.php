@@ -33,6 +33,9 @@ class MySqlBookshopRepository implements BookshopRepository
                 $this->buildBookSelect()
                 . " WHERE b.status = 'active' ORDER BY b.title ASC, b.author_name ASC"
             );
+            if ($statement === false) {
+                return [];
+            }
 
             return array_map([$this, 'normalizeBook'], $statement->fetchAll() ?: []);
         };
@@ -56,6 +59,9 @@ class MySqlBookshopRepository implements BookshopRepository
                 WHERE is_active = 1
                 ORDER BY name ASC
             SQL);
+            if ($statement === false) {
+                return [];
+            }
 
             return array_map([$this, 'normalizeCategory'], $statement->fetchAll() ?: []);
         };
@@ -79,6 +85,9 @@ class MySqlBookshopRepository implements BookshopRepository
                 WHERE is_active = 1
                 ORDER BY name ASC
             SQL);
+            if ($statement === false) {
+                return [];
+            }
 
             return array_map([$this, 'normalizeGenre'], $statement->fetchAll() ?: []);
         };
@@ -90,6 +99,9 @@ class MySqlBookshopRepository implements BookshopRepository
     {
         $operation = function (): array {
             $statement = $this->pdo->query($this->buildBookSelect() . ' ORDER BY b.title ASC, b.author_name ASC');
+            if ($statement === false) {
+                return [];
+            }
             $books = array_map([$this, 'normalizeBook'], $statement->fetchAll() ?: []);
 
             return $this->attachAvailableStockLotsToBooks($books);
@@ -212,6 +224,9 @@ class MySqlBookshopRepository implements BookshopRepository
                 ORDER BY CAST(RIGHT(sku, 4) AS UNSIGNED) DESC
                 LIMIT 1
             SQL);
+            if ($statement === false) {
+                return $this->formatGeneratedBookSku(1);
+            }
             $currentSku = (string) ($statement->fetchColumn() ?: '');
             $nextNumber = $this->extractGeneratedBookSkuNumber($currentSku) + 1;
 
@@ -227,9 +242,17 @@ class MySqlBookshopRepository implements BookshopRepository
             $this->pdo->beginTransaction();
 
             try {
-                $rows = $this->pdo->query(
+                $statement = $this->pdo->query(
                     'SELECT id, sku FROM bookshop_books ORDER BY id ASC FOR UPDATE'
-                )->fetchAll() ?: [];
+                );
+
+                if ($statement === false) {
+                    $this->pdo->rollBack();
+
+                    return 0;
+                }
+
+                $rows = $statement->fetchAll() ?: [];
 
                 if ($rows === []) {
                     $this->pdo->commit();
@@ -461,6 +484,9 @@ class MySqlBookshopRepository implements BookshopRepository
                 FROM bookshop_categories
                 ORDER BY name ASC
             SQL);
+            if ($statement === false) {
+                return [];
+            }
 
             return array_map([$this, 'normalizeCategory'], $statement->fetchAll() ?: []);
         };
@@ -477,6 +503,9 @@ class MySqlBookshopRepository implements BookshopRepository
                 WHERE category_id IS NOT NULL
                 GROUP BY category_id
             SQL);
+            if ($statement === false) {
+                return [];
+            }
 
             $rows = $statement->fetchAll(\PDO::FETCH_ASSOC) ?: [];
             $counts = [];
@@ -537,6 +566,9 @@ class MySqlBookshopRepository implements BookshopRepository
                 FROM bookshop_genres
                 ORDER BY name ASC
             SQL);
+            if ($statement === false) {
+                return [];
+            }
 
             return array_map([$this, 'normalizeGenre'], $statement->fetchAll() ?: []);
         };
@@ -553,6 +585,9 @@ class MySqlBookshopRepository implements BookshopRepository
                 WHERE genre_id IS NOT NULL
                 GROUP BY genre_id
             SQL);
+            if ($statement === false) {
+                return [];
+            }
 
             $rows = $statement->fetchAll(\PDO::FETCH_ASSOC) ?: [];
             $counts = [];
@@ -613,6 +648,9 @@ class MySqlBookshopRepository implements BookshopRepository
                 FROM bookshop_collections
                 ORDER BY name ASC
             SQL);
+            if ($statement === false) {
+                return [];
+            }
 
             return array_map([$this, 'normalizeCollection'], $statement->fetchAll() ?: []);
         };
@@ -891,6 +929,9 @@ class MySqlBookshopRepository implements BookshopRepository
                 FROM bookshop_sales
                 ORDER BY sold_at DESC, id DESC
             SQL);
+            if ($statement === false) {
+                return [];
+            }
 
             return array_map([$this, 'normalizeSale'], $statement->fetchAll() ?: []);
         };
@@ -931,6 +972,9 @@ class MySqlBookshopRepository implements BookshopRepository
                 LEFT JOIN bookshop_books b ON b.id = m.book_id
                 ORDER BY m.occurred_at DESC, m.id DESC
             SQL);
+            if ($statement === false) {
+                return [];
+            }
 
             return array_map([$this, 'normalizeStockMovement'], $statement->fetchAll() ?: []);
         };
@@ -3521,6 +3565,9 @@ class MySqlBookshopRepository implements BookshopRepository
             WHERE category_name IS NOT NULL
               AND TRIM(category_name) <> ''
         SQL);
+        if ($statement === false) {
+            return;
+        }
 
         $updateStatement = $this->pdo->prepare(<<<SQL
             UPDATE bookshop_books
@@ -3597,6 +3644,9 @@ class MySqlBookshopRepository implements BookshopRepository
                 COALESCE(b.updated_at, b.created_at, NOW())
             HAVING COALESCE(SUM(l.quantity_available), 0) < b.stock_quantity
         SQL);
+        if ($statement === false) {
+            return;
+        }
 
         foreach ($statement->fetchAll() ?: [] as $row) {
             $missingQuantity = max(
