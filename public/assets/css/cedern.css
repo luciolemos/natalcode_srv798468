@@ -5025,7 +5025,7 @@ code {
 .nc-dot-green { background: linear-gradient(90deg, var(--swatch-green-1), var(--swatch-green-2)); }
 .nc-dot-violet { background: linear-gradient(90deg, var(--swatch-violet-1), var(--swatch-violet-2)); }
 .nc-dot-amber { background: linear-gradient(90deg, var(--swatch-amber-1), var(--swatch-amber-2)); }
-    white-space: normal;
+
 @media (min-width: 801px) {
   :root {
     --main-padding-x: var(--space-6);
