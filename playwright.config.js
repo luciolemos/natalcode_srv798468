@@ -72,6 +72,8 @@ module.exports = defineConfig({
       APP_DEFAULT_MODE: 'light',
       APP_DEFAULT_DARK_INTENSITY: 'neutral',
       APP_ASSET_VERSION: '1',
+      APP_WHATSAPP_NUMBER: '5584996360721',
+      APP_WHATSAPP_MESSAGE: 'Oi! Quero conversar sobre o projeto de uma landing page com a NatalCode.',
       APP_SOCIAL_INSTAGRAM_URL: 'https://www.instagram.com/natalcodern/',
       APP_SOCIAL_INSTAGRAM_LABEL: 'Instagram',
       APP_SOCIAL_FACEBOOK_URL: 'https://www.facebook.com/natalcodern/',
