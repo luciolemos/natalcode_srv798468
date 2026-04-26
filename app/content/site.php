@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 $instagramUrl = trim((string) ($_ENV['APP_SOCIAL_INSTAGRAM_URL'] ?? 'https://www.instagram.com/natalcode/'));
-$instagramLabel = trim((string) ($_ENV['APP_SOCIAL_INSTAGRAM_LABEL'] ?? 'Instagram oficial: @natalcode'));
+$instagramLabel = trim((string) ($_ENV['APP_SOCIAL_INSTAGRAM_LABEL'] ?? 'Instagram'));
 $facebookUrl = trim((string) ($_ENV['APP_SOCIAL_FACEBOOK_URL'] ?? 'https://www.facebook.com/natalcode/'));
-$facebookLabel = trim((string) ($_ENV['APP_SOCIAL_FACEBOOK_LABEL'] ?? 'Facebook oficial: NatalCode'));
+$facebookLabel = trim((string) ($_ENV['APP_SOCIAL_FACEBOOK_LABEL'] ?? 'Facebook'));
+$githubUrl = trim((string) ($_ENV['APP_SOCIAL_GITHUB_URL'] ?? 'https://github.com/natalcode'));
+$githubLabel = trim((string) ($_ENV['APP_SOCIAL_GITHUB_LABEL'] ?? 'GitHub'));
 
 return [
     'name' => 'NatalCode',
@@ -32,6 +34,10 @@ return [
         'facebook' => [
             'url' => $facebookUrl,
             'label' => $facebookLabel,
+        ],
+        'github' => [
+            'url' => $githubUrl,
+            'label' => $githubLabel,
         ],
     ],
     'institutional' => [

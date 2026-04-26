@@ -72,10 +72,6 @@ test.describe('Home visual regression', () => {
     test('home full page', async({ page }, testInfo) => {
         await openHomeReady(page);
 
-        if (testInfo.project.name === 'mobile') {
-            testInfo.skip('Mobile full-page snapshot is flaky due to dynamic page height.');
-        }
-
         await expect(page).toHaveScreenshot('home-full.png', {
             fullPage: true,
             animations: 'disabled',

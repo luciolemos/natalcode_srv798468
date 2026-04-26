@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+$founderFacebookUrl = trim((string) ($_ENV['APP_FOUNDER_FACEBOOK_URL'] ?? 'https://www.facebook.com/natalcode/'));
+$founderInstagramUrl = trim((string) ($_ENV['APP_FOUNDER_INSTAGRAM_URL'] ?? 'https://www.instagram.com/natalcode/'));
+$founderGithubUrl = trim((string) ($_ENV['APP_FOUNDER_GITHUB_URL'] ?? 'https://github.com/luciolemos'));
+
 /*
 |--------------------------------------------------------------------------
 | Home Content Map
@@ -419,6 +423,20 @@ return [
             'role' => 'Founder & CEO | Lead Developer at NatalCode',
             'photo' => '/assets/img/techlead.png',
             'photo_alt' => 'Retrato da governança da NatalCode',
+            'social' => [
+                'facebook' => [
+                    'url' => $founderFacebookUrl,
+                    'label' => 'Facebook do CEO',
+                ],
+                'instagram' => [
+                    'url' => $founderInstagramUrl,
+                    'label' => 'Instagram do CEO',
+                ],
+                'github' => [
+                    'url' => $founderGithubUrl,
+                    'label' => 'GitHub do CEO',
+                ],
+            ],
             'intro' => [
                 'A NatalCode é liderada por seu fundador, que atua diretamente na direção estratégica e na execução técnica dos projetos. Esse modelo garante alinhamento entre visão de negócio e excelência tecnológica, proporcionando soluções eficientes, bem estruturadas e orientadas a resultado. ',
                 'Nossa atuação conecta estratégia, design e engenharia em um processo disciplinado: começamos com diagnóstico e definição de metas, avançamos para implementação técnica com padrão de qualidade e sustentamos a evolução com leitura de dados, testes e ciclos contínuos de melhoria.',
