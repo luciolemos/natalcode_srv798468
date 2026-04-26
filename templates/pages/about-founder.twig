@@ -11,6 +11,24 @@
     {% set founder_quote_attribution = founder.quote_attribution|default('')|trim %}
     {% set founder_display_name = founder_name != '' ? founder_name : founder.title|default('Nosso Fundador') %}
     {% set founder_avatar_label = founder_name != '' ? founder_name : founder_display_name %}
+    {% set founder_social = founder.social|default({}) %}
+    {% set founder_social_items = [
+      {
+        platform: 'facebook',
+        href: founder_social.facebook.url|default(site.social.facebook.url|default(''))|trim,
+        label: founder_social.facebook.label|default('Facebook do CEO')
+      },
+      {
+        platform: 'instagram',
+        href: founder_social.instagram.url|default(site.social.instagram.url|default(''))|trim,
+        label: founder_social.instagram.label|default('Instagram do CEO')
+      },
+      {
+        platform: 'github',
+        href: founder_social.github.url|default(site.social.github.url|default(''))|trim,
+        label: founder_social.github.label|default('GitHub do CEO')
+      }
+    ] %}
 
     <section class="nc-section nc-about-founder-page" aria-label="Página dedicada ao fundador" data-aos="fade-up" data-aos-delay="0">
       {% include 'components/section-header.twig' with {
@@ -39,6 +57,39 @@
             <div class="nc-about-founder-meta">
               <h2 class="nc-about-founder-name">{{ founder_display_name }}</h2>
               <p class="nc-about-founder-role">{{ founder_role }}</p>
+              <div class="nc-about-founder-social" aria-label="Redes sociais do CEO">
+                {% for social in founder_social_items %}
+                  {% set social_has_href = social.href != '' %}
+                  {% if social_has_href %}
+                    <a class="nc-about-founder-social-link" href="{{ social.href }}" target="_blank" rel="noopener noreferrer" aria-label="{{ social.label }}">
+                  {% else %}
+                    <span class="nc-about-founder-social-link is-passive" aria-label="{{ social.label }}">
+                  {% endif %}
+                    {% if social.platform == 'instagram' %}
+                      <svg class="nc-about-founder-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="4" y="4" width="16" height="16" rx="4.5" stroke="currentColor" stroke-width="1.8"/>
+                        <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8"/>
+                        <circle cx="16.5" cy="7.5" r="0.9" fill="currentColor"/>
+                      </svg>
+                    {% elseif social.platform == 'facebook' %}
+                      <svg class="nc-about-founder-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+                        <path d="M13.5 8H12C11.4477 8 11 8.44772 11 9V11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9.5 11H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M11 11V19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      </svg>
+                    {% elseif social.platform == 'github' %}
+                      <svg class="nc-about-founder-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M12 3.6C7.36 3.6 3.6 7.36 3.6 12C3.6 15.71 6 18.85 9.33 19.96C9.75 20.04 9.9 19.78 9.9 19.56V18.18C7.58 18.69 7.09 17.2 7.09 17.2C6.72 16.28 6.19 16.03 6.19 16.03C5.46 15.53 6.25 15.54 6.25 15.54C7.06 15.6 7.49 16.37 7.49 16.37C8.21 17.6 9.39 17.24 9.86 17.03C9.94 16.5 10.14 16.14 10.37 15.94C8.52 15.74 6.58 15.01 6.58 11.75C6.58 10.82 6.92 10.06 7.48 9.46C7.39 9.25 7.1 8.39 7.57 7.25C7.57 7.25 8.28 7.03 9.9 8.12C10.57 7.93 11.28 7.84 12 7.84C12.72 7.84 13.43 7.93 14.1 8.12C15.72 7.03 16.43 7.25 16.43 7.25C16.9 8.39 16.61 9.25 16.52 9.46C17.08 10.06 17.42 10.82 17.42 11.75C17.42 15.02 15.47 15.73 13.62 15.93C13.91 16.18 14.16 16.67 14.16 17.43V19.56C14.16 19.78 14.31 20.05 14.73 19.96C18.06 18.85 20.4 15.71 20.4 12C20.4 7.36 16.64 3.6 12 3.6Z" fill="currentColor"/>
+                      </svg>
+                    {% endif %}
+                  {% if social_has_href %}
+                    </a>
+                  {% else %}
+                    </span>
+                  {% endif %}
+                {% endfor %}
+              </div>
             </div>
 
             <div class="nc-about-founder-intro">

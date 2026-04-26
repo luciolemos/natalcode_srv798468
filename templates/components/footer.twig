@@ -11,14 +11,21 @@
   {% set social_links = social_links|merge([{
     platform: 'instagram',
     href: social.instagram.url,
-    label: social.instagram.label|default('Instagram oficial')
+    label: social.instagram.label|default('Instagram')
   }]) %}
 {% endif %}
 {% if social.facebook.url|default('') %}
   {% set social_links = social_links|merge([{
     platform: 'facebook',
     href: social.facebook.url,
-    label: social.facebook.label|default('Facebook oficial')
+    label: social.facebook.label|default('Facebook')
+  }]) %}
+{% endif %}
+{% if social.github.url|default('') %}
+  {% set social_links = social_links|merge([{
+    platform: 'github',
+    href: social.github.url,
+    label: social.github.label|default('GitHub')
   }]) %}
 {% endif %}
 
@@ -85,6 +92,10 @@
                         <path d="M13.5 8H12C11.4477 8 11 8.44772 11 9V11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M9.5 11H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                         <path d="M11 11V19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      </svg>
+                    {% elseif social_link.platform == 'github' %}
+                      <svg class="nc-footer-social-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M12 3C7.029 3 3 7.029 3 12C3 15.979 5.582 19.353 9.157 20.543C9.607 20.625 9.771 20.353 9.771 20.12C9.771 19.913 9.764 19.363 9.761 18.633C7.259 19.177 6.731 17.428 6.731 17.428C6.322 16.39 5.733 16.114 5.733 16.114C4.917 15.556 5.795 15.567 5.795 15.567C6.697 15.631 7.171 16.494 7.171 16.494C7.973 17.87 9.276 17.472 9.79 17.241C9.872 16.66 10.104 16.262 10.36 16.037C8.363 15.81 6.263 15.038 6.263 11.588C6.263 10.605 6.614 9.803 7.192 9.172C7.099 8.946 6.79 8.037 7.279 6.807C7.279 6.807 8.035 6.565 9.754 7.727C10.474 7.527 11.245 7.427 12.014 7.423C12.783 7.427 13.554 7.527 14.275 7.727C15.993 6.565 16.748 6.807 16.748 6.807C17.238 8.037 16.929 8.946 16.836 9.172C17.415 9.803 17.764 10.605 17.764 11.588C17.764 15.047 15.66 15.807 13.658 16.03C13.979 16.307 14.265 16.853 14.265 17.691C14.265 18.893 14.254 19.86 14.254 20.12C14.254 20.355 14.416 20.629 14.872 20.542C18.447 19.351 21.027 15.978 21.027 12C21.027 7.029 16.998 3 12.027 3H12Z"/>
                       </svg>
                     {% endif %}
                     <span>{{ social_link.label }}</span>

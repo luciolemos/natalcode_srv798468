@@ -693,24 +693,32 @@ h3 {
   margin: 0;
   padding: 0;
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: var(--space-3);
 }
 
 .nc-footer-social-link {
   display: inline-flex;
   align-items: center;
+  justify-content: flex-start;
   gap: var(--space-2);
+  width: 100%;
+  max-width: 16rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.5rem;
+  background-color: transparent;
   text-decoration: none;
+  white-space: nowrap;
   color: var(--text-muted);
   font-size: var(--font-size-sm, 0.875rem);
-  transition: color 0.15s ease;
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .nc-footer-social-link:hover,
 .nc-footer-social-link:focus-visible {
   color: var(--theme-ink);
+  background-color: var(--state-link-hover-bg);
 }
 
 .nc-footer-social-icon {
@@ -1993,6 +2001,46 @@ h3 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--theme-soft-ink);
+}
+
+.nc-about-founder-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: var(--space-2);
+}
+
+.nc-about-founder-social-link {
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--theme-soft-2) 52%, var(--card-border));
+  background: color-mix(in srgb, var(--theme-soft-1) 14%, var(--card-bg));
+  color: var(--theme-ink);
+  text-decoration: none;
+  transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.nc-about-founder-social-link:hover,
+.nc-about-founder-social-link:focus-visible {
+  transform: translateY(-1px);
+  color: var(--text-main);
+  border-color: color-mix(in srgb, var(--theme-ink) 48%, var(--card-border));
+  background: color-mix(in srgb, var(--theme-soft-1) 26%, var(--card-bg));
+}
+
+.nc-about-founder-social-link.is-passive {
+  color: var(--text-subtle);
+  border-color: color-mix(in srgb, var(--theme-soft-1) 44%, var(--card-border));
+}
+
+.nc-about-founder-social-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
 }
 
 .nc-about-founder-intro {
@@ -3888,6 +3936,29 @@ body.is-library-cover-dialog-open {
   color: var(--text-main);
 }
 
+.nc-footer-nav-column.is-institutional .nc-footer-links {
+  grid-template-columns: 1fr;
+}
+
+.nc-footer-nav-column.is-institutional .nc-footer-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 16rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.nc-footer-nav-column.is-institutional .nc-footer-link:hover,
+.nc-footer-nav-column.is-institutional .nc-footer-link:focus-visible {
+  background-color: var(--state-link-hover-bg);
+}
+
 .nc-section {
   margin-top: var(--section-gap);
 }
@@ -4461,7 +4532,7 @@ code {
 
 .nc-home-testimonials .nc-testimonial-card:hover .nc-testimonial-avatar,
 .nc-home-testimonials .nc-testimonial-card:focus-within .nc-testimonial-avatar {
-  transform: scale(1.05);
+  white-space: normal;
   filter: saturate(1.06) contrast(1.02);
 }
 
@@ -4901,6 +4972,10 @@ code {
     row-gap: var(--space-1);
   }
 
+  .nc-footer-nav-column.is-institutional .nc-footer-links {
+    grid-template-columns: 1fr;
+  }
+
   .nc-footer-copy {
     font-size: var(--font-size-sm-plus);
   }
@@ -4950,7 +5025,7 @@ code {
 .nc-dot-green { background: linear-gradient(90deg, var(--swatch-green-1), var(--swatch-green-2)); }
 .nc-dot-violet { background: linear-gradient(90deg, var(--swatch-violet-1), var(--swatch-violet-2)); }
 .nc-dot-amber { background: linear-gradient(90deg, var(--swatch-amber-1), var(--swatch-amber-2)); }
-
+    white-space: normal;
 @media (min-width: 801px) {
   :root {
     --main-padding-x: var(--space-6);
@@ -7358,6 +7433,10 @@ input[type='file'].nc-admin-form-input:focus-visible::file-selector-button {
   .nc-about-founder-meta {
     justify-items: center;
     text-align: center;
+  }
+
+  .nc-about-founder-social {
+    justify-content: center;
   }
 
   .nc-member-photo-field {

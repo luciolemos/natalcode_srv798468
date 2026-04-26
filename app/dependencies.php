@@ -254,7 +254,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             $appAddress = (string) ($siteContent['contact']['address'] ?? '');
             $appInstagramUrl = (string) ($siteContent['social']['instagram']['url'] ?? '');
-            $appInstagramLabel = (string) ($siteContent['social']['instagram']['label'] ?? 'Instagram oficial');
+            $appInstagramLabel = (string) ($siteContent['social']['instagram']['label'] ?? 'Instagram');
 
             $twig->getEnvironment()->addGlobal('app_default_page_title', $appDefaultPageTitle);
             $twig->getEnvironment()->addGlobal('app_default_page_description', $appDefaultPageDescription);

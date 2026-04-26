@@ -66,11 +66,6 @@ test.describe('About visual regression', () => {
     });
 
     test('about full page', async({ page }, testInfo) => {
-        test.skip(
-            testInfo.project.name === 'mobile',
-            'Mobile full-page screenshot is flaky in CI due unstable document height.'
-        );
-
         await openAboutReady(page);
 
         await expect(page).toHaveScreenshot('about-full.png', {
