@@ -20,6 +20,7 @@
           {% endif %}
 
           <form class="nc-admin-login-form" method="post" action="/painel/login">
+          {% include 'components/csrf-field.twig' %}
             <div class="nc-admin-login-field">
               <label class="nc-admin-login-label" for="username">Usuário</label>
               <input class="nc-admin-login-input" id="username" name="username" type="text" autocomplete="username" required>

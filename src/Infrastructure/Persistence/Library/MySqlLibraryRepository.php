@@ -27,6 +27,9 @@ class MySqlLibraryRepository implements LibraryRepository
             SQL;
 
             $statement = $this->pdo->query($sql);
+            if ($statement === false) {
+                return [];
+            }
 
             return array_map([$this, 'normalizeBook'], $statement->fetchAll() ?: []);
         };
@@ -42,6 +45,9 @@ class MySqlLibraryRepository implements LibraryRepository
             SQL;
 
             $statement = $this->pdo->query($sql);
+            if ($statement === false) {
+                return [];
+            }
 
             return array_map([$this, 'normalizeBook'], $statement->fetchAll() ?: []);
         };
@@ -204,6 +210,9 @@ class MySqlLibraryRepository implements LibraryRepository
             SQL;
 
             $statement = $this->pdo->query($sql);
+            if ($statement === false) {
+                return [];
+            }
 
             return $statement->fetchAll() ?: [];
         };
@@ -229,6 +238,9 @@ class MySqlLibraryRepository implements LibraryRepository
             SQL;
 
             $statement = $this->pdo->query($sql);
+            if ($statement === false) {
+                return [];
+            }
 
             return $statement->fetchAll() ?: [];
         };

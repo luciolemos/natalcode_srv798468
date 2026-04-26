@@ -355,6 +355,9 @@ class MySqlMemberAuthRepository implements MemberAuthRepository
     {
         try {
             $statement = $this->pdo->query('SELECT id, role_key, name, description FROM roles ORDER BY id ASC');
+            if ($statement === false) {
+                return [];
+            }
 
             return $statement->fetchAll() ?: [];
         } catch (\Throwable $exception) {
@@ -673,6 +676,9 @@ class MySqlMemberAuthRepository implements MemberAuthRepository
             SQL;
 
             $statement = $this->pdo->query($sql);
+            if ($statement === false) {
+                return [];
+            }
 
             return $statement->fetchAll() ?: [];
         } catch (\Throwable $exception) {
@@ -702,6 +708,9 @@ class MySqlMemberAuthRepository implements MemberAuthRepository
                 SQL;
 
                 $statement = $this->pdo->query($sql);
+                if ($statement === false) {
+                    return [];
+                }
                 $rows = $statement->fetchAll() ?: [];
             } catch (\Throwable $innerException) {
                 $sql = <<<SQL
@@ -728,6 +737,9 @@ class MySqlMemberAuthRepository implements MemberAuthRepository
                 SQL;
 
                 $statement = $this->pdo->query($sql);
+                if ($statement === false) {
+                    return [];
+                }
                 $rows = $statement->fetchAll() ?: [];
             }
 

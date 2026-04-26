@@ -273,6 +273,9 @@ class MySqlAgendaRepository implements AgendaRepository
         SQL;
 
         $statement = $this->pdo->query($sql);
+        if ($statement === false) {
+            return [];
+        }
 
         return array_map([$this, 'normalizeEvent'], $statement->fetchAll() ?: []);
     }
@@ -307,6 +310,9 @@ class MySqlAgendaRepository implements AgendaRepository
         SQL;
 
         $statement = $this->pdo->query($sql);
+        if ($statement === false) {
+            return [];
+        }
 
         return $statement->fetchAll() ?: [];
     }
@@ -329,6 +335,9 @@ class MySqlAgendaRepository implements AgendaRepository
         SQL;
 
         $statement = $this->pdo->query($sql);
+        if ($statement === false) {
+            return [];
+        }
 
         return $statement->fetchAll() ?: [];
     }

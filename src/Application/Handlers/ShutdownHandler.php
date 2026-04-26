@@ -36,7 +36,7 @@ class ShutdownHandler
 
     public function __invoke(): void
     {
-        $error = error_get_last();
+        $error = $this->getLastError();
         if ($error && in_array($error['type'], self::FATAL_ERRORS, true)) {
             $errorFile = $error['file'];
             $errorLine = $error['line'];
@@ -75,8 +75,23 @@ class ShutdownHandler
                 false,
             );
 
-            $responseEmitter = new ResponseEmitter();
+            $responseEmitter = $this->createResponseEmitter();
             $responseEmitter->emit($response);
         }
+    }
+
+    /**
+     * @return array{type:int,message:string,file:string,line:int}|null
+     */
+    protected function getLastError(): ?array
+    {
+        $error = error_get_last();
+
+        return is_array($error) ? $error : null;
+    }
+
+    protected function createResponseEmitter(): ResponseEmitter
+    {
+        return new ResponseEmitter();
     }
 }

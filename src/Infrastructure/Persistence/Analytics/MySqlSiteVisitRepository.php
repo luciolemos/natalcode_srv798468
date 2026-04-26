@@ -233,6 +233,9 @@ class MySqlSiteVisitRepository implements SiteVisitRepository
             ORDER BY started_at DESC, id DESC
             LIMIT 1
         SQL);
+        if ($statement === false) {
+            return null;
+        }
         $row = $statement->fetch();
         $value = trim((string) ($row['started_at'] ?? ''));
 

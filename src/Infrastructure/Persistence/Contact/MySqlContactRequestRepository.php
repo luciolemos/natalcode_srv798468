@@ -204,6 +204,9 @@ class MySqlContactRequestRepository implements ContactRequestRepository
             FROM contact_requests
             ORDER BY submitted_at DESC, id DESC
         SQL);
+        if ($statement === false) {
+            return [];
+        }
 
         $rows = $statement->fetchAll() ?: [];
 

@@ -409,6 +409,9 @@ abstract class AbstractAdminBookshopAction extends AbstractPageAction
                 $backgroundColor['g'],
                 $backgroundColor['b']
             );
+            if ($fill === false) {
+                $fill = 0;
+            }
             imagefill($normalizedCanvas, 0, 0, $fill);
             imagealphablending($normalizedCanvas, true);
 
@@ -519,6 +522,9 @@ abstract class AbstractAdminBookshopAction extends AbstractPageAction
         }
 
         $white = imagecolorallocate($flattened, 255, 255, 255);
+        if ($white === false) {
+            $white = 0;
+        }
         imagefill($flattened, 0, 0, $white);
         imagealphablending($flattened, true);
         imagecopy($flattened, $image, 0, 0, 0, 0, $width, $height);

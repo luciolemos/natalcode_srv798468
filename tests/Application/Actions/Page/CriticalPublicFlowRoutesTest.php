@@ -9,6 +9,8 @@ use Tests\TestCase;
 
 class CriticalPublicFlowRoutesTest extends TestCase
 {
+    private const TEST_CSRF_TOKEN = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+
     /** @var array<string, string|null> */
     private array $originalEnv = [];
 
@@ -106,6 +108,10 @@ class CriticalPublicFlowRoutesTest extends TestCase
         $app = $this->getAppInstance();
         $request = $this->createRequest($method, $path, ['HTTP_ACCEPT' => 'text/html']);
 
+        if (strtoupper($method) === 'POST') {
+            $parsedBody['_csrf'] = (string) ($_SESSION['_csrf_token'] ?? self::TEST_CSRF_TOKEN);
+        }
+
         if ($parsedBody !== []) {
             $request = $request->withParsedBody($parsedBody);
         }
@@ -135,11 +141,16 @@ class CriticalPublicFlowRoutesTest extends TestCase
 
     private function resetSessionState(): void
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            @session_start();
+        if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
+            session_start();
+        }
+
+        if (!isset($_SESSION) || !is_array($_SESSION)) {
+            $_SESSION = [];
         }
 
         $_SESSION = [];
+        $_SESSION['_csrf_token'] = self::TEST_CSRF_TOKEN;
     }
 
     /**

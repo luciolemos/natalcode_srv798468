@@ -228,6 +228,41 @@ abstract class AbstractPageAction
         }
     }
 
+    protected function rotateSessionCsrfToken(): void
+    {
+        $this->ensureSessionStarted();
+
+        try {
+            $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
+        } catch (\Throwable $exception) {
+            unset($_SESSION['_csrf_token']);
+        }
+    }
+
+    protected function sanitizeInternalRedirectTarget(string $redirectTo, string $fallback = '/'): string
+    {
+        $normalized = trim($redirectTo);
+
+        if ($normalized === '' || !str_starts_with($normalized, '/')) {
+            return $fallback;
+        }
+
+        if (str_starts_with($normalized, '//') || str_starts_with($normalized, '/\\')) {
+            return $fallback;
+        }
+
+        if (preg_match('/[\x00-\x1F\x7F]/', $normalized) === 1) {
+            return $fallback;
+        }
+
+        $path = (string) (parse_url($normalized, PHP_URL_PATH) ?? '');
+        if ($path === '' || !str_starts_with($path, '/')) {
+            return $fallback;
+        }
+
+        return $normalized;
+    }
+
     /**
      * @return array{ok: bool, message: string, score: float|null, error_codes: list<string>}
      */

@@ -5,4 +5,6 @@
 /vendor/
 /logs/*
 !/logs/README.md
+/backups/
+/var/backups/
 .phpunit.result.cache

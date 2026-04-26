@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Domain\Agenda\AgendaRepository;
 use App\Domain\Analytics\SiteVisitRepository;
 use App\Domain\Member\MemberAuthRepository;
+use App\Application\Middleware\CsrfMiddleware;
+use App\Application\Middleware\RateLimitMiddleware;
 use App\Application\Middleware\SessionMiddleware;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -260,6 +262,7 @@ return function (App $app) {
         $twigEnvironment->addGlobal('member_name', (string) ($_SESSION['member_name'] ?? ''));
         $twigEnvironment->addGlobal('member_role_key', (string) ($_SESSION['member_role_key'] ?? ''));
         $twigEnvironment->addGlobal('member_role_name', (string) ($_SESSION['member_role_name'] ?? 'Membro'));
+        $twigEnvironment->addGlobal('csrf_token', (string) ($_SESSION['_csrf_token'] ?? ''));
         $twigEnvironment->addGlobal(
             'member_profile_photo_path',
             (string) ($_SESSION['member_profile_photo_path'] ?? '')
@@ -398,5 +401,7 @@ return function (App $app) {
         return $response;
     });
 
+    $app->add(CsrfMiddleware::class);
+    $app->add(RateLimitMiddleware::class);
     $app->add(SessionMiddleware::class);
 };
