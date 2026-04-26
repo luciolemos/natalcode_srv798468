@@ -8,3 +8,4 @@
 /backups/
 /var/backups/
 .phpunit.result.cache
+/test-results/
