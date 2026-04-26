@@ -98,6 +98,10 @@ class MemberLoginPageAction extends AbstractPageAction
                 } elseif ((string) ($user['status'] ?? '') === 'blocked') {
                     $error = 'Seu acesso está bloqueado. Procure a administração.';
                 } else {
+                    $this->ensureSessionStarted();
+                    session_regenerate_id(true);
+                    $this->rotateSessionCsrfToken();
+
                     $_SESSION['member_authenticated'] = true;
                     $_SESSION['member_user_id'] = (int) ($user['id'] ?? 0);
                     $_SESSION['member_name'] = (string) ($user['full_name'] ?? 'Membro');
@@ -150,12 +154,6 @@ class MemberLoginPageAction extends AbstractPageAction
 
     private function sanitizeRedirectTarget(string $redirectTo): string
     {
-        $redirectTo = trim($redirectTo);
-
-        if ($redirectTo === '' || !str_starts_with($redirectTo, '/')) {
-            return '/membro';
-        }
-
-        return $redirectTo;
+        return $this->sanitizeInternalRedirectTarget($redirectTo, '/membro');
     }
 }

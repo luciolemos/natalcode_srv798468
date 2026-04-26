@@ -129,6 +129,7 @@
                   </small>
 
                   <form class="nc-admin-inline-form nc-admin-contact-status-form" method="post" action="/painel/institucional/solicitacoes-contato">
+          {% include 'components/csrf-field.twig' %}
                     <input type="hidden" name="request_id" value="{{ request.id }}">
                     <input type="hidden" name="return_to" value="{{ current_url }}">
                     <select class="nc-admin-inline-select" name="status" aria-label="Atualizar status da solicitação {{ request.request_protocol|default(request.id) }}">

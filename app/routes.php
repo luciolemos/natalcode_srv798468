@@ -614,7 +614,79 @@ return function (App $app) {
         return $twig->render($response, 'users.twig', ['users' => $users]);
     });
 
-    $app->get('/health/render', function (Request $request, Response $response) use ($app) {
+    $resolveRequestClientIp = static function (Request $request): string {
+        $forwardedFor = trim((string) $request->getHeaderLine('X-Forwarded-For'));
+
+        if ($forwardedFor !== '') {
+            $candidates = array_map('trim', explode(',', $forwardedFor));
+
+            foreach ($candidates as $candidate) {
+                if (filter_var($candidate, FILTER_VALIDATE_IP) !== false) {
+                    return $candidate;
+                }
+            }
+        }
+
+        $remoteAddress = trim((string) ($request->getServerParams()['REMOTE_ADDR'] ?? ''));
+
+        return filter_var($remoteAddress, FILTER_VALIDATE_IP) !== false ? $remoteAddress : '';
+    };
+
+    $isHealthEndpointAllowed = static function (Request $request) use ($resolveRequestClientIp): bool {
+        $appEnv = strtolower(trim((string) ($_ENV['APP_ENV'] ?? 'production')));
+
+        if (in_array($appEnv, ['dev', 'development', 'local', 'test'], true)) {
+            return true;
+        }
+
+        $expectedToken = trim((string) ($_ENV['APP_HEALTH_TOKEN'] ?? ''));
+        $providedToken = trim((string) $request->getHeaderLine('X-Health-Token'));
+
+        if ($providedToken === '') {
+            $queryParams = $request->getQueryParams();
+            $providedToken = trim((string) ($queryParams['token'] ?? ''));
+        }
+
+        if ($expectedToken !== '' && $providedToken !== '' && hash_equals($expectedToken, $providedToken)) {
+            return true;
+        }
+
+        $clientIp = $resolveRequestClientIp($request);
+        if ($clientIp === '') {
+            return false;
+        }
+
+        $allowedIpsRaw = trim((string) ($_ENV['APP_HEALTH_ALLOWED_IPS'] ?? '127.0.0.1,::1'));
+        $allowedIps = array_values(array_filter(
+            array_map('trim', explode(',', $allowedIpsRaw)),
+            static fn (string $ip): bool => $ip !== ''
+        ));
+
+        return in_array($clientIp, $allowedIps, true);
+    };
+
+    $buildHealthNotFoundResponse = static function (Response $response): Response {
+        $response->getBody()->write((string) json_encode([
+            'status' => 'not_found',
+        ], JSON_UNESCAPED_UNICODE));
+
+        return $response
+            ->withStatus(404)
+            ->withHeader('Content-Type', 'application/json');
+    };
+
+    $app->get('/health/render', function (
+        Request $request,
+        Response $response
+    ) use (
+        $app,
+        $isHealthEndpointAllowed,
+        $buildHealthNotFoundResponse
+    ) {
+        if (!$isHealthEndpointAllowed($request)) {
+            return $buildHealthNotFoundResponse($response);
+        }
+
         $twigView = $app->getContainer()->get(Twig::class);
         $twig = $twigView->getEnvironment();
         $homeContent = require __DIR__ . '/content/home.php';
@@ -737,7 +809,18 @@ return function (App $app) {
         return $response->withHeader('Content-Type', 'application/json');
     });
 
-    $app->get('/health/db', function (Request $request, Response $response) use ($app) {
+    $app->get('/health/db', function (
+        Request $request,
+        Response $response
+    ) use (
+        $app,
+        $isHealthEndpointAllowed,
+        $buildHealthNotFoundResponse
+    ) {
+        if (!$isHealthEndpointAllowed($request)) {
+            return $buildHealthNotFoundResponse($response);
+        }
+
         try {
             /** @var \PDO $pdo */
             $pdo = $app->getContainer()->get(\PDO::class);
@@ -759,7 +842,6 @@ return function (App $app) {
             $payload = [
                 'status' => 'error',
                 'db' => 'unavailable',
-                'message' => $exception->getMessage(),
             ];
 
             $response->getBody()->write((string) json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
@@ -770,14 +852,126 @@ return function (App $app) {
         }
     });
 
-    $app->post('/events', function (Request $request, Response $response): Response {
-        $rawBody = (string) $request->getBody();
-        $payload = json_decode($rawBody, true);
+    $app->post('/events', function (Request $request, Response $response) use ($resolveRequestClientIp): Response {
+        $maxPayloadBytes = (int) ($_ENV['APP_EVENT_MAX_PAYLOAD_BYTES'] ?? 8192);
+        if ($maxPayloadBytes < 512 || $maxPayloadBytes > (64 * 1024)) {
+            $maxPayloadBytes = 8192;
+        }
 
+        $rawBody = (string) $request->getBody();
+        if ($rawBody === '') {
+            $response->getBody()->write('Invalid payload');
+
+            return $response->withStatus(400)->withHeader('Content-Type', 'text/plain');
+        }
+
+        if (strlen($rawBody) > $maxPayloadBytes) {
+            $response->getBody()->write('Payload too large');
+
+            return $response->withStatus(413)->withHeader('Content-Type', 'text/plain');
+        }
+
+        /**
+         * @param mixed $value
+         */
+        $normalizeScalar = static function ($value, int $maxLength): string {
+            if (is_bool($value)) {
+                $value = $value ? '1' : '0';
+            } elseif (!is_scalar($value)) {
+                return '';
+            }
+
+            $normalized = trim((string) $value);
+            if ($normalized === '') {
+                return '';
+            }
+
+            $normalized = (string) preg_replace('/[\x00-\x1F\x7F]/', '', $normalized);
+            if ($normalized === '') {
+                return '';
+            }
+
+            if (function_exists('mb_strlen') && function_exists('mb_substr')) {
+                if (mb_strlen($normalized) > $maxLength) {
+                    return trim((string) mb_substr($normalized, 0, $maxLength));
+                }
+
+                return $normalized;
+            }
+
+            if (strlen($normalized) > $maxLength) {
+                return trim(substr($normalized, 0, $maxLength));
+            }
+
+            return $normalized;
+        };
+
+        $payload = json_decode($rawBody, true);
         if (!is_array($payload)) {
             $response->getBody()->write('Invalid payload');
 
             return $response->withStatus(400)->withHeader('Content-Type', 'text/plain');
+        }
+
+        $eventType = strtolower($normalizeScalar($payload['type'] ?? '', 40));
+        if (!in_array($eventType, ['page_view', 'click', 'event'], true)) {
+            $response->getBody()->write('Invalid event type');
+
+            return $response->withStatus(400)->withHeader('Content-Type', 'text/plain');
+        }
+
+        $eventPayload = [
+            'type' => $eventType,
+        ];
+
+        $eventName = $normalizeScalar($payload['event'] ?? '', 80);
+        if ($eventName !== '') {
+            $eventPayload['event'] = $eventName;
+        }
+
+        $title = $normalizeScalar($payload['title'] ?? '', 160);
+        if ($title !== '') {
+            $eventPayload['title'] = $title;
+        }
+
+        $label = $normalizeScalar($payload['label'] ?? '', 190);
+        if ($label !== '') {
+            $eventPayload['label'] = $label;
+        }
+
+        $path = $normalizeScalar($payload['path'] ?? '', 255);
+        if ($path !== '' && str_starts_with($path, '/')) {
+            $eventPayload['path'] = $path;
+        }
+
+        $href = $normalizeScalar($payload['href'] ?? '', 255);
+        if ($href !== '' && preg_match('#^(?:/|https?://)#i', $href) === 1) {
+            $eventPayload['href'] = $href;
+        }
+
+        $referrer = $normalizeScalar($payload['referrer'] ?? '', 255);
+        if ($referrer !== '' && preg_match('#^https?://#i', $referrer) === 1) {
+            $eventPayload['referrer'] = $referrer;
+        }
+
+        $metaPayload = [];
+        if (isset($payload['meta']) && is_array($payload['meta'])) {
+            $metaItems = array_slice($payload['meta'], 0, 12, true);
+
+            foreach ($metaItems as $metaKey => $metaValue) {
+                $normalizedMetaKey = $normalizeScalar((string) $metaKey, 40);
+                $normalizedMetaValue = $normalizeScalar($metaValue, 120);
+
+                if ($normalizedMetaKey === '' || $normalizedMetaValue === '') {
+                    continue;
+                }
+
+                $metaPayload[$normalizedMetaKey] = $normalizedMetaValue;
+            }
+        }
+
+        if ($metaPayload !== []) {
+            $eventPayload['meta'] = $metaPayload;
         }
 
         $projectRoot = dirname(__DIR__);
@@ -802,23 +996,25 @@ return function (App $app) {
             return $response->withStatus(500)->withHeader('Content-Type', 'text/plain');
         }
 
-        $ip = trim((string) $request->getHeaderLine('X-Forwarded-For'));
-        $ip = $ip !== '' ? explode(',', $ip)[0] : $request->getServerParams()['REMOTE_ADDR'] ?? '';
-
         $eventRecord = [
             'timestamp' => gmdate('c'),
-            'type' => (string) ($payload['type'] ?? 'event'),
-            'payload' => $payload,
-            'path' => (string) $request->getHeaderLine('Referer'),
-            'ip' => trim((string) $ip),
-            'ua' => (string) $request->getHeaderLine('User-Agent'),
+            'type' => $eventType,
+            'payload' => $eventPayload,
+            'path' => (string) ($eventPayload['path'] ?? ''),
+            'ip' => $resolveRequestClientIp($request),
+            'ua' => $normalizeScalar((string) $request->getHeaderLine('User-Agent'), 255),
         ];
 
-        file_put_contents(
+        $bytesWritten = @file_put_contents(
             $eventLogPath,
             json_encode($eventRecord, JSON_UNESCAPED_SLASHES) . PHP_EOL,
             FILE_APPEND | LOCK_EX
         );
+        if ($bytesWritten === false) {
+            $response->getBody()->write('Event log write failed');
+
+            return $response->withStatus(500)->withHeader('Content-Type', 'text/plain');
+        }
 
         return $response->withStatus(204);
     });

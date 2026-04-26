@@ -41,11 +41,7 @@ class MemberEventInterestToggleAction extends AbstractMemberGuardedPageAction
         $interested = $intent !== 'remove';
 
         $redirectTo = trim((string) ($payload['redirect_to'] ?? '/membro'));
-        if ($redirectTo === '' || str_starts_with($redirectTo, '/')) {
-            $safeRedirectTo = $redirectTo === '' ? '/membro' : $redirectTo;
-        } else {
-            $safeRedirectTo = '/membro';
-        }
+        $safeRedirectTo = $this->sanitizeInternalRedirectTarget($redirectTo, '/membro');
 
         $status = $interested ? 'interest-added' : 'interest-removed';
 

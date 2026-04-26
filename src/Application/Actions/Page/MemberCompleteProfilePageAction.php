@@ -277,13 +277,7 @@ class MemberCompleteProfilePageAction extends AbstractMemberGuardedPageAction
 
     private function sanitizeRedirectTarget(string $redirectTo): string
     {
-        $redirectTo = trim($redirectTo);
-
-        if ($redirectTo === '' || !str_starts_with($redirectTo, '/')) {
-            return '/membro';
-        }
-
-        return $redirectTo;
+        return $this->sanitizeInternalRedirectTarget($redirectTo, '/membro');
     }
 
     private function resolvePostSaveFlashKey(string $redirectTo): string
