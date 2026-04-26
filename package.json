@@ -9,6 +9,6 @@
     "test:visual:update": "env -u NO_COLOR XDEBUG_MODE=off playwright test --update-snapshots"
   },
   "devDependencies": {
-    "@playwright/test": "^1.52.0"
+    "@playwright/test": "^1.59.1"
   }
 }
