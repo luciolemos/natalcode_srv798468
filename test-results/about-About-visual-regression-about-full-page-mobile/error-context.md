@@ -1,0 +1,117 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "NatalCode - Início" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "NatalCode (tema claro)" [ref=e6]
+      - button "Abrir menu" [ref=e7] [cursor=pointer]
+      - text: ▾
+  - main [ref=e11]:
+    - region "Posicionamento da NatalCode" [ref=e12]:
+      - paragraph [ref=e13]: Quem Somos
+      - heading "Agência digital orientada a resultado" [level=2] [ref=e14]
+      - paragraph [ref=e15]: A NatalCode combina estratégia, design e engenharia para construir sites, landing pages e produtos digitais com foco em conversão, performance e evolução contínua. Atuamos do briefing à publicação, com método claro, entregas previsíveis e acompanhamento pós-lançamento.
+      - generic [ref=e16]:
+        - link "Ver portfólio" [ref=e17] [cursor=pointer]:
+          - /url: /portfolio
+        - link "Solicitar orçamento" [ref=e18] [cursor=pointer]:
+          - /url: /contato
+    - region "Soluções da NatalCode" [ref=e19]:
+      - paragraph [ref=e20]: Soluções
+      - heading "O que entregamos para o seu negócio" [level=2] [ref=e21]
+      - paragraph [ref=e22]: Estruturamos presença digital profissional para gerar mais contatos qualificados e melhorar a operação comercial.
+      - generic [ref=e23]:
+        - article [ref=e24]:
+          - heading "Landing Pages" [level=3] [ref=e25]
+          - paragraph [ref=e26]: Páginas de campanha com foco em conversão, copy estratégica e CTA claro.
+          - link "Ver serviço" [ref=e28] [cursor=pointer]:
+            - /url: /estudos/esde
+        - article [ref=e29]:
+          - heading "Sites Institucionais" [level=3] [ref=e30]
+          - paragraph [ref=e31]: Sites completos para posicionamento, autoridade da marca e geração de demanda.
+          - link "Ver serviço" [ref=e33] [cursor=pointer]:
+            - /url: /estudos/eade
+        - article [ref=e34]:
+          - heading "SEO e Evolução" [level=3] [ref=e35]
+          - paragraph [ref=e36]: Ajustes técnicos e de conteúdo para melhorar visibilidade orgânica e performance.
+          - link "Ver serviço" [ref=e38] [cursor=pointer]:
+            - /url: /estudos/palestras
+    - region "Método de trabalho da NatalCode" [ref=e39]:
+      - paragraph [ref=e40]: Método
+      - heading "Como trabalhamos em cada projeto" [level=2] [ref=e41]
+      - paragraph [ref=e42]: Processo objetivo para reduzir retrabalho e acelerar a entrega com qualidade.
+      - generic [ref=e43]:
+        - article [ref=e44]:
+          - heading "1. Diagnóstico e briefing" [level=3] [ref=e45]
+          - paragraph [ref=e46]: Entendimento de público, oferta e objetivos comerciais para definir escopo certo.
+        - article [ref=e47]:
+          - heading "2. Execução e validação" [level=3] [ref=e48]
+          - paragraph [ref=e49]: Sprints curtas com checkpoints, revisão de conteúdo e aprovação das entregas.
+        - article [ref=e50]:
+          - heading "3. Publicação e evolução" [level=3] [ref=e51]
+          - paragraph [ref=e52]: Go-live assistido, mensuração inicial e plano de melhorias contínuas.
+    - region "Governança da NatalCode" [ref=e53]:
+      - paragraph [ref=e54]: Quem Somos
+      - heading "Governança" [level=2] [ref=e55]
+      - paragraph [ref=e56]: Do conceito à implementação, a NatalCode orquestra todo o ciclo de vida do seu projeto, com expertise técnica e visão estratégica. Resultado? Sistemas que não apenas funcionam, mas performam e evoluem.
+      - generic [ref=e57]:
+        - link "Conhecer governança" [ref=e58] [cursor=pointer]:
+          - /url: /quem-somos/fundador
+        - link "Base de conhecimento" [ref=e59] [cursor=pointer]:
+          - /url: /quem-somos/base-de-conhecimento
+    - region "Chamada final" [ref=e60]:
+      - paragraph [ref=e61]: Próximo passo
+      - heading "Vamos construir sua presença digital" [level=2] [ref=e62]
+      - paragraph [ref=e63]: Se você precisa lançar, melhorar conversão ou organizar sua operação online, a NatalCode estrutura o projeto com método e execução previsivel.
+      - link "Solicitar proposta" [ref=e65] [cursor=pointer]:
+        - /url: /contato
+  - complementary "Ferramentas de interface":
+    - region "Paleta de cores do site" [ref=e66]:
+      - button "Cores ▾" [ref=e67]:
+        - generic [ref=e68]: Cores
+        - text: ▾
+  - contentinfo [ref=e69]:
+    - generic [ref=e70]:
+      - generic [ref=e71]:
+        - region "Identidade institucional" [ref=e72]:
+          - link "NatalCode - Início" [ref=e73] [cursor=pointer]:
+            - /url: /
+            - img "NatalCode (tema claro)" [ref=e74]
+          - paragraph [ref=e75]: Presença digital orientada a resultado
+          - paragraph [ref=e76]: NatalCode Soluções Digitais
+          - paragraph [ref=e77]: Da landing page ao sistema sob medida, estruturamos projetos digitais com visão de produto, performance e evolução continua.
+        - generic [ref=e78]:
+          - navigation "Institucional" [ref=e79]:
+            - heading "Institucional" [level=3] [ref=e80]
+            - list [ref=e81]:
+              - listitem [ref=e82]:
+                - link "Política de Privacidade" [ref=e83] [cursor=pointer]:
+                  - /url: /politica-de-privacidade
+              - listitem [ref=e84]:
+                - link "Termos de Uso" [ref=e85] [cursor=pointer]:
+                  - /url: /termos-de-uso
+          - navigation "Redes sociais institucionais" [ref=e86]:
+            - heading "Redes sociais" [level=3] [ref=e87]
+            - list [ref=e88]:
+              - listitem [ref=e89]:
+                - link "Instagram" [ref=e90] [cursor=pointer]:
+                  - /url: https://www.instagram.com/natalcode/
+                  - img [ref=e91]
+                  - generic [ref=e95]: Instagram
+              - listitem [ref=e96]:
+                - link "Facebook" [ref=e97] [cursor=pointer]:
+                  - /url: https://www.facebook.com/natalcode/
+                  - img [ref=e98]
+                  - generic [ref=e101]: Facebook
+              - listitem [ref=e102]:
+                - link "GitHub" [ref=e103] [cursor=pointer]:
+                  - /url: https://github.com/natalcode
+                  - img [ref=e104]
+                  - generic [ref=e106]: GitHub
+      - generic [ref=e107]:
+        - paragraph [ref=e108]: © 2026 NatalCode. Todos os direitos reservados.
+        - paragraph [ref=e109]: Atendimento nacional
+```

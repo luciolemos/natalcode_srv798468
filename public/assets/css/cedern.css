@@ -709,6 +709,7 @@ h3 {
   border-radius: 0.5rem;
   background-color: transparent;
   text-decoration: none;
+  white-space: nowrap;
   color: var(--text-muted);
   font-size: var(--font-size-sm, 0.875rem);
   transition: color 0.15s ease, background-color 0.15s ease;
@@ -3949,6 +3950,7 @@ body.is-library-cover-dialog-open {
   border-radius: 0.5rem;
   background-color: transparent;
   text-decoration: none;
+  white-space: nowrap;
   transition: color 0.15s ease, background-color 0.15s ease;
 }
 
@@ -4530,7 +4532,7 @@ code {
 
 .nc-home-testimonials .nc-testimonial-card:hover .nc-testimonial-avatar,
 .nc-home-testimonials .nc-testimonial-card:focus-within .nc-testimonial-avatar {
-  transform: scale(1.05);
+  white-space: normal;
   filter: saturate(1.06) contrast(1.02);
 }
 
@@ -5023,7 +5025,7 @@ code {
 .nc-dot-green { background: linear-gradient(90deg, var(--swatch-green-1), var(--swatch-green-2)); }
 .nc-dot-violet { background: linear-gradient(90deg, var(--swatch-violet-1), var(--swatch-violet-2)); }
 .nc-dot-amber { background: linear-gradient(90deg, var(--swatch-amber-1), var(--swatch-amber-2)); }
-
+    white-space: normal;
 @media (min-width: 801px) {
   :root {
     --main-padding-x: var(--space-6);
