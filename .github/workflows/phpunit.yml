@@ -14,6 +14,8 @@ jobs:
     env:
       XDEBUG_MODE: off
       MIN_STATEMENT_COVERAGE: "5"
+      NEXT_MIN_STATEMENT_COVERAGE: "10"
+      COVERAGE_CRITICAL_PATH_TARGETS: "src/Application/Middleware=15,src/Application/Security=20,src/Application/Actions/Page/ContactPageAction.php=20"
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
     steps:
@@ -46,4 +48,9 @@ jobs:
           vendor/bin/phpunit --configuration phpunit.xml --coverage-clover build/logs/clover.xml
 
       - name: Enforce coverage gate
-        run: php scripts/check_coverage_gate.php build/logs/clover.xml "$MIN_STATEMENT_COVERAGE"
+        run: |
+          php scripts/check_coverage_gate.php \
+            build/logs/clover.xml \
+            "$MIN_STATEMENT_COVERAGE" \
+            "$NEXT_MIN_STATEMENT_COVERAGE" \
+            "$COVERAGE_CRITICAL_PATH_TARGETS"
