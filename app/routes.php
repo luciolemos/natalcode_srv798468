@@ -105,6 +105,7 @@ use App\Domain\User\UserRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 use Slim\Views\Twig;
@@ -675,6 +676,29 @@ return function (App $app) {
             ->withHeader('Content-Type', 'application/json');
     };
 
+    /**
+     * @param array<string, mixed> $context
+     */
+    $logEventIngestionFailure = static function (string $reason, array $context = []) use ($app): void {
+        try {
+            /** @var LoggerInterface $logger */
+            $logger = $app->getContainer()->get(LoggerInterface::class);
+            $logger->warning('Falha na persistência de telemetria de eventos.', array_merge(
+                ['reason' => $reason],
+                $context
+            ));
+        } catch (\Throwable $exception) {
+            $fallbackPayload = array_merge(
+                ['reason' => $reason, 'error' => $exception->getMessage()],
+                $context
+            );
+            error_log(
+                '[natalcode events] Failed to log ingestion failure: '
+                . json_encode($fallbackPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+            );
+        }
+    };
+
     $app->get('/health/render', function (
         Request $request,
         Response $response
@@ -852,7 +876,13 @@ return function (App $app) {
         }
     });
 
-    $app->post('/events', function (Request $request, Response $response) use ($resolveRequestClientIp): Response {
+    $app->post('/events', function (
+        Request $request,
+        Response $response
+    ) use (
+        $resolveRequestClientIp,
+        $logEventIngestionFailure
+    ): Response {
         $maxPayloadBytes = (int) ($_ENV['APP_EVENT_MAX_PAYLOAD_BYTES'] ?? 8192);
         if ($maxPayloadBytes < 512 || $maxPayloadBytes > (64 * 1024)) {
             $maxPayloadBytes = 8192;
@@ -991,9 +1021,16 @@ return function (App $app) {
         }
 
         if (!is_dir($eventLogDir) || !is_writable($eventLogDir)) {
-            $response->getBody()->write('Event log not writable');
+            $logEventIngestionFailure('event_log_not_writable', [
+                'event_log_path' => $eventLogPath,
+                'event_log_dir' => $eventLogDir,
+                'request_path' => (string) $request->getUri()->getPath(),
+                'event_type' => $eventType,
+                'event_payload_path' => (string) ($eventPayload['path'] ?? ''),
+                'client_ip' => $resolveRequestClientIp($request),
+            ]);
 
-            return $response->withStatus(500)->withHeader('Content-Type', 'text/plain');
+            return $response->withStatus(204);
         }
 
         $eventRecord = [
@@ -1011,9 +1048,15 @@ return function (App $app) {
             FILE_APPEND | LOCK_EX
         );
         if ($bytesWritten === false) {
-            $response->getBody()->write('Event log write failed');
+            $logEventIngestionFailure('event_log_write_failed', [
+                'event_log_path' => $eventLogPath,
+                'request_path' => (string) $request->getUri()->getPath(),
+                'event_type' => $eventType,
+                'event_payload_path' => (string) ($eventPayload['path'] ?? ''),
+                'client_ip' => $resolveRequestClientIp($request),
+            ]);
 
-            return $response->withStatus(500)->withHeader('Content-Type', 'text/plain');
+            return $response->withStatus(204);
         }
 
         return $response->withStatus(204);
