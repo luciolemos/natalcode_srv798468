@@ -91,6 +91,28 @@ final class EventIngestionRouteTest extends TestCase
         $this->assertSame(413, $response->getStatusCode());
     }
 
+    public function testEventsRouteReturnsNoContentWhenEventLogIsNotWritable(): void
+    {
+        $_ENV['APP_EVENT_MAX_PAYLOAD_BYTES'] = '8192';
+        $_ENV['APP_EVENT_LOG'] = '/proc/natalcode-events-test.log';
+
+        $app = $this->getAppInstance();
+        $request = $this->createRequest('POST', '/events', [
+            'CONTENT_TYPE' => 'application/json',
+            'HTTP_ACCEPT' => 'text/plain',
+        ]);
+        $request->getBody()->write((string) json_encode([
+            'type' => 'page_view',
+            'path' => '/portfolio',
+            'title' => 'Portfolio',
+        ]));
+        $request->getBody()->rewind();
+
+        $response = $app->handle($request);
+
+        $this->assertSame(204, $response->getStatusCode());
+    }
+
     private function backupEnv(): void
     {
         foreach ($this->managedEnvKeys() as $key) {

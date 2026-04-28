@@ -303,6 +303,21 @@ composer test
 
 Testes iniciais incluem smoke tests de boot e rotas de saúde.
 
+### Gate de cobertura (CI)
+
+O workflow `PHPUnit` usa gate progressivo de cobertura:
+
+- `MIN_STATEMENT_COVERAGE`: mínimo obrigatório (bloqueante), atualmente `5`;
+- `NEXT_MIN_STATEMENT_COVERAGE`: próxima meta global (advisory), atualmente `10`;
+- `COVERAGE_CRITICAL_PATH_TARGETS`: metas por caminhos críticos (advisory), no formato `caminho=percentual`.
+
+Execução local equivalente:
+
+```bash
+XDEBUG_MODE=coverage vendor/bin/phpunit --configuration phpunit.xml --coverage-clover build/logs/clover.xml
+php scripts/check_coverage_gate.php build/logs/clover.xml 5 10 "src/Application/Middleware=15,src/Application/Security=20,src/Application/Actions/Page/ContactPageAction.php=20"
+```
+
 ## Smoke check de deploy
 
 Para validar rapidamente se a página publicada não está truncada e se os scripts críticos foram carregados:

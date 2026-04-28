@@ -288,7 +288,10 @@
       let isInViewport = true;
       let isUserInteracting = false;
       let isUserPaused = false;
+      let reducedMotionPlaybackEnabled = false;
       let copyTransitionTimer = null;
+      const isPlaybackBlockedByReducedMotion = () =>
+        prefersReducedMotion && !reducedMotionPlaybackEnabled;
 
       const fallbackCopy = {
         kicker: readTextContent(kickerElement),
@@ -455,11 +458,11 @@
 
         const playLabel = toggleButton.getAttribute('data-label-play') || 'Reproduzir';
         const pauseLabel = toggleButton.getAttribute('data-label-pause') || 'Pausar';
-        const isAutoplayDisabled = prefersReducedMotion || isUserPaused;
+        const isAutoplayDisabled = isPlaybackBlockedByReducedMotion() || isUserPaused;
 
         toggleButton.textContent = isAutoplayDisabled ? playLabel : pauseLabel;
         toggleButton.setAttribute('aria-pressed', isAutoplayDisabled ? 'true' : 'false');
-        toggleButton.disabled = !!prefersReducedMotion;
+        toggleButton.disabled = false;
       };
 
       const applyImage = async (options = {}) => {
@@ -496,7 +499,11 @@
       };
 
       const shouldAutoplay = () =>
-        !prefersReducedMotion && !isUserPaused && !document.hidden && isInViewport && !isUserInteracting;
+        !isPlaybackBlockedByReducedMotion() &&
+        !isUserPaused &&
+        !document.hidden &&
+        isInViewport &&
+        !isUserInteracting;
 
       const startAutoplay = () => {
         if (autoplayTimer !== null || !shouldAutoplay()) {
@@ -579,11 +586,17 @@
 
       if (toggleButton) {
         toggleButton.addEventListener('click', () => {
-          if (prefersReducedMotion) {
-            return;
+          if (isPlaybackBlockedByReducedMotion()) {
+            reducedMotionPlaybackEnabled = true;
+            isUserPaused = false;
+          } else {
+            isUserPaused = !isUserPaused;
           }
 
-          isUserPaused = !isUserPaused;
+          if (!isPlaybackBlockedByReducedMotion() && !isUserPaused) {
+            isUserInteracting = false;
+          }
+
           updateToggleButton();
           syncAutoplay();
           updateStatus(true);
@@ -639,6 +652,9 @@
       if (reducedMotionQuery) {
         const onReducedMotionChange = (event) => {
           prefersReducedMotion = event.matches;
+          if (prefersReducedMotion) {
+            reducedMotionPlaybackEnabled = false;
+          }
           applyCopyMarkup(mediaItems[currentIndex], { animate: false });
           triggerImageZoom();
           updateToggleButton();
