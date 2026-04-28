@@ -5,6 +5,9 @@ declare(strict_types=1);
 $founderFacebookUrl = trim((string) ($_ENV['APP_FOUNDER_FACEBOOK_URL'] ?? 'https://www.facebook.com/natalcode/'));
 $founderInstagramUrl = trim((string) ($_ENV['APP_FOUNDER_INSTAGRAM_URL'] ?? 'https://www.instagram.com/natalcode/'));
 $founderGithubUrl = trim((string) ($_ENV['APP_FOUNDER_GITHUB_URL'] ?? 'https://github.com/luciolemos'));
+$founderLinkedinUrl = trim((string) ($_ENV['APP_FOUNDER_LINKEDIN_URL'] ?? 'https://www.linkedin.com/in/luciolemos/'));
+$founderXUrl = trim((string) ($_ENV['APP_FOUNDER_X_URL'] ?? 'https://x.com/luciolemos'));
+$founderDisqusUrl = trim((string) ($_ENV['APP_FOUNDER_DISQUS_URL'] ?? 'https://disqus.com/by/luciolemos/'));
 
 /*
 |--------------------------------------------------------------------------
@@ -435,6 +438,18 @@ return [
                 'github' => [
                     'url' => $founderGithubUrl,
                     'label' => 'GitHub do CEO',
+                ],
+                'linkedin' => [
+                    'url' => $founderLinkedinUrl,
+                    'label' => 'LinkedIn do CEO',
+                ],
+                'x' => [
+                    'url' => $founderXUrl,
+                    'label' => 'X do CEO',
+                ],
+                'disqus' => [
+                    'url' => $founderDisqusUrl,
+                    'label' => 'Disqus do CEO',
                 ],
             ],
             'intro' => [

@@ -14,6 +14,21 @@
     {% set founder_social = founder.social|default({}) %}
     {% set founder_social_items = [
       {
+        platform: 'linkedin',
+        href: founder_social.linkedin.url|default('')|trim,
+        label: founder_social.linkedin.label|default('LinkedIn do CEO')
+      },
+      {
+        platform: 'x',
+        href: founder_social.x.url|default('')|trim,
+        label: founder_social.x.label|default('X do CEO')
+      },
+      {
+        platform: 'disqus',
+        href: founder_social.disqus.url|default('')|trim,
+        label: founder_social.disqus.label|default('Disqus do CEO')
+      },
+      {
         platform: 'facebook',
         href: founder_social.facebook.url|default(site.social.facebook.url|default(''))|trim,
         label: founder_social.facebook.label|default('Facebook do CEO')
@@ -81,6 +96,22 @@
                     {% elseif social.platform == 'github' %}
                       <svg class="nc-about-founder-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <path d="M12 3.6C7.36 3.6 3.6 7.36 3.6 12C3.6 15.71 6 18.85 9.33 19.96C9.75 20.04 9.9 19.78 9.9 19.56V18.18C7.58 18.69 7.09 17.2 7.09 17.2C6.72 16.28 6.19 16.03 6.19 16.03C5.46 15.53 6.25 15.54 6.25 15.54C7.06 15.6 7.49 16.37 7.49 16.37C8.21 17.6 9.39 17.24 9.86 17.03C9.94 16.5 10.14 16.14 10.37 15.94C8.52 15.74 6.58 15.01 6.58 11.75C6.58 10.82 6.92 10.06 7.48 9.46C7.39 9.25 7.1 8.39 7.57 7.25C7.57 7.25 8.28 7.03 9.9 8.12C10.57 7.93 11.28 7.84 12 7.84C12.72 7.84 13.43 7.93 14.1 8.12C15.72 7.03 16.43 7.25 16.43 7.25C16.9 8.39 16.61 9.25 16.52 9.46C17.08 10.06 17.42 10.82 17.42 11.75C17.42 15.02 15.47 15.73 13.62 15.93C13.91 16.18 14.16 16.67 14.16 17.43V19.56C14.16 19.78 14.31 20.05 14.73 19.96C18.06 18.85 20.4 15.71 20.4 12C20.4 7.36 16.64 3.6 12 3.6Z" fill="currentColor"/>
+                      </svg>
+                    {% elseif social.platform == 'linkedin' %}
+                      <svg class="nc-about-founder-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M5.8 9.2H9.3V19H5.8V9.2Z" fill="currentColor"/>
+                        <path d="M7.55 5C6.41 5 5.5 5.91 5.5 7.05C5.5 8.19 6.41 9.1 7.55 9.1C8.69 9.1 9.6 8.19 9.6 7.05C9.6 5.91 8.69 5 7.55 5Z" fill="currentColor"/>
+                        <path d="M10.9 9.2H14.25V10.55H14.3C14.76 9.68 15.89 8.9 17.56 8.9C20.64 8.9 21.2 10.93 21.2 13.57V19H17.7V14.14C17.7 12.98 17.68 11.49 16.08 11.49C14.45 11.49 14.2 12.76 14.2 14.06V19H10.9V9.2Z" fill="currentColor"/>
+                      </svg>
+                    {% elseif social.platform == 'x' %}
+                      <svg class="nc-about-founder-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M18.85 4.8H21L15.8 10.74L21.92 19H17.11L13.34 14.03L8.99 19H6.84L12.41 12.62L6.56 4.8H11.49L14.9 9.35L18.85 4.8ZM18.09 17.64H19.28L10.84 6.08H9.56L18.09 17.64Z" fill="currentColor"/>
+                      </svg>
+                    {% elseif social.platform == 'disqus' %}
+                      <svg class="nc-about-founder-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.8"/>
+                        <path d="M11.2 8.9H13.4C15.64 8.9 17.1 10.17 17.1 12.33C17.1 14.5 15.65 15.8 13.4 15.8H11.2V8.9ZM13.2 14.25C14.56 14.25 15.32 13.55 15.32 12.33C15.32 11.11 14.56 10.43 13.2 10.43H12.92V14.25H13.2Z" fill="currentColor"/>
+                        <path d="M9.8 8.9V15.8H8.1V8.9H9.8Z" fill="currentColor"/>
                       </svg>
                     {% endif %}
                   {% if social_has_href %}
