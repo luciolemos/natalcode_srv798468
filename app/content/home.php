@@ -419,7 +419,7 @@ return [
             'kicker' => 'Quem Somos',
             'title' => 'Governança',
             'lead' => 'Do conceito à implementação, a NatalCode orquestra todo o ciclo de vida do seu projeto, com expertise técnica e visão estratégica. Resultado? Sistemas que não apenas funcionam, mas performam e evoluem.',
-            'name' => '',
+            'name' => 'Lúcio Lemos',
             'role' => 'Founder & CEO | Lead Developer at NatalCode',
             'photo' => '/assets/img/techlead.png',
             'photo_alt' => 'Retrato da governança da NatalCode',
