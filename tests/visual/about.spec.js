@@ -16,6 +16,18 @@ async function stabilizeForScreenshot(page)
     await page.waitForLoadState('networkidle');
     await page.waitForFunction(() => document.fonts && document.fonts.status === 'loaded');
     await page.waitForFunction(() => Array.from(document.images).every((img) => img.complete && img.naturalWidth > 0));
+    await page.evaluate(() => {
+        const videos = Array.from(document.querySelectorAll('video'));
+        videos.forEach((video) => {
+            try {
+                video.pause();
+                video.currentTime = 0;
+            } catch (error) {
+                // Ignora restricoes ocasionais do navegador em controles de midia durante testes.
+            }
+        });
+    });
+    await page.waitForTimeout(120);
     await page.evaluate(async() => {
         window.scrollTo(0, document.documentElement.scrollHeight);
         await new Promise((resolve) => window.setTimeout(resolve, 120));

@@ -4,6 +4,36 @@
   <main class="nc-main nc-container nc-home-flow">
     {% set founder = homeContent.aboutPages.fundador|default({}) %}
 
+    <section class="nc-section nc-home-hero nc-about-hero-video has-background-image" aria-label="Vídeo institucional da NatalCode">
+      <div class="nc-home-hero-media" aria-hidden="true">
+        <video
+          class="nc-home-hero-media-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+        >
+          <source src="/assets/videos/341476.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="nc-home-hero-overlay" aria-hidden="true"></div>
+
+      <div class="nc-hero-grid is-single-column">
+        <div class="nc-hero-copy-stack nc-about-hero-copy-card" data-aos="fade-up" data-aos-delay="80">
+          <p class="nc-section-kicker">Quem Somos</p>
+          <h1 class="nc-title">Estratégia, design e engenharia para crescimento digital</h1>
+          <p class="nc-hero-tagline">Projetos sob medida com foco em conversão e evolução contínua</p>
+          <p class="nc-lead">Da descoberta à publicação, a NatalCode integra posicionamento, tecnologia e acompanhamento pós-lançamento para gerar resultado mensurável com previsibilidade.</p>
+
+          <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="140">
+            <a class="nc-btn nc-btn-primary" href="/portfolio">Ver portfólio</a>
+            <a class="nc-btn nc-btn-secondary" href="/contato">Solicitar orçamento</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="nc-section nc-about-overview" aria-label="Posicionamento da NatalCode" data-aos="fade-up" data-aos-delay="20">
       {% include 'components/section-header.twig' with {
         kicker: 'Quem Somos',
