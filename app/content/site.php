@@ -15,9 +15,9 @@ return [
     'tagline' => 'Estratégia, design e tecnologia para negócios digitais.',
     'brand' => [
         'homeHref' => '/',
-        'logoSrc' => '/assets/img/brand/natalcode_logo_horizontal_black_1158x314.png',
-        'logoLightSrc' => '/assets/img/brand/natalcode_logo_horizontal_black_1158x314.png',
-        'logoDarkSrc' => '/assets/img/brand/natalcode_logo_horizontal_white_1158x314.png',
+        'logoSrc' => '/assets/img/brand/natalcode2_logo_horizontal_black_1158x314.png',
+        'logoLightSrc' => '/assets/img/brand/natalcode2_logo_horizontal_black_1158x314.png',
+        'logoDarkSrc' => '/assets/img/brand/natalcode1_logo_horizontal_white_1158x314.png',
         'logoAlt' => 'NatalCode',
         'motto' => 'Código com proposito, design com resultado.',
     ],

@@ -2,7 +2,24 @@
 
 {% block head %}
   {% set asset_version = app_asset_version|default('1') %}
+  {% set hero_section = homeContent.sections.hero|default({}) %}
+  {% set hero_images = hero_section.images|default([]) %}
+  {% set hero_first_slide = hero_images|length > 0 ? hero_images[0] : {} %}
+  {% set hero_mobile_avif_srcset = hero_first_slide.mobileAvifSrcset|default('') %}
+  {% set hero_mobile_avif = '' %}
+  {% if hero_mobile_avif_srcset %}
+    {% set hero_mobile_avif = hero_mobile_avif_srcset|split(',')|first|trim|split(' ')|first %}
+  {% endif %}
+  {% set hero_desktop_src = hero_section.imageSrc|default('') %}
+  {% set hero_desktop_avif = hero_desktop_src ? hero_desktop_src|replace({'.jpg': '.avif', '.jpeg': '.avif', '.png': '.avif', '.webp': '.avif'}) : '' %}
+  {% if hero_mobile_avif %}
+    <link rel="preload" as="image" href="{{ hero_mobile_avif }}" type="image/avif" media="(max-width: 700px)" fetchpriority="high">
+  {% endif %}
+  {% if hero_desktop_avif %}
+    <link rel="preload" as="image" href="{{ hero_desktop_avif }}" type="image/avif" media="(min-width: 701px)" fetchpriority="high">
+  {% endif %}
   <script src="/assets/js/cedern-hero-carousel.js?v={{ asset_version }}" defer></script>
+  <script src="/assets/js/cedern-testimonials-toggle.js?v={{ asset_version }}" defer></script>
 {% endblock %}
 
 {% block content %}
