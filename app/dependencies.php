@@ -59,8 +59,37 @@ return function (ContainerBuilder $containerBuilder) {
             return $pdo;
         },
         Twig::class => function () {
+            $appEnv = strtolower(trim((string) ($_ENV['APP_ENV'] ?? 'production')));
+            $isDevelopment = in_array($appEnv, ['dev', 'development', 'local', 'test'], true);
+            $appAssetVersion = trim((string) ($_ENV['APP_ASSET_VERSION'] ?? ''));
+
+            if ($appAssetVersion === '') {
+                $appAssetVersion = $appEnv === 'production' ? '2' : '1';
+            }
+
+            $cacheVersionSuffix = preg_replace('/[^a-zA-Z0-9._-]/', '-', $appAssetVersion) ?? '';
+            if ($cacheVersionSuffix === '') {
+                $cacheVersionSuffix = '1';
+            }
+
+            $twigCache = false;
+
+            if (!$isDevelopment) {
+                $twigCacheDirectory = __DIR__ . '/../var/cache/twig/v' . $cacheVersionSuffix;
+                $twigCacheReady = is_dir($twigCacheDirectory) || @mkdir($twigCacheDirectory, 0775, true);
+
+                if ($twigCacheReady && is_writable($twigCacheDirectory)) {
+                    $twigCache = $twigCacheDirectory;
+                } else {
+                    error_log(
+                        '[natalcode bootstrap] Twig cache disabled: cache directory is not writable: '
+                        . $twigCacheDirectory
+                    );
+                }
+            }
+
             $twig = Twig::create(__DIR__ . '/../templates', [
-                'cache' => false,
+                'cache' => $twigCache,
             ]);
 
             $uiDefaults = [
@@ -93,12 +122,6 @@ return function (ContainerBuilder $containerBuilder) {
             $appDefaultPageImage = trim((string) ($_ENV['APP_DEFAULT_PAGE_IMAGE'] ?? 'https://natalcode.com.br/assets/img/brand/natalcode1.png'));
             $appDefaultSiteName = trim((string) ($_ENV['APP_DEFAULT_SITE_NAME'] ?? 'NatalCode'));
             $appDefaultTwitterSite = trim((string) ($_ENV['APP_DEFAULT_TWITTER_SITE'] ?? '@natalcode'));
-            $appEnv = strtolower((string) ($_ENV['APP_ENV'] ?? 'production'));
-            $appAssetVersion = trim((string) ($_ENV['APP_ASSET_VERSION'] ?? ''));
-
-            if ($appAssetVersion === '') {
-                $appAssetVersion = $appEnv === 'production' ? '2' : '1';
-            }
             $appGtmId = strtoupper(trim((string) ($_ENV['APP_GTM_ID'] ?? '')));
             $appGa4Id = strtoupper(trim((string) ($_ENV['APP_GA4_ID'] ?? '')));
             $appWhatsappNumber = preg_replace('/\D+/', '', (string) ($_ENV['APP_WHATSAPP_NUMBER'] ?? ''));
@@ -129,10 +152,6 @@ return function (ContainerBuilder $containerBuilder) {
 
             if ($appDefaultTwitterSite === '') {
                 $appDefaultTwitterSite = '@natalcode';
-            }
-
-            if ($appAssetVersion === '') {
-                $appAssetVersion = '1';
             }
 
             if (!preg_match('/^GTM-[A-Z0-9]+$/', $appGtmId)) {
