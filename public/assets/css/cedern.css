@@ -1217,7 +1217,7 @@ h3 {
 }
 
 .nc-home-hero-media-image.is-hero-zooming {
-  animation: nc-hero-image-zoom 5.4s ease-out forwards;
+  animation: nc-hero-image-zoom 7.2s linear forwards;
 }
 
 @keyframes nc-hero-image-zoom {
@@ -1226,7 +1226,7 @@ h3 {
   }
 
   to {
-    transform: scale(1.055);
+    transform: scale(1.045);
   }
 }
 
