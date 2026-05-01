@@ -178,6 +178,34 @@
       }
     })();
   </script>
+  <script>
+    (function () {
+      try {
+        var path = window.location.pathname || '';
+        var isHomePath = path === '/' || /\/natalcode\/?$/.test(path);
+        if (!isHomePath || window.location.hash) {
+          return;
+        }
+
+        var navEntry =
+          (performance.getEntriesByType && performance.getEntriesByType('navigation')[0]) || null;
+        var isReload = navEntry
+          ? navEntry.type === 'reload'
+          : performance.navigation && performance.navigation.type === 1;
+        if (!isReload) {
+          return;
+        }
+
+        if ('scrollRestoration' in history) {
+          history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      } catch (error) {
+      }
+    })();
+  </script>
   {% set google_fonts_href = 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Lora:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap' %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
