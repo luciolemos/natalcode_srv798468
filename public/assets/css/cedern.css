@@ -4524,7 +4524,12 @@ code {
   object-fit: cover;
   border: 2px solid color-mix(in srgb, var(--theme-soft-2) 62%, var(--surface-border));
   flex-shrink: 0;
-  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), filter 420ms ease;
+  box-shadow: 0 10px 22px -18px color-mix(in srgb, var(--theme-accent-1) 42%, transparent);
+  transition:
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 420ms ease,
+    border-color 260ms ease,
+    box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .nc-testimonial-avatar-fallback {
@@ -4536,9 +4541,18 @@ code {
 }
 
 .nc-home-testimonials .nc-testimonial-card:hover .nc-testimonial-avatar,
-.nc-home-testimonials .nc-testimonial-card:focus-within .nc-testimonial-avatar {
-  white-space: normal;
-  filter: saturate(1.06) contrast(1.02);
+.nc-home-testimonials .nc-testimonial-card:focus-within .nc-testimonial-avatar,
+.nc-home-testimonials .nc-testimonial-avatar:hover {
+  transform: translateY(-2px) scale(1.12);
+  filter: saturate(1.14) contrast(1.05);
+  border-color: color-mix(in srgb, var(--theme-accent-1) 64%, var(--surface-border));
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--theme-soft-2) 38%, transparent),
+    0 18px 34px -18px color-mix(in srgb, var(--theme-accent-1) 56%, var(--surface-shadow, transparent));
+}
+
+.nc-home-testimonials .nc-testimonial-avatar:hover {
+  transform: translateY(-3px) scale(1.18) rotate(-2deg);
 }
 
 .nc-testimonial-meta {
