@@ -89,11 +89,11 @@ return function (App $app) {
             "form-action 'self'",
             "frame-ancestors 'self'",
             "object-src 'none'",
-            "img-src 'self' data: https:",
+            "img-src 'self' data: blob: https:",
             "font-src 'self' data: https://fonts.gstatic.com",
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
             "script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com",
-            "connect-src 'self' https://www.google.com https://www.gstatic.com https://www.google-analytics.com https://region1.google-analytics.com",
+            "connect-src 'self' https://servicodados.ibge.gov.br https://www.google.com https://www.gstatic.com https://www.google-analytics.com https://region1.google-analytics.com",
             "frame-src 'self' https://www.google.com https://www.gstatic.com https://recaptcha.google.com https://www.googletagmanager.com",
         ];
 
