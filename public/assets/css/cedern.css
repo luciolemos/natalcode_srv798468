@@ -4462,6 +4462,16 @@ body.is-library-cover-dialog-open {
   }
 }
 
+@media (max-width: 768px) {
+  .nc-portfolio-showcase .nc-actions {
+    flex-direction: column;
+  }
+
+  .nc-portfolio-showcase .nc-actions .nc-btn {
+    width: 100%;
+  }
+}
+
 code {
   font-family: var(--font-mono);
   font-size: 0.92em;
