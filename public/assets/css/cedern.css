@@ -4415,6 +4415,16 @@ body.is-library-cover-dialog-open {
   color: var(--text-muted);
 }
 
+.nc-portfolio-showcase .nc-trust-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 240px;
+}
+
+.nc-portfolio-showcase .nc-trust-body .nc-actions {
+  margin-top: auto;
+}
+
 .nc-home-social-proof .nc-trust-card:hover,
 .nc-home-social-proof .nc-trust-card:focus-within,
 .nc-portfolio-showcase .nc-trust-card:hover,
