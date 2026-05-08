@@ -78,7 +78,7 @@ return [
         'lead' => 'Galeria de modelos por segmento: landing pages e sites para nichos especificos.',
         'note' => 'As imagens abaixo sao demonstrativas. Podemos substituir por screenshots reais de cada projeto publicado.',
         'items' => [
-            [
+           /*  [
                 'title' => 'Modelo de Landing Page',
                 'category' => 'Landing Page',
                 'segment' => 'Landing Pages',
@@ -88,8 +88,8 @@ return [
                 'urlLabel' => 'Ver demo',
                 'image' => '/assets/img/portifolio/cedern.png',
                 'alt' => 'Preview de home de landing page',
-            ],
-            [
+            ], */
+           /*  [
                 'title' => 'Modelo de Landing Page para Supermercado',
                 'category' => 'Landing Page',
                 'segment' => 'Supermercados',
@@ -99,8 +99,8 @@ return [
                 'urlLabel' => 'Ver demo',
                 'image' => '/assets/img/portifolio/cedern.png',
                 'alt' => 'Preview de home para supermercado',
-            ],
-            [
+            ], */
+           /*  [
                 'title' => 'Modelo de Landing Page para Padaria',
                 'category' => 'Landing Page',
                 'segment' => 'Padarias',
@@ -110,8 +110,8 @@ return [
                 'urlLabel' => 'Ver demo',
                 'image' => '/assets/img/portifolio/cedern.png',
                 'alt' => 'Preview de home para padaria',
-            ],
-            [
+            ], */
+          /*   [
                 'title' => 'Modelo de Landing Page para Dentistas',
                 'category' => 'Landing Page',
                 'segment' => 'Dentistas',
@@ -121,7 +121,7 @@ return [
                 'urlLabel' => 'Ver demo',
                 'image' => '/assets/img/portifolio/cedern.png',
                 'alt' => 'Preview de home para clínica odontológica',
-            ],
+            ], */
             [
                 'title' => 'MEDICARE — Modelo de Landing page para consultórios médicos',
                 'category' => 'Landing Page',
@@ -130,7 +130,7 @@ return [
                 'summary' => 'Estrutura profissional com serviços, biografia, localização e CTA de consulta.',
                 'url' => 'https://natalcode.com.br/medico/',
                 'urlLabel' => 'Ver demo',
-                'image' => '/assets/img/portifolio/preview_medicina.png',
+                'image' => '/assets/img/portifolio/preview_medicare.png',
                  'alt' => 'Preview da landing page premium para médicos',
             ],
             [
@@ -141,7 +141,7 @@ return [
                 'summary' => 'Design sofisticado e acolhedor para transmitir confiança, fortalecer sua autoridade profissional e transformar visitantes em pacientes agendados.',
                 'url' => 'https://natalcode.com.br/psicologia/',
                 'urlLabel' => 'Ver demo',
-                'image' => '/assets/img/portifolio/preview_psicologia.png',
+                'image' => '/assets/img/portifolio/preview_emotion.png',
                 'alt' => 'Preview da landing page premium para psicólogos',
             ],
             [
@@ -152,7 +152,7 @@ return [
                 'summary' => 'Landing page moderna e acolhedora para pediatras, desenvolvida para transmitir confiança às famílias, destacar especialidades médicas, credenciais, depoimentos e facilitar o agendamento de consultas.',
                 'url' => 'https://natalcode.com.br/pediatria/',
                 'urlLabel' => 'Ver demo',
-                'image' => '/assets/img/portifolio/preview_pediatria.png',
+                'image' => '/assets/img/portifolio/preview_allegra.png',
                 'alt' => 'Preview da landing page premium para clínica pediátrica',
             ],
         ],
