@@ -43,6 +43,10 @@ class ContactPageAction extends AbstractPageAction
             'label' => 'Psicólogos',
             'subject' => 'Quero um site para consultório de psicologia',
         ],
+        'pediatras' => [
+            'label' => 'Pediatras',
+            'subject' => 'Quero um site para pediatria',
+        ],
     ];
 
     private RecaptchaVerifier $recaptchaVerifier;
