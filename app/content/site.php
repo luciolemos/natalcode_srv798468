@@ -144,6 +144,17 @@ return [
                 'image' => '/assets/img/portifolio/preview_psicologia.png',
                 'alt' => 'Preview da landing page premium para psicólogos',
             ],
+            [
+                'title' => 'ALLEGRA — Landing Page Premium para Pediatras',
+                'category' => 'Landing Page',
+                'segment' => 'Pediatras',
+                'segmentKey' => 'pediatras',
+                'summary' => 'Landing page moderna e acolhedora para pediatras, desenvolvida para transmitir confiança às famílias, destacar especialidades médicas, credenciais, depoimentos e facilitar o agendamento de consultas.',
+                'url' => 'https://natalcode.com.br/pediatria/',
+                'urlLabel' => 'Ver demo',
+                'image' => '/assets/img/portifolio/preview_pediatria.png',
+                'alt' => 'Preview da landing page premium para clínica pediátrica',
+            ],
         ],
     ],
 ];
