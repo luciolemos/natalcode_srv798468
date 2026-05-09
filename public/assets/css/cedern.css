@@ -4400,6 +4400,17 @@ body.is-library-cover-dialog-open {
   cursor: pointer;
 }
 
+.nc-trust-media-wrapper .nc-library-bookplate {
+  aspect-ratio: 16 / 10;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.nc-trust-media-wrapper .nc-library-bookplate-image {
+  object-fit: cover;
+}
+
 .nc-preview-icon {
   position: absolute;
   top: 50%;
