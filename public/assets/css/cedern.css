@@ -4395,28 +4395,6 @@ body.is-library-cover-dialog-open {
   transition: transform 540ms cubic-bezier(0.22, 1, 0.36, 1), filter 540ms ease;
 }
 
-.nc-trust-media-wrapper {
-  position: relative;
-  cursor: pointer;
-}
-
-.nc-preview-icon {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border-radius: 4px;
-  padding: 4px;
-  font-size: 14px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.nc-trust-media-wrapper:hover .nc-preview-icon {
-  opacity: 1;
-}
-
 .nc-trust-media-placeholder {
   background: color-mix(in srgb, var(--theme-soft-1) 26%, var(--surface-muted));
   border-bottom: 1px solid color-mix(in srgb, var(--theme-soft-2) 35%, var(--surface-border));
@@ -4435,6 +4413,10 @@ body.is-library-cover-dialog-open {
 .nc-trust-body p {
   margin: 0;
   color: var(--text-muted);
+}
+
+.nc-preview-actions {
+  margin: var(--space-2) 0;
 }
 
 .nc-portfolio-showcase .nc-trust-body {
