@@ -19,13 +19,15 @@
         {% for item in portfolio_items %}
           <article class="nc-trust-card" style="--trust-enter-delay: {{ 80 + (loop.index0 * 90) }}ms;">
             {% if item.image is not empty %}
-              <img
-                class="nc-trust-media"
-                src="{{ item.image }}"
-                alt="{{ item.alt|default(item.title|default('Projeto')) }}"
-                loading="lazy"
-                decoding="async"
-              >
+              <div class="nc-trust-media-wrapper">
+                <img
+                  class="nc-trust-media"
+                  src="{{ item.image }}"
+                  alt="{{ item.alt|default(item.title|default('Projeto')) }}"
+                  loading="lazy"
+                  decoding="async"
+                >
+              </div>
             {% endif %}
 
             <div class="nc-trust-body">
@@ -62,10 +64,6 @@
             </div>
           </article>
         {% endfor %}
-      </div>
-
-      <div class="nc-actions is-stacked-mobile" data-aos="fade-up" data-aos-delay="120">
-        <a class="nc-btn nc-btn-primary" href="/contato">Quero um projeto para meu negocio</a>
       </div>
     </section>
   </main>
