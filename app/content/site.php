@@ -39,10 +39,6 @@ return [
             'url' => $githubUrl,
             'label' => $githubLabel,
         ],
-        'email' => [
-            'url' => '/contato#formulario-contato',
-            'label' => 'contato@natalcode.com.br',
-        ],
     ],
     'institutional' => [
         'statuteExcerpt' => 'A NatalCode é uma agência digital focada em estratégia, design e desenvolvimento web, com atuação orientada a resultado e experiência do usuário.',
@@ -51,7 +47,7 @@ return [
     ],
     'footer' => [
         'kicker' => 'Presença digital orientada a resultado',
-        'description' => 'Da landing page ao sistema sob medida, estruturamos projetos digitais com visão de produto, performance e evolução continua - sua Landing page profissional otimizada para SEO e campanhas no Google Ads.',
+        'description' => 'Da landing page ao sistema sob medida, estruturamos projetos digitais com visão de produto, performance e evolução continua.',
         'navGroups' => [
             [
                 'title' => 'Institucional',
