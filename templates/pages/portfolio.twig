@@ -1,5 +1,18 @@
 {% extends 'layouts/base.twig' %}
 
+{% block head %}
+  <style>
+    .nc-portfolio-image-dialog {
+      width: min(96vw, 80rem);
+    }
+
+    .nc-portfolio-image-dialog .nc-library-cover-dialog-image {
+      max-width: min(100%, 70rem);
+      max-height: calc(100dvh - 6rem);
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
   <script src="/assets/js/cedern-library-lightbox.js?v={{ app_asset_version|default('1') }}" defer></script>
   <main class="nc-main nc-container nc-home-flow">
@@ -75,7 +88,7 @@
       </div>
     </section>
 
-    <dialog class="nc-library-cover-dialog" data-library-cover-dialog aria-label="Visualizador de imagem">
+    <dialog class="nc-library-cover-dialog nc-portfolio-image-dialog" data-library-cover-dialog aria-label="Visualizador de imagem">
       <div class="nc-library-cover-dialog-content">
         <button class="nc-library-cover-dialog-close" type="button" data-library-cover-close aria-label="Fechar visualização da imagem">Fechar</button>
         <div class="nc-library-cover-dialog-stage" data-library-cover-stage></div>

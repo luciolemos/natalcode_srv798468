@@ -3358,7 +3358,7 @@ h3 {
 }
 
 .nc-library-cover-dialog {
-  width: min(96vw, 80rem);
+  width: min(96vw, 42rem);
   max-width: none;
   max-height: calc(100dvh - 1.5rem);
   padding: 0;
@@ -3413,8 +3413,8 @@ h3 {
 .nc-library-cover-dialog-image {
   display: block;
   width: auto;
-  max-width: min(100%, 70rem);
-  max-height: calc(100dvh - 6rem);
+  max-width: min(100%, 32rem);
+  max-height: calc(100dvh - 10rem);
   height: auto;
   object-fit: contain;
   object-position: center top;
