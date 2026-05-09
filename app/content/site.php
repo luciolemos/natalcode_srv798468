@@ -39,6 +39,10 @@ return [
             'url' => $githubUrl,
             'label' => $githubLabel,
         ],
+        'email' => [
+            'url' => '/contato#formulario-contato',
+            'label' => 'contato@natalcode.com.br',
+        ],
     ],
     'institutional' => [
         'statuteExcerpt' => 'A NatalCode é uma agência digital focada em estratégia, design e desenvolvimento web, com atuação orientada a resultado e experiência do usuário.',
@@ -47,7 +51,7 @@ return [
     ],
     'footer' => [
         'kicker' => 'Presença digital orientada a resultado',
-        'description' => 'Da landing page ao sistema sob medida, estruturamos projetos digitais com visão de produto, performance e evolução continua.',
+        'description' => 'Da landing page ao sistema sob medida, estruturamos projetos digitais com visão de produto, performance e evolução continua - sua Landing page profissional otimizada para SEO e campanhas no Google Ads.',
         'navGroups' => [
             [
                 'title' => 'Institucional',
@@ -74,8 +78,8 @@ return [
     ],
     'portfolio' => [
         'kicker' => 'Portfolio NatalCode',
-        'title' => 'Catalogo de landing pages e sites web',
-        'lead' => 'Galeria de modelos por segmento: landing pages e sites para nichos especificos.',
+        'title' => 'Catálogo de produtos',
+        'lead' => 'Galeria de modelos por segmento: landing pages e sites para nichos especificos otimizadas para SEO e Google Ads',
         'note' => 'As imagens abaixo sao demonstrativas. Podemos substituir por screenshots reais de cada projeto publicado.',
         'items' => [
            /*  [
@@ -127,7 +131,7 @@ return [
                 'category' => 'Landing Page',
                 'segment' => 'Médicos',
                 'segmentKey' => 'medico',
-                'summary' => 'Estrutura profissional com serviços, biografia, localização e CTA de consulta.',
+                'summary' => 'Landing page profissional otimizada para SEO e campanhas no Google Ads, criada para atrair mais pacientes, aumentar a confiança das famílias e gerar mais agendamentos online.',
                 'url' => 'https://natalcode.com.br/medico/',
                 'urlLabel' => 'Ver demo',
                 'image' => '/assets/img/portifolio/preview_medicare.png',
