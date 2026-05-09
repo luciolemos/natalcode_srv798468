@@ -39,6 +39,10 @@ return [
             'url' => $githubUrl,
             'label' => $githubLabel,
         ],
+        'email' => [
+            'url' => '/contato#formulario-contato',
+            'label' => 'E-mail',
+        ],
     ],
     'institutional' => [
         'statuteExcerpt' => 'A NatalCode é uma agência digital focada em estratégia, design e desenvolvimento web, com atuação orientada a resultado e experiência do usuário.',
