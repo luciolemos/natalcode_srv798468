@@ -4464,6 +4464,157 @@ body.is-library-cover-dialog-open {
   margin-top: auto;
 }
 
+.nc-portfolio-showcase .nc-trust-media-wrapper {
+  overflow: hidden;
+}
+
+.nc-portfolio-media-preview {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface-main) 10%, transparent) 0%,
+    color-mix(in srgb, var(--surface-main) 62%, transparent) 100%
+  );
+  color: var(--surface-text);
+  opacity: 0;
+  transition: opacity 220ms ease;
+  text-decoration: none;
+}
+
+.nc-portfolio-media-preview-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--surface-main) 80%, transparent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.nc-portfolio-media-preview-label {
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0;
+}
+
+.nc-portfolio-showcase .nc-trust-card:hover .nc-portfolio-media-preview,
+.nc-portfolio-showcase .nc-trust-card:focus-within .nc-portfolio-media-preview {
+  opacity: 1;
+}
+
+.nc-portfolio-preview-dialog {
+  border: 0;
+  padding: 0;
+  width: min(92vw, 960px);
+  max-width: 960px;
+  background: transparent;
+}
+
+.nc-portfolio-preview-dialog::backdrop {
+  background: color-mix(in srgb, var(--surface-main) 84%, #000);
+}
+
+.nc-portfolio-preview-shell {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+  justify-items: center;
+}
+
+.nc-portfolio-preview-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  justify-self: end;
+  margin-right: max(0px, calc((100% - 760px) / 2));
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  border-radius: 999px;
+  padding: 0.36rem 0.8rem;
+  font-size: 0.81rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.01em;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.nc-portfolio-preview-close::before {
+  content: "×";
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.nc-portfolio-preview-close:hover,
+.nc-portfolio-preview-close:focus-visible {
+  border-color: #ffffff;
+  background: rgba(0, 0, 0, 0.9);
+  transform: translateY(-1px);
+}
+
+.nc-portfolio-preview-close:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.nc-portfolio-preview-stage {
+  display: grid;
+  place-items: center;
+}
+
+.nc-portfolio-preview-image {
+  width: 100%;
+  max-width: 760px;
+  max-height: min(58vh, 560px);
+  object-fit: contain;
+  border-radius: 0.45rem;
+  border: 0;
+  background: transparent;
+}
+
+.nc-portfolio-preview-caption {
+  margin: 0;
+  text-align: center;
+  color: color-mix(in srgb, var(--surface-main) 92%, transparent);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  max-width: min(760px, 92%);
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, #000 44%, transparent);
+  border: 1px solid color-mix(in srgb, var(--surface-main) 28%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+@media (max-width: 768px) {
+  .nc-portfolio-preview-dialog {
+    width: min(94vw, 560px);
+  }
+
+  .nc-portfolio-preview-image {
+    max-height: min(46vh, 420px);
+  }
+
+  .nc-portfolio-preview-close {
+    margin-right: 0;
+    justify-self: end;
+  }
+}
+
 .nc-home-social-proof .nc-trust-card:hover,
 .nc-home-social-proof .nc-trust-card:focus-within,
 .nc-portfolio-showcase .nc-trust-card:hover,
