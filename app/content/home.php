@@ -514,7 +514,6 @@ return [
             'lead' => 'Espaço dedicado a experimentos, templates e aceleradores que usamos para acelerar entregas.',
             'name' => 'NatalCode Labs',
             'role' => 'Pesquisa e desenvolvimento',
-            'photo' => '/assets/img/face1_620_620.png',
             'photo_alt' => 'Identidade visual da NatalCode Labs',
             'intro' => [
                 'No Labs testamos interfaces, componentes e fluxos antes de levar para produção.',
