@@ -1908,6 +1908,7 @@ class MySqlBookshopRepository implements BookshopRepository
     private function normalizeBook(array $book): array
     {
         $coverImagePath = ltrim((string) ($book['cover_image_path'] ?? ''), '/');
+        $coverImageUrl = $this->resolveExistingPublicUrl($coverImagePath);
         $coverImageSizeBytes = isset($book['cover_image_size_bytes']) && $book['cover_image_size_bytes'] !== null
             ? (int) $book['cover_image_size_bytes']
             : null;
@@ -1935,7 +1936,7 @@ class MySqlBookshopRepository implements BookshopRepository
                 ? (int) $book['page_count']
                 : null,
             'cover_image_size_bytes' => $coverImageSizeBytes,
-            'cover_image_url' => $coverImagePath !== '' ? '/' . $coverImagePath : '',
+            'cover_image_url' => $coverImageUrl,
             'cost_price' => $costPrice,
             'sale_price' => $salePrice,
             'stock_quantity' => $stockQuantity,
@@ -1950,6 +1951,18 @@ class MySqlBookshopRepository implements BookshopRepository
             'potential_revenue_value' => $salePrice * $stockQuantity,
             'potential_revenue_label' => $this->formatMoney($salePrice * $stockQuantity),
         ]);
+    }
+
+    private function resolveExistingPublicUrl(string $relativePath): string
+    {
+        $normalizedPath = ltrim($relativePath, '/');
+        if ($normalizedPath === '') {
+            return '';
+        }
+
+        $absolutePath = dirname(__DIR__, 4) . '/public/' . $normalizedPath;
+
+        return is_file($absolutePath) ? '/' . $normalizedPath : '';
     }
 
     /**

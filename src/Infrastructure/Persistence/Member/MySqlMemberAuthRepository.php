@@ -151,7 +151,11 @@ class MySqlMemberAuthRepository implements MemberAuthRepository
             $statement->execute(['email' => $normalizedEmail]);
             $row = $statement->fetch();
 
-            return $row ?: null;
+            if (!$row) {
+                return null;
+            }
+
+            return $this->normalizeMemberRowWithDefaults($row);
         } catch (\Throwable $exception) {
             try {
                 $sql = <<<SQL
@@ -265,7 +269,11 @@ class MySqlMemberAuthRepository implements MemberAuthRepository
             $statement->execute(['id' => $id]);
             $row = $statement->fetch();
 
-            return $row ?: null;
+            if (!$row) {
+                return null;
+            }
+
+            return $this->normalizeMemberRowWithDefaults($row);
         } catch (\Throwable $exception) {
             try {
                 $sql = <<<SQL
@@ -680,7 +688,9 @@ class MySqlMemberAuthRepository implements MemberAuthRepository
                 return [];
             }
 
-            return $statement->fetchAll() ?: [];
+            $rows = $statement->fetchAll() ?: [];
+
+            return array_map(fn (array $row): array => $this->normalizeMemberRowWithDefaults($row), $rows);
         } catch (\Throwable $exception) {
             try {
                 $sql = <<<SQL
@@ -922,7 +932,9 @@ class MySqlMemberAuthRepository implements MemberAuthRepository
         $row['institutional_role'] = $row['institutional_role'] ?? null;
         $row['member_type'] = $row['member_type'] ?? null;
         $row['member_type_label'] = $this->resolveMemberTypeLabel((string) ($row['member_type'] ?? ''));
-        $row['profile_photo_path'] = $row['profile_photo_path'] ?? null;
+        $row['profile_photo_path'] = $this->resolveExistingPublicPath(
+            $this->nullableText($row['profile_photo_path'] ?? null)
+        );
         $row['privacy_notice_version'] = $row['privacy_notice_version'] ?? null;
         $row['privacy_notice_accepted_at'] = $row['privacy_notice_accepted_at'] ?? null;
         $row['profile_completed'] = (int) ($row['profile_completed'] ?? 0);
@@ -939,6 +951,22 @@ class MySqlMemberAuthRepository implements MemberAuthRepository
         $normalized = trim((string) $value);
 
         return $normalized === '' ? null : $normalized;
+    }
+
+    private function resolveExistingPublicPath(?string $relativePath): ?string
+    {
+        if ($relativePath === null) {
+            return null;
+        }
+
+        $normalizedPath = ltrim($relativePath, '/');
+        if ($normalizedPath === '') {
+            return null;
+        }
+
+        $absolutePath = dirname(__DIR__, 4) . '/public/' . $normalizedPath;
+
+        return is_file($absolutePath) ? $normalizedPath : null;
     }
 
     private function resolveMemberTypeLabel(string $memberType): string
