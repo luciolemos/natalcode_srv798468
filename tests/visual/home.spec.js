@@ -10,6 +10,10 @@ function getMaxDiffRatio(testInfo)
 
 async function stabilizeForScreenshot(page)
 {
+    // Load off-screen images before waiting for all images to be ready.
+    await page.locator('img[loading="lazy"]').evaluateAll((images) => {
+        images.forEach((img) => { img.loading = 'eager'; });
+    });
     await page.waitForLoadState('networkidle');
     await page.waitForFunction(() => document.fonts && document.fonts.status === 'loaded');
     await page.waitForFunction(() => Array.from(document.images).every((img) => img.complete && img.naturalWidth > 0));
