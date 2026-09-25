@@ -614,6 +614,15 @@ h3 {
   align-content: start;
 }
 
+.nc-footer-affiliate {
+  justify-items: center;
+  text-align: center;
+}
+
+.nc-footer-affiliate img {
+  display: block;
+}
+
 .nc-footer-brand {
   display: inline-flex;
   align-items: center;
