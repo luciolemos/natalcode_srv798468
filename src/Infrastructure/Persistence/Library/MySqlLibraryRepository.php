@@ -468,6 +468,7 @@ class MySqlLibraryRepository implements LibraryRepository
     private function normalizeBook(array $book): array
     {
         $coverImagePath = ltrim((string) ($book['cover_image_path'] ?? ''), '/');
+        $coverImageUrl = $this->resolveExistingPublicUrl($coverImagePath);
         $pdfPath = ltrim((string) ($book['pdf_path'] ?? ''), '/');
         $publicationYear = isset($book['publication_year']) && $book['publication_year'] !== null
             ? (int) $book['publication_year']
@@ -486,13 +487,25 @@ class MySqlLibraryRepository implements LibraryRepository
             'publication_year' => $publicationYear,
             'page_count' => $pageCount,
             'cover_image_size_bytes' => $coverImageSizeBytes,
-            'cover_image_url' => $coverImagePath !== '' ? '/' . $coverImagePath : '',
+            'cover_image_url' => $coverImageUrl,
             'pdf_size_bytes' => $pdfSizeBytes,
             'pdf_url' => $pdfPath !== '' ? '/' . $pdfPath : '',
             'pdf_size_label' => $pdfSizeBytes !== null ? $this->formatBytes($pdfSizeBytes) : '',
             'status_label' => $this->formatStatusLabel((string) ($book['status'] ?? 'draft')),
             'editorial_reference' => $this->buildEditorialReference($book),
         ]);
+    }
+
+    private function resolveExistingPublicUrl(string $relativePath): string
+    {
+        $normalizedPath = ltrim($relativePath, '/');
+        if ($normalizedPath === '') {
+            return '';
+        }
+
+        $absolutePath = dirname(__DIR__, 4) . '/public/' . $normalizedPath;
+
+        return is_file($absolutePath) ? '/' . $normalizedPath : '';
     }
 
     /**
