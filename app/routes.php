@@ -7,7 +7,6 @@ use App\Application\Actions\Page\AboutMissionPageAction;
 use App\Application\Actions\Page\AboutValuesPageAction;
 use App\Application\Actions\Page\AboutHistoryPageAction;
 use App\Application\Actions\Page\AboutFounderPageAction;
-use App\Application\Actions\Page\AboutStatutePageAction;
 use App\Application\Actions\Page\AboutBrandPageAction;
 use App\Application\Actions\Page\AboutManagementPageAction;
 use App\Application\Actions\Admin\AdminDashboardPageAction;
@@ -64,11 +63,7 @@ use App\Application\Actions\Admin\AdminTermsOfUsePageAction;
 use App\Application\Actions\Admin\AdminUserGuidePageAction;
 use App\Application\Actions\Admin\AdminVisitCounterResetAction;
 use App\Application\Actions\Admin\AdminLogoutAction;
-use App\Application\Actions\Page\AgendaDetailPageAction;
-use App\Application\Actions\Page\AgendaEventIcsDownloadAction;
-use App\Application\Actions\Page\AgendaPageAction;
 use App\Application\Actions\Page\BookshopCoverImagePageAction;
-use App\Application\Actions\Page\BookshopAutaDeSousaPageAction;
 use App\Application\Actions\Page\ContactPageAction;
 use App\Application\Actions\Page\EadePageAction;
 use App\Application\Actions\Page\EsdePageAction;
@@ -78,11 +73,6 @@ use App\Application\Actions\Page\FaqParticipationPageAction;
 use App\Application\Actions\Page\FaqPracticesPageAction;
 use App\Application\Actions\Page\FraternalServicePageAction;
 use App\Application\Actions\Page\HomePageAction;
-use App\Application\Actions\Page\LibraryPageAction;
-use App\Application\Actions\Page\StoreBazaarPageAction;
-use App\Application\Actions\Page\StoreBookshopIiPageAction;
-use App\Application\Actions\Page\StoreBookshopPageAction;
-use App\Application\Actions\Page\StorePageAction;
 use App\Application\Actions\Page\MemberCompleteProfilePageAction;
 use App\Application\Actions\Page\MemberEventInterestToggleAction;
 use App\Application\Actions\Page\MemberAdminAreaPageAction;
@@ -99,9 +89,6 @@ use App\Application\Actions\Page\PortfolioPageAction;
 use App\Application\Actions\Page\PublicLecturesPageAction;
 use App\Application\Actions\Page\StudiesPageAction;
 use App\Application\Actions\Page\TermsOfUsePageAction;
-use App\Application\Actions\User\ListUsersAction;
-use App\Application\Actions\User\ViewUserAction;
-use App\Domain\User\UserRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -111,6 +98,21 @@ use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 use Slim\Views\Twig;
 
 return function (App $app) {
+    $envFlag = static function (string $key, bool $default = false): bool {
+        $value = strtolower(trim((string) ($_ENV[$key] ?? '')));
+
+        if ($value === '') {
+            return $default;
+        }
+
+        return in_array($value, ['1', 'true', 'yes', 'on'], true);
+    };
+    // Módulos herdados do projeto CEDE (agenda, biblioteca, livraria/PDV) no painel.
+    // Desligados por padrão no site da agência; APP_LEGACY_MODULES_ENABLED=true reativa.
+    $legacyModulesEnabled = $envFlag('APP_LEGACY_MODULES_ENABLED');
+    // Cadastro público de membros. Desligado por padrão; MEMBER_REGISTRATION_ENABLED=true reativa.
+    $memberRegistrationEnabled = $envFlag('MEMBER_REGISTRATION_ENABLED');
+
     $roleWeights = [
         'member' => 10,
         'operator' => 20,
@@ -229,7 +231,6 @@ return function (App $app) {
     $app->get('/quem-somos/valores', AboutValuesPageAction::class);
     $app->get('/quem-somos/historia', AboutHistoryPageAction::class);
     $app->get('/quem-somos/fundador', AboutFounderPageAction::class);
-    $app->get('/quem-somos/estatuto', AboutStatutePageAction::class);
     $app->get('/quem-somos/nossa-marca', AboutBrandPageAction::class);
     $app->get('/quem-somos/equipe', AboutManagementPageAction::class);
     $app->get('/quem-somos/gestao-cede', function (Request $request, Response $response) {
@@ -244,142 +245,135 @@ return function (App $app) {
     $app->get('/estudos/palestras', PublicLecturesPageAction::class);
     $app->get('/estudos/atendimento-fraterno', FraternalServicePageAction::class);
     $app->get('/portfolio', PortfolioPageAction::class);
-    $app->get('/agenda', AgendaPageAction::class);
-    $app->get('/agenda/{slug}', AgendaDetailPageAction::class);
-    $app->get('/agenda/{slug}/ics', AgendaEventIcsDownloadAction::class);
-    $app->get('/media/livraria/capas/{file}', BookshopCoverImagePageAction::class);
-    $app->get('/loja', StorePageAction::class);
-    $app->get('/loja/bazar', StoreBazaarPageAction::class);
-    $app->get('/loja/livraria', StoreBookshopIiPageAction::class);
-    $app->get('/loja/livraria-ii', function (Request $request, Response $response) {
-        $queryString = trim($request->getUri()->getQuery());
-        $target = '/loja/livraria' . ($queryString !== '' ? '?' . $queryString : '');
+    // Páginas herdadas do projeto CEDE (estatuto, agenda, biblioteca, loja/livraria).
+    // Retiradas do site público da agência: respondem 301 para o destino equivalente.
+    $legacyPublicRedirects = [
+        '/quem-somos/estatuto' => '/quem-somos',
+        '/quem-somos/base-de-conhecimento' => '/quem-somos',
+        '/biblioteca' => '/quem-somos',
+        '/loja/biblioteca' => '/quem-somos',
+        '/agenda' => '/',
+        '/agenda/{slug}' => '/',
+        '/agenda/{slug}/ics' => '/',
+        '/loja' => '/portfolio',
+        '/loja/bazar' => '/portfolio',
+        '/loja/livraria' => '/portfolio',
+        '/loja/livraria-ii' => '/portfolio',
+        '/loja/livraria-auta-de-sousa' => '/portfolio',
+        '/livraria' => '/portfolio',
+        '/livraria-ii' => '/portfolio',
+        '/livraria-auta-de-sousa' => '/portfolio',
+    ];
 
-        return $response->withHeader('Location', $target)->withStatus(302);
-    });
-    $app->get('/loja/livraria-auta-de-sousa', BookshopAutaDeSousaPageAction::class);
-    $app->get('/livraria', function (Request $request, Response $response) {
-        $queryString = trim($request->getUri()->getQuery());
-        $target = '/loja/livraria' . ($queryString !== '' ? '?' . $queryString : '');
-
-        return $response->withHeader('Location', $target)->withStatus(302);
-    });
-    $app->get('/livraria-ii', function (Request $request, Response $response) {
-        $queryString = trim($request->getUri()->getQuery());
-        $target = '/loja/livraria' . ($queryString !== '' ? '?' . $queryString : '');
-
-        return $response->withHeader('Location', $target)->withStatus(302);
-    });
-    $app->get('/livraria-auta-de-sousa', function (Request $request, Response $response) {
-        $queryString = trim($request->getUri()->getQuery());
-        $target = '/loja/livraria-auta-de-sousa' . ($queryString !== '' ? '?' . $queryString : '');
-
-        return $response->withHeader('Location', $target)->withStatus(302);
-    });
-    $app->get('/quem-somos/base-de-conhecimento', LibraryPageAction::class);
-    $app->get('/loja/biblioteca', function (Request $request, Response $response) {
-        $queryString = trim($request->getUri()->getQuery());
-        $target = '/quem-somos/base-de-conhecimento' . ($queryString !== '' ? '?' . $queryString : '');
-
-        return $response->withHeader('Location', $target)->withStatus(302);
-    });
-    $app->get('/biblioteca', function (Request $request, Response $response) {
-        $queryString = trim($request->getUri()->getQuery());
-        $target = '/quem-somos/base-de-conhecimento' . ($queryString !== '' ? '?' . $queryString : '');
-
-        return $response->withHeader('Location', $target)->withStatus(302);
-    });
-    $app->map(['GET', 'POST'], '/cadastro', MemberRegisterPageAction::class);
+    foreach ($legacyPublicRedirects as $legacyPath => $legacyTarget) {
+        $app->get($legacyPath, function (Request $request, Response $response) use ($legacyTarget) {
+            return $response->withHeader('Location', $legacyTarget)->withStatus(301);
+        });
+    }
+    if ($legacyModulesEnabled) {
+        $app->get('/media/livraria/capas/{file}', BookshopCoverImagePageAction::class);
+    }
+    if ($memberRegistrationEnabled) {
+        $app->map(['GET', 'POST'], '/cadastro', MemberRegisterPageAction::class);
+    } else {
+        $app->map(['GET', 'POST'], '/cadastro', function (Request $request, Response $response) {
+            return $response->withHeader('Location', '/contato')->withStatus(302);
+        });
+    }
     $app->map(['GET', 'POST'], '/entrar', MemberLoginPageAction::class);
     $app->map(['GET', 'POST'], '/esqueci-senha', MemberForgotPasswordPageAction::class);
     $app->map(['GET', 'POST'], '/redefinir-senha', MemberResetPasswordPageAction::class);
     $app->map(['GET', 'POST'], '/membro/sair', MemberLogoutAction::class);
     $app->get('/membro', MemberHomePageAction::class);
     $app->map(['GET', 'POST'], '/membro/perfil/completar', MemberCompleteProfilePageAction::class);
-    $app->post('/membro/eventos/{id}/participacao', MemberEventInterestToggleAction::class);
+    if ($legacyModulesEnabled) {
+        $app->post('/membro/eventos/{id}/participacao', MemberEventInterestToggleAction::class);
+    }
     $app->get('/membro/operacao', MemberOperatorAreaPageAction::class);
     $app->get('/membro/gestao', MemberManagerAreaPageAction::class);
     $app->get('/membro/administracao', MemberAdminAreaPageAction::class);
     $app->map(['GET', 'POST'], '/painel/login', AdminLoginPageAction::class);
     $app->get('/painel/logout', AdminLogoutAction::class);
-    $app->group('/painel', function (Group $group) use ($panelBookshopAccessMiddleware, $panelDashboardAccessMiddleware, $panelRoleMiddlewareFactory) {
+    $app->group('/painel', function (Group $group) use ($legacyModulesEnabled, $panelBookshopAccessMiddleware, $panelDashboardAccessMiddleware, $panelRoleMiddlewareFactory) {
         $group->get('', AdminDashboardPageAction::class)->add($panelDashboardAccessMiddleware);
-        $group->get('/eventos', AdminAgendaListPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
-        $group->map(['GET', 'POST'], '/eventos/novo', AdminAgendaFormPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
-        $group->map(['GET', 'POST'], '/eventos/{id}/editar', AdminAgendaFormPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
-        $group->post('/eventos/{id}/excluir', AdminAgendaDeleteAction::class)->add($panelRoleMiddlewareFactory('operator'));
-        $group->get('/categorias', AdminCategoryListPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
-        $group->map(['GET', 'POST'], '/categorias/nova', AdminCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
-        $group->map(['GET', 'POST'], '/categorias/{id}/editar', AdminCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
-        $group->post('/categorias/{id}/alternar-status', AdminCategoryToggleStatusAction::class)->add($panelRoleMiddlewareFactory('manager'));
-        $group->get('/biblioteca/livros', AdminLibraryBookListPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
-        $group->map(['GET', 'POST'], '/biblioteca/livros/novo', AdminLibraryBookFormPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
-        $group->map(['GET', 'POST'], '/biblioteca/livros/{id}/editar', AdminLibraryBookFormPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
-        $group->post('/biblioteca/livros/{id}/excluir', AdminLibraryBookDeleteAction::class)->add($panelRoleMiddlewareFactory('operator'));
-        $group->get('/biblioteca/categorias', AdminLibraryCategoryListPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
-        $group->map(['GET', 'POST'], '/biblioteca/categorias/nova', AdminLibraryCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
-        $group->map(['GET', 'POST'], '/biblioteca/categorias/{id}/editar', AdminLibraryCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
-        $group->post('/biblioteca/categorias/{id}/alternar-status', AdminLibraryCategoryToggleStatusAction::class)->add($panelRoleMiddlewareFactory('manager'));
-        $group->get('/livraria', AdminBookshopDashboardPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/manual', AdminBookshopManualPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/relatorios', AdminBookshopReportsPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/movimentacoes', AdminBookshopStockMovementListPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->map(['GET', 'POST'], '/livraria/movimentacoes/nova', AdminBookshopStockMovementFormPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/colecoes', AdminBookshopCollectionListPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->map(['GET', 'POST'], '/livraria/colecoes/nova', AdminBookshopCollectionFormPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->map(['GET', 'POST'], '/livraria/colecoes/{id}/editar', AdminBookshopCollectionFormPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->post('/livraria/colecoes/{id}/alternar-status', AdminBookshopCollectionToggleStatusAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/categorias', AdminBookshopCategoryListPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->map(['GET', 'POST'], '/livraria/categorias/nova', AdminBookshopCategoryFormPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->map(['GET', 'POST'], '/livraria/categorias/{id}/editar', AdminBookshopCategoryFormPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->post('/livraria/categorias/{id}/alternar-status', AdminBookshopCategoryToggleStatusAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/generos', AdminBookshopGenreListPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->map(['GET', 'POST'], '/livraria/generos/novo', AdminBookshopGenreFormPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->map(['GET', 'POST'], '/livraria/generos/{id}/editar', AdminBookshopGenreFormPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->post('/livraria/generos/{id}/alternar-status', AdminBookshopGenreToggleStatusAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/acervo', AdminBookshopBookListPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/acervo/exportar', AdminBookshopBookExportCsvAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->map(['GET', 'POST'], '/livraria/acervo/novo', AdminBookshopBookFormPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/acervo/{id}/lotes', AdminBookshopBookLotsPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/acervo/{id}', AdminBookshopBookViewPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->map(['GET', 'POST'], '/livraria/acervo/{id}/editar', AdminBookshopBookFormPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->post('/livraria/acervo/{id}/excluir', AdminBookshopBookDeleteAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/importar/modelo', AdminBookshopImportTemplateDownloadAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->map(['GET', 'POST'], '/livraria/importar', AdminBookshopImportPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/vendas', AdminBookshopSaleListPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->map(['GET', 'POST'], '/livraria/vendas/nova', AdminBookshopSaleFormPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->get('/livraria/vendas/{id}', AdminBookshopSaleViewPageAction::class)
-            ->add($panelBookshopAccessMiddleware);
-        $group->post('/livraria/vendas/{id}/cancelar', AdminBookshopSaleCancelAction::class)
-            ->add($panelBookshopAccessMiddleware);
+        if ($legacyModulesEnabled) {
+            $group->get('/eventos', AdminAgendaListPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+            $group->map(['GET', 'POST'], '/eventos/novo', AdminAgendaFormPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+            $group->map(['GET', 'POST'], '/eventos/{id}/editar', AdminAgendaFormPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+            $group->post('/eventos/{id}/excluir', AdminAgendaDeleteAction::class)->add($panelRoleMiddlewareFactory('operator'));
+            $group->get('/categorias', AdminCategoryListPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
+            $group->map(['GET', 'POST'], '/categorias/nova', AdminCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
+            $group->map(['GET', 'POST'], '/categorias/{id}/editar', AdminCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
+            $group->post('/categorias/{id}/alternar-status', AdminCategoryToggleStatusAction::class)->add($panelRoleMiddlewareFactory('manager'));
+            $group->get('/biblioteca/livros', AdminLibraryBookListPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+            $group->map(['GET', 'POST'], '/biblioteca/livros/novo', AdminLibraryBookFormPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+            $group->map(['GET', 'POST'], '/biblioteca/livros/{id}/editar', AdminLibraryBookFormPageAction::class)->add($panelRoleMiddlewareFactory('operator'));
+            $group->post('/biblioteca/livros/{id}/excluir', AdminLibraryBookDeleteAction::class)->add($panelRoleMiddlewareFactory('operator'));
+            $group->get('/biblioteca/categorias', AdminLibraryCategoryListPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
+            $group->map(['GET', 'POST'], '/biblioteca/categorias/nova', AdminLibraryCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
+            $group->map(['GET', 'POST'], '/biblioteca/categorias/{id}/editar', AdminLibraryCategoryFormPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
+            $group->post('/biblioteca/categorias/{id}/alternar-status', AdminLibraryCategoryToggleStatusAction::class)->add($panelRoleMiddlewareFactory('manager'));
+            $group->get('/livraria', AdminBookshopDashboardPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/manual', AdminBookshopManualPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/relatorios', AdminBookshopReportsPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/movimentacoes', AdminBookshopStockMovementListPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->map(['GET', 'POST'], '/livraria/movimentacoes/nova', AdminBookshopStockMovementFormPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/colecoes', AdminBookshopCollectionListPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->map(['GET', 'POST'], '/livraria/colecoes/nova', AdminBookshopCollectionFormPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->map(['GET', 'POST'], '/livraria/colecoes/{id}/editar', AdminBookshopCollectionFormPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->post('/livraria/colecoes/{id}/alternar-status', AdminBookshopCollectionToggleStatusAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/categorias', AdminBookshopCategoryListPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->map(['GET', 'POST'], '/livraria/categorias/nova', AdminBookshopCategoryFormPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->map(['GET', 'POST'], '/livraria/categorias/{id}/editar', AdminBookshopCategoryFormPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->post('/livraria/categorias/{id}/alternar-status', AdminBookshopCategoryToggleStatusAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/generos', AdminBookshopGenreListPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->map(['GET', 'POST'], '/livraria/generos/novo', AdminBookshopGenreFormPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->map(['GET', 'POST'], '/livraria/generos/{id}/editar', AdminBookshopGenreFormPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->post('/livraria/generos/{id}/alternar-status', AdminBookshopGenreToggleStatusAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/acervo', AdminBookshopBookListPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/acervo/exportar', AdminBookshopBookExportCsvAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->map(['GET', 'POST'], '/livraria/acervo/novo', AdminBookshopBookFormPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/acervo/{id}/lotes', AdminBookshopBookLotsPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/acervo/{id}', AdminBookshopBookViewPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->map(['GET', 'POST'], '/livraria/acervo/{id}/editar', AdminBookshopBookFormPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->post('/livraria/acervo/{id}/excluir', AdminBookshopBookDeleteAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/importar/modelo', AdminBookshopImportTemplateDownloadAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->map(['GET', 'POST'], '/livraria/importar', AdminBookshopImportPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/vendas', AdminBookshopSaleListPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->map(['GET', 'POST'], '/livraria/vendas/nova', AdminBookshopSaleFormPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->get('/livraria/vendas/{id}', AdminBookshopSaleViewPageAction::class)
+                ->add($panelBookshopAccessMiddleware);
+            $group->post('/livraria/vendas/{id}/cancelar', AdminBookshopSaleCancelAction::class)
+                ->add($panelBookshopAccessMiddleware);
+        }
         $group->get('/usuarios', AdminMemberUsersPageAction::class)->add($panelRoleMiddlewareFactory('admin'));
         $group->get('/gestao-equipe', AdminTeamManagementPageAction::class)->add($panelRoleMiddlewareFactory('manager'));
         $group->get('/gestao-cede', function (Request $request, Response $response) {
@@ -604,16 +598,6 @@ return function (App $app) {
     });
     $app->get('/termos-de-uso', TermsOfUsePageAction::class);
 
-    $app->get('/users', function (Request $request, Response $response) use ($app) {
-        $twig = $app->getContainer()->get(Twig::class);
-        $repository = $app->getContainer()->get(UserRepository::class);
-        $users = array_map(
-            static fn ($user): array => $user->jsonSerialize(),
-            $repository->findAll()
-        );
-
-        return $twig->render($response, 'users.twig', ['users' => $users]);
-    });
 
     $resolveRequestClientIp = static function (Request $request): string {
         $forwardedFor = trim((string) $request->getHeaderLine('X-Forwarded-For'));
@@ -1062,8 +1046,4 @@ return function (App $app) {
         return $response->withStatus(204);
     });
 
-    $app->group('/api/users', function (Group $group) {
-        $group->get('', ListUsersAction::class);
-        $group->get('/{id}', ViewUserAction::class);
-    });
 };

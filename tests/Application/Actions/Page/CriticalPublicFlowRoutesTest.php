@@ -20,6 +20,8 @@ class CriticalPublicFlowRoutesTest extends TestCase
 
         $this->backupEnv();
         $_ENV['RECAPTCHA_ENABLED'] = 'false';
+        // Estes testes cobrem o fluxo de cadastro em si; em produção ele fica desligado por padrão.
+        $_ENV['MEMBER_REGISTRATION_ENABLED'] = 'true';
         $this->resetSessionState();
     }
 
@@ -50,6 +52,18 @@ class CriticalPublicFlowRoutesTest extends TestCase
 
         $this->assertSame(303, $response->getStatusCode());
         $this->assertSame('/cadastro', $response->getHeaderLine('Location'));
+    }
+
+    public function testCadastroRedirectsToContatoWhenRegistrationIsDisabled(): void
+    {
+        unset($_ENV['MEMBER_REGISTRATION_ENABLED']);
+
+        foreach (['GET', 'POST'] as $method) {
+            $response = $this->dispatch($method, '/cadastro');
+
+            $this->assertSame(302, $response->getStatusCode(), $method . ' /cadastro should redirect.');
+            $this->assertSame('/contato', $response->getHeaderLine('Location'));
+        }
     }
 
     public function testEntrarPostWithInvalidCredentialsRedirectsBackToEntrar(): void
@@ -160,6 +174,7 @@ class CriticalPublicFlowRoutesTest extends TestCase
     {
         return [
             'RECAPTCHA_ENABLED',
+            'MEMBER_REGISTRATION_ENABLED',
         ];
     }
 }

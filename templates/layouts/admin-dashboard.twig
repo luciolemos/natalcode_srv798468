@@ -3,11 +3,11 @@
 {% block content %}
   {% set panel_is_superuser = dashboard_is_admin_session|default(false) %}
   {% set panel_role_key = member_role_key|default('member') %}
-  {% set panel_can_events = panel_is_superuser or panel_role_key in ['operator', 'manager', 'admin'] %}
-  {% set panel_can_categories = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
-  {% set panel_can_library_books = panel_is_superuser or panel_role_key in ['operator', 'manager', 'admin'] %}
-  {% set panel_can_library_categories = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
-  {% set panel_can_bookshop = panel_is_superuser or panel_role_key in ['bookshop_operator', 'admin'] %}
+  {% set panel_can_events = legacy_modules_enabled|default(false) and (panel_is_superuser or panel_role_key in ['operator', 'manager', 'admin']) %}
+  {% set panel_can_categories = legacy_modules_enabled|default(false) and (panel_is_superuser or panel_role_key in ['manager', 'admin']) %}
+  {% set panel_can_library_books = legacy_modules_enabled|default(false) and (panel_is_superuser or panel_role_key in ['operator', 'manager', 'admin']) %}
+  {% set panel_can_library_categories = legacy_modules_enabled|default(false) and (panel_is_superuser or panel_role_key in ['manager', 'admin']) %}
+  {% set panel_can_bookshop = legacy_modules_enabled|default(false) and (panel_is_superuser or panel_role_key in ['bookshop_operator', 'admin']) %}
   {% set panel_can_users = panel_is_superuser or panel_role_key == 'admin' %}
   {% set panel_can_team_management = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
   {% set sidebar_brand_logo_light_src = site.brand.logoPanelLightSrc|default('/assets/img/brand/natalcode2_logo_horizontal_black_1158x314.png') %}
@@ -103,6 +103,7 @@
               </span>
               <span>Início do painel</span>
             </a>
+            {% if panel_can_events %}
             <details class="nc-dashboard-user-menu-group" {% if current_path starts with '/painel/eventos' or current_path starts with '/painel/categorias' %}open{% endif %}>
               <summary class="nc-dashboard-user-menu-group-title">AGENDA</summary>
               <a class="nc-link nc-dashboard-user-menu-link nc-dashboard-user-menu-sublink" href="/painel/eventos">
@@ -132,6 +133,7 @@
                 </a>
               {% endif %}
             </details>
+            {% endif %}
             {% if panel_can_library_books %}
               <details class="nc-dashboard-user-menu-group" {% if current_path starts with '/painel/biblioteca/' %}open{% endif %}>
                 <summary class="nc-dashboard-user-menu-group-title">CONTEÚDOS</summary>
@@ -469,6 +471,7 @@
             <span class="nc-admin-link-label">Dashboard</span>
           </a>
 
+          {% if panel_can_events %}
           <details class="nc-admin-nav-group" aria-label="Seção agenda" {% if current_path starts with '/painel/eventos' or current_path starts with '/painel/categorias' %}open{% endif %}>
             <summary class="nc-admin-nav-group-title">AGENDA</summary>
             <a class="nc-link nc-admin-submenu-link{{ current_path starts with '/painel/eventos' ? ' is-active' : '' }}" href="/painel/eventos">
@@ -496,6 +499,7 @@
               </a>
             {% endif %}
           </details>
+          {% endif %}
 
           {% if panel_can_bookshop %}
             <details class="nc-admin-nav-group" aria-label="Seção livraria" {% if current_path starts with '/painel/livraria' %}open{% endif %}>

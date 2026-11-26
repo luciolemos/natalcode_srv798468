@@ -6,6 +6,7 @@ use App\Domain\Agenda\AgendaRepository;
 use App\Domain\Analytics\SiteVisitRepository;
 use App\Domain\Member\MemberAuthRepository;
 use App\Application\Middleware\CsrfMiddleware;
+use App\Application\Middleware\EnvironmentAccessGuardMiddleware;
 use App\Application\Middleware\RateLimitMiddleware;
 use App\Application\Middleware\SessionMiddleware;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -259,6 +260,14 @@ return function (App $app) {
         $twigEnvironment->addGlobal('dashboard_is_authenticated', $dashboardIsAuthenticated);
         $twigEnvironment->addGlobal('dashboard_is_admin_session', $dashboardIsAdminSession);
         $twigEnvironment->addGlobal('member_is_authenticated', !empty($_SESSION['member_authenticated']));
+        $twigEnvironment->addGlobal(
+            'legacy_modules_enabled',
+            in_array(strtolower(trim((string) ($_ENV['APP_LEGACY_MODULES_ENABLED'] ?? ''))), ['1', 'true', 'yes', 'on'], true)
+        );
+        $twigEnvironment->addGlobal(
+            'member_registration_enabled',
+            in_array(strtolower(trim((string) ($_ENV['MEMBER_REGISTRATION_ENABLED'] ?? ''))), ['1', 'true', 'yes', 'on'], true)
+        );
         $twigEnvironment->addGlobal('member_name', (string) ($_SESSION['member_name'] ?? ''));
         $twigEnvironment->addGlobal('member_role_key', (string) ($_SESSION['member_role_key'] ?? ''));
         $twigEnvironment->addGlobal('member_role_name', (string) ($_SESSION['member_role_name'] ?? 'Membro'));
@@ -404,4 +413,6 @@ return function (App $app) {
     $app->add(CsrfMiddleware::class);
     $app->add(RateLimitMiddleware::class);
     $app->add(SessionMiddleware::class);
+    // Adicionado por último = executa primeiro: bloqueia o ambiente de dev antes de sessão e contagem de visitas.
+    $app->add(new EnvironmentAccessGuardMiddleware($app->getResponseFactory()));
 };

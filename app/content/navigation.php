@@ -51,8 +51,6 @@ return [
                 ['path' => '/quem-somos/fundador', 'key' => 'fundador'],
                 ['path' => '/quem-somos/nossa-marca', 'key' => 'nossa-marca'],
                 ['path' => '/quem-somos/equipe', 'key' => 'equipe'],
-                ['path' => '/quem-somos/estatuto', 'key' => 'estatuto'],
-                ['path' => '/quem-somos/base-de-conhecimento', 'key' => 'biblioteca'],
             ],
         ],
         [
@@ -64,25 +62,6 @@ return [
                 ['path' => '/estudos/esde', 'key' => 'esde'],
                 ['path' => '/estudos/palestras', 'key' => 'palestras'],
                 ['path' => '/estudos/atendimento-fraterno', 'key' => 'atendimento-fraterno'],
-            ],
-        ],
-        [
-            'key' => 'agenda',
-            'base' => '/agenda',
-            'items' => [
-                ['path' => '/agenda', 'label' => 'Visão geral'],
-                ['path' => '/agenda/estudo-do-evangelho', 'key' => 'estudo-do-evangelho'],
-                ['path' => '/agenda/palestra-publica', 'key' => 'palestra-publica'],
-                ['path' => '/agenda/juventude-espirita', 'key' => 'juventude-espirita'],
-            ],
-        ],
-        [
-            'key' => 'loja',
-            'base' => '/loja',
-            'items' => [
-                ['path' => '/loja', 'label' => 'Visão geral'],
-                ['path' => '/loja/livraria', 'label' => 'NatalCode Labs'],
-                ['path' => '/loja/bazar', 'key' => 'bazar'],
             ],
         ],
     ],

@@ -36,6 +36,7 @@ class AdminDashboardPageAction extends AbstractPageAction
         if (
             empty($_SESSION['admin_authenticated'])
             && (string) ($_SESSION['member_role_key'] ?? '') === 'bookshop_operator'
+            && in_array(strtolower(trim((string) ($_ENV['APP_LEGACY_MODULES_ENABLED'] ?? ''))), ['1', 'true', 'yes', 'on'], true)
         ) {
             return $response->withHeader('Location', '/painel/livraria')->withStatus(302);
         }

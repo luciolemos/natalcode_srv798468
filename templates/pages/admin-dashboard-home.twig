@@ -18,9 +18,9 @@
 {% endif %}
 
 {% block admin_content %}
-  {% set panel_can_events = panel_is_superuser or panel_role_key in ['operator', 'manager', 'admin'] %}
-  {% set panel_can_categories = panel_is_superuser or panel_role_key in ['manager', 'admin'] %}
-  {% set panel_can_bookshop = panel_is_superuser or panel_role_key in ['bookshop_operator', 'admin'] %}
+  {% set panel_can_events = legacy_modules_enabled|default(false) and (panel_is_superuser or panel_role_key in ['operator', 'manager', 'admin']) %}
+  {% set panel_can_categories = legacy_modules_enabled|default(false) and (panel_is_superuser or panel_role_key in ['manager', 'admin']) %}
+  {% set panel_can_bookshop = legacy_modules_enabled|default(false) and (panel_is_superuser or panel_role_key in ['bookshop_operator', 'admin']) %}
   {% set panel_can_users = panel_is_superuser or panel_role_key == 'admin' %}
   {% set panel_can_visit_reset = panel_is_superuser or panel_role_key == 'admin' %}
   {% set visit_metrics = dashboard_visit_metrics|default({}) %}

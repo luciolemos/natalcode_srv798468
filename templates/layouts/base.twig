@@ -126,31 +126,8 @@
       }|json_encode|raw }}
     </script>
   {% endif %}
-  {% if app_gtm_id|default('') %}
-    <script>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', '{{ app_gtm_id|e('js') }}');
-    </script>
-  {% endif %}
-  {% if app_ga4_id|default('') and not app_gtm_id|default('') %}
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ app_ga4_id|url_encode }}"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', '{{ app_ga4_id|e('js') }}', { anonymize_ip: true });
-    </script>
-  {% endif %}
+  {# Analytics (GTM ou GA4) só é carregado após consentimento do visitante (LGPD).
+     O carregamento é feito por /assets/js/natalcode-analytics.js; IDs vêm de APP_GTM_ID / APP_GA4_ID. #}
   <script>
     (function () {
       try {
@@ -222,25 +199,23 @@
   <script src="/assets/js/cedern-buttons.js?v={{ asset_version }}" defer></script>
   <script src="/assets/js/cedern-theme.js?v={{ asset_version }}" defer></script>
   <script src="/assets/js/cedern-events.js?v={{ asset_version }}" defer></script>
+  {% if app_gtm_id|default('') or app_ga4_id|default('') %}
+    <script src="/assets/js/natalcode-analytics.js?v={{ asset_version }}" defer
+      data-gtm-id="{{ app_gtm_id|default('') }}"
+      data-ga4-id="{{ app_ga4_id|default('') }}"></script>
+  {% endif %}
   {% block head %}{% endblock %}
 </head>
 <body data-default-theme="{{ default_theme|default('amber') }}" data-default-mode="{{ default_mode|default('light') }}" data-default-dark-intensity="{{ default_dark_intensity|default('neutral') }}">
-  {% if app_gtm_id|default('') %}
-    <noscript>
-      <iframe
-        src="https://www.googletagmanager.com/ns.html?id={{ app_gtm_id|url_encode }}"
-        height="0"
-        width="0"
-        style="display:none;visibility:hidden"
-      ></iframe>
-    </noscript>
-  {% endif %}
   <div class="nc-shell">
     {% include 'components/header.twig' %}
     {% include 'components/breadcrumbs.twig' %}
     {% block content %}{% endblock %}
     {% include 'components/footer.twig' %}
   </div>
+  {% if app_gtm_id|default('') or app_ga4_id|default('') %}
+    {% include 'components/analytics-consent.twig' %}
+  {% endif %}
   {# <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> #}
   {# <script src="/assets/js/aos-init.js" defer></script> #}
 </body>

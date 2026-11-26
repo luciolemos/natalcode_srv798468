@@ -32,7 +32,11 @@ return function (ContainerBuilder $containerBuilder) {
                     'path' => ($_ENV['APP_ENV'] ?? '') === 'test'
                         ? 'php://stderr'
                         : (isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log'),
-                    'level' => Logger::DEBUG,
+                    // Produção: WARNING por padrão (sem log de cada requisição com IP/user-agent).
+                    // Ajuste com APP_LOG_LEVEL=debug|info|notice|warning|error.
+                    'level' => Logger::toMonologLevel(
+                        strtoupper(trim((string) ($_ENV['APP_LOG_LEVEL'] ?? ''))) ?: ($isDevelopment ? 'DEBUG' : 'WARNING')
+                    ),
                 ],
                 'agenda' => [
                     'public_upcoming_limit' => max(1, min(100, (int) ($_ENV['APP_AGENDA_PUBLIC_LIMIT'] ?? 12))),

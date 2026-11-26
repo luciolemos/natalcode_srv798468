@@ -142,6 +142,9 @@
       {% if footer.bottomNote|default('') %}
         <p class="nc-footer-copy">{{ footer.bottomNote }}</p>
       {% endif %}
+      {% if app_gtm_id|default('') or app_ga4_id|default('') %}
+        <p class="nc-footer-copy"><a class="nc-link" href="#" data-analytics-consent-open>Preferências de cookies</a></p>
+      {% endif %}
     </div>
   </div>
 </footer>
