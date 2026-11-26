@@ -36,19 +36,9 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://natalcode.com.br/quem-somos/estatuto</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://natalcode.com.br/quem-somos/equipe</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://natalcode.com.br/quem-somos/base-de-conhecimento</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://natalcode.com.br/estudos</loc>
@@ -81,11 +71,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://natalcode.com.br/agenda</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://natalcode.com.br/faq</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -103,26 +88,6 @@
   <url>
     <loc>https://natalcode.com.br/faq/praticas</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://natalcode.com.br/loja</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://natalcode.com.br/loja/bazar</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://natalcode.com.br/loja/livraria</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://natalcode.com.br/loja/livraria-auta-de-sousa</loc>
-    <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>

@@ -19,7 +19,9 @@
     <link rel="preload" as="image" href="{{ hero_desktop_avif }}" type="image/avif" media="(min-width: 701px)" fetchpriority="high">
   {% endif %}
   <script src="/assets/js/cedern-hero-carousel.js?v={{ asset_version }}" defer></script>
+  {% if homeContent.socialProofTestimonials|default([])|length > 0 %}
   <script src="/assets/js/cedern-testimonials-toggle.js?v={{ asset_version }}" defer></script>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -31,7 +33,10 @@
     {% include 'home/social-proof.twig' %}
 
     {# Bloco Testimonials: depoimentos e validacao social para sustentar prova de resultado. #}
-    {% include 'home/testimonials.twig' %}
+    {# Exibido apenas quando houver depoimentos reais cadastrados em app/content/home.php. #}
+    {% if homeContent.socialProofTestimonials|default([])|length > 0 %}
+      {% include 'home/testimonials.twig' %}
+    {% endif %}
 
     {# Bloco Quick Access: atalhos estrategicos para as principais rotas da NatalCode. #}
     {% include 'home/quick-access.twig' %}

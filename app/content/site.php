@@ -64,9 +64,8 @@ return [
                 'title' => 'Recursos',
                 'links' => [
                     ['path' => '/portfolio', 'key' => 'portfolio'],
-                    ['path' => '/loja', 'key' => 'loja'],
-                    ['path' => '/loja/livraria', 'key' => 'livraria'],
-                    ['path' => '/loja/bazar', 'key' => 'bazar'],
+                    ['path' => '/faq', 'key' => 'faq'],
+                    ['path' => '/contato', 'key' => 'contato'],
                 ],
             ],
         ],

@@ -399,6 +399,16 @@ class MemberCompleteProfilePageAction extends AbstractMemberGuardedPageAction
             return ['warning' => 'Não foi possível salvar a foto agora. Seus outros dados foram atualizados.'];
         }
 
+        // O tipo informado pelo navegador pode ser forjado: confirma que o arquivo é mesmo uma imagem.
+        $detectedImage = function_exists('getimagesize') ? @getimagesize($targetPath) : false;
+        $allowedImageTypes = [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_WEBP];
+
+        if ($detectedImage === false || !in_array($detectedImage[2], $allowedImageTypes, true)) {
+            @unlink($targetPath);
+
+            return ['error' => 'O arquivo enviado não é uma imagem válida. Use JPG, PNG ou WEBP.'];
+        }
+
         $relativePath = str_starts_with($targetDirectory, $projectRoot . '/public/')
             ? substr($targetDirectory, strlen($projectRoot . '/public/')) . '/' . $fileName
             : 'assets/img/member-photos/' . $fileName;

@@ -11726,3 +11726,52 @@ body:has(.nc-bookshop-receipt-card) .nc-utility-stack {
     padding-top: 0.5rem !important;
   }
 }
+
+/* Banner de consentimento de analytics (LGPD) */
+.nc-consent {
+  position: fixed;
+  inset-inline: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 1000;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  max-width: 960px;
+  margin-inline: auto;
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-elevated, var(--surface-main));
+  color: var(--text-main);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+}
+
+.nc-consent[hidden] {
+  display: none;
+}
+
+.nc-consent-text {
+  flex: 1 1 420px;
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.nc-consent-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+@media (max-width: 560px) {
+  .nc-consent-actions {
+    width: 100%;
+  }
+
+  .nc-consent-actions .nc-btn {
+    flex: 1 1 0;
+  }
+}

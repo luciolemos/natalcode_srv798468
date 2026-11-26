@@ -31,7 +31,7 @@ return [
             'kicker' => 'Sites e sistemas para negócios',
             'title' => 'Software, sites e produtos digitais que convertem',
             'tagline' => 'Para empresas que precisam lançar rápido e evoluir com segurança',
-            'lead' => 'Unimos UX, engenharia e conteúdo para aumentar demanda e reduzir retrabalho. Projetos recentes incluem +38% na taxa de contato em 45 dias e lançamentos em até 21 dias.',
+            'lead' => 'Unimos UX, engenharia e conteúdo para aumentar demanda e reduzir retrabalho, com prazos claros e acompanhamento após a publicação.',
             'imageSrc' => '/assets/img/hero/home/natalcode1-1920.jpg',
             'images' => [
                 [
@@ -48,7 +48,7 @@ return [
                     'badge' => 'Sites e sistemas para negócios',
                     'title' => 'Software, sites e produtos digitais que convertem',
                     'tagline' => 'Para empresas que precisam lançar rápido e evoluir com segurança',
-                    'lead' => 'Unimos UX, engenharia e conteúdo para aumentar demanda e reduzir retrabalho. Projetos recentes incluem +38% na taxa de contato em 45 dias e lançamentos em até 21 dias.',
+                    'lead' => 'Unimos UX, engenharia e conteúdo para aumentar demanda e reduzir retrabalho, com prazos claros e acompanhamento após a publicação.',
                     'imageAlt' => 'Interface da NatalCode com visual SaaS e proposta de valor em destaque',
                 ],
                 [
@@ -82,7 +82,7 @@ return [
                     'badge' => 'Conteúdo estratégico e UX orientada a resultado',
                     'title' => 'Landing pages que transformam visitas em contatos',
                     'tagline' => 'Copy comercial, prova social e CTA claro para aumentar a taxa de resposta',
-                    'lead' => 'A combinação de narrativa de oferta, performance e instrumentação de dados já gerou ganhos de +38% na taxa de contato em cenários recentes.',
+                    'lead' => 'A combinação de narrativa de oferta, performance e instrumentação de dados para transformar mais visitas em contatos.',
                     'imageAlt' => 'Tela de landing page com elementos de conversão e métricas',
                 ],
                 [
@@ -577,36 +577,10 @@ return [
         ],
     ],
     // Depoimentos usados na seção de testemunhos.
-    'socialProofTestimonials' => [
-        [
-            'avatar' => 'https://randomuser.me/api/portraits/women/44.jpg',
-            'alt' => 'Marina Lima',
-            'name' => 'Marina Lima',
-            'role' => 'Gestora comercial',
-            'quote' => 'A taxa de contato subiu de 2,1% para 4,8% em 45 dias, mantendo o mesmo investimento em mídia. A página ficou clara e objetiva para o nosso público.',
-        ],
-        [
-            'avatar' => 'https://randomuser.me/api/portraits/men/32.jpg',
-            'alt' => 'Joao Costa',
-            'name' => 'Joao Costa',
-            'role' => 'Empreendedor',
-            'quote' => 'Fechamos o novo site em 24 dias, antes do prazo de 30, e o tempo médio de permanencia passou de 1m12 para 2m49 no primeiro mês.',
-        ],
-        [
-            'avatar' => 'https://randomuser.me/api/portraits/women/68.jpg',
-            'alt' => 'Ana Bezerra',
-            'name' => 'Ana Bezerra',
-            'role' => 'Coordenadora de marketing',
-            'quote' => 'Em 90 dias saímos de 18 para 47 palavras-chave no top 10 e aumentamos em 62% o tráfego orgânico qualificado, com base técnica pronta para escalar.',
-        ],
-        [
-            'avatar' => 'https://randomuser.me/api/portraits/women/90.jpg',
-            'alt' => 'Solange Rocha',
-            'name' => 'Solange Rocha',
-            'role' => 'Consultora',
-            'quote' => 'Com ajustes quinzenais no pós-entrega, o CAC caiu 23% e o ROI das campanhas saiu de 1,9x para 3,4x em três meses.',
-        ],
-    ],
+    // Use apenas depoimentos REAIS, autorizados pelo cliente (nome, cargo, empresa e foto própria).
+    // Com a lista vazia, a seção não é exibida na home.
+    // Formato: ['avatar' => '/assets/img/clientes/nome.jpg', 'alt' => '', 'name' => '', 'role' => '', 'quote' => ''],
+    'socialProofTestimonials' => [],
     /*
     | Bloco orfao (desativado):
     | - donationOptions era consumido por templates/home/donation.twig.
@@ -630,24 +604,24 @@ return [
             'phase' => 'Etapa 1',
             'title' => 'Descoberta e Diagnóstico',
             'description' => 'Levantamos objetivo, público e contexto técnico para definir escopo e prioridades.',
-            'href' => '/agenda/estudo-do-evangelho',
-            'linkLabel' => 'Ver detalhes da etapa',
+            'href' => '/contato',
+            'linkLabel' => 'Iniciar meu projeto',
             'status' => 'done',
         ],
         [
             'phase' => 'Etapa 2',
             'title' => 'Design e Implementação',
             'description' => 'Executamos interface, conteúdo e desenvolvimento com validações incrementais.',
-            'href' => '/agenda/palestra-publica',
-            'linkLabel' => 'Ver detalhes da etapa',
+            'href' => '/contato',
+            'linkLabel' => 'Iniciar meu projeto',
             'status' => 'current',
         ],
         [
             'phase' => 'Etapa 3',
             'title' => 'Publicação e Otimização',
             'description' => 'Entramos em produção com acompanhamento de desempenho e ajustes de melhoria.',
-            'href' => '/agenda/juventude-espirita',
-            'linkLabel' => 'Ver detalhes da etapa',
+            'href' => '/contato',
+            'linkLabel' => 'Iniciar meu projeto',
             'status' => 'planned',
         ],
     ],

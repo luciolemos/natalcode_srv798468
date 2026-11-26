@@ -24,6 +24,11 @@ require $autoloadPath;
 
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
 
+// Não expor a versão do PHP nos cabeçalhos de resposta.
+if (function_exists('header_remove')) {
+    header_remove('X-Powered-By');
+}
+
 $projectRoot = dirname(__DIR__);
 if (is_file($projectRoot . '/.env')) {
     Dotenv::createImmutable($projectRoot)->safeLoad();

@@ -53,9 +53,11 @@
             Esqueci minha senha. <a class="nc-link" href="/esqueci-senha">Redefinir agora</a>
           </p>
 
+          {% if member_registration_enabled|default(false) %}
           <p class="nc-admin-login-footnote">
             Não sou membro. <a class="nc-link" href="/cadastro">Desejo ser membro</a>
           </p>
+          {% endif %}
         </form>
       </article>
 
