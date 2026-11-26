@@ -1,476 +1,59 @@
-# NatalCode
+# NatalCode — site institucional (Laravel)
 
-[![Visual Regression](https://github.com/luciolemos/natalcode_srv798468/actions/workflows/visual-regression.yml/badge.svg)](https://github.com/luciolemos/natalcode_srv798468/actions/workflows/visual-regression.yml)
-[![PHPUnit](https://github.com/luciolemos/natalcode_srv798468/actions/workflows/phpunit.yml/badge.svg)](https://github.com/luciolemos/natalcode_srv798468/actions/workflows/phpunit.yml)
-[![PHPStan](https://github.com/luciolemos/natalcode_srv798468/actions/workflows/phpstan.yml/badge.svg)](https://github.com/luciolemos/natalcode_srv798468/actions/workflows/phpstan.yml)
-[![PHPCS](https://github.com/luciolemos/natalcode_srv798468/actions/workflows/phpcs.yml/badge.svg)](https://github.com/luciolemos/natalcode_srv798468/actions/workflows/phpcs.yml)
+Site da NatalCode, agência de sites e sistemas web de Natal/RN. Laravel 13, PHP 8.3+, Tailwind CSS 4 (Vite).
 
-Site institucional da agência em **Slim 4 + Twig**, com base reutilizável para evolução de produto (site, área administrativa e conteúdo) e sistema de tema visual dinâmico.
-
-## Estado atual
-
-O projeto está rodando em servidor Linux com Apache, publicado no domínio:
-
-- `https://srv798468.hstgr.cloud/`
-
-Atualmente, a aplicação entrega:
-
-- site institucional em Twig com seções modulares;
-- paleta de cores dinâmica (blue/red/green/violet/amber);
-- modo `light` / `dark`;
-- intensidade do dark (`neutral` / `vivid`);
-- animações de entrada com AOS e delays progressivos;
-- tokenização de design em CSS (`app.css`).
-
-## Stack
-
-- PHP 8.4+
-- Slim Framework 4
-- PHP-DI
-- Twig (`slim/twig-view`)
-- Dotenv (`vlucas/phpdotenv`)
-- Monolog
-- AOS (Animate On Scroll)
-- CSS custom com design tokens
-- JS vanilla para interações de tema
-- Playwright (regressão visual)
-- GitHub Actions (CI)
-- PHPStan nível 6 (`phpstan.neon.dist`)
-
-## Estrutura do projeto
-
-```txt
-/var/www/natalcode
-├── .github/
-│   └── workflows/
-│       ├── visual-regression.yml
-│       ├── phpunit.yml
-│       ├── phpstan.yml
-│       └── phpcs.yml
-├── app/
-│   ├── content/
-│   │   ├── home.php            # Conteúdo centralizado da home
-│   │   └── README.md           # Guia de edição do conteúdo
-│   ├── dependencies.php        # Container + Twig globals
-│   ├── middleware.php
-│   ├── repositories.php
-│   ├── routes.php
-│   └── settings.php
-├── tests/
-│   ├── Application/             # Testes de aplicação e rotas críticas
-│   ├── Domain/                  # Testes de domínio
-│   └── visual/
-│       ├── home.spec.js         # Regressão visual da home
-│       └── about.spec.js        # Regressão visual da página Quem Somos
-├── public/
-│   ├── assets/
-│   │   ├── css/cedern.css      # Tokens + componentes + temas
-│   │   └── js/
-│   │       ├── aos-init.js
-│   │       ├── cedern-buttons.js
-│   │       ├── cedern-nav.js
-│   │       └── cedern-theme.js
-│   └── index.php               # Bootstrap Slim + dotenv
-├── templates/
-│   ├── components/
-│   │   ├── check-item.twig
-│   │   ├── faq-item.twig
-│   │   ├── feature-card.twig
-│   │   ├── footer.twig
-│   │   ├── header.twig
-│   │   ├── section-header.twig
-│   │   └── theme-palette.twig
-│   ├── home/
-│   │   ├── hero.twig
-│   │   ├── features.twig
-│   │   ├── social-proof.twig
-│   │   ├── roadmap.twig
-│   │   ├── faq.twig
-│   │   └── final-cta.twig
-│   ├── layouts/base.twig
-│   └── home.twig               # Composição da home via includes
-├── package.json                # Scripts de regressão visual
-├── playwright.config.js        # Config Playwright
-├── .env
-├── .env.example
-└── README.md
-```
-
-## Estrutura da home
-
-A home é composta por partials Twig:
-
-1. `hero`
-2. `features` (Estudos)
-3. `social-proof`
-4. `roadmap`
-5. `final-cta`
-
-Cada seção tem animação AOS e delays progressivos nos elementos internos.
-
-## Edição de conteúdo da home
-
-O conteúdo textual da home (títulos, descrições, cards, agenda, FAQ e CTAs) está centralizado em:
-
-- `app/content/home.php`
-
-Guia detalhado de edição:
-
-- `app/content/README.md`
-
-### O que este guia cobre
-
-- quais chaves controlam cada seção da home;
-- como editar textos sem quebrar o layout;
-- como usar `delay` nas animações;
-- como configurar ações de botões (`loadingOnClick`, `ariaDisabled`, `disabledLabel`).
-
-### Fluxo recomendado para alterar conteúdo
-
-1. editar `app/content/home.php`;
-2. validar localmente em `http://localhost:8080`;
-3. rodar checks (`npm run test:visual` e checks PHP no CI);
-4. abrir PR com a mudança de conteúdo.
-
-## Compatibilidade técnica
-
-- `composer.json` aceita PHP `^8.3 || ^8.4`.
-- `composer.json` define `config.platform.php = 8.3.0` para compatibilidade de resolução do `composer.lock` em hospedagem compartilhada.
-- CI de PHP roda em `8.4` nos workflows.
-- análise estática está em `phpstan` nível `6`.
-
-### Checklist rápido antes de publicar
-
-- textos coerentes com a linha editorial;
-- links válidos (`href` funcionando);
-- ordem dos itens correta (arrays);
-- snapshots visuais atualizados quando houver mudança intencional.
-
-## Tema, modo e intensidade
-
-A interface suporta:
-
-- paleta: `blue | red | green | violet | amber`
-- modo: `light | dark`
-- dark intensity: `neutral | vivid`
-
-### Prioridade de configuração
-
-1. Preferência salva no navegador (`localStorage`)
-2. Defaults vindos do servidor via `.env`
-
-## Configuração via .env
-
-Arquivo: `.env`
-
-Chaves disponíveis:
-
-```env
-APP_DEFAULT_THEME=amber
-APP_DEFAULT_MODE=light
-APP_DEFAULT_DARK_INTENSITY=neutral
-APP_AGENDA_PUBLIC_LIMIT=12
-LIBRARY_UPLOAD_DIR=public/assets/docs/library
-LIBRARY_UPLOAD_PUBLIC_PREFIX=assets/docs/library
-LIBRARY_COVER_UPLOAD_DIR=public/assets/img/library-covers
-LIBRARY_COVER_UPLOAD_PUBLIC_PREFIX=assets/img/library-covers
-BOOKSHOP_COVER_UPLOAD_DIR=public/assets/img/bookshop-covers
-BOOKSHOP_COVER_UPLOAD_PUBLIC_PREFIX=assets/img/bookshop-covers
-```
-
-Valores válidos:
-
-- `APP_DEFAULT_THEME`: `blue | red | green | violet | amber`
-- `APP_DEFAULT_MODE`: `light | dark`
-- `APP_DEFAULT_DARK_INTENSITY`: `neutral | vivid`
-- `APP_AGENDA_PUBLIC_LIMIT`: quantidade de eventos futuros exibidos em `/agenda` (mínimo `1`, máximo `100`)
-- `LIBRARY_UPLOAD_DIR`: diretório físico onde os PDFs da Biblioteca serão gravados; pode ser relativo ao projeto ou absoluto
-- `LIBRARY_UPLOAD_PUBLIC_PREFIX`: prefixo público salvo em `pdf_path` e usado nas URLs do site, por exemplo `assets/docs/library`
-- `LIBRARY_COVER_UPLOAD_DIR`: diretório físico onde as capas da Biblioteca serão gravadas; pode ser relativo ao projeto ou absoluto
-- `LIBRARY_COVER_UPLOAD_PUBLIC_PREFIX`: prefixo público salvo em `cover_image_path` e usado nas URLs das capas, por exemplo `assets/img/library-covers`
-- `BOOKSHOP_COVER_UPLOAD_DIR`: diretório físico onde as capas da Livraria serão gravadas; pode ser relativo ao projeto ou absoluto
-- `BOOKSHOP_COVER_UPLOAD_PUBLIC_PREFIX`: prefixo público salvo em `cover_image_path` e usado nas URLs das capas, por exemplo `assets/img/bookshop-covers`
-
-## Acesso administrativo via membros
-
-O painel (`/painel`) utiliza papéis de `member_users`.
-
-- `operator`: acesso a eventos;
-- `manager`: acesso a eventos e categorias;
-- `admin`: acesso total, incluindo usuários.
-
-Não há mais autenticação administrativa por usuário/senha em `.env`.
-Administradores devem ser membros aprovados com papel `admin`.
-
-### Bootstrap do primeiro admin (SQL)
-
-Promover um membro existente pelo e-mail:
-
-```sql
-UPDATE member_users mu
-JOIN roles r ON r.role_key = 'admin'
-SET
-	mu.role_id = r.id,
-	mu.status = 'active',
-	mu.approved_at = COALESCE(mu.approved_at, NOW())
-WHERE mu.email = 'seu-email@dominio.com';
-```
-
-Criar um membro admin direto (ajuste hash/senha conforme sua política):
-
-```sql
-INSERT INTO member_users (
-	full_name,
-	email,
-	password_hash,
-	role_id,
-	status,
-	profile_completed,
-	approved_at
-)
-SELECT
-	'Administrador CEDE',
-	'admin@exemplo.com',
-	'$2y$10$TroquePorHashBcryptValido',
-	r.id,
-	'active',
-	1,
-	NOW()
-FROM roles r
-WHERE r.role_key = 'admin';
-```
-
-## Como executar localmente
+## Desenvolvimento local
 
 ```bash
-cd /var/www/natalcode
-composer install
-composer start
+composer install && npm install
+cp .env.example .env && php artisan key:generate
+npm run build          # ou: npm run dev (Vite com recarga automática)
+php artisan serve      # http://localhost:8000
+php artisan test       # testes
+vendor/bin/pint        # formatação do código
 ```
 
-Aplicação local:
+O `composer.json` fixa a plataforma em PHP 8.3 (`config.platform.php`): o Composer da Hostinger roda em 8.3, e sem essa trava o lock pode puxar pacotes que exigem 8.4.
 
-- `http://localhost:8080`
+## Onde mudar cada coisa
 
-## Regressão visual (Playwright)
+| O quê | Onde |
+|---|---|
+| Textos, serviços, portfólio, processo, dúvidas, depoimentos | `config/site.php` |
+| URLs antigas (301) | `config/redirects.php` |
+| Cores, fontes e componentes visuais | `resources/css/app.css` (`@theme` e `@utility`) |
+| Layout, cabeçalho, rodapé, SEO | `resources/views/components/` |
+| Páginas | `resources/views/pages/` |
+| Banner de cookies e eventos do GA4 | `resources/js/analytics.js` |
 
-Setup inicial:
+Regra de conteúdo: só publique números, depoimentos e casos que possam ser comprovados. Com a lista `testimonials` vazia, a seção de depoimentos não aparece.
 
-```bash
-cd /var/www/natalcode
-npm install
-npx playwright install --with-deps chromium
-```
+## Variáveis de ambiente do site
 
-Gerar baseline inicial (snapshots):
+| Variável | Uso |
+|---|---|
+| `SITE_GA4_ID` | Google Analytics 4. Vazio = sem analytics e sem banner. Carrega só após o "Aceitar". |
+| `SITE_WHATSAPP_NUMBER` | Número dos botões de WhatsApp (só dígitos, com 55). |
+| `SITE_CNPJ` | Exibido no rodapé quando preenchido. |
+| `ACCESS_GUARD_USER` / `ACCESS_GUARD_PASS` | Senha no site inteiro (ambiente de dev). **Vazio em produção.** |
 
-```bash
-npm run test:visual:update
-```
+Fora de `APP_ENV=production`, toda resposta leva `X-Robots-Tag: noindex`.
 
-Executar regressão visual:
+## Segurança
 
-```bash
-npm run test:visual
-```
+- CSP sem `unsafe-inline`: só o próprio site e o Google Tag Manager/Analytics.
+- Fontes servidas pelo próprio site (sem Google Fonts).
+- Cabeçalhos: `nosniff`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, HSTS em HTTPS.
 
-Cobertura atual:
+## Migração do Slim para o Laravel
 
-- Home (top fold e full page)
-- Breakpoints: mobile, tablet e desktop
+A versão anterior (Slim 4 + Twig) continua nas branches `natalcode` e `main` e segue em produção até a troca.
 
-### CI automático
-
-Workflow configurado em:
-
-- `.github/workflows/visual-regression.yml`
-
-Executa em `push` e `pull_request`:
-
-- instala dependências PHP/Node;
-- instala Chromium do Playwright;
-- executa `npm run test:visual`.
-
-Em caso de falha, publica artefatos com relatório e resultados dos testes.
-
-## Testes automatizados (PHPUnit)
-
-Executar suite de testes PHP:
-
-```bash
-composer test
-```
-
-Testes iniciais incluem smoke tests de boot e rotas de saúde.
-
-### Gate de cobertura (CI)
-
-O workflow `PHPUnit` usa gate progressivo de cobertura:
-
-- `MIN_STATEMENT_COVERAGE`: mínimo obrigatório (bloqueante), atualmente `5`;
-- `NEXT_MIN_STATEMENT_COVERAGE`: próxima meta global (advisory), atualmente `10`;
-- `COVERAGE_CRITICAL_PATH_TARGETS`: metas por caminhos críticos (advisory), no formato `caminho=percentual`.
-
-Execução local equivalente:
-
-```bash
-XDEBUG_MODE=coverage vendor/bin/phpunit --configuration phpunit.xml --coverage-clover build/logs/clover.xml
-php scripts/check_coverage_gate.php build/logs/clover.xml 5 10 "src/Application/Middleware=15,src/Application/Security=20,src/Application/Actions/Page/ContactPageAction.php=20"
-```
-
-## Smoke check de deploy
-
-Para validar rapidamente se a página publicada não está truncada e se os scripts críticos foram carregados:
-
-```bash
-chmod +x scripts/smoke-check.sh
-./scripts/smoke-check.sh https://cedern.org/
-```
-
-O script falha se:
-
-- status HTTP for >= 500;
-- HTML vier truncado (sem `</html>`);
-- houver JSON de erro injetado no HTML (`"statusCode": 500`);
-- referência do `cedern-nav.js` não for encontrada.
-
-Workflow dedicado:
-
-- `.github/workflows/smoke-check.yml`
-
-Ele roda manualmente (`workflow_dispatch`) e deve ser executado após o deploy.
-
-## Checklist anti-quebra em hospedagem compartilhada
-
-Use esta lista como critério de publicação para evitar regressão em produção:
-
-1. **Paridade de ambiente**
-	- Validar local/staging com a mesma versão de PHP e extensões do servidor.
-
-2. **Erro correto por tipo de resposta**
-	- Páginas HTML devem receber erro em HTML.
-	- Rotas de API devem receber erro em JSON.
-
-3. **Shutdown handler seguro**
-	- Tratar apenas erros fatais no shutdown (warnings/notices não devem sobrescrever resposta válida).
-
-4. **Versionamento de assets**
-	- Sempre publicar CSS/JS com versão/hash para evitar cache antigo em deploy.
-
-5. **Smoke check obrigatório pós-deploy**
-	- Executar `scripts/smoke-check.sh` contra o domínio publicado.
-	- Bloquear liberação se houver HTML truncado, `statusCode: 500` injetado ou falta de scripts críticos.
-
-6. **CI alinhada ao runtime real**
-	- Matriz de testes deve usar versões de PHP compatíveis com `composer.lock`.
-
-7. **Logs e diagnóstico rápido**
-	- Garantir logs acessíveis no servidor e endpoint de diagnóstico quando necessário.
-
-8. **Deploy determinístico**
-	- Confirmar que o provedor publicou exatamente o commit esperado (sem artefato antigo em cache).
-
-## Incidente conhecido: Composer CLI 8.3 em deploy (Hostinger)
-
-### Sintomas
-
-- `update: Your requirements could not be resolved to an installable set of packages.`
-- `Application dependencies are missing. Run composer install --no-dev.`
-
-### Causa raiz
-
-Em hospedagem compartilhada, o PHP do site (Apache/FPM) pode estar em `8.4`, mas o Composer do deploy pode rodar no CLI em `8.3`.
-Com isso, uma dependência de `require-dev` travada para `^8.4` no `composer.lock` pode quebrar a resolução, mesmo com deploy usando `--no-dev`.
-
-### Solução aplicada neste projeto
-
-- `composer.json`: `php` em `^8.3 || ^8.4`.
-- `composer.json`: `config.platform.php` fixado em `8.3.0`.
-- `composer.lock`: `doctrine/instantiator` em `2.0.0` (`php ^8.1`), evitando bloqueio em CLI `8.3`.
-
-### Verificação rápida antes do deploy
-
-```bash
-composer validate --no-check-publish
-composer install --no-dev --dry-run --no-interaction
-```
-
-### Fluxo recomendado de implantação
-
-1. Rodar validações locais (`phpunit`, `phpstan`, `phpcs`, visual quando aplicável).
-2. Publicar branch/PR e aguardar checks obrigatórios.
-3. Fazer deploy no provedor.
-4. Executar smoke check pós-deploy.
-5. Validar interações críticas (menu mobile, seletor de tema, rota API principal).
-
-### Fluxo de release entre branches (recomendado)
-
-- Desenvolvimento: `natalcode`
-- Produção: `main`
-- Publicação: sempre via merge `natalcode -> main`
-
-Script de apoio para padronizar esse processo:
-
-```bash
-chmod +x scripts/release-main.sh
-scripts/release-main.sh
-```
-
-Modo padrão (`dry-run`):
-
-- sincroniza `natalcode` com remoto;
-- roda `phpunit`, `phpstan`, `phpcs` e visual;
-- mostra os comandos de merge/push sem executar.
-
-Para aplicar o release de fato:
-
-```bash
-scripts/release-main.sh --apply
-```
-
-### Quando a mudança visual for intencional
-
-Atualize snapshots localmente e versione os arquivos gerados:
-
-```bash
-npm run test:visual:update
-```
-
-## Publicação (Apache)
-
-A aplicação deve ser servida com `DocumentRoot` apontando para:
-
-- `.../natalcode/public`
-
-## Observação operacional
-
-No momento, alterações estão sendo feitas diretamente no servidor. Para fluxo profissional, recomenda-se:
-
-1. ambiente local de desenvolvimento;
-2. ambiente de staging;
-3. deploy para produção após validação.
-
-## Branch protection (recomendado)
-
-No GitHub, configure proteção da branch principal (`main`/`master`) com:
-
-- Require a pull request before merging
-- Require approvals: `1` ou mais
-- Dismiss stale pull request approvals when new commits are pushed
-- Require status checks to pass before merging
-- Require conversation resolution before merging
-- Restrict who can push to matching branches (opcional)
-
-### Status checks sugeridos
-
-- `Visual Regression / visual-tests`
-- `PHPUnit / phpunit`
-- `PHPStan / phpstan`
-- `PHPCS / phpcs`
-
-### Política de merge
-
-- Preferir `Squash and merge`
-- Bloquear merge direto na branch principal
-- Exigir PR mesmo para manutenção de conteúdo
-- Utilizar checklist do template de PR: `.github/pull_request_template.md`
+| Fase | Conteúdo | Situação |
+|---|---|---|
+| 0 | Esqueleto Laravel 13, Tailwind 4, fontes locais, cabeçalhos de segurança, proteção do dev | concluída |
+| 1 | Redesenho: início, serviços (5), portfólio, sobre, dúvidas, contato, 404, SEO, sitemap, redirecionamentos 301 | concluída |
+| 2 | Formulário de contato (lead no banco + aviso por e-mail, reCAPTCHA, limite de envios), Política de Privacidade e Termos de Uso, GA4 `generate_lead` | a fazer |
+| 3 | Publicação no dev (subdomínio) e revisão do conteúdo | a fazer |
+| 4 | Deploy na Hostinger (GitHub Action + SSH, como no projeto Emotion) e troca da branch publicada | a fazer |
+| 5 | Painel (Filament): leads, portfólio, depoimentos e dúvidas | a fazer |

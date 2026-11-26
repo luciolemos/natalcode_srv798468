@@ -1,0 +1,115 @@
+/* Fontes servidas pelo próprio site (sem Google Fonts: melhor para LGPD e para a CSP). */
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/sora';
+@import '@fontsource-variable/jetbrains-mono';
+
+@import 'tailwindcss';
+
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Sora Variable', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    /* Tinta: base escura da marca (logo monocromático). */
+    --color-ink-50: oklch(0.985 0.004 265);
+    --color-ink-100: oklch(0.962 0.008 265);
+    --color-ink-200: oklch(0.915 0.014 265);
+    --color-ink-300: oklch(0.84 0.02 265);
+    --color-ink-400: oklch(0.68 0.028 265);
+    --color-ink-500: oklch(0.55 0.03 265);
+    --color-ink-600: oklch(0.44 0.032 265);
+    --color-ink-700: oklch(0.35 0.032 265);
+    --color-ink-800: oklch(0.26 0.03 265);
+    --color-ink-900: oklch(0.2 0.028 265);
+    --color-ink-950: oklch(0.15 0.025 265);
+
+    /* Azul NatalCode: cor de ação (botões, links, destaques). */
+    --color-brand-50: oklch(0.97 0.02 255);
+    --color-brand-100: oklch(0.93 0.045 255);
+    --color-brand-200: oklch(0.87 0.08 255);
+    --color-brand-300: oklch(0.78 0.13 255);
+    --color-brand-400: oklch(0.69 0.17 258);
+    --color-brand-500: oklch(0.6 0.2 260);
+    --color-brand-600: oklch(0.53 0.21 262);
+    --color-brand-700: oklch(0.46 0.19 263);
+    --color-brand-800: oklch(0.39 0.15 264);
+    --color-brand-900: oklch(0.33 0.11 265);
+
+    /* Sol de Natal: acento pontual (nunca em texto longo). */
+    --color-sun-300: oklch(0.88 0.13 85);
+    --color-sun-400: oklch(0.83 0.16 75);
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        @apply bg-white font-sans text-ink-800 antialiased;
+    }
+
+    h1, h2, h3, h4 {
+        @apply font-display text-ink-950 tracking-tight text-balance;
+    }
+
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-brand-500;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+}
+
+/* Componentes próprios (declarados como utilitários para poderem ser combinados com @apply). */
+@utility container-site {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+}
+
+@utility btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition
+        focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60;
+}
+
+@utility btn-primary {
+    @apply btn bg-brand-600 text-white shadow-sm shadow-brand-900/20 hover:bg-brand-700;
+}
+
+@utility btn-light {
+    @apply btn bg-white text-ink-950 hover:bg-ink-100;
+}
+
+@utility btn-ghost {
+    @apply btn text-ink-800 ring-1 ring-ink-200 ring-inset hover:bg-ink-50;
+}
+
+@utility btn-ghost-dark {
+    @apply btn text-white ring-1 ring-white/25 ring-inset hover:bg-white/10;
+}
+
+@utility kicker {
+    @apply font-mono text-xs font-medium tracking-wide text-brand-600 uppercase;
+}
+
+@utility section {
+    @apply py-20 sm:py-28;
+}
+
+@utility prose-site {
+    & p + p {
+        @apply mt-4;
+    }
+}
+
+/* Grade sutil usada no fundo das seções escuras. */
+@utility bg-grid {
+    background-image:
+        linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+}
