@@ -5,7 +5,8 @@
  * - Qualquer elemento com [data-analytics-consent-open] reabre o banner (ex.: link no rodapé).
  * - Eventos de conversão enviados após consentimento:
  *     whatsapp_click  -> clique em links wa.me / api.whatsapp.com
- *     generate_lead   -> envio do formulário de /contato
+ *     generate_lead   -> mensagem de /contato aceita pelo servidor (aviso de sucesso
+ *                        com [data-analytics-lead], exibido uma única vez após o envio)
  *     contact_click   -> clique em links mailto: / tel:
  */
 (() => {
@@ -94,14 +95,20 @@
         track('contact_click', { method: href.split(':')[0], page_path: window.location.pathname });
       }
     });
+  };
 
-    document.addEventListener('submit', (event) => {
-      const form = event.target;
+  // Não usa o evento "submit": o reCAPTCHA cancela e reenvia o formulário (contaria em dobro)
+  // e o envio pode ser recusado pelo servidor. O aviso de sucesso só aparece para envio aceito.
+  let leadTracked = false;
+  const trackConfirmedLead = () => {
+    const marker = document.querySelector('[data-analytics-lead]');
 
-      if (form instanceof HTMLFormElement && (form.getAttribute('action') || '') === '/contato') {
-        track('generate_lead', { form: 'contato', page_path: window.location.pathname });
-      }
-    });
+    if (!loaded || leadTracked || !marker) {
+      return;
+    }
+
+    leadTracked = true;
+    track('generate_lead', { form: marker.getAttribute('data-analytics-lead') || 'contato', page_path: window.location.pathname });
   };
 
   const init = () => {
@@ -135,6 +142,7 @@
 
         if (choice === 'granted') {
           loadAnalytics();
+          trackConfirmedLead();
         } else if (loaded) {
           // Já carregado nesta página: recarrega para descarregar os scripts do Google.
           window.location.reload();
@@ -155,6 +163,7 @@
 
     if (consent === 'granted') {
       loadAnalytics();
+      trackConfirmedLead();
     } else if (consent !== 'denied') {
       showBanner();
     }
