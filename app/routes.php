@@ -1045,5 +1045,4 @@ return function (App $app) {
 
         return $response->withStatus(204);
     });
-
 };
