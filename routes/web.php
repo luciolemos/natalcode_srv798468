@@ -13,6 +13,7 @@ Route::view('/portfolio', 'pages.portfolio')->name('portfolio');
 Route::view('/sobre', 'pages.about')->name('about');
 Route::view('/faq', 'pages.faq')->name('faq');
 Route::view('/contato', 'pages.contact')->name('contact');
+Route::view('/politica-de-privacidade', 'pages.privacy')->name('privacy');
 
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 

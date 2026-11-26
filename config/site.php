@@ -37,6 +37,11 @@ return [
         'cnpj' => env('SITE_CNPJ', ''),
     ],
 
+    // Data da versão vigente da Política de Privacidade (AAAA-MM-DD). Atualize ao mudar o texto.
+    'legal' => [
+        'privacy_updated_at' => '2026-11-26',
+    ],
+
     'social' => [
         'instagram' => ['label' => 'Instagram', 'url' => 'https://www.instagram.com/natalcodern/'],
         'facebook' => ['label' => 'Facebook', 'url' => 'https://www.facebook.com/natalcodern/'],

@@ -21,6 +21,7 @@ class PublicPagesTest extends TestCase
             'sobre' => ['/sobre', 'Design e desenvolvimento a serviço do seu negócio'],
             'dúvidas' => ['/faq', 'Perguntas frequentes'],
             'contato' => ['/contato', 'Vamos conversar sobre o seu projeto'],
+            'privacidade' => ['/politica-de-privacidade', 'Política de Privacidade'],
         ];
     }
 
@@ -73,7 +74,7 @@ class PublicPagesTest extends TestCase
 
         $response->assertOk()->assertHeader('Content-Type', 'application/xml; charset=UTF-8');
 
-        foreach (['/', '/servicos', '/servicos/sistemas-web', '/portfolio', '/sobre', '/faq', '/contato'] as $path) {
+        foreach (['/', '/servicos', '/servicos/sistemas-web', '/portfolio', '/sobre', '/faq', '/contato', '/politica-de-privacidade'] as $path) {
             $response->assertSee('<loc>'.url($path).'</loc>', false);
         }
     }
@@ -85,5 +86,15 @@ class PublicPagesTest extends TestCase
 
         config(['site.analytics.ga4' => 'G-TESTE123']);
         $this->get('/')->assertSee('data-ga4-id="G-TESTE123"', false)->assertSee('data-consent-choice="granted"', false);
+    }
+
+    public function test_footer_and_consent_banner_link_to_privacy_policy(): void
+    {
+        config(['site.analytics.ga4' => 'G-TESTE123']);
+
+        $link = 'href="'.url('/politica-de-privacidade').'"';
+        $html = $this->get('/')->assertOk()->getContent();
+
+        $this->assertSame(2, substr_count($html, $link), 'Rodapé e banner de cookies devem apontar para a política.');
     }
 }
